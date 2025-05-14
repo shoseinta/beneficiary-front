@@ -1,28 +1,40 @@
 import { useEffect, useState } from "react";
 import Login from "../LoginPage/Login";
+import Carousel from "../../components/carousel/Carousel";
 
 function Home() {
-  const [isAtBottom, setIsAtBottom] = useState(false);
-  const [requestData, setRequestData] = useState([]);
-  const [page, setPage] = useState(1);
-  const [pageCount, setPageCount] = useState(1); // Start at 1 (minimum)
-  const [isLoading, setIsLoading] = useState(false);
+  const [loadedEndpoints, setLoadedEndpoints] = useState({
+    "request-announcement-get": false,
+    "announcement-get": false
+  });
+  const [announcementData, setAnnouncementData] = useState([]);
+  const [newsData, setNewsData] = useState([]);
+  const [announcementPage, setAnnouncementPage] = useState(1);
+  const [newsPage, setNewsPage] = useState(1);
+  const [announcementPageCount, setAnnouncementPageCount] = useState(1);
+  const [newsPageCount, setNewsPageCount] = useState(1);
+  const [isLoadingAnnouncement, setIsLoadingAnnouncement] = useState(false);
+  const [isLoadingNews, setIsLoadingNews] = useState(false);
+  const [activeEndpoint, setActiveEndpoint] = useState("request-announcement-get");
 
-  // Check if the user has scrolled to the bottom
-  const handleScroll = (e) => {
-    const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
-    const bottom = Math.abs(scrollHeight - (scrollTop + clientHeight)) < 5; // Tolerance for rounding errors
-    setIsAtBottom(bottom);
+  const endpoints = {
+    announcements: "request-announcement-get",
+    news: "announcement-get"
   };
 
-  // Fetch data for a specific page
-  const fetchData = async (pageNum) => {
-    if (!localStorage.getItem('access_token')) return;
+  const loadInitialData = async (endpoint) => {
+    if (!localStorage.getItem('access_token') || loadedEndpoints[endpoint]) return;
 
-    setIsLoading(true);
+    const isLoading = endpoint === "request-announcement-get" ? setIsLoadingAnnouncement : setIsLoadingNews;
+    const setData = endpoint === "request-announcement-get" ? setAnnouncementData : setNewsData;
+    const setPageCount = endpoint === "request-announcement-get" ? setAnnouncementPageCount : setNewsPageCount;
+
+    isLoading(true);
     try {
       const response = await fetch(
-        `http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-announcement-get/?page=${pageNum}`,
+        `http://localhost:8000/beneficiary-platform/beneficiary/${
+          localStorage.getItem('user_id')
+        }/${endpoint}/?page=1`,
         {
           headers: {
             'Authorization': `Token ${localStorage.getItem('access_token')}`,
@@ -38,73 +50,76 @@ function Home() {
       }
 
       const data = await response.json();
-      return data;
+      setData(data.results || []);
+      setPageCount(Math.max(Math.ceil(data.count / 10), 1));
+      setLoadedEndpoints(prev => ({ ...prev, [endpoint]: true }));
     } catch (error) {
       console.error("Fetch error:", error);
-      return null;
     } finally {
-      setIsLoading(false);
+      isLoading(false);
     }
   };
 
-  // Load initial data (page 1)
-  const loadInitialData = async () => {
-    const data = await fetchData(1);
-    if (data) {
-      setRequestData(data.results || []);
-      setPageCount(Math.ceil(data.count / 10) || 1); // Adjust based on your pagination size
-    }
+  const handleEndpointChange = (newEndpoint) => {
+    setActiveEndpoint(newEndpoint);
+    loadInitialData(newEndpoint);
   };
 
-  // Load more data when reaching the bottom
-  const loadMoreItems = async () => {
-    if (isLoading || !isAtBottom || page >= pageCount) return;
-    
-    const nextPage = page + 1;
-    const data = await fetchData(nextPage);
-    if (data) {
-      setRequestData(prev => [...prev, ...(data.results || [])]);
-      setPage(nextPage);
-    }
-  };
-
-  // Load page 1 on mount
   useEffect(() => {
-    loadInitialData();
+    loadInitialData("request-announcement-get");
+    loadInitialData("announcement-get");
   }, []);
-
-  // Trigger loading more data when scrolling to the bottom
-  useEffect(() => {
-    if (isAtBottom) {
-      loadMoreItems();
-    }
-  }, [isAtBottom]);
 
   if (!localStorage.getItem('access_token')) {
     return <Login />;
   }
 
   return (
-    <div
-      style={{
-        height: '400px',
-        overflowY: 'auto',
-        border: '1px solid #ddd',
-        padding: '10px',
-        margin: '20px 0',
-      }}
-      onScroll={handleScroll}
-    >
-      <div style={{ border: '1px solid black' }}>
-        {requestData.map((item) => (
-          <div key={item.charity_announcement_for_request_id} style={{ marginBottom: '20px' }}>
-            <h1>{item.charity_announcement_for_request_title}-سلام</h1>
-            <p>{item.charity_announcement_for_request_description}</p>
-          </div>
-        ))}
-        {isLoading && <p>Loading more...</p>}
-        {page >= pageCount && <p>No more results.</p>}
+    <div>
+      <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
+        <button 
+          onClick={() => handleEndpointChange(endpoints.announcements)}
+          style={{
+            background: activeEndpoint === endpoints.announcements ? '#4CAF50' : '#f1f1f1',
+            color: activeEndpoint === endpoints.announcements ? 'white' : 'black'
+          }}
+        >
+          Announcements
+        </button>
+        <button 
+          onClick={() => handleEndpointChange(endpoints.news)}
+          style={{
+            background: activeEndpoint === endpoints.news ? '#4CAF50' : '#f1f1f1',
+            color: activeEndpoint === endpoints.news ? 'white' : 'black'
+          }}
+        >
+          News
+        </button>
       </div>
+
+      {activeEndpoint === 'request-announcement-get' ? (
+        <Carousel
+          requestData={announcementData}
+          setRequestData={setAnnouncementData}
+          page={announcementPage}
+          setPage={setAnnouncementPage}
+          pageCount={announcementPageCount}
+          activeEndpoint={activeEndpoint}
+          isLoading={isLoadingAnnouncement}
+          setIsLoading={setIsLoadingAnnouncement}
+        />
+      ) : (
+        <Carousel 
+          requestData={newsData}
+          setRequestData={setNewsData}
+          page={newsPage}
+          setPage={setNewsPage}
+          pageCount={newsPageCount}
+          activeEndpoint={activeEndpoint}
+          isLoading={isLoadingNews}
+          setIsLoading={setIsLoadingNews}
+        />
+      )}
     </div>
   );
 }
