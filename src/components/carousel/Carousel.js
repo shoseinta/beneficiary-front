@@ -59,7 +59,39 @@ function Carousel({
       setPage(nextPage);
     }
   };
-
+  const handleCancel = async (itemId) => {
+    try {
+      let apiUrl;
+      if(activeEndpoint === "request-announcement-get") {
+        apiUrl = `http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-announcement-seen/${itemId}/`
+      }else{
+        apiUrl = `http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/announcement-seen/${itemId}/`
+      }
+      const response = await fetch(apiUrl, {
+        method: 'GET', // or DELETE, depends on your API
+        headers: {
+          'Authorization': `Token ${localStorage.getItem('access_token')}`,
+          'Content-Type': 'application/json',
+        }
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to cancel item");
+      }
+      let newData;
+      if(activeEndpoint === "request-announcement-get") {
+        newData = requestData.filter((item) => item.charity_announcement_for_request_id !== itemId);
+      }else{
+        newData = requestData.filter((item) => item.charity_announcement_to_beneficiary_id !==itemId);
+      }
+      // Remove the item from local state
+      setRequestData(newData);
+    } catch (error) {
+      console.error("Cancel error:", error);
+      alert("Something went wrong while cancelling the item.");
+    }
+  };
+  
   useEffect(() => {
     if (isAtBottom) {
       loadMoreItems();
@@ -83,9 +115,13 @@ function Carousel({
       >
         <div style={{ border: '1px solid black' }}>
           {displayData.map((item) => (
-            <div key={item.id} style={{ marginBottom: '20px' }}>
+            <div key={item.charity_announcement_to_beneficiary_id || item.charity_announcement_for_request_id} style={{ marginBottom: '20px' }}>
               <h1>{item.title || item.charity_announcement_for_request_title  || item.charity_announcement_to_beneficiary_title}</h1>
               <p>{item.description || item.charity_announcement_for_request_description || item.charity_announcement_to_beneficiary_description}</p>
+
+              <button onClick={() => handleCancel(item.charity_announcement_to_beneficiary_id || item.charity_announcement_for_request_id)} style={{ marginTop: '10px', background: 'red', color: 'white' }}>
+                    dont show
+              </button>
             </div>
           ))}
           {isLoading && <p>Loading more...</p>}

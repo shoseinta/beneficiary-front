@@ -117,16 +117,31 @@ function Home() {
         </button>
       </div>
 
-      <Carousel
-        requestData={currentState.data}
-        setRequestData={(newData) => updateEndpointState(activeEndpoint, { data: newData })}
-        page={currentState.page}
-        setPage={(newPage) => updateEndpointState(activeEndpoint, { page: newPage })}
-        pageCount={currentState.pageCount}
-        activeEndpoint={activeEndpoint}
-        isLoading={currentState.isLoading}
-        setIsLoading={(loading) => updateEndpointState(activeEndpoint, { isLoading: loading })}
-      />
+      <div style={{ display: activeEndpoint === endpoints.announcements ? 'block' : 'none' }}>
+        <Carousel
+          requestData={endpointStates["request-announcement-get"].data}
+          setRequestData={(newData) => updateEndpointState("request-announcement-get", { data: newData })}
+          page={endpointStates["request-announcement-get"].page}
+          setPage={(newPage) => updateEndpointState("request-announcement-get", { page: newPage })}
+          pageCount={endpointStates["request-announcement-get"].pageCount}
+          activeEndpoint="request-announcement-get"
+          isLoading={endpointStates["request-announcement-get"].isLoading}
+          setIsLoading={(loading) => updateEndpointState("request-announcement-get", { isLoading: loading })}
+        />
+      </div>
+
+      <div style={{ display: activeEndpoint === endpoints.news ? 'block' : 'none' }}>
+        <Carousel
+          requestData={endpointStates["announcement-get"].data}
+          setRequestData={(newData) => updateEndpointState("announcement-get", { data: newData })}
+          page={endpointStates["announcement-get"].page}
+          setPage={(newPage) => updateEndpointState("announcement-get", { page: newPage })}
+          pageCount={endpointStates["announcement-get"].pageCount}
+          activeEndpoint="announcement-get"
+          isLoading={endpointStates["announcement-get"].isLoading}
+          setIsLoading={(loading) => updateEndpointState("announcement-get", { isLoading: loading })}
+        />
+      </div>
     </div>
   );
 }
