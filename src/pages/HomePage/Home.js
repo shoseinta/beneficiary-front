@@ -1,20 +1,24 @@
 import { useEffect, useState } from "react";
-import Login from "../LoginPage/Login";
+import { useNavigate } from "react-router-dom";
 import Carousel from "../../components/carousel/Carousel";
 
 function Home() {
-  const [loadedEndpoints, setLoadedEndpoints] = useState({
-    "request-announcement-get": false,
-    "announcement-get": false
+  const [endpointStates, setEndpointStates] = useState({
+    "request-announcement-get": {
+      data: [],
+      page: 1,
+      pageCount: 1,
+      isLoading: false,
+      loaded: false
+    },
+    "announcement-get": {
+      data: [],
+      page: 1,
+      pageCount: 1,
+      isLoading: false,
+      loaded: false
+    }
   });
-  const [announcementData, setAnnouncementData] = useState([]);
-  const [newsData, setNewsData] = useState([]);
-  const [announcementPage, setAnnouncementPage] = useState(1);
-  const [newsPage, setNewsPage] = useState(1);
-  const [announcementPageCount, setAnnouncementPageCount] = useState(1);
-  const [newsPageCount, setNewsPageCount] = useState(1);
-  const [isLoadingAnnouncement, setIsLoadingAnnouncement] = useState(false);
-  const [isLoadingNews, setIsLoadingNews] = useState(false);
   const [activeEndpoint, setActiveEndpoint] = useState("request-announcement-get");
 
   const endpoints = {
@@ -23,13 +27,11 @@ function Home() {
   };
 
   const loadInitialData = async (endpoint) => {
-    if (!localStorage.getItem('access_token') || loadedEndpoints[endpoint]) return;
+    const currentState = endpointStates[endpoint];
+    if (currentState.loaded) return;
 
-    const isLoading = endpoint === "request-announcement-get" ? setIsLoadingAnnouncement : setIsLoadingNews;
-    const setData = endpoint === "request-announcement-get" ? setAnnouncementData : setNewsData;
-    const setPageCount = endpoint === "request-announcement-get" ? setAnnouncementPageCount : setNewsPageCount;
-
-    isLoading(true);
+    updateEndpointState(endpoint, { isLoading: true });
+    
     try {
       const response = await fetch(
         `http://localhost:8000/beneficiary-platform/beneficiary/${
@@ -50,19 +52,34 @@ function Home() {
       }
 
       const data = await response.json();
-      setData(data.results || []);
-      setPageCount(Math.max(Math.ceil(data.count / 10), 1));
-      setLoadedEndpoints(prev => ({ ...prev, [endpoint]: true }));
+      updateEndpointState(endpoint, {
+        data: Array.isArray(data.results) ? data.results : [],
+        pageCount: Math.max(Math.ceil(data.count / 10), 1),
+        loaded: true,
+        isLoading: false
+      });
     } catch (error) {
       console.error("Fetch error:", error);
-    } finally {
-      isLoading(false);
+      updateEndpointState(endpoint, { 
+        data: [],
+        isLoading: false 
+      });
     }
+  };
+
+  const updateEndpointState = (endpoint, updates) => {
+    setEndpointStates(prev => ({
+      ...prev,
+      [endpoint]: {
+        ...prev[endpoint],
+        ...updates
+      }
+    }));
   };
 
   const handleEndpointChange = (newEndpoint) => {
     setActiveEndpoint(newEndpoint);
-    loadInitialData(newEndpoint);
+    // No need to load initial data here if we're preserving state
   };
 
   useEffect(() => {
@@ -70,9 +87,12 @@ function Home() {
     loadInitialData("announcement-get");
   }, []);
 
-  if (!localStorage.getItem('access_token')) {
-    return <Login />;
-  }
+  const currentState = endpointStates[activeEndpoint] || { 
+    data: [], 
+    page: 1, 
+    pageCount: 1, 
+    isLoading: false 
+  };
 
   return (
     <div>
@@ -97,29 +117,16 @@ function Home() {
         </button>
       </div>
 
-      {activeEndpoint === 'request-announcement-get' ? (
-        <Carousel
-          requestData={announcementData}
-          setRequestData={setAnnouncementData}
-          page={announcementPage}
-          setPage={setAnnouncementPage}
-          pageCount={announcementPageCount}
-          activeEndpoint={activeEndpoint}
-          isLoading={isLoadingAnnouncement}
-          setIsLoading={setIsLoadingAnnouncement}
-        />
-      ) : (
-        <Carousel 
-          requestData={newsData}
-          setRequestData={setNewsData}
-          page={newsPage}
-          setPage={setNewsPage}
-          pageCount={newsPageCount}
-          activeEndpoint={activeEndpoint}
-          isLoading={isLoadingNews}
-          setIsLoading={setIsLoadingNews}
-        />
-      )}
+      <Carousel
+        requestData={currentState.data}
+        setRequestData={(newData) => updateEndpointState(activeEndpoint, { data: newData })}
+        page={currentState.page}
+        setPage={(newPage) => updateEndpointState(activeEndpoint, { page: newPage })}
+        pageCount={currentState.pageCount}
+        activeEndpoint={activeEndpoint}
+        isLoading={currentState.isLoading}
+        setIsLoading={(loading) => updateEndpointState(activeEndpoint, { isLoading: loading })}
+      />
     </div>
   );
 }
