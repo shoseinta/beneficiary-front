@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Carousel from "../../components/carousel/Carousel";
+import NavigationBar from "../../components/navigationBar/NavigationBar";
 
 function Home() {
   const [endpointStates, setEndpointStates] = useState({
@@ -142,6 +143,7 @@ function Home() {
           setIsLoading={(loading) => updateEndpointState("announcement-get", { isLoading: loading })}
         />
       </div>
+      <NavigationBar />
     </div>
   );
 }
