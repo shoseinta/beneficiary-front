@@ -5,6 +5,7 @@ import './App.css';
 import NewRequest from './pages/NewRequest/NewRequest';
 import Requests from './pages/Requests/Requests';
 import Account from './pages/Account/Account';
+import RequestDetail from './pages/RequestDetail/RequestDetail';
 
 // Auth wrapper component
 const ProtectedRoute = ({ children }) => {
@@ -48,6 +49,15 @@ function App() {
           </ProtectedRoute>
         }
       />
+      <Route
+        path=":id/request-detail"
+        element={
+          <ProtectedRoute>
+            <RequestDetail />
+          </ProtectedRoute>
+        }
+      />
+
       {/* Catch-all route for unauthenticated access */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

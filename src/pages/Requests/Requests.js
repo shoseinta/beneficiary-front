@@ -151,7 +151,7 @@ function Requests() {
             {/* One scrollable container per tab */}
             {requestsData.map((endpoint, index) => (
                 <div
-                    key={endpoint.data.beneficiary_request_id}
+                    key={index}
                     onScroll={(e) => activeEndpoint === index && handleScroll(e)}
                     style={{
                         display: activeEndpoint === index ? 'block' : 'none',

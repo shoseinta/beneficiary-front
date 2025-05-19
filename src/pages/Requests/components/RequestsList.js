@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 function RequestsList({ data, setRequestData, activeEndpoint }) {
     if (!data) {
@@ -26,7 +27,7 @@ function RequestsList({ data, setRequestData, activeEndpoint }) {
                         </div>
                         <div>{item.beneficiary_request_processing_stage}</div>
                         <div>
-                            <a href="#" style={{ color: 'blue', textDecoration: 'underline' }}>View</a>
+                            <Link to={`/${item.beneficiary_request_id}/request-detail`}>View</Link>
                         </div>
                     </div>
                 ))
