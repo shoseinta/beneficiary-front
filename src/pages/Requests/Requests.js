@@ -5,6 +5,13 @@ import { useLookup } from "../../context/LookUpContext";
 
 function Requests() {
     const {requestsData,setRequestsData, activeEndpoint, setActiveEndpoint} = useLookup()
+    const endpoints = [
+        'request-all-get/',
+        'request-initial-stages-get/',
+        'request-in-progress-get/',
+        'request-completed-get/',
+        'request-rejected-get/',
+      ];
     
     const scrollRef = useRef(null);
     const loadNextPage = async (index) => {
@@ -20,7 +27,7 @@ function Requests() {
         });
 
         try {
-            const response = await fetch(`${current.url}?page=${nextPage}`, {
+            const response = await fetch(`${current.url}/${localStorage.getItem('user_id')}/${endpoints[index]}?page=${nextPage}`, {
                 headers: {
                     'Authorization': `Token ${localStorage.getItem('access_token')}`,
                     'Content-Type': 'application/json',

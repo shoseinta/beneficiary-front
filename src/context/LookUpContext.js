@@ -7,38 +7,44 @@ export const useLookup = () => useContext(LookupContext);
 
 export const LookupProvider = ({ children }) => {
   const [activeEndpoint, setActiveEndpoint] = useState(0);
-  const [loadingRequests, setLoadingRequests] = useState(true)
+  const endpoints = [
+        'request-all-get/',
+        'request-initial-stages-get/',
+        'request-in-progress-get/',
+        'request-completed-get/',
+        'request-rejected-get/',
+      ];
   const [requestsData, setRequestsData] = useState([
     {
-        url: `http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-all-get/`,
+        url: `http://localhost:8000/beneficiary-platform/beneficiary`,
         data: null,
         page: 1,
         pageCount: 1,
         loading: false,
     },
     {
-        url: `http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-initial-stages-get/`,
+        url: `http://localhost:8000/beneficiary-platform/beneficiary`,
         data: null,
         page: 1,
         pageCount: 1,
         loading: false,
     },
     {
-        url: `http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-in-progress-get/`,
+        url: `http://localhost:8000/beneficiary-platform/beneficiary`,
         data: null,
         page: 1,
         pageCount: 1,
         loading: false,
     },
     {
-        url: `http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-completed-get/`,
+        url: `http://localhost:8000/beneficiary-platform/beneficiary`,
         data: null,
         page: 1,
         pageCount: 1,
         loading: false,
     },
     {
-        url: `http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-rejected-get/`,
+        url: `http://localhost:8000/beneficiary-platform/beneficiary`,
         data: null,
         page: 1,
         pageCount: 1,
@@ -46,7 +52,8 @@ export const LookupProvider = ({ children }) => {
     },
 ]);
   const loadInitialData = async (index) => {
-        const apiUrl = requestsData[index].url;
+        const apiUrl = `${requestsData[index].url}/${localStorage.getItem('user_id')}/${endpoints[index]}`;
+        
 
         try {
             const response = await fetch(`${apiUrl}?page=1`, {
@@ -79,12 +86,24 @@ export const LookupProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   useEffect(() => {
-        for (let i = 0; i < 5; i++) {
-            if (!requestsData[i].data &&localStorage.getItem('access_token')) {
-                loadInitialData(i);
-            }
+  const interval = setInterval(() => {
+    const token = localStorage.getItem('access_token');
+    const userId = localStorage.getItem('user_id');
+
+    if (token && userId) {
+      // fetch all request endpoints
+      requestsData.forEach((request, index) => {
+        if (!request.data) {
+          loadInitialData(index);
         }
-    }, [localStorage.getItem('access_token')]);
+      });
+      clearInterval(interval); // stop polling after token is found
+    }
+  }, 500); // check every 500ms
+
+  return () => clearInterval(interval);
+}, []);
+
   useEffect(() => {
     const fetchLookups = async () => {
       try {
