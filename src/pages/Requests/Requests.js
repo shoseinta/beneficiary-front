@@ -1,73 +1,12 @@
 import { useEffect, useState, useRef } from "react";
 import NavigationBar from "../../components/navigationBar/NavigationBar";
 import RequestsList from "./components/RequestsList";
+import { useLookup } from "../../context/LookUpContext";
 
 function Requests() {
-    const [activeEndpoint, setActiveEndpoint] = useState(0);
-    const [requestsData, setRequestsData] = useState([
-        {
-            url: `http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-all-get/`,
-            data: null,
-            page: 1,
-            pageCount: 1,
-            loading: false,
-        },
-        {
-            url: `http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-initial-stages-get/`,
-            data: null,
-            page: 1,
-            pageCount: 1,
-            loading: false,
-        },
-        {
-            url: `http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-in-progress-get/`,
-            data: null,
-            page: 1,
-            pageCount: 1,
-            loading: false,
-        },
-        {
-            url: `http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-completed-get/`,
-            data: null,
-            page: 1,
-            pageCount: 1,
-            loading: false,
-        },
-        {
-            url: `http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-rejected-get/`,
-            data: null,
-            page: 1,
-            pageCount: 1,
-            loading: false,
-        },
-    ]);
+    const {requestsData,setRequestsData, activeEndpoint, setActiveEndpoint} = useLookup()
+    
     const scrollRef = useRef(null);
-
-    const loadInitialData = async (index) => {
-        const apiUrl = requestsData[index].url;
-
-        try {
-            const response = await fetch(`${apiUrl}?page=1`, {
-                headers: {
-                    'Authorization': `Token ${localStorage.getItem('access_token')}`,
-                    'Content-Type': 'application/json',
-                },
-            });
-
-            const data = await response.json();
-            setRequestsData((prev) => {
-                const newState = [...prev];
-                newState[index].data = [...data.results];
-                newState[index].page = 1;
-                newState[index].pageCount = Math.max(1, Math.ceil(data.count / 10));
-                newState[index].loading = false;
-                return newState;
-            });
-        } catch (error) {
-            console.error("Fetch error:", error);
-        }
-    };
-
     const loadNextPage = async (index) => {
         const current = requestsData[index];
         const nextPage = current.page + 1;
@@ -119,15 +58,6 @@ function Requests() {
             loadNextPage(activeEndpoint);
         }
     };
-
-    useEffect(() => {
-        for (let i = 0; i < 5; i++) {
-            if (!requestsData[i].data && activeEndpoint === i) {
-                loadInitialData(i);
-            }
-        }
-    }, [activeEndpoint]);
-
     return (
         <>
             {/* Tabs */}
