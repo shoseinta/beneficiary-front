@@ -4,12 +4,15 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
+import { LookupProvider } from './context/LookUpContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <App />
+      <LookupProvider>
+        <App />
+      </LookupProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

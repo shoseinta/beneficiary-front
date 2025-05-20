@@ -122,11 +122,11 @@ function Requests() {
 
     useEffect(() => {
         for (let i = 0; i < 5; i++) {
-            if (!requestsData[i].data) {
+            if (!requestsData[i].data && activeEndpoint === i) {
                 loadInitialData(i);
             }
         }
-    }, []);
+    }, [activeEndpoint]);
 
     return (
         <>

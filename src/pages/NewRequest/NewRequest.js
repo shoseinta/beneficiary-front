@@ -5,12 +5,13 @@ import Form1 from "./components/Form1";
 import Form2 from "./components/Form2";
 import Form3 from "./components/Form3";
 import Form4 from "./components/Form4";
+import { useLookup } from "../../context/LookUpContext";
 
 function NewRequest() {
     const navigate = useNavigate();
-    const [duration, setDuration] = useState([]);
-    const [typeLayerOne, setTypeLayerOne] = useState([]);
-    const [typeLayerTwo, setTypeLayerTwo] = useState([]);
+
+    const {loading, error, duration, typeLayerOne, typeLayerTwo} = useLookup()
+    
     const [requestData, setRequestData] = useState({
         beneficiary_request_title: "",
         beneficiary_request_description: "",
@@ -30,63 +31,6 @@ function NewRequest() {
     const [nextActive, setNextActive] = useState(false);
     const [submitSuccess, setSubmitSuccess] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
-
-    const fetchTypeLayerOne = async () => {
-        try {
-            const response = await fetch(`http://localhost:8000/beneficiary-platform/requests/type-layer1/`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.detail || 'Failed to fetch type layer 1');
-            }
-            const result = await response.json();
-            setTypeLayerOne(result);
-        } catch (err) {
-            console.error(err);
-        }
-    };
-
-    const fetchTypeLayerTwo = async () => {
-        try {
-            const response = await fetch(`http://localhost:8000/beneficiary-platform/requests/type-layer2/`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.detail || 'Failed to fetch type layer 2');
-            }
-            const result = await response.json();
-            setTypeLayerTwo(result);
-        } catch (err) {
-            console.error(err);
-        }
-    };
-
-    const fetchDuration = async () => {
-        try {
-            const response = await fetch(`http://localhost:8000/beneficiary-platform/requests/duration/`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.detail || 'Failed to fetch duration');
-            }
-            const result = await response.json();
-            setDuration(result);
-        } catch (err) {
-            console.error(err);
-        }
-    };
 
     const handleSubmit = async () => {
         setIsSubmitting(true);
@@ -174,12 +118,8 @@ function NewRequest() {
         }
     };
 
-    useEffect(() => {
-        fetchTypeLayerOne();
-        fetchTypeLayerTwo();
-        fetchDuration();
-    }, []);
-
+    if (loading) return <p>Loading lookups...</p>;
+    if (error) return <p>Error loading lookups: {error}</p>;
     if (submitSuccess) {
         return (
             <div style={{
