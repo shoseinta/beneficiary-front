@@ -2,9 +2,10 @@ import { useEffect, useState, useRef } from "react";
 import NavigationBar from "../../components/navigationBar/NavigationBar";
 import RequestsList from "./components/RequestsList";
 import { useLookup } from "../../context/LookUpContext";
+import { data } from "react-router-dom";
 
 function Requests() {
-    const {requestsData,setRequestsData, activeEndpoint, setActiveEndpoint} = useLookup()
+    const {requestsData,setRequestsData, activeEndpoint, setActiveEndpoint, setIsRequestPage} = useLookup()
     const endpoints = [
         'request-all-get/',
         'request-initial-stages-get/',
@@ -65,6 +66,23 @@ function Requests() {
             loadNextPage(activeEndpoint);
         }
     };
+    useEffect(() => {
+        if (!activeEndpoint){
+            setActiveEndpoint(0)
+        }
+    },[activeEndpoint])
+    useEffect(() => {
+        setIsRequestPage(true)
+        return () => {
+            setIsRequestPage(false)
+            setRequestsData((prev) => {
+                const newData = prev.map((item) => {
+                    return {...item, data:null, page: 1, pageCount: 1, loading: false};
+                })
+                return newData
+            })
+        }
+    },[])
     return (
         <>
             {/* Tabs */}
@@ -101,8 +119,7 @@ function Requests() {
                 >
                     <RequestsList
                         data={endpoint.data}
-                        setRequestsData={setRequestsData}
-                        activeEndpoint={index}
+                        index={index}
                     />
                     {endpoint.loading && (
                         <div style={{ textAlign: 'center', padding: '10px', color: 'gray' }}>Loading more...</div>

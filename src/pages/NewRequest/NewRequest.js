@@ -10,7 +10,7 @@ import { useLookup } from "../../context/LookUpContext";
 function NewRequest() {
     const navigate = useNavigate();
 
-    const {loading, error, duration, typeLayerOne, typeLayerTwo} = useLookup()
+    const {loading, error, duration, typeLayerOne, typeLayerTwo, setActiveEndpoint} = useLookup()
     
     const [requestData, setRequestData] = useState({
         beneficiary_request_title: "",
@@ -109,6 +109,7 @@ function NewRequest() {
             }
 
             setSubmitSuccess(true);
+            setActiveEndpoint(0);
             setTimeout(() => navigate('/requests'), 5000);
         } catch (err) {
             console.error('Submission error:', err);

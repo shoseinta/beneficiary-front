@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-function RequestsList({ data, setRequestData, activeEndpoint }) {
+function RequestsList({ data, index}) {
     if (!data) {
         return <div>Loading...</div>;
     }
@@ -19,7 +19,7 @@ function RequestsList({ data, setRequestData, activeEndpoint }) {
             {/* Data rows */}
             {
                 data.map(item => (
-                    <div key={item.beneficiary_request_id} style={{ display: 'grid', gridTemplateColumns: '1fr 2fr 1fr 1fr', padding: '0.5rem 0', borderBottom: '1px solid #eee' }}>
+                    <div key={`${item.beneficiary_request_id}-${index}`} style={{ display: 'grid', gridTemplateColumns: '1fr 2fr 1fr 1fr', padding: '0.5rem 0', borderBottom: '1px solid #eee' }}>
                         <div>{item.effective_date || '-'}</div>
                         <div>
                             <div>{item.beneficiary_request_type_layer1}</div>

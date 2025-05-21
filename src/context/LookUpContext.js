@@ -6,7 +6,8 @@ const LookupContext = createContext();
 export const useLookup = () => useContext(LookupContext);
 
 export const LookupProvider = ({ children }) => {
-  const [activeEndpoint, setActiveEndpoint] = useState(0);
+  const [activeEndpoint, setActiveEndpoint] = useState(null);
+  const [isRequestPage, setIsRequestPage] = useState(false);
   const endpoints = [
         'request-all-get/',
         'request-initial-stages-get/',
@@ -83,26 +84,10 @@ export const LookupProvider = ({ children }) => {
   const [provinces, setProvinces] = useState([]);
   const [cities, setCities] = useState([]);
 
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  useEffect(() => {
-  const interval = setInterval(() => {
-    const token = localStorage.getItem('access_token');
-    const userId = localStorage.getItem('user_id');
-
-    if (token && userId) {
-      // fetch all request endpoints
-      requestsData.forEach((request, index) => {
-        if (!request.data) {
-          loadInitialData(index);
-        }
-      });
-      clearInterval(interval); // stop polling after token is found
-    }
-  }, 500); // check every 500ms
-
-  return () => clearInterval(interval);
-}, []);
+ // Empty dependency array
 
   useEffect(() => {
     const fetchLookups = async () => {
@@ -144,6 +129,28 @@ export const LookupProvider = ({ children }) => {
     fetchLookups();
   }, []);
 
+    useEffect(() => {
+  const fetchSequentially = async () => {
+    const token = localStorage.getItem('access_token');
+    const userId = localStorage.getItem('user_id');
+    
+    if (!token || !userId) return false; // Exit if no credentials
+
+    try {
+      for (let i = 0; i < requestsData.length; i++) {
+        if(activeEndpoint === i && !requestsData[i].data){
+            loadInitialData(i);
+        }
+        
+      }
+    } catch (error) {
+      console.error('Sequential fetch error:', error);
+    }
+  };
+
+  fetchSequentially();
+}, [activeEndpoint,isRequestPage]);
+
   return (
     <LookupContext.Provider
       value={{
@@ -159,6 +166,7 @@ export const LookupProvider = ({ children }) => {
         setRequestsData,
         activeEndpoint,
         setActiveEndpoint,
+        setIsRequestPage,
       }}
     >
       {children}
