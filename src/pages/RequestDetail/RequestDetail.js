@@ -4,7 +4,7 @@ import { useLookup } from '../../context/LookUpContext';
 
 function RequestDetail() {
   const { id } = useParams();
-  const {duration, typeLayerOne, typeLayerTwo} = useLookup();
+  const {duration} = useLookup();
   const [isEdit,setIsEdit] = useState(false)
   const [requestData,setRequestData] = useState(null)
   const [updateData, setUpdateData] = useState(null)
@@ -70,68 +70,137 @@ function RequestDetail() {
   }
 
   const handleFinishEdit = async () => {
-    const isConfirmed = window.confirm('are you sure about the edit?')
-    if(isConfirmed){
-      // try {
-      //     const response = await fetch('http://localhost:8000/user-api/beneficiary/login/', {
-      //       method: 'POST',
-      //       headers: {
-      //         'Content-Type': 'application/json',
-      //       },
-      //       body: JSON.stringify(formData),
-      //     });
-      //     if (!response.ok) {  // Check for HTTP errors (4xx/5xx)
-      //       const errorData = await response.json();
-      //       throw new Error(errorData.detail || 'Login failed');
-      //     }
-      //     const result = await response.json();
-      //     console.log(result)
-      //     localStorage.setItem('access_token', result.token);
-      //     localStorage.setItem('user_id', result.user_id);
-      //     localStorage.setItem('username', result.username);
-      //     // Handle success
-      //     setError(false)
-      //     navigate('/home')
+  const isConfirmed = window.confirm('are you sure about the edit?');
+  if (isConfirmed) {
+    try {
+      // Prepare the main request data
+      const requestDataToSend = {
+        beneficiary_request_title: updateData.beneficiary_request_title,
+        beneficiary_request_description: updateData.beneficiary_request_description,
+        beneficiary_request_amount: updateData.beneficiary_request_amount,
+        beneficiary_request_duration: updateData.beneficiary_request_duration,
+      };
 
-      //   } catch (err) {
-      //     setError(true)
-      //   }
-      return
-      
-  } else {
-    setIsEdit(false)
-     let updateDuration;
-    if (requestData.beneficiary_request_duration === 'One Time'){
-      updateDuration = 1
-    } else if (requestData.beneficiary_request_duration === 'Recurring'){
-      updateDuration = 2
-    } else {
-      updateDuration = 3
-    }
-    let updateDurationOnetime;
-    if (requestData.beneficiary_request_duration_onetime){
-      updateDurationOnetime = requestData.beneficiary_request_duration_onetime
-    } else {
-      updateDurationOnetime = {beneficiary_request_duration_onetime_deadline: null}
-    }
-    let updateDurationRecurring;
-    if (requestData.beneficiary_request_duration_recurring){
-      updateDurationRecurring = requestData.beneficiary_request_duration_recurring
-    }else {
-      updateDurationRecurring = {beneficiary_request_duration_recurring_limit: null}
-    }
-    setUpdateData({
-            beneficiary_request_title: requestData.beneficiary_request_title,
-            beneficiary_request_description:requestData.beneficiary_request_description,
-            beneficiary_request_amount:requestData.beneficiary_request_amount,
-            beneficiary_request_duration_onetime:requestData.beneficiary_request_duration_onetime,
-            beneficiary_request_duration_recurring:requestData.beneficiary_request_duration_recurring,
-            beneficiary_request_duration: updateDuration,
-            beneficiary_request_duration_onetime: updateDurationOnetime,
-            beneficiary_request_duration_recurring: updateDurationRecurring,
-          })
+      // Send main request update
+      const response = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-single-update/${id}/`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${localStorage.getItem('access_token')}`,
+        },
+        body: JSON.stringify(requestDataToSend),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'request update failed');
+      }
+
+      // Handle duration-specific updates
+      if (updateData.beneficiary_request_duration === 1) {
+        const updateOnetime = {
+          beneficiary_request_duration_onetime_deadline: 
+            updateData.beneficiary_request_duration_onetime?.beneficiary_request_duration_onetime_deadline
+        };
+
+        if (requestData.beneficiary_request_duration_onetime) {
+          // Update existing one-time
+          const onetimeResponse = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-single-update-onetime/${id}/`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Token ${localStorage.getItem('access_token')}`,
+            },
+            body: JSON.stringify(updateOnetime),
+          });
+          if (!onetimeResponse.ok) {
+            const errorData = await onetimeResponse.json();
+            throw new Error(errorData.detail || 'onetime update failed');
+          }
+        } else {
+          // Create new one-time
+          const onetimeResponse = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-create-onetime/${id}/`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Token ${localStorage.getItem('access_token')}`,
+            },
+            body: JSON.stringify(updateOnetime),
+          });
+          if (!onetimeResponse.ok) {
+            const errorData = await onetimeResponse.json();
+            throw new Error(errorData.detail || 'onetime create failed');
+          }
         }
+      } 
+      else if (updateData.beneficiary_request_duration === 2) {
+        const updateRecurring = {
+          beneficiary_request_duration_recurring_limit: 
+            updateData.beneficiary_request_duration_recurring?.beneficiary_request_duration_recurring_limit
+        };
+
+        if (requestData.beneficiary_request_duration_recurring) {
+          // Update existing recurring
+          const recurringResponse = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-single-update-recurring/${id}/`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Token ${localStorage.getItem('access_token')}`,
+            },
+            body: JSON.stringify(updateRecurring),
+          });
+          if (!recurringResponse.ok) {
+            const errorData = await recurringResponse.json();
+            throw new Error(errorData.detail || 'recurring update failed');
+          }
+        } else {
+          // Create new recurring
+          const recurringResponse = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-create-recurring/${id}/`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Token ${localStorage.getItem('access_token')}`,
+            },
+            body: JSON.stringify(updateRecurring),
+          });
+          if (!recurringResponse.ok) {
+            const errorData = await recurringResponse.json();
+            throw new Error(errorData.detail || 'recurring create failed');
+          }
+        }
+      }
+
+      // Refresh data
+      setRequestData(null);
+      setIsEdit(false);
+      await fetchData();
+    } catch (err) {
+      console.error('Error during update:', err);
+    }
+  } else {
+    // User canceled - reset to original data
+    setIsEdit(false);
+    let updateDuration;
+    if (requestData.beneficiary_request_duration === 'One Time') {
+      updateDuration = 1;
+    } else if (requestData.beneficiary_request_duration === 'Recurring') {
+      updateDuration = 2;
+    } else {
+      updateDuration = 3;
+    }
+    
+    setUpdateData({
+      beneficiary_request_title: requestData.beneficiary_request_title,
+      beneficiary_request_description: requestData.beneficiary_request_description,
+      beneficiary_request_amount: requestData.beneficiary_request_amount,
+      beneficiary_request_duration: updateDuration,
+      beneficiary_request_duration_onetime: requestData.beneficiary_request_duration_onetime || 
+        { beneficiary_request_duration_onetime_deadline: null },
+      beneficiary_request_duration_recurring: requestData.beneficiary_request_duration_recurring || 
+        { beneficiary_request_duration_recurring_limit: null },
+    });
   }
+};
 
   const handleAmountUpdate = (event) => {
     setUpdateData(pre => {
@@ -189,10 +258,10 @@ function RequestDetail() {
     })
   }
 
-  useEffect(() => {
-    console.log(updateData)
-    console.log(duration)
-  })
+  // useEffect(() => {
+  //   console.log(updateData)
+  //   console.log(duration)
+  // })
 
   if(!requestData){
     return <p>loading...</p>
