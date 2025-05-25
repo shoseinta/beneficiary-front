@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useLookup } from '../../context/LookUpContext';
 
 function RequestDetail() {
@@ -8,6 +8,7 @@ function RequestDetail() {
   const [isEdit,setIsEdit] = useState(false)
   const [requestData,setRequestData] = useState(null)
   const [updateData, setUpdateData] = useState(null)
+  const navigate = useNavigate();
 
   const fetchData = async () => {
         try {
@@ -67,6 +68,62 @@ function RequestDetail() {
         return
     }
     setIsEdit(true)
+  }
+
+  const handleDelete = async () => {
+    if(requestData.beneficiary_request_is_created_by_charity || (requestData.beneficiary_request_processing_stage !== 'Submitted' && requestData.beneficiary_request_processing_stage !== 'Pending Review' && requestData.beneficiary_request_processing_stage !== 'Under Evaluation')){
+        return
+    }
+    const isConfirmed = window.confirm('are you sure you want to delete this request?')
+    if (!isConfirmed) {
+      return
+    } else {
+      try {
+        const response = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-single-update/${id}/`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${localStorage.getItem('access_token')}`,
+        },
+      });
+
+      if(!response.ok){
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'request delete failed');
+      }
+
+      if(requestData.beneficiary_request_duration === 'One Time' && requestData.beneficiary_request_duration_onetime){
+        const onetimeResponse = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-single-update-onetime/${id}/`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Token ${localStorage.getItem('access_token')}`,
+            },
+          });
+          if (!onetimeResponse.ok) {
+            const errorData = await onetimeResponse.json();
+            throw new Error(errorData.detail || 'onetime delete failed');
+          }
+      }
+
+      if(requestData.beneficiary_request_duration === 'Recurring' && requestData.beneficiary_request_duration_recurring){
+        const recurringResponse = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-single-update-recurring/${id}/`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Token ${localStorage.getItem('access_token')}`,
+            },
+          });
+          if (!recurringResponse.ok) {
+            const errorData = await recurringResponse.json();
+            throw new Error(errorData.detail || 'recurring delete failed');
+          }
+      }
+      } catch(err) {
+        console.log(err)
+      }
+    }
+    navigate('/requests');
   }
 
   const handleFinishEdit = async () => {
@@ -363,6 +420,7 @@ function RequestDetail() {
         <p>processing stage: {requestData.beneficiary_request_processing_stage}</p>
     </div>
     {!isEdit?<button onClick={handleEditClick}>edit</button>:<button onClick={handleFinishEdit}>finish editing</button>}
+    <button onClick={handleDelete}>delete</button>
     <Link to={`/requests`} >back</Link>
     </>
   );
