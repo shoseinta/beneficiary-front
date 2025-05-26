@@ -259,6 +259,8 @@ function RequestDetail() {
   }
 };
 
+
+
   const handleAmountUpdate = (event) => {
     setUpdateData(pre => {
         if (event.target.value !== ''){
