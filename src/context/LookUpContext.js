@@ -89,67 +89,67 @@ export const LookupProvider = ({ children }) => {
   const [error, setError] = useState(null);
  // Empty dependency array
 
-//   useEffect(() => {
-//     const fetchLookups = async () => {
-//       try {
-//         const [typeLayer1Res, typeLayer2Res, processingStageRes, durationRes, provincesRes, citiesRes] = await Promise.all([
-//           fetch(`http://localhost:8000/beneficiary-platform/requests/type-layer1/`),
-//           fetch(`http://localhost:8000/beneficiary-platform/requests/type-layer2/`),
-//           fetch(`http://localhost:8000/beneficiary-platform/requests/processing-stage/`),
-//           fetch(`http://localhost:8000/beneficiary-platform/requests/duration/`),
-//           fetch(`http://localhost:8000/beneficiary-platform/provinces/`),
-//           fetch(`http://localhost:8000/beneficiary-platform/cities/`),
+  useEffect(() => {
+    const fetchLookups = async () => {
+      try {
+        const [typeLayer1Res, typeLayer2Res, processingStageRes, durationRes, provincesRes, citiesRes] = await Promise.all([
+          fetch(`http://localhost:8000/beneficiary-platform/requests/type-layer1/`),
+          fetch(`http://localhost:8000/beneficiary-platform/requests/type-layer2/`),
+          fetch(`http://localhost:8000/beneficiary-platform/requests/processing-stage/`),
+          fetch(`http://localhost:8000/beneficiary-platform/requests/duration/`),
+          fetch(`http://localhost:8000/beneficiary-platform/provinces/`),
+          fetch(`http://localhost:8000/beneficiary-platform/cities/`),
 
-//         ]);
+        ]);
 
-//         if (!typeLayer1Res.ok || !typeLayer2Res.ok || !processingStageRes.ok || !durationRes.ok || !provincesRes.ok || !citiesRes.ok) {
-//           throw new Error('One or more lookup requests failed');
-//         }
+        if (!typeLayer1Res.ok || !typeLayer2Res.ok || !processingStageRes.ok || !durationRes.ok || !provincesRes.ok || !citiesRes.ok) {
+          throw new Error('One or more lookup requests failed');
+        }
 
-//         const typeLayer1Data = await typeLayer1Res.json();
-//         const typeLayer2Data = await typeLayer2Res.json();
-//         const processingStageData = await processingStageRes.json();
-//         const durationData = await durationRes.json();
-//         const provincesData = await provincesRes.json();
-//         const citiesData = await citiesRes.json();
+        const typeLayer1Data = await typeLayer1Res.json();
+        const typeLayer2Data = await typeLayer2Res.json();
+        const processingStageData = await processingStageRes.json();
+        const durationData = await durationRes.json();
+        const provincesData = await provincesRes.json();
+        const citiesData = await citiesRes.json();
 
-//         setTypeLayerOne(typeLayer1Data);
-//         setTypeLayerTwo(typeLayer2Data);
-//         setProcessingStage(processingStageData);
-//         setDuration(durationData);
-//         setProvinces(provincesData);
-//         setCities(citiesData);
-//         setLoading(false);
-//       } catch (err) {
-//         setError(err.message);
-//         setLoading(false);
-//       }
-//     };
+        setTypeLayerOne(typeLayer1Data);
+        setTypeLayerTwo(typeLayer2Data);
+        setProcessingStage(processingStageData);
+        setDuration(durationData);
+        setProvinces(provincesData);
+        setCities(citiesData);
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
 
-//     fetchLookups();
-//   }, []);
+    fetchLookups();
+  }, []);
 
-//     useEffect(() => {
-//   const fetchSequentially = async () => {
-//     const token = localStorage.getItem('access_token');
-//     const userId = localStorage.getItem('user_id');
+    useEffect(() => {
+  const fetchSequentially = async () => {
+    const token = localStorage.getItem('access_token');
+    const userId = localStorage.getItem('user_id');
     
-//     if (!token || !userId) return false; // Exit if no credentials
+    if (!token || !userId) return false; // Exit if no credentials
 
-//     try {
-//       for (let i = 0; i < requestsData.length; i++) {
-//         if(activeEndpoint === i && !requestsData[i].data){
-//             loadInitialData(i);
-//         }
+    try {
+      for (let i = 0; i < requestsData.length; i++) {
+        if(activeEndpoint === i && !requestsData[i].data){
+            loadInitialData(i);
+        }
         
-//       }
-//     } catch (error) {
-//       console.error('Sequential fetch error:', error);
-//     }
-//   };
+      }
+    } catch (error) {
+      console.error('Sequential fetch error:', error);
+    }
+  };
 
-//   fetchSequentially();
-// }, [activeEndpoint,isRequestPage]);
+  fetchSequentially();
+}, [activeEndpoint,isRequestPage]);
 
   return (
     <LookupContext.Provider

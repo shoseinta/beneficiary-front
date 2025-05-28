@@ -1,30 +1,44 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Carousel from "../../components/carousel/Carousel";
 import NavigationBar from "../../components/navigationBar/NavigationBar";
+import Header from "../../components/header/Header";
+import bell_icon from '../../media/icons/bell_icon.svg';
+import more_icon from '../../media/icons/more_icon.svg';
+import tutorial from '../../media/images/tutorial.mp4';
+import thumbnail from '../../media/images/thumbnail.png'
+import './Home.css';
 
 function Home() {
   const [endpointStates, setEndpointStates] = useState({
     "request-announcement-get": {
-      data: [],
+      id: "notif1",
+      title: "اطلاعیه‌های شما",
+      items: [],
+      moreItems: [],
       page: 1,
       pageCount: 1,
       isLoading: false,
       loaded: false
     },
     "announcement-get": {
-      data: [],
+      id: "notif2",
+      title: "اعلانات سامانه",
+      items: [],
+      moreItems: [],
       page: 1,
       pageCount: 1,
       isLoading: false,
       loaded: false
     }
   });
-  const [activeEndpoint, setActiveEndpoint] = useState("request-announcement-get");
 
-  const endpoints = {
-    announcements: "request-announcement-get",
-    news: "announcement-get"
+  // Contact information
+  const contactInfo = {
+    phone: "۰۲۱-۲۲۳۴۵۶۷۸",
+    whatsapp: "۰۹۱۲۳۴۵۶۷۸۹",
+    instagram: "daste_mehrabaan",
+    email: "daste.mehrabaan@email.com",
+    hours: "همه روزه از ساعت ۱۰ الی ۱۲"
   };
 
   const loadInitialData = async (endpoint) => {
@@ -53,16 +67,27 @@ function Home() {
       }
 
       const data = await response.json();
-      updateEndpointState(endpoint, {
-        data: Array.isArray(data.results) ? data.results : [],
-        pageCount: Math.max(Math.ceil(data.count / 10), 1),
-        loaded: true,
-        isLoading: false
-      });
+      
+      if (data.results && data.results.length > 0) {
+        const moreItems = data.results.map(item => ({
+          heading: item.charity_announcement_for_request_title || "عنوان پیش‌فرض",
+          date: item.charity_announcement_for_request_updated_at || "تاریخ نامشخص",
+          content: item.charity_announcement_for_request_description || "محتوا موجود نیست"
+        }));
+
+        const items = moreItems.length > 0 ? [moreItems[0]] : [];
+        
+        updateEndpointState(endpoint, {
+          items,
+          moreItems,
+          loaded: true,
+          isLoading: false,
+          pageCount: Math.max(Math.ceil(data.count / 10), 1)
+        });
+      }
     } catch (error) {
       console.error("Fetch error:", error);
       updateEndpointState(endpoint, { 
-        data: [],
         isLoading: false 
       });
     }
@@ -78,72 +103,110 @@ function Home() {
     }));
   };
 
-  const handleEndpointChange = (newEndpoint) => {
-    setActiveEndpoint(newEndpoint);
-    // No need to load initial data here if we're preserving state
-  };
-
   useEffect(() => {
     loadInitialData("request-announcement-get");
     loadInitialData("announcement-get");
   }, []);
 
-  const currentState = endpointStates[activeEndpoint] || { 
-    data: [], 
-    page: 1, 
-    pageCount: 1, 
-    isLoading: false 
-  };
+  // Convert endpointStates to array for mapping
+  const notifications = Object.values(endpointStates);
 
   return (
-    <div>
-      <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
-        <button 
-          onClick={() => handleEndpointChange(endpoints.announcements)}
-          style={{
-            background: activeEndpoint === endpoints.announcements ? '#4CAF50' : '#f1f1f1',
-            color: activeEndpoint === endpoints.announcements ? 'white' : 'black'
-          }}
-        >
-          Announcements
-        </button>
-        <button 
-          onClick={() => handleEndpointChange(endpoints.news)}
-          style={{
-            background: activeEndpoint === endpoints.news ? '#4CAF50' : '#f1f1f1',
-            color: activeEndpoint === endpoints.news ? 'white' : 'black'
-          }}
-        >
-          News
-        </button>
-      </div>
+    <div className="container">
+      <Header />
+      <main className="main">
+        <div className="carousel">
+          {notifications.map((notification, index) => (
+            <article key={notification.id} className="notification" id={notification.id}>
+              <section className="h1">
+                <img src={bell_icon} alt="" />
+                <h1>{notification.title}</h1>
+              </section>
+              
+              {notification.items && notification.items.map((item, itemIndex) => (
+                <div key={itemIndex}>
+                  <section className="h3">
+                    <h3>{item.heading}</h3>
+                    <time dateTime={item.date}>{item.date}</time>
+                  </section>
+                  <div>
+                    <p className="paragraph">{item.content}</p>
+                  </div>
+                </div>
+              ))}
+              
+              <div className="details">
+                <details>
+                  <summary className="summary">
+                    موارد بیشتر <img src={more_icon} alt="" />
+                  </summary>
+                  <section className="h1">
+                    <img src={bell_icon} alt="" />
+                    <h1>{notification.title}</h1>
+                  </section>
+                  {notification.moreItems && notification.moreItems.map((item, moreIndex) => (
+                    <div key={`more-${moreIndex}`}>
+                      <section className="h3">
+                        <h3>{item.heading}</h3>
+                        <time dateTime={item.date}>{item.date}</time>
+                      </section>
+                      <div>
+                        <p className="paragraph">{item.content}</p>
+                      </div>
+                    </div>
+                  ))}
+                </details>
+              </div>
+            </article>
+          ))}
+        </div>
+        
+        <div className="carousel-dots">
+          {notifications.map((_, index) => (
+            <span key={index} className={`dot ${index === 0 ? 'active' : ''}`}></span>
+          ))}
+        </div>
+      </main>
 
-      <div style={{ display: activeEndpoint === endpoints.announcements ? 'block' : 'none' }}>
-        <Carousel
-          requestData={endpointStates["request-announcement-get"].data}
-          setRequestData={(newData) => updateEndpointState("request-announcement-get", { data: newData })}
-          page={endpointStates["request-announcement-get"].page}
-          setPage={(newPage) => updateEndpointState("request-announcement-get", { page: newPage })}
-          pageCount={endpointStates["request-announcement-get"].pageCount}
-          activeEndpoint="request-announcement-get"
-          isLoading={endpointStates["request-announcement-get"].isLoading}
-          setIsLoading={(loading) => updateEndpointState("request-announcement-get", { isLoading: loading })}
-        />
-      </div>
+      <section className="video">
+        <div className="poster-overlay"></div>
+        <video controls poster={thumbnail}>
+          <source src={tutorial} type="video/mp4" />
+          ویدئو آموزش استفاده از سامانه
+        </video>
+        <section className="title">ویدئو آموزش استفاده از سامانه</section>
+      </section>
 
-      <div style={{ display: activeEndpoint === endpoints.news ? 'block' : 'none' }}>
-        <Carousel
-          requestData={endpointStates["announcement-get"].data}
-          setRequestData={(newData) => updateEndpointState("announcement-get", { data: newData })}
-          page={endpointStates["announcement-get"].page}
-          setPage={(newPage) => updateEndpointState("announcement-get", { page: newPage })}
-          pageCount={endpointStates["announcement-get"].pageCount}
-          activeEndpoint="announcement-get"
-          isLoading={endpointStates["announcement-get"].isLoading}
-          setIsLoading={(loading) => updateEndpointState("announcement-get", { isLoading: loading })}
-        />
+      <div className="footer-nav">
+        <div className="footer-container">
+          <footer className="footer">
+            <h2 id="title">ارتباط با خیریه</h2>
+            <section id="key">
+              شماره تماس <br /> 
+              شماره واتس‌اپ <br /> 
+              صفحه اینستاگرام <br /> 
+              آدرس ایمیل <br /> 
+              ساعات پاسخگویی
+            </section>
+            <section id="value">
+              <a href={`tel:${contactInfo.phone}`}>
+                {contactInfo.phone} <img src="media/icons/phone_icon.svg" alt="" />
+              </a> <br />
+              <a href={`https://wa.me/${contactInfo.whatsapp}`} target="_blank" rel="noopener noreferrer">
+                {contactInfo.whatsapp} <img src="media/icons/whatsapp_icon.svg" alt="" />
+              </a> <br />
+              <a href={`https://instagram.com/${contactInfo.instagram}`} target="_blank" rel="noopener noreferrer">
+                {contactInfo.instagram} <img src="media/icons/instagram_icon.svg" alt="" />
+              </a> <br />
+              <a href={`mailto:${contactInfo.email}`}>
+                {contactInfo.email} <img src="media/icons/email_icon.svg" alt="" />
+              </a> <br />
+              <span>{contactInfo.hours}</span>
+            </section>
+          </footer>
+        </div>
+        <NavigationBar />
       </div>
-      <NavigationBar />
     </div>
   );
 }
