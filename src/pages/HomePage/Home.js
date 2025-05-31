@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import Carousel from "../../components/carousel/Carousel";
 import { useNavigate } from "react-router-dom";
 import NavigationBar from "../../components/navigationBar/NavigationBar";
 import Header from "../../components/header/Header";
@@ -111,63 +112,19 @@ function Home() {
   // Convert endpointStates to array for mapping
   const notifications = Object.values(endpointStates);
 
+  useEffect(() => console.log(notifications))
+
   return (
     <div className="container">
       <Header />
-      <main className="main">
-        <div className="carousel">
-          {notifications.map((notification, index) => (
-            <article key={notification.id} className="notification" id={notification.id}>
-              <section className="h1">
-                <img src={bell_icon} alt="" />
-                <h1>{notification.title}</h1>
-              </section>
-              
-              {notification.items && notification.items.map((item, itemIndex) => (
-                <div key={itemIndex}>
-                  <section className="h3">
-                    <h3>{item.heading}</h3>
-                    <time dateTime={item.date}>{item.date}</time>
-                  </section>
-                  <div>
-                    <p className="paragraph">{item.content}</p>
-                  </div>
-                </div>
-              ))}
-              
-              <div className="details">
-                <details>
-                  <summary className="summary">
-                    موارد بیشتر <img src={more_icon} alt="" />
-                  </summary>
-                  <section className="h1">
-                    <img src={bell_icon} alt="" />
-                    <h1>{notification.title}</h1>
-                  </section>
-                  {notification.moreItems && notification.moreItems.map((item, moreIndex) => (
-                    <div key={`more-${moreIndex}`}>
-                      <section className="h3">
-                        <h3>{item.heading}</h3>
-                        <time dateTime={item.date}>{item.date}</time>
-                      </section>
-                      <div>
-                        <p className="paragraph">{item.content}</p>
-                      </div>
-                    </div>
-                  ))}
-                </details>
-              </div>
-            </article>
-          ))}
-        </div>
-        
-        <div className="carousel-dots">
-          {notifications.map((_, index) => (
-            <span key={index} className={`dot ${index === 0 ? 'active' : ''}`}></span>
-          ))}
-        </div>
-      </main>
+      {/* <Carousel notifications={notifications} endpointStates={endpointStates}/> */}
 
+      {notifications[0]?.items?.length > 0 && (
+        <Carousel notification={notifications[0]} notifIndex={0} />
+      )}
+      {notifications[1]?.items?.length > 0 && (
+        <Carousel notification={notifications[1]} notifIndex={1} />
+      )}
       <section className="video">
         <div className="poster-overlay"></div>
         <video controls poster={thumbnail}>
