@@ -71,6 +71,7 @@ function Home() {
       
       if (data.results && data.results.length > 0) {
         const moreItems = data.results.map(item => ({
+          id: item.charity_announcement_for_request_id || 0,
           heading: item.charity_announcement_for_request_title || "عنوان پیش‌فرض",
           date: item.charity_announcement_for_request_updated_at || "تاریخ نامشخص",
           content: item.charity_announcement_for_request_description || "محتوا موجود نیست"

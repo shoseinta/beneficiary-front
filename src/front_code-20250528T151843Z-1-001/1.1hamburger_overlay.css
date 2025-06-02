@@ -1,0 +1,165 @@
+@font-face {
+  font-family: vazir;
+  src: url('media/fonts/Vazir-Regular-UI.woff2') format('woff2'),
+       url('media/fonts/Vazir-Regular-UI.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+    font-family: vazir;
+    src: url('media/fonts/Vazir-Bold-UI.woff2') format('woff2'),
+         url('media/fonts/Vazir-Bold-UI.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+}
+@font-face {
+    font-family: vazir;
+    src: url('media/fonts/Vazir-Black-UI.woff2') format('woff2'),
+         url('media/fonts/Vazir-Black-UI.woff') format('woff');
+    font-weight: 900;
+    font-style: normal;
+}
+@font-face {
+    font-family: vazir;
+    src: url('media/fonts/Vazir-Medium-UI.woff2') format('woff2'),
+         url('media/fonts/Vazir-Medium-UI.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+}
+@font-face {
+    font-family: vazir;
+    src: url('media/fonts/Vazir-Light-UI.woff2') format('woff2'),
+         url('media/fonts/Vazir-Light-UI.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+}
+@font-face {
+    font-family: vazir;
+    src: url('media/fonts/Vazir-Thin-UI.woff2') format('woff2'),
+         url('media/fonts/Vazir-Thin-UI.woff') format('woff');
+    font-weight: 100;
+    font-style: normal;
+}
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "vazir", sans-serif;
+  direction: rtl;
+  unicode-bidi: embed;
+  text-align: right;
+}
+:root {
+    --main-color: #185ea7;
+    --main50-color: rgba(24, 94, 160, 0.5);
+    --main10-color: rgba(24, 94, 160, 0.1);
+    --white-color: #ffffff;
+    --white-gray-color: #f5f5f5;
+    --gray-color: #f9f9f9;
+    --black-color: #000000;
+    --black50-color: rgba(0, 0, 0, 0.5);
+    --black25-color: rgba(0, 0, 0, 0.25);
+    --error-red: #ff0000;
+    --bluelinenav-color : #8BAECF
+}
+body {
+  background-color: var(--black25-color);
+  overflow-y: auto;
+}
+.hamburger-overlay {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 60%;
+  max-width: 280px;
+  padding: 20px 10px;
+  background-color: var(--white-color);
+  border-radius: 10px 0 0 10px ;
+  border: var(--main-color) 2px solid;
+  border-right: none;
+  overflow-y: auto;
+  z-index: 20;
+}
+.hamburger-overlay-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--main-color);
+}
+.close-btn {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  width: 5vw;
+  max-width: 30px;
+  height: auto;
+}
+.close-btn img {
+  width: 100%;
+  height: auto;
+}
+h5 {
+  font-size: 0.9rem;
+  font-weight: bold;
+  text-align: center;
+}
+.settings {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 80px;
+}
+.setting-content {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  column-gap: 10px;
+  font-size: 0.8rem;
+  font-weight: normal;
+  color: var(--black50-color);
+}
+.setting-image {
+  position: relative;
+  display: inline-block;
+  width: auto;
+}
+.setting-image img:first-child {
+    display: block;
+    width: 100%;
+}
+
+.setting-image img:last-child {
+    position: absolute;
+    top: 0;
+    right: 0;
+    transition: 0.4s ease-in-out;
+}
+.setting-image img:last-child.move-left {
+    right: auto;
+    left: 0;
+}
+.sign-out-btn {
+  display: flex;
+  align-items: center;
+  justify-content: right;
+  gap: 10px;
+  margin: 10px 0 10px 0;
+  color: var(--error-red);
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+}
+.sign-out-btn img {
+  width: 15px;
+  height: auto;
+}

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fa-IR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="صفحه ایجاد درخواست مددجویان خیریه دست مهربان">
+  <meta name="keywords" content="صفحه ایجاد درخواست خیریه، مددجو، مددجویان، خیریه دست مهربان، دست مهربان">
+  <meta name="author" content="محمد جواد عزیزی">
+  <link rel="stylesheet" href="3.request_creation_page.css">
+  <title>صفحه ایجاد درخواست خیریه</title>
+</head>
+
+<body>
+  <div class="container">
+
+    <header class="header">
+      <button type="menu" id="hamburger">
+        <img src="media/icons/hamburger_icon.svg" alt="منوی تنظیمات">
+      </button>
+      <img src="media/images/charity_typo_white.png" id="typo" alt="تایپوگرافی نام خیریه">
+      <img src="media/images/charity_logo.png" id="logo" alt="لوگوی خیریه">
+    </header>
+    <main class="main">
+
+      <nav class="nav-up">
+        <ol class="nav-list-up">
+          <li class="nav-item-up" id="active-nav-up">
+            <div> 
+              <span class="step-icon"><img src="media/icons/step1_active.svg" alt=""></span>
+              <p> نوع درخواست   </p> </div>
+
+          </li>
+          <li class="nav-item-up">
+            <div> 
+              <span class="step-icon"><img src="media/icons/step2.svg" alt=""></span>
+              <p>  تعیین تاریخ  </p> </div>
+
+          </li>
+          <li class="nav-item-up">
+            <div> 
+              <span class="step-icon"><img src="media/icons/step3.svg" alt=""></span>
+              <p> اطلاعات تکمیلی  </p></div>
+
+          </li>
+          <li class="nav-item-up">
+            <div> 
+              <span class="step-icon"><img src="media/icons/step4.svg" alt=""></span>
+              <p> تأیید نهایی  </p> </div>
+
+          </li>
+        </ol>
+
+      </nav>
+
+      <form action="sign_in.php" method="POST" class="form">
+        <fieldset class="type-layer1 input-space">
+          <legend class="label-space"> نوع درخواست شما در کدامیک از دسته‌های زیر قرار دارد؟ <sup>*</sup></legend>
+          
+          <div class="choice-group">
+            <input type="radio" id="type-good" name="request_type" value="good" required>
+            <label for="type-good">کالا</label>
+
+            <input type="radio" id="type-cash" name="request_type" value="cash">
+            <label for="type-cash"> وجه نقد  </label>
+
+            <input type="radio" id="type-service" name="request_type" value="service">
+            <label for="type-service">  خدمت </label>
+          </div>
+        </fieldset>
+
+        <div class="type-layer2 input-space">
+          <label for="type-layer2-id" class="label-space"> کالای درخواستی شما در کدامیک از دسته‌های زیر قرار دارد؟ <sup>*</sup></label>
+          <select id="type-layer2-id" name="type-layer2" required>
+            <option value="">انتخاب کنید</option>
+            <option value="good">نوع یک</option>
+            <option value="cash">نوع دو </option>
+            <option value="service">نوع سه</option>
+          </select>
+        </div>
+
+        <div></div>
+
+      </form>
+
+      <div class="next-btn">
+        <button>
+          <span> بعدی</span>
+          <img src="media/icons/next_icon.svg" alt="دکمه بعدی">
+        </button>
+      </div>
+
+      <div></div>
+
+    </main>
+
+
+
+
+
+    <nav class="nav">
+      <ul class="nav-list">
+        <li><a href=""> 
+          <div class="nav-icon"><img src="media/icons/home_nav.svg" alt=""></div>  خانه </a></li>
+        <li><a href="" id="active-nav">
+          <div class="nav-icon"> <img src="media/icons/creation_nav_active.svg" alt=""></div> ایجاد درخواست </a></li>
+        <li><a href="">
+          <div class="nav-icon"> <img src="media/icons/requests_nav.svg" alt=""></div> سوابق درخواست </a></li>
+        <li><a href=""> 
+          <div class="nav-icon"><img src="media/icons/account_nav.svg" alt=""></div> حساب کاربری </a></li>
+      </ul>
+    </nav>
+
+  </div>
+</body>
+</html>

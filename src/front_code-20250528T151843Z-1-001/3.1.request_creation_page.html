@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fa-IR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="صفحه ایجاد درخواست مددجویان خیریه دست مهربان">
+  <meta name="keywords" content="صفحه ایجاد درخواست خیریه، مددجو، مددجویان، خیریه دست مهربان، دست مهربان">
+  <meta name="author" content="محمد جواد عزیزی">
+  <link rel="stylesheet" href="3.1.request_creation_page.css">
+  <title>صفحه ایجاد درخواست خیریه</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/css/persian-datepicker.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/persian-date@0.1.8/dist/persian-date.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
+</head>
+
+<body>
+  <div class="container">
+
+    <header class="header">
+      <button type="menu" id="hamburger">
+        <img src="media/icons/hamburger_icon.svg" alt="منوی تنظیمات">
+      </button>
+      <img src="media/images/charity_typo_white.png" id="typo" alt="تایپوگرافی نام خیریه">
+      <img src="media/images/charity_logo.png" id="logo" alt="لوگوی خیریه">
+    </header>
+
+    <main class="main">
+
+      <nav class="nav-up">
+        <ol class="nav-list-up">
+          <li class="nav-item-up step-completed" >
+            <div> 
+              <span class="step-icon"><img src="media/icons/step1_completed.svg" alt=""></span>
+              <p> نوع درخواست   </p> </div>
+
+          </li>
+          <li class="nav-item-up" id="active-nav-up">
+            <div> 
+              <span class="step-icon"><img src="media/icons/step2_active.svg" alt=""></span>
+              <p>  تعیین تاریخ  </p> </div>
+
+          </li>
+          <li class="nav-item-up">
+            <div> 
+              <span class="step-icon"><img src="media/icons/step3.svg" alt=""></span>
+              <p> اطلاعات تکمیلی  </p></div>
+
+          </li>
+          <li class="nav-item-up">
+            <div> 
+              <span class="step-icon"><img src="media/icons/step4.svg" alt=""></span>
+              <p> تأیید نهایی  </p> </div>
+
+          </li>
+        </ol>
+
+      </nav>
+
+      <form action="sign_in.php" method="POST" class="form">
+        <fieldset class="time-layer1 input-space">
+          <legend class="label-space"> درخواست شما در کدامیک از گزینه‌های زمانی زیر قرار دارد؟ <sup>*</sup></legend>
+          
+          <div class="choice-group2">
+            <input type="radio" id="one-time" name="request_time" value="one-time" required>
+            <label for="one-time">فقط یکبار </label>
+
+            <input type="radio" id="recurring" name="request_time" value="recurring">
+            <label for="recurring"> به‌صورت ماهانه </label>
+
+            <input type="radio" id="permanent" name="request_time" value="permanent">
+            <label for="permanent">  به‌صورت دائمی </label>
+          </div>
+        </fieldset>
+
+        <div class="time-layer2 input-space" id="time-layer2-one-time">
+          <label for="time-layer2-one-time-id" class="label-space"> آخرین زمانی که می‌خواهید درخواست شما انجام شود، چه تاریخی است؟<sup>*</sup></label>
+          <input type="text" id="time-layer2-one-time-id" placeholder="تاریخ را انتخاب کنید" readonly required >
+        </div>
+        <div class="time-layer2 input-space" id="time-layer2-recurring">
+          <label for="time-layer2-recurring-id" class="label-space">  دوره‌های ماهانه درخواست شما چه تعداد است؟  <sup>*</sup></label>
+          <input type="number" id="time-layer2-recurring-id" placeholder=" برای مثال: ۱۲" required min="1" step="1">
+        </div>
+
+        <div class="cash-input-wrapper input-space">
+          <label for="cash-amount" class="label-space"> مبلغ مورد نیاز شما (به تومان) برای این درخواست چه مقدار است؟ <sup>*</sup></label>
+          <div class="cash-input-box">
+            <input type="text" id="cash-amount" name="cash_amount" inputmode="numeric" placeholder="برای مثال: ۱٫۰۰۰٫۰۰۰">
+          </div>
+          <div id="cash-in-words" class="amount-preview"></div>
+        </div>
+
+        <div></div>
+
+      </form>
+
+      <div class="next-back-btn">
+        <button>
+          <img src="media/icons/back_icon.svg" alt=" ">
+          <span> قبلی</span>
+        </button>
+
+        <button>
+          <span> بعدی</span>
+          <img src="media/icons/next_icon.svg" alt=" ">
+        </button>
+      </div>
+
+      <div></div>
+
+    </main>
+
+
+
+
+
+    <nav class="nav">
+      <ul class="nav-list">
+        <li><a href=""> 
+          <div class="nav-icon"><img src="media/icons/home_nav.svg" alt=""></div>  خانه </a></li>
+        <li><a href="" id="active-nav">
+          <div class="nav-icon"> <img src="media/icons/creation_nav_active.svg" alt=""></div> ایجاد درخواست </a></li>
+        <li><a href="">
+          <div class="nav-icon"> <img src="media/icons/requests_nav.svg" alt=""></div> سوابق درخواست </a></li>
+        <li><a href=""> 
+          <div class="nav-icon"><img src="media/icons/account_nav.svg" alt=""></div> حساب کاربری </a></li>
+      </ul>
+    </nav>
+
+  </div>
+</body>
+</html>
