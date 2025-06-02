@@ -121,10 +121,10 @@ function Home() {
       {/* <Carousel notifications={notifications} endpointStates={endpointStates}/> */}
 
       {notifications[0]?.items?.length > 0 && (
-        <Carousel notification={notifications[0]} notifIndex={0} />
+        <Carousel notification={notifications[0]} notifIndex={0} endpointStates={endpointStates} setEndpointStates={setEndpointStates} />
       )}
       {notifications[1]?.items?.length > 0 && (
-        <Carousel notification={notifications[1]} notifIndex={1} />
+        <Carousel notification={notifications[1]} notifIndex={1} endpointStates={endpointStates} setEndpointStates={setEndpointStates} />
       )}
       <section className="video">
         <div className="poster-overlay"></div>
