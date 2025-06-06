@@ -1,6 +1,14 @@
 import { useState, useEffect } from "react";
+import Header from '../../../components/header/Header';
+import NavigationBar from '../../../components/navigationBar/NavigationBar';
+import step1_active from '../../../media/icons/step1_active.svg'
+import step2 from '../../../media/icons/step2.svg';
+import step3 from '../../../media/icons/step3.svg';
+import step4 from '../../../media/icons/step4.svg';
+import next_icon from '../../../media/icons/next_icon.svg';
+import './Form1.css'
 
-function Form1({ requestData, setRequestData, setNextActive, typeLayerOne, typeLayerTwo }) {
+function Form1({ requestData, setRequestData, setNextActive, typeLayerOne, typeLayerTwo, setStep }) {
     // Initialize with null and only set after typeLayerOne is loaded
     const [selectedTypeLayerOne, setSelectedTypeLayerOne] = useState(null);
     
@@ -13,7 +21,7 @@ function Form1({ requestData, setRequestData, setNextActive, typeLayerOne, typeL
     }, [typeLayerOne]);
 
     useEffect(() => {
-        const isFormComplete = (requestData.beneficiary_request_type_layer1 && requestData.beneficiary_request_type_layer2 && requestData.beneficiary_request_amount !== "")
+        const isFormComplete = (requestData.beneficiary_request_type_layer1 && requestData.beneficiary_request_type_layer2)
         setNextActive(isFormComplete)
     },[requestData])
 
@@ -22,13 +30,13 @@ function Form1({ requestData, setRequestData, setNextActive, typeLayerOne, typeL
     },[requestData])
     useEffect(() => {
         if(selectedTypeLayerOne){
-            setRequestData(pre => ({...pre, beneficiary_request_type_layer1:selectedTypeLayerOne.beneficiary_request_type_layer1_id, beneficiary_request_type_layer2:""}))
+            setRequestData(pre => ({...pre, beneficiary_request_type_layer1:selectedTypeLayerOne, beneficiary_request_type_layer2:""}))
         }
         
     },[selectedTypeLayerOne])
-    const typeLayerOneSelection = (typeLayerOne) => {
-        setSelectedTypeLayerOne(typeLayerOne);
-        //setRequestData(pre => ({...pre, beneficiary_request_type_layer1:typeLayerOne.beneficiary_request_type_layer1_id}))
+    const typeLayerOneSelection = (e) => {
+        setSelectedTypeLayerOne(Number(e.target.value));
+        setRequestData(pre => ({...pre, beneficiary_request_type_layer1:selectedTypeLayerOne,beneficiary_request_type_layer2:""}))
         
     }
 
@@ -38,15 +46,6 @@ function Form1({ requestData, setRequestData, setNextActive, typeLayerOne, typeL
             item => item.beneficiary_request_type_layer2_id.toString() === selectedId
         );
         setRequestData(pre => ({...pre,beneficiary_request_type_layer2:selectedItem.beneficiary_request_type_layer2_id}));
-    };
-
-    const handleAmountChange = (event) => {
-        if (event.target.value !== ""){
-            setRequestData(pre => ({...pre,beneficiary_request_amount:Number(event.target.value)}));
-        }else {
-            setRequestData(pre => ({...pre,beneficiary_request_amount:""}));
-        }
-        
     };
 
     // Add loading state
@@ -59,60 +58,120 @@ function Form1({ requestData, setRequestData, setNextActive, typeLayerOne, typeL
     }
 
     return (
-        <>
-            <p>select type layer one</p>
-            {typeLayerOne.map(element => {
-                return (
-                    <div 
-                        key={element.beneficiary_request_type_layer1_id} 
-                        onClick={() => typeLayerOneSelection(element)}
-                        style={{
-                            padding: '10px',
-                            margin: '5px',
-                            border: selectedTypeLayerOne?.beneficiary_request_type_layer1_id === element.beneficiary_request_type_layer1_id 
-                                ? '2px solid blue' 
-                                : '1px solid gray',
-                            cursor: 'pointer'
-                        }}
-                    >
-                        {element.beneficiary_request_type_layer1_name}
+        <div className="container">
+            <Header />
+            <main className="main">
+                <nav className="nav-up">
+                <ol className="nav-list-up">
+                    <li className="nav-item-up" id="active-nav-up">
+                    <div> 
+                        <span className="step-icon"><img src={step1_active} alt="" /></span>
+                        <p> نوع درخواست </p> 
                     </div>
-                );
-            })}
+                    </li>
+                    <li className="nav-item-up">
+                    <div> 
+                        <span className="step-icon"><img src={step2} alt="" /></span>
+                        <p> تعیین تاریخ </p> 
+                    </div>
+                    </li>
+                    <li className="nav-item-up">
+                    <div> 
+                        <span className="step-icon"><img src={step3} alt="" /></span>
+                        <p> اطلاعات تکمیلی </p>
+                    </div>
+                    </li>
+                    <li className="nav-item-up">
+                    <div> 
+                        <span className="step-icon"><img src={step4} alt="" /></span>
+                        <p> تأیید نهایی </p> 
+                    </div>
+                    </li>
+                </ol>
+                </nav>
 
-            {selectedTypeLayerOne.beneficiary_request_type_layer1_name === 'good' ?
-                <p>what type of good you want?</p> :
-                selectedTypeLayerOne.beneficiary_request_type_layer1_name === 'cash' ?
-                <p>for what you need cash?</p> :
-                <p>what service you need?</p>
-            }
+                <form className="form">
+                    
+                <fieldset className="type-layer1 input-space">
+                    <legend className="label-space"> نوع درخواست شما در کدامیک از دسته‌های زیر قرار دارد؟ <sup>*</sup></legend>
+                    
+                    <div className="choice-group">
+                        <input 
+                        type="radio" 
+                        id="type-good" 
+                        name="request_type" 
+                        value={typeLayerOne[0].beneficiary_request_type_layer1_id} 
+                        checked={selectedTypeLayerOne === typeLayerOne[0].beneficiary_request_type_layer1_id} 
+                        onChange={typeLayerOneSelection}
+                        />
+                        <label htmlFor="type-good">کالا</label>
 
-            {typeLayerTwo
-                .filter((element) => {
-                    return element.beneficiary_request_type_layer1 === 
-                        selectedTypeLayerOne.beneficiary_request_type_layer1_id;
-                })
-                .map((item) => {
-                    return (
-                        <div key={item.beneficiary_request_type_layer2_id}>
-                            <input 
-                                type="radio" 
-                                id={item.beneficiary_request_type_layer2_id} 
-                                name="options" 
-                                onChange={handleTypeLayerTwoSelection}
-                                value={item.beneficiary_request_type_layer2_id} 
-                            />
-                            <label htmlFor={item.beneficiary_request_type_layer2_id}>
-                                {item.beneficiary_request_type_layer2_name}
-                            </label>
-                            <br/>
-                        </div>
-                    );
-                })
-            }
-            <p>what amount?</p>
-            <input type="number" onChange={handleAmountChange} />
-        </>
+                        <input 
+                        type="radio" 
+                        id="type-cash" 
+                        name="request_type" 
+                        value={typeLayerOne[1].beneficiary_request_type_layer1_id} 
+                        checked={selectedTypeLayerOne === typeLayerOne[1].beneficiary_request_type_layer1_id}
+                        onChange={typeLayerOneSelection}
+                        />
+                        <label htmlFor="type-cash"> وجه نقد </label>
+
+                        <input 
+                        type="radio" 
+                        id="type-service" 
+                        name="request_type" 
+                        value={typeLayerOne[2].beneficiary_request_type_layer1_id}
+                        checked={selectedTypeLayerOne === typeLayerOne[2].beneficiary_request_type_layer1_id} 
+                        onChange={typeLayerOneSelection}
+                        />
+                        <label htmlFor="type-service"> خدمت </label>
+                    </div>
+                </fieldset>
+
+                <div className="type-layer2 input-space">
+                    <label htmlFor="type-layer2-id" className="label-space"> {selectedTypeLayerOne === 1 ?
+                    'کالای درخواستی شما در کدامیک از دسته های زیر قرار دارد؟' :
+                    selectedTypeLayerOne === 2 ?
+                'وجه نقد درخواستی شما در کدامیک از دسته های زیر قرار دارد؟' :
+                'خدمت درخواستی شما در کدامیک از دسته های زیر قرار دارد؟'}<sup>*</sup></label>
+                    <select 
+                    id="type-layer2-id" 
+                    name="type-layer2" 
+                    required
+                    value={requestData.beneficiary_request_type_layer2}
+                    onChange={handleTypeLayerTwoSelection}
+                    >
+                        <option value="" disabled>انتخاب کنید</option>
+                        {typeLayerTwo
+                            .filter((element) => {
+                                return element.beneficiary_request_type_layer1 === 
+                                    selectedTypeLayerOne
+                            })
+                            .map((item) => {
+                                return (
+                                    <option value={item.beneficiary_request_type_layer2_id}>{item.beneficiary_request_type_layer2_name}</option>
+                                );
+                            })
+                        }
+
+                    </select>
+                </div>
+
+                <div></div>
+                </form>
+
+                <div className="next-btn">
+                <button onClick={() => setStep(pre => pre + 1)}>
+                    <span> بعدی</span>
+                    <img src={next_icon} alt="دکمه بعدی" />
+                </button>
+                </div>
+
+                <div></div>
+            </main>
+
+            <NavigationBar />
+        </div>
     );
 }
 

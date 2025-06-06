@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import NavigationBar from "../../components/navigationBar/NavigationBar";
 import Form1 from "./components/Form1";
 import Form2 from "./components/Form2";
 import Form3 from "./components/Form3";
@@ -144,43 +143,11 @@ function NewRequest() {
 
     return (
         <>
-            {step === 1 && <Form1 requestData={requestData} setRequestData={setRequestData} setNextActive={setNextActive} typeLayerOne={typeLayerOne} typeLayerTwo={typeLayerTwo} />}
-            {step === 2 && <Form2 duration={duration} setOneTimeData={setOneTimeData} setRecurringData={setRecurringData} setRequestData={setRequestData} onetimeData={onetimeData} recurringData={recurringData} requestData={requestData} setNextActive={setNextActive} />}
-            {step === 3 && <Form3 requestData={requestData} setRequestData={setRequestData} />}
-            {step === 4 && <Form4 requestData={requestData} onetimeData={onetimeData} recurringData={recurringData} typeLayerOne={typeLayerOne} typeLayerTwo={typeLayerTwo} duration={duration} />}
+            {step === 1 && <Form1 requestData={requestData} setRequestData={setRequestData} setNextActive={setNextActive} typeLayerOne={typeLayerOne} typeLayerTwo={typeLayerTwo} setStep={setStep}/>}
+            {step === 2 && <Form2 duration={duration} setOneTimeData={setOneTimeData} setRecurringData={setRecurringData} setRequestData={setRequestData} onetimeData={onetimeData} recurringData={recurringData} requestData={requestData} setNextActive={setNextActive} setStep={setStep}/>}
+            {step === 3 && <Form3 requestData={requestData} setRequestData={setRequestData} setStep={setStep}/>}
+            {step === 4 && <Form4 requestData={requestData} onetimeData={onetimeData} recurringData={recurringData} typeLayerOne={typeLayerOne} typeLayerTwo={typeLayerTwo} duration={duration} setStep={setStep}/>}
             
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', margin: '20px 0' }}>
-                {step !== 1 && (
-                    <button 
-                        onClick={() => setStep(pre => pre - 1)}
-                        style={{ padding: '10px 20px' }}
-                    >
-                        Previous
-                    </button>
-                )}
-                {step !== 4 && nextActive && (
-                    <button 
-                        onClick={() => setStep(pre => pre + 1)}
-                        style={{ padding: '10px 20px' }}
-                    >
-                        Next
-                    </button>
-                )}
-                {step === 4 && (
-                    <button 
-                        onClick={handleSubmit}
-                        disabled={isSubmitting}
-                        style={{ 
-                            padding: '10px 20px',
-                            backgroundColor: isSubmitting ? '#ccc' : '#4CAF50',
-                            color: 'white'
-                        }}
-                    >
-                        {isSubmitting ? 'Submitting...' : 'Submit'}
-                    </button>
-                )}
-            </div>
-            <NavigationBar />
         </>
     );
 }
