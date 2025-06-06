@@ -62,8 +62,8 @@
     --error-red: #ff0000;
     --bluelinenav-color : #8BAECF
 }
-body {
-  background-color: var(--black25-color);
+body.more-active {
+  background-color: var(--black50-color);
   overflow-y: auto;
 }
 .notif-overlay-container {

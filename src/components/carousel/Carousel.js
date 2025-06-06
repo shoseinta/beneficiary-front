@@ -7,10 +7,42 @@ import './Carousel.css'
 
 
 
-function Carousel({ notification, notifIndex, endpointStates, setEndpointStates}) {
+function Carousel({ notification, notifIndex, endpointStates, setEndpointStates, setWhichNotif}) {
   const [moreItems, setMoreItems] = useState(false);
   const mainRef = useRef(null);
   const videoRef = useRef(null);
+
+  useEffect(() => {
+    console.log(moreItems)
+  })
+
+  useEffect(()=>{
+    if (!moreItems) {
+      return
+    }
+    let firstClick = false
+    const bodyOverlay = document.querySelector('body.more-active')
+    const handleClick = (event) => {
+        if (!firstClick){
+          firstClick = true
+          return
+        }
+        const hasOverlayInPath = event.composedPath().some(element => {
+          return element.classList && element.classList.contains('notif-overlay-container')
+        })
+
+        if (hasOverlayInPath){
+          return
+        }
+        setMoreItems(false);
+        document.body.classList.remove('more-active')
+    }
+    if (bodyOverlay){
+      bodyOverlay.addEventListener('click', handleClick)
+    }
+    return () => bodyOverlay.removeEventListener('click',handleClick)
+  },[moreItems])
+
 
   useEffect(() => {
   if (moreItems) {
@@ -194,7 +226,10 @@ function Carousel({ notification, notifIndex, endpointStates, setEndpointStates}
               {notification.items[0]?.content || "توضیحات اطلاعیه"}
             </p>
           </div>
-          <div className="details" onClick={() => {setMoreItems(true)}}>
+          <div className="details" onClick={() => {
+            setMoreItems(true);
+            document.body.classList.add('more-active');
+          }}>
             <details>
               <summary className="summary"> موارد بیشتر <img src={more_icon} alt="" /> </summary>
             </details>
@@ -202,8 +237,8 @@ function Carousel({ notification, notifIndex, endpointStates, setEndpointStates}
         </article>
       </div>
       <div className="carousel-dots">
-        {notifIndex === 0 ? <span className="dot active"></span> : <span className="dot"></span>}
-        {notifIndex === 1 ? <span className="dot active"></span> : <span className="dot"></span>}
+        {notifIndex === 0 ? <span className="dot active"></span> : <span className="dot" onClick={() => setWhichNotif(0)}></span>}
+        {notifIndex === 1 ? <span className="dot active"></span> : <span className="dot" onClick={() => setWhichNotif(1)}></span>}
       </div>
   </main>
 
@@ -215,7 +250,10 @@ function Carousel({ notification, notifIndex, endpointStates, setEndpointStates}
         <h1> اطلاعیه‌های شما </h1>
       </section>
 
-      <button onClick={() => {setMoreItems(false)}}>
+      <button onClick={() => {
+        setMoreItems(false)
+        document.body.classList.remove('more-active');
+      }}>
         <span> بستن </span>
         <svg width="30" height="30" viewBox="0 0 30 30" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
           <path d="M29.2929 3.72853C29.6834 3.33801 29.6834 2.70485 29.2929 2.31432L27.6857 0.707107C27.2952 0.316583 26.662 0.316583 26.2715 0.707107L15.7071 11.2715C15.3166 11.662 14.6834 11.662 14.2929 11.2715L3.72853 0.707106C3.33801 0.316582 2.70485 0.316582 2.31432 0.707107L0.707107 2.31432C0.316583 2.70485 0.316583 3.33801 0.707107 3.72853L11.2715 14.2929C11.662 14.6834 11.662 15.3166 11.2715 15.7071L0.707106 26.2715C0.316582 26.662 0.316582 27.2952 0.707107 27.6857L2.31432 29.2929C2.70485 29.6834 3.33801 29.6834 3.72853 29.2929L14.2929 18.7285C14.6834 18.338 15.3166 18.338 15.7071 18.7285L26.2715 29.2929C26.662 29.6834 27.2952 29.6834 27.6857 29.2929L29.2929 27.6857C29.6834 27.2952 29.6834 26.662 29.2929 26.2715L18.7285 15.7071C18.338 15.3166 18.338 14.6834 18.7285 14.2929L29.2929 3.72853Z" />

@@ -33,6 +33,8 @@ function Home() {
     }
   });
 
+  const [whichNotif, setWhichNotif] = useState(0);
+
   // Contact information
   const contactInfo = {
     phone: "۰۲۱-۲۲۳۴۵۶۷۸",
@@ -68,14 +70,26 @@ function Home() {
       }
 
       const data = await response.json();
+      let moreItems;
       
       if (data.results && data.results.length > 0) {
-        const moreItems = data.results.map(item => ({
+        if (endpoint === 'request-announcement-get'){
+          moreItems = data.results.map(item => ({
           id: item.charity_announcement_for_request_id || 0,
           heading: item.charity_announcement_for_request_title || "عنوان پیش‌فرض",
           date: item.charity_announcement_for_request_updated_at || "تاریخ نامشخص",
           content: item.charity_announcement_for_request_description || "محتوا موجود نیست"
         }));
+        }
+        if(endpoint === 'announcement-get'){
+          moreItems = data.results.map(item => ({
+          id: item.charity_announcement_to_beneficiary_id || 0,
+          heading: item.charity_announcement_to_beneficiary_title || "عنوان پیش‌فرض",
+          date: item.charity_announcement_to_beneficiary_updated_at || "تاریخ نامشخص",
+          content: item.charity_announcement_to_beneficiary_description || "محتوا موجود نیست"
+        }));
+        }
+        
 
         const items = moreItems.length > 0 ? [moreItems[0]] : [];
         
@@ -120,11 +134,11 @@ function Home() {
       <Header />
       {/* <Carousel notifications={notifications} endpointStates={endpointStates}/> */}
 
-      {notifications[0]?.items?.length > 0 && (
-        <Carousel notification={notifications[0]} notifIndex={0} endpointStates={endpointStates} setEndpointStates={setEndpointStates} />
+      {whichNotif === 0 && notifications[0]?.items?.length > 0 && (
+        <Carousel notification={notifications[0]} notifIndex={0} endpointStates={endpointStates} setEndpointStates={setEndpointStates} setWhichNotif={setWhichNotif}/>
       )}
-      {notifications[1]?.items?.length > 0 && (
-        <Carousel notification={notifications[1]} notifIndex={1} endpointStates={endpointStates} setEndpointStates={setEndpointStates} />
+      {whichNotif === 1 && notifications[1]?.items?.length > 0 && (
+        <Carousel notification={notifications[1]} notifIndex={1} endpointStates={endpointStates} setEndpointStates={setEndpointStates} setWhichNotif={setWhichNotif}/>
       )}
       <section className="video">
         <div className="poster-overlay"></div>
