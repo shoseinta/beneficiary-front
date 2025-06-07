@@ -74,7 +74,7 @@ function Login() {
       };
 
   return (
-    <div className="container">
+    <div className="login-container">
       <div className="logo-typo">
         <img 
           src={charity_logo} 

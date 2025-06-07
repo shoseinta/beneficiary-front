@@ -69,13 +69,13 @@ body {
   background-color: var(--white-color);
   overflow-y: auto;
 }
-.container {
+.form1-container {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   row-gap: 10px;
 }
-.header {
+.form1-container .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -85,7 +85,7 @@ body {
   top: 0;
   z-index: 10;
 }
-.header > #hamburger {
+.form1-container .header > #hamburger {
   width: auto;
   height: auto;
   border: none;
@@ -94,24 +94,24 @@ body {
   display: inline-block;
   cursor: pointer;
 }
-.header > #hamburger > img {
+.form1-container .header > #hamburger > img {
   display: block;
   width: 9vw;
   max-width: 60px;
   height: auto;
 }
-.header > #typo {
+.form1-container .header > #typo {
   width: 25vw;
   max-width: 150px;
   height: auto;
 }
-.header > #logo {
+.form1-container .header > #logo {
   width: 9vw;
   max-width: 60px;
   height: auto;
   border-radius: 50%;
 }
-.main {
+.form1-container .main {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
@@ -119,23 +119,23 @@ body {
   row-gap: 10px;
   padding: 10px;
 }
-.nav-up {
+.form1-container .nav-up {
   width: 100%;
   max-width: 600px;
   margin: 0 auto;
 }
-.nav-list-up {
+.form1-container .nav-list-up {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
 }
-.nav-item-up {
+.form1-container .nav-item-up {
   text-decoration: none;
   list-style: none;
   position: relative;
   flex: 1;
 }
-.nav-item-up > div{
+.form1-container .nav-item-up > div{
   list-style: none;
   display: flex;
   flex-direction: column;
@@ -148,13 +148,13 @@ body {
   font-weight: normal;
   position: relative;
 }
-.step-icon {
+.form1-container .step-icon {
   position: relative;
   display: inline-block;
   margin-bottom: 5px;
 
 }
-.nav-item-up:not(:last-child) .step-icon::after {
+.form1-container .nav-item-up:not(:last-child) .step-icon::after {
   content: '';
   position: absolute;
   top: 50%; /* Middle of the image */
@@ -166,19 +166,19 @@ body {
   z-index: 0;
 }
 /* ✅ Completed lines before active step */
-#active-nav-up ~ .nav-item-up .step-icon::after {
+.form1-container #active-nav-up ~ .nav-item-up .step-icon::after {
   background-color: var(--main50-color); /* make sure they remain light blue (upcoming steps) */
 }
 
-.nav-item-up.step-completed .step-icon::after {
+.form1-container .nav-item-up.step-completed .step-icon::after {
   background-color: var(--main-color); /* dark blue */
 }
 
 /* ✅ In-progress line (gradient after current step) */
-#active-nav-up .step-icon::after {
+.form1-container #active-nav-up .step-icon::after {
   background: linear-gradient(to left, var(--main-color) , var(--main50-color)); /* RTL gradient */
 }
-.step-icon img {
+.form1-container .step-icon img {
   display: block;
   width: 7vw;
   max-width: 36px;
@@ -188,46 +188,46 @@ body {
   border-radius: 50%;
 
 }
-#active-nav-up > div{
+.form1-container #active-nav-up > div{
   color: var(--main-color);
 }
 
-.form {
+.form1-container .form {
   width: 100%;
   max-width: 500px;
   margin: 0 auto;
 }
-.form > * {
+.form1-container .form > * {
   font-size: 0.8rem;
   font-weight: normal;
 }
 
-sup {
+.form1-container sup {
   color: var(--error-red);
 }
-.type-layer1 {
+.form1-container .type-layer1 {
   display: flex;
   flex-direction: column;
   align-items: center;
   background-color: transparent;
   border: none;
 }
-#legend-id {
+.form1-container #legend-id {
   display: flex;
   justify-content: flex-start;
 }
-.choice-group {
+.form1-container .choice-group {
   display: flex;
   justify-content: space-between;
   width: 80%;
   max-width: 400px;
 }
 
-.choice-group input[type="radio"] {
+.form1-container .choice-group input[type="radio"] {
   display: none;
 }
 
-.choice-group label {
+.form1-container .choice-group label {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -241,16 +241,16 @@ sup {
   font-size: 0.7rem;
 }
 
-.choice-group input[type="radio"]:checked + label {
+.form1-container .choice-group input[type="radio"]:checked + label {
   background-color: var(--main-color);
   color: var(--white-color);
 }
-.type-layer2 {
+.form1-container .type-layer2 {
   display: flex;
   flex-direction: column;
 
 }
-.type-layer2 select {
+.form1-container .type-layer2 select {
   width: 80%;
   max-width: 400px;
   height: 35px;
@@ -270,21 +270,21 @@ sup {
   font-size: 0.7rem;
   font-weight: normal;
 }
-option {
+.form1-container option {
   text-align: center;
   text-align-last: center;
 }
-.cash-input-wrapper {
+.form1-container .cash-input-wrapper {
   display: flex;
   flex-direction: column;
   
 }
-.cash-input-box {
+.form1-container .cash-input-box {
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.cash-input-box input {
+.form1-container .cash-input-box input {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -296,20 +296,20 @@ option {
   border-radius: 6px;
   text-align: center;
 }
-.label-space {
+.form1-container .label-space {
   margin-bottom: 15px;
 }
-.input-space {
+.form1-container .input-space {
   margin-bottom: 40px;
 }
-.next-btn {
+.form1-container .next-btn {
   display: flex;
   justify-content: left;
   width: 100%;
   max-width: 500px;
   margin: 0 auto;
 }
-.next-btn button {
+.form1-container .next-btn button {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -317,7 +317,7 @@ option {
   border: none;
   background-color: transparent;
 }
-.next-btn button > span{
+.form1-container .next-btn button > span{
   margin-left: 5px;
   padding-bottom: 5px;
 }

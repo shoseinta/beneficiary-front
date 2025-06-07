@@ -55,7 +55,7 @@ function Form1({ requestData, setRequestData, setNextActive, typeLayerOne, typeL
     // }
 
     return (
-        <div className="container">
+        <div className="form1-container">
             <Header />
             <main className="main">
                 <nav className="nav-up">

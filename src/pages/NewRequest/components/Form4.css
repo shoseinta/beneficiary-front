@@ -60,7 +60,8 @@
     --black50-color: rgba(0, 0, 0, 0.5);
     --black25-color: rgba(0, 0, 0, 0.25);
     --error-red: #ff0000;
-    --bluelinenav-color : #8BAECF
+    --bluelinenav-color : #8BAECF;
+    --green-color: #3F9633
 }
 html {
   background-color: var(--main-color);
@@ -69,13 +70,13 @@ body {
   background-color: var(--white-color);
   overflow-y: auto;
 }
-.form2-container {
+.form4-container {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   row-gap: 10px;
 }
-.form2-container .header {
+.form4-container .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -85,7 +86,7 @@ body {
   top: 0;
   z-index: 10;
 }
-.form2-container .header > #hamburger {
+.form4-container .header > #hamburger {
   width: auto;
   height: auto;
   border: none;
@@ -94,24 +95,24 @@ body {
   display: inline-block;
   cursor: pointer;
 }
-.form2-container .header > #hamburger > img {
+.form4-container .header > #hamburger > img {
   display: block;
   width: 9vw;
   max-width: 60px;
   height: auto;
 }
-.form2-container .header > #typo {
+.form4-container .header > #typo {
   width: 25vw;
   max-width: 150px;
   height: auto;
 }
-.form2-container .header > #logo {
+.form4-container .header > #logo {
   width: 9vw;
   max-width: 60px;
   height: auto;
   border-radius: 50%;
 }
-.form2-container .main {
+.form4-container .main {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
@@ -119,23 +120,23 @@ body {
   row-gap: 10px;
   padding: 10px;
 }
-.form2-container .nav-up {
+.form4-container .nav-up {
   width: 100%;
   max-width: 600px;
   margin: 0 auto;
 }
-.form2-container .nav-list-up {
+.form4-container .nav-list-up {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
 }
-.form2-container .nav-item-up {
+.form4-container .nav-item-up {
   text-decoration: none;
   list-style: none;
   position: relative;
   flex: 1;
 }
-.form2-container .nav-item-up > div{
+.form4-container .nav-item-up > div{
   list-style: none;
   display: flex;
   flex-direction: column;
@@ -148,13 +149,13 @@ body {
   font-weight: normal;
   position: relative;
 }
-.form2-container .step-icon {
+.form4-container .step-icon {
   position: relative;
   display: inline-block;
   margin-bottom: 5px;
 
 }
-.form2-container .nav-item-up:not(:last-child) .step-icon::after {
+.form4-container .nav-item-up:not(:last-child) .step-icon::after {
   content: '';
   position: absolute;
   top: 50%; /* Middle of the image */
@@ -166,19 +167,19 @@ body {
   z-index: 0;
 }
 /* ✅ Completed lines before active step */
-.form2-container #active-nav-up ~ .nav-item-up .step-icon::after {
+.form4-container #active-nav-up ~ .nav-item-up .step-icon::after {
   background-color: var(--main50-color); /* make sure they remain light blue (upcoming steps) */
 }
 
-.form2-container .nav-item-up.step-completed .step-icon::after {
+.form4-container .nav-item-up.step-completed .step-icon::after {
   background-color: var(--main-color); /* dark blue */
 }
 
 /* ✅ In-progress line (gradient after current step) */
-.form2-container #active-nav-up .step-icon::after {
+.form4-container #active-nav-up .step-icon::after {
   background: linear-gradient(to left, var(--main-color) , var(--main50-color)); /* RTL gradient */
 }
-.form2-container .step-icon img {
+.form4-container .step-icon img {
   display: block;
   width: 7vw;
   max-width: 36px;
@@ -188,179 +189,154 @@ body {
   border-radius: 50%;
 
 }
-.form2-container #active-nav-up > div{
+.form4-container #active-nav-up > div{
   color: var(--main-color);
 }
-
-.form2-container .form {
-  width: 100%;
+/* ------------------------------------------------------------------ */
+.form4-container .form {
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+  width: 80%;
   max-width: 500px;
   margin: 0 auto;
+  border: var(--main-color) 1px solid;
+  border-radius: 10px;
+  background-color: var(--white-gray-color);
+  padding: 10px;
 }
-.form2-container .form > * {
+.form4-container .form > * {
   font-size: 0.8rem;
   font-weight: normal;
 }
-
-.form2-container sup {
+.form4-container sup {
   color: var(--error-red);
 }
-.form2-container .time-layer1 {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: transparent;
-  border: none;
-}
-.form2-container .choice-group2 {
+.form4-container form div {
   display: flex;
   justify-content: space-between;
-  width: 80%;
-  max-width: 400px;
+  align-items: center;
+  gap: 10px;
+}
+.form4-container form div label {
+  display: flex;
+  justify-content: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.form2-container .choice-group2 input[type="radio"] {
-  display: none;
+.form4-container form div input , textarea {
+  flex: 1;
+  height: 30px;
+  background-color: var(--white-color);
+  border: none;
+  border-radius: 6px;
+  padding-right: 10px;
+  box-shadow: 0px 1px 4px var(--black25-color);
+  font-size: 0.7rem;
+  font-weight: normal;
+}
+.form4-container textarea {
+  resize: none;
+  line-height: 2;
+  text-align: justify;
+  vertical-align: top;
+  overflow-y: auto;
 }
 
-.form2-container .choice-group2 label {
+.form4-container #request-description-review1-id , #request-document-review1-id {
+  height: 60px;
+}
+.form4-container #label-for-file-input {
+  flex: 1;
+  height: 60px;
+  background-color: var(--white-color);
+  border: none;
+  border-radius: 6px;
+  padding-right: 10px;
+  box-shadow: 0px 1px 4px var(--black25-color);
+  font-size: 0.7rem;
+  font-weight: normal;
+  justify-content: right;
+}
+.form4-container .upload-label {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 10px 0;
-  width: 80px;
-  background-color: var(--white-gray-color);
-  border: var(--main-color) 1px solid;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 0.7rem;
-}
-
-.form2-container .choice-group2 input[type="radio"]:checked + label {
-  background-color: var(--main-color);
-  color: var(--white-color);
-}
-.form2-container .time-layer2 {
-  display: flex;
-  flex-direction: column;
-
-}
-.form2-container .time-layer2 input {
   width: 80%;
   max-width: 400px;
-  height: 35px;
+  height: 70px;
   align-self: center;
   background-color: var(--white-gray-color);
   border: var(--main-color) 1px solid;
   border-radius: 6px;
-  appearance: none;            /* Remove default arrow */
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  background-image: url(../../../media/icons/calendar_icon.svg);
-  background-repeat: no-repeat;
-  background-position: left 10px center; /* RTL support */
-  background-size: 14px;
+  font-size: 0.7rem;
+  font-weight: normal;
   cursor: pointer;
-  font-size: 0.7rem;
-  font-weight: normal;
-  text-align: center;
+  color: var(--black50-color);
 }
-/* #time-layer2-recurring {
-  display: none;
-} */
-.form2-container #time-layer2-recurring input{
-  background-image:none;
+.form4-container .upload-label img {
+  width: 6px;
+  height: auto;
+  margin-left: 10px; /* Space between text and icon */
 }
 
-/* For Chrome, Safari, Edge, Opera */
-.form2-container [type=number]::-webkit-inner-spin-button,
-.form2-container [type=number]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+.form4-container .label-space {
+  margin-bottom: 0px;
 }
-
-/* For Firefox */
-.form2-container [type=number] {
-  appearance: textfield;
-  -moz-appearance: textfield;
+.form4-container .input-space {
+  margin-bottom: 0px;
 }
-.form2-container .cash-input-wrapper {
-  display: flex;
-  flex-direction: column;
-  
-}
-.form2-container .cash-input-box {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.form2-container .cash-input-box input {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 80%;
-  max-width: 400px;
-  height: 35px;
-  background-color: var(--white-gray-color);
-  border: var(--main-color) 1px solid;
-  border-radius: 6px;
-  font-size: 0.7rem;
-  font-weight: normal;
-  text-align: center;
-}
-/* #cash-input-recurring {
-  display: none;
-} */
-.form2-container .label-space {
-  margin-bottom: 15px;
-}
-.form2-container .input-space {
-  margin-bottom: 40px;
-}
-.form2-container .next-back-btn {
+.form4-container .next-back-btn {
   display: flex;
   justify-content: space-between;
   width: 100%;
   max-width: 500px;
   margin: 0 auto;
 }
-.form2-container .next-back-btn button {
+.form4-container .next-back-btn button {
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
   border: none;
-  background-color: transparent;
 }
-.form2-container .next-back-btn button > span{
+.form4-container .next-back-btn button > span{
   margin: 0 5px;
 }
-.form2-container .next-back-btn button:last-child span {
-  padding-bottom: 5px;
+.form4-container .back-button-review {
+  background-color: transparent;
+}
+.form4-container .submit-button-review {
+  background-color: var(--green-color);
+  border-radius: 6px;
+  box-shadow: 0px 4px 4px var(--black25-color);
+  color: var(--white-color);
+  padding: 0 5px;
 }
 
 
 
 
 
-.form2-container .nav {
+.form4-container .nav {
   padding: 5px 0 5px 0;
   border-top: var(--bluelinenav-color) 3px solid;
   position: sticky;
   bottom: 0;
   background-color: var(--white-color);
 }
-.form2-container .nav > .nav-list {
+.form4-container .nav > .nav-list {
   display: flex;
   justify-content: space-around;
   align-items: center;
   height: 100%;
 }
-.form2-container .nav > .nav-list > li {
+.form4-container .nav > .nav-list > li {
   list-style: none;
 }
-.form2-container .nav > .nav-list > li > a {
+.form4-container .nav > .nav-list > li > a {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -371,10 +347,10 @@ body {
   font-size: 0.7rem;
   font-weight: normal;
 }
-.form2-container .nav > .nav-list > li > #active-nav {
+.form4-container .nav > .nav-list > li > #active-nav {
   color: var(--main-color);
 }
-.form2-container .nav > .nav-list > li > a > .nav-icon > img{
+.form4-container .nav > .nav-list > li > a > .nav-icon > img{
   display: block;
   margin-bottom: 5px;
   height: 7vw;

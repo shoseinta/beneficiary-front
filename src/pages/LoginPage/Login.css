@@ -62,19 +62,19 @@ body {
   background-color: var(--white-gray-color);
   overflow-y: auto;
 }
-.container {
+.login-container {
   display: grid;
   place-content: center;
   min-height: 100vh;
 }
-.logo-typo {
+.login-container .logo-typo {
   min-height: 25vh;
   display: grid;
   justify-content: center;
   align-content: end;
   row-gap: 10px;
 }
-.logo-typo > #logo {
+.login-container .logo-typo > #logo {
   width: 20vw;
   max-width: 100px;
   height: auto;
@@ -82,13 +82,13 @@ body {
   border: #185ea7 1px solid;
   margin: auto;
 }
-.logo-typo > #typo {
+.login-container .logo-typo > #typo {
   width: 30vw;
   max-width: 150px;
   height: auto;
   margin-bottom: 20px;
 }
-.form-container {
+.login-container .form-container {
   width: 80vw;
   max-width: 350px;
   aspect-ratio: 1/1;
@@ -99,19 +99,19 @@ body {
   align-content: space-between;
   padding: 20px;
 }
-.form-container h1 {
+.login-container .form-container h1 {
   font-size: 1.2rem;
   font-weight: bold;
   text-align: center;
 }
 
-.form-inside label {
+.login-container .form-inside label {
   display: block;
   font-size: 1rem;
   font-weight: bold;
   margin-bottom: 10px;
 }
-.form-inside input {
+.login-container .form-inside input {
   width: 100%;
   height: 35px;
   font-size: 0.9rem;
@@ -121,28 +121,28 @@ body {
   border: #185ea7 1px solid;
   border-radius: 6px;
 }
-.username-input {
+.login-container .username-input {
   margin-bottom: 20px;
 }
-.password-icons {
+.login-container .password-icons {
   position: relative;
 }
-.password-icons > #password {
+.login-container .password-icons > #password {
   padding-left: 25px;
 }
-.password-icons > #hide-icon {
+.login-container .password-icons > #hide-icon {
   position: absolute;
   top: 50%;
   left: 10px;
   transform: translateY(-50%);
 }
-.submit-forgot {
+.login-container .submit-forgot {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-top: 20px;
 }
-.submit-forgot > #submit {
+.login-container .submit-forgot > #submit {
   width: 77px;
   height: 35px;
   background-color: var(--main-color);
@@ -156,47 +156,47 @@ body {
   padding-bottom: 5px;
   letter-spacing: 1px;
 }
-.submit-forgot > #forgot {
+.login-container .submit-forgot > #forgot {
   text-decoration: none;
   color: var(--main-color);
   font-size: 0.9rem;
 }
-.empty {
+.login-container .empty {
   height: 25vh;
 }
 
 /* display="none" items style */
-.username-icons {
+.login-container .username-icons {
   position: relative;
 }
-.username-icons > #alert-icon1 {
+.login-container .username-icons > #alert-icon1 {
   position: absolute;
   top: 50%;
   left: -15px;
   transform: translateY(-50%);
 }
-.password-icons > #alert-icon2 {
+.login-container .password-icons > #alert-icon2 {
   position: absolute;
   top: 50%;
   left: -15px;
   transform: translateY(-50%);
 }
-.error1 {
+.login-container .error1 {
   display: none;
 }
-.error1 p {
+.login-container .error1 p {
   display: inline;
   font-size: 0.9rem;
   color: var(--error-red);
   font-weight: normal;
 }
-.error2 {
+.login-container .error2 {
   display: none;
 }
-.show {
+.login-container .show {
   display: block;
 }
-.error2 p {
+.login-container .error2 p {
   display: inline;
   font-size: 0.9rem;
   color: var(--error-red);

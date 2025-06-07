@@ -69,7 +69,7 @@ function Form2({setOneTimeData, setRecurringData, duration, setRequestData, onet
     //     return <p>Loading selection...</p>;
     // }
     return(
-        <div className="container">
+        <div className="form2-container">
             <Header />
             <main className="main">
     <nav className="nav-up">

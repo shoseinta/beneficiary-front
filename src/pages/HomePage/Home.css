@@ -66,14 +66,14 @@ body {
   background-color: var(--white-color);
   overflow-y: auto;
 }
-.container {
+.home-container {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   min-height: 100vh;
   row-gap: 10px;
 }
-.header {
+.home-container .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -83,7 +83,7 @@ body {
   top: 0;
   z-index: 10;
 }
-.header > #hamburger {
+.home-container .header > #hamburger {
   width: auto;
   height: auto;
   border: none;
@@ -92,24 +92,24 @@ body {
   display: inline-block;
   cursor: pointer;
 }
-.header > #hamburger > img {
+.home-container .header > #hamburger > img {
   display: block;
   width: 9vw;
   max-width: 60px;
   height: auto;
 }
-.header > #typo {
+.home-container .header > #typo {
   width: 25vw;
   max-width: 150px;
   height: auto;
 }
-.header > #logo {
+.home-container .header > #logo {
   width: 9vw;
   max-width: 60px;
   height: auto;
   border-radius: 50%;
 }
-.notification {
+.home-container .notification {
   display: flex;
   flex-direction: column;
   row-gap: 10px;
@@ -127,16 +127,16 @@ body {
 }
 
 /* For Chrome, Safari and Opera */
-.notification::-webkit-scrollbar {
+.home-container .notification::-webkit-scrollbar {
   display: none;
 }
-.details {
+.home-container .details {
   display: flex;
   flex-direction: column;
   row-gap: 10px;
 }
 
-.h1{
+.home-container .h1{
   display: flex;
   align-items: center;
   gap: 10px;
@@ -144,31 +144,31 @@ body {
   padding-bottom: 5px;
   margin-bottom: 10px;
 }
-.h1 > h1{
+.home-container .h1 > h1{
   font-size: 1rem;
   font-weight: bold;
 }
-.h3 {
+.home-container .h3 {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-.h3 > h3 {
+.home-container .h3 > h3 {
   font-size: 0.9rem;
   font-weight: bold;
 }
-.h3 > time {
+.home-container .h3 > time {
   font-size: 0.8rem;
   font-weight: normal;
   color: var(--black50-color);
 }
-.paragraph {
+.home-container .paragraph {
   font-size: 0.9rem;
   font-weight: normal;
   text-align: justify;
   line-height: 1.5;
 }
-#para1 , #para2 {
+.home-container #para1 , #para2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
   line-clamp: 2;
@@ -176,7 +176,7 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.summary {
+.home-container .summary {
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -186,9 +186,7 @@ body {
   color: var(--black50-color);
   cursor: pointer;
 }
-#notif2 {
-}
-.main {
+.home-container .main {
   width: 90%;
   align-self: center;
   overflow: hidden;
@@ -196,23 +194,23 @@ body {
   max-width: 500px;
 }
 
-.carousel {
+.home-container .carousel {
   display: flex;
   gap: 20px;
   transition: transform 0.3s ease-in-out;
   will-change: transform;
 }
 
-.notification {
+.home-container .notification {
   min-width: 90%;
   max-width: 90%;
 }
-.carousel-dots {
+.home-container .carousel-dots {
   text-align: center;
   margin-top: 10px;
 }
 
-.dot {
+.home-container .dot {
   height: 10px;
   width: 10px;
   margin: 0 5px;
@@ -222,20 +220,20 @@ body {
   transition: background-color 0.3s ease;
 }
 
-.dot.active {
+.home-container .dot.active {
   background-color: #333;
 }
 
 @media (min-width: 700px) {
-  .carousel-track {
+  .home-container .carousel-track {
     transform: translateX(0%) !important; /* reset any shift */
   }
 
-  .card {
+  .home-container .card {
     min-width: 50%;
   }
 }
-.video {
+.home-container .video {
   position: relative; /* Makes positioning inside possible */
   display: inline-block;
   align-self: center;
@@ -243,7 +241,7 @@ body {
   box-shadow: 0px 4px 4px var(--black25-color);
 
 }
-.video > .poster-overlay {
+.home-container .video > .poster-overlay {
   position: absolute;
   top: 0;
   left: 0;
@@ -254,7 +252,7 @@ body {
   z-index: 1;
 }
 
-.video > video {
+.home-container .video > video {
   position: relative;
   align-self: center;
   width: 90vw;
@@ -263,7 +261,7 @@ body {
   max-height: 250px;
   z-index: 2;
 }
-.video > .title {
+.home-container .video > .title {
     position: absolute;
     top: 5px;
     right: 5px;
@@ -274,13 +272,13 @@ body {
     border-radius: 6px;
     z-index: 3;
 }
-.footer-container {
+.home-container .footer-container {
   width: 100%;
   background-color: var(--main10-color);
   box-shadow: 0px 4px 4px var(--black25-color) inset;
 
 }
-.footer {
+.home-container .footer {
   margin: 0 auto;
   display: grid;
   grid-template-columns: auto auto;
@@ -289,21 +287,21 @@ body {
   max-width: 500px;
   padding: 10px;
 }
-.footer > #title {
+.home-container .footer > #title {
   grid-column: 1 / span 2;
   grid-row: 1;
   font-size: 1rem;
   font-weight: bold;
   color: var(--main-color);
 }
-.footer > #key {
+.home-container .footer > #key {
   grid-column: 1;
   grid-row: 2;
   font-size: 0.9rem;
   font-weight: normal;
   line-height: 2;
 }
-.footer > #value {
+.home-container .footer > #value {
   grid-column: 2;
   grid-row: 2;
   font-size: 0.9rem;
@@ -311,30 +309,30 @@ body {
   text-align: left;
   line-height: 2;
 }
-#value > a > img {
+.home-container #value > a > img {
   margin-right: 5px;
 }
-#value > a {
+.home-container #value > a {
   color: var(--black-color);
   text-decoration: none;
 }
-.nav {
+.home-container .nav {
   padding: 5px 0 5px 0;
   border-top: var(--bluelinenav-color) 3px solid;
   position: sticky;
   bottom: 0;
   background-color: var(--white-color);
 }
-.nav > .nav-list {
+.home-container .nav > .nav-list {
   display: flex;
   justify-content: space-around;
   align-items: center;
   height: 100%;
 }
-.nav > .nav-list > li {
+.home-container .nav > .nav-list > li {
   list-style: none;
 }
-.nav > .nav-list > li > a {
+.home-container .nav > .nav-list > li > a {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -345,10 +343,10 @@ body {
   font-size: 0.7rem;
   font-weight: normal;
 }
-.active-nav {
+.home-container .active-nav {
   color: var(--main-color);
 }
-.nav > .nav-list > li > a > .nav-icon > img{
+.home-container .nav > .nav-list > li > a > .nav-icon > img{
   display: block;
   margin-bottom: 5px;
   height: 7vw;
@@ -356,20 +354,20 @@ body {
   width: auto;
 }
 
-.carousel-container {
+.home-container .carousel-container {
   width: 100%;
   overflow: hidden;
   position: relative;
   touch-action: pan-y;
 }
 
-.carousel {
+.home-container .carousel {
   display: flex;
   transition: transform 0.3s ease-out;
   width: 100%;
 }
 
-.notification {
+.home-container .notification {
   flex: 0 0 100%;
   min-width: 100%;
   max-width: 100%;
@@ -378,19 +376,19 @@ body {
 }
 
 @media (min-width: 768px) {
-  .notification {
+  .home-container .notification {
     padding: 0 10%;
   }
 }
 
-.carousel-dots {
+.home-container .carousel-dots {
   display: flex;
   justify-content: center;
   margin-top: 15px;
   gap: 8px;
 }
 
-.dot {
+.home-container .dot {
   width: 10px;
   height: 10px;
   border-radius: 50%;
@@ -399,6 +397,115 @@ body {
   transition: background-color 0.3s ease;
 }
 
-.dot.active {
+.home-container .dot.active {
   background-color: #185ea7;
+}
+
+body.more-active {
+  background-color: var(--black50-color);
+  overflow-y: auto;
+}
+.home-container .notif-overlay-container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 50vh;
+  width: 90vw;
+  max-width: 400px;
+  background-color: var(--white-color);
+  border-radius: 8px;
+  border: var(--main-color) 1px solid;
+  box-shadow: 0px 4px 4px var(--black25-color);
+  padding: 12px 8px;
+  overflow-y: auto;
+  z-index: 20;
+
+  /* new */
+  top: var(--notif-top, 0);
+  height: var(--notif-height, auto);
+}
+.home-container .notif-overlay-up {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  
+}
+.home-container .notif-overlay-up  button , section {
+  padding-bottom: 5px;
+}
+.home-container .notif-overlay-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border-bottom: var(--main-color) 2px solid;
+  
+  
+}
+.home-container .notif-overlay-up h1 {
+  font-size: 1rem;
+  font-weight: bold;
+}
+.home-container button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--error-red);
+  font-size: 0.6rem;
+}
+.home-container svg {
+  width: 10px;
+  height: auto;
+  color: var(--error-red);
+}
+.home-container .notif-overlay-header svg {
+  width: 12px;
+  height: auto;
+}
+.home-container .notif-overlay-up span {
+  font-size: 0.7rem;
+}
+.home-container .notif-overlay-body {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+.home-container .notif-overlay-title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.home-container .notif-overlay-title h3 {
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+.home-container .notif-overlay-title time {
+  font-size: 0.7rem;
+  font-weight: normal;
+}
+.home-container .notif-overlay-content {
+  display: flex;
+  justify-content: space-between;
+
+}
+.home-container .notif-overlay-content p {
+  max-width: 80%;
+  font-size: 0.8rem;
+  line-height: 2;
+  font-weight: normal;
+  text-align: justify;
+}
+.home-container .notif-overlay-content button {
+  align-self: flex-end;
+  margin-bottom: 5px;
 }

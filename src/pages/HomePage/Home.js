@@ -130,7 +130,7 @@ function Home() {
   useEffect(() => console.log(notifications))
 
   return (
-    <div className="container">
+    <div className="home-container">
       <Header />
       {/* <Carousel notifications={notifications} endpointStates={endpointStates}/> */}
 

@@ -69,13 +69,13 @@ body {
   background-color: var(--white-color);
   overflow-y: auto;
 }
-.container {
+.form3-container {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   row-gap: 10px;
 }
-.header {
+.form3-container .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -85,7 +85,7 @@ body {
   top: 0;
   z-index: 10;
 }
-.header > #hamburger {
+.form3-container .header > #hamburger {
   width: auto;
   height: auto;
   border: none;
@@ -94,24 +94,24 @@ body {
   display: inline-block;
   cursor: pointer;
 }
-.header > #hamburger > img {
+.form3-container .header > #hamburger > img {
   display: block;
   width: 9vw;
   max-width: 60px;
   height: auto;
 }
-.header > #typo {
+.form3-container .header > #typo {
   width: 25vw;
   max-width: 150px;
   height: auto;
 }
-.header > #logo {
+.form3-container .header > #logo {
   width: 9vw;
   max-width: 60px;
   height: auto;
   border-radius: 50%;
 }
-.main {
+.form3-container .main {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
@@ -119,23 +119,23 @@ body {
   row-gap: 10px;
   padding: 10px;
 }
-.nav-up {
+.form3-container .nav-up {
   width: 100%;
   max-width: 600px;
   margin: 0 auto;
 }
-.nav-list-up {
+.form3-container .nav-list-up {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
 }
-.nav-item-up {
+.form3-container .nav-item-up {
   text-decoration: none;
   list-style: none;
   position: relative;
   flex: 1;
 }
-.nav-item-up > div{
+.form3-container .nav-item-up > div{
   list-style: none;
   display: flex;
   flex-direction: column;
@@ -148,13 +148,13 @@ body {
   font-weight: normal;
   position: relative;
 }
-.step-icon {
+.form3-container .step-icon {
   position: relative;
   display: inline-block;
   margin-bottom: 5px;
 
 }
-.nav-item-up:not(:last-child) .step-icon::after {
+.form3-container .nav-item-up:not(:last-child) .step-icon::after {
   content: '';
   position: absolute;
   top: 50%; /* Middle of the image */
@@ -166,19 +166,19 @@ body {
   z-index: 0;
 }
 /* ✅ Completed lines before active step */
-#active-nav-up ~ .nav-item-up .step-icon::after {
+.form3-container #active-nav-up ~ .nav-item-up .step-icon::after {
   background-color: var(--main50-color); /* make sure they remain light blue (upcoming steps) */
 }
 
-.nav-item-up.step-completed .step-icon::after {
+.form3-container .nav-item-up.step-completed .step-icon::after {
   background-color: var(--main-color); /* dark blue */
 }
 
 /* ✅ In-progress line (gradient after current step) */
-#active-nav-up .step-icon::after {
+.form3-container #active-nav-up .step-icon::after {
   background: linear-gradient(to left, var(--main-color) , var(--main50-color)); /* RTL gradient */
 }
-.step-icon img {
+.form3-container .step-icon img {
   display: block;
   width: 7vw;
   max-width: 36px;
@@ -188,34 +188,34 @@ body {
   border-radius: 50%;
 
 }
-#active-nav-up > div{
+.form3-container #active-nav-up > div{
   color: var(--main-color);
 }
 /* ------------------------------------------------------------------ */
-.form {
+.form3-container .form {
   width: 100%;
   max-width: 500px;
   margin: 0 auto;
 }
-.form > * {
+.form3-container .form > * {
   font-size: 0.8rem;
   font-weight: normal;
 }
 
-sup {
+.form3-container sup {
   color: var(--error-red);
 }
-form div {
+.form3-container form div {
   display: flex;
   flex-direction: column;
   background-color: transparent;
   border: none;
 }
-form div label {
+.form3-container form div label {
   display: flex;
   justify-content: right;
 }
-form div input , textarea {
+.form3-container form div input , textarea {
   width: 80%;
   max-width: 400px;
   height: 35px;
@@ -227,10 +227,10 @@ form div input , textarea {
   font-weight: normal;
   text-align: center;
 }
-form div:not(:first-of-type) input , textarea {
+.form3-container form div:not(:first-of-type) input , textarea {
   height: 70px;
 }
-.upload-label {
+.form3-container .upload-label {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -246,12 +246,12 @@ form div:not(:first-of-type) input , textarea {
   cursor: pointer;
   color: var(--black50-color);
 }
-.upload-label img {
+.form3-container .upload-label img {
   width: 6px;
   height: auto;
   margin-left: 10px; /* Space between text and icon */
 }
-#form-description-id {
+.form3-container #form-description-id {
   padding: 8px;
   resize: none;
   line-height: 1.5;
@@ -259,20 +259,20 @@ form div:not(:first-of-type) input , textarea {
   vertical-align: top;
   overflow-y: auto;
 }
-.label-space {
+.form3-container .label-space {
   margin-bottom: 15px;
 }
-.input-space {
+.form3-container .input-space {
   margin-bottom: 40px;
 }
-.next-back-btn {
+.form3-container .next-back-btn {
   display: flex;
   justify-content: space-between;
   width: 100%;
   max-width: 500px;
   margin: 0 auto;
 }
-.next-back-btn button {
+.form3-container .next-back-btn button {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -280,10 +280,10 @@ form div:not(:first-of-type) input , textarea {
   border: none;
   background-color: transparent;
 }
-.next-back-btn button > span{
+.form3-container .next-back-btn button > span{
   margin: 0 5px;
 }
-.next-back-btn button:last-child span {
+.form3-container .next-back-btn button:last-child span {
   padding-bottom: 5px;
 }
 
@@ -291,23 +291,23 @@ form div:not(:first-of-type) input , textarea {
 
 
 
-.nav {
+.form3-container .nav {
   padding: 5px 0 5px 0;
   border-top: var(--bluelinenav-color) 3px solid;
   position: sticky;
   bottom: 0;
   background-color: var(--white-color);
 }
-.nav > .nav-list {
+.form3-container .nav > .nav-list {
   display: flex;
   justify-content: space-around;
   align-items: center;
   height: 100%;
 }
-.nav > .nav-list > li {
+.form3-container .nav > .nav-list > li {
   list-style: none;
 }
-.nav > .nav-list > li > a {
+.form3-container .nav > .nav-list > li > a {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -318,10 +318,10 @@ form div:not(:first-of-type) input , textarea {
   font-size: 0.7rem;
   font-weight: normal;
 }
-.nav > .nav-list > li > #active-nav {
+.form3-container .nav > .nav-list > li > #active-nav {
   color: var(--main-color);
 }
-.nav > .nav-list > li > a > .nav-icon > img{
+.form3-container .nav > .nav-list > li > a > .nav-icon > img{
   display: block;
   margin-bottom: 5px;
   height: 7vw;

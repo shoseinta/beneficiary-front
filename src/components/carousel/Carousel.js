@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import more_icon from '../../media/icons/more_icon.svg';
 import bell_icon from '../../media/icons/bell_icon.svg'
-import './Carousel.css'
+
 
 
 
