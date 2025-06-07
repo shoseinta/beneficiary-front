@@ -26,9 +26,6 @@ function Form1({ requestData, setRequestData, setNextActive, typeLayerOne, typeL
     },[requestData])
 
     useEffect(() => {
-        console.log(requestData)
-    },[requestData])
-    useEffect(() => {
         if(selectedTypeLayerOne){
             setRequestData(pre => ({...pre, beneficiary_request_type_layer1:selectedTypeLayerOne, beneficiary_request_type_layer2:""}))
         }

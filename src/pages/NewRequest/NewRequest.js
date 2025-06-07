@@ -117,7 +117,9 @@ function NewRequest() {
             setIsSubmitting(false);
         }
     };
-
+    useEffect(() => {
+        console.log(requestData)
+    })
     if (loading) return <p>Loading lookups...</p>;
     if (error) return <p>Error loading lookups: {error}</p>;
     if (submitSuccess) {
