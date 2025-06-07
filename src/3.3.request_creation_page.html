@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="fa-IR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="صفحه ایجاد درخواست مددجویان خیریه دست مهربان">
+  <meta name="keywords" content="صفحه ایجاد درخواست خیریه، مددجو، مددجویان، خیریه دست مهربان، دست مهربان">
+  <meta name="author" content="محمد جواد عزیزی">
+  <link rel="stylesheet" href="3.3.request_creation_page.css">
+  <title>صفحه ایجاد درخواست خیریه</title>
+</head>
+
+<body>
+  <div class="container">
+
+    <header class="header">
+      <button type="menu" id="hamburger">
+        <img src="media/icons/hamburger_icon.svg" alt="منوی تنظیمات">
+      </button>
+      <img src="media/images/charity_typo_white.png" id="typo" alt="تایپوگرافی نام خیریه">
+      <img src="media/images/charity_logo.png" id="logo" alt="لوگوی خیریه">
+    </header>
+
+    <main class="main">
+
+      <nav class="nav-up">
+        <ol class="nav-list-up">
+          <li class="nav-item-up step-completed" >
+            <div> 
+              <span class="step-icon"><img src="media/icons/step1_completed.svg" alt=""></span>
+              <p> نوع درخواست   </p> </div>
+
+          </li>
+          <li class="nav-item-up step-completed">
+            <div> 
+              <span class="step-icon"><img src="media/icons/step2_completed.svg" alt=""></span>
+              <p>  تعیین تاریخ  </p> </div>
+
+          </li>
+          <li class="nav-item-up step-completed" >
+            <div> 
+              <span class="step-icon"><img src="media/icons/step3_completed.svg" alt=""></span>
+              <p> اطلاعات تکمیلی  </p></div>
+
+          </li>
+          <li class="nav-item-up" id="active-nav-up">
+            <div> 
+              <span class="step-icon"><img src="media/icons/step4_active.svg" alt=""></span>
+              <p> تأیید نهایی  </p> </div>
+
+          </li>
+        </ol>
+
+      </nav>
+      <!-- ------------------------------------------------------------------------------ -->
+
+      <form action="sign_in.php" method="POST" class="form">
+
+        <div class="request-type-review input-space">
+          <label class="label-space" for="request-type-review1-id"> نوع درخواست:  </label>
+          <input type="text" id="request-type-review1-id"  readonly value="وجه نقد">
+        </div>
+
+        <div class="request-type-review input-space">
+          <label for="request-type-review2-id" class="label-space"> دسته درخواست: </label>
+          <input type="text" id="request-type-review2-id"  readonly value="اجاره خانه ">
+        </div>
+
+      </form>
+
+      <!-- ------------------------------------------------------------------------------ -->
+
+      <form action="sign_in.php" method="POST" class="form">
+
+        <div class="request-time-review input-space">
+          <label class="label-space" for="request-time-review1-id"> نوع زمانی درخواست: </label>
+          <input type="text" id="request-time-review1-id"  readonly value="به صورت ماهانه ">
+        </div>
+
+        <div class="request-time-review input-space">
+          <label for="request-time-review2-id" class="label-space" id="request-time-review2-one-time-id"> تاریخ دریافت درخواست </label>
+          <label for="request-time-review2-id" class="label-space" id="request-time-review2-recurring-id"> تعداد دوره‌های درخواست: </label>
+          <input type="text" id="request-time-review2-id"  readonly value="۱۲ دوره ماهانه  ">
+        </div>
+
+        <div class="request-cash-review input-space">
+          <label class="label-space" for="request-cash-review1-id"> مبلغ درخواست: </label>
+        <input type="text" id="request-cash-review1-id"  readonly value=" ۸٫۰۰۰٫۰۰۰ تومان ">
+        </div>
+
+      </form>
+
+      <!-- ------------------------------------------------------------------------------ -->
+
+      <form action="sign_in.php" method="POST" class="form">
+
+        <div class="request-title-review input-space">
+          <label class="label-space" for="request-title-review1-id"> عنوان درخواست:  </label>
+          <input type="text" id="request-title-review1-id"  readonly value=" وجه نقد - اجاره خانه ">
+        </div>
+
+        <div class="request-description-review input-space">
+          <label for="request-description-review1-id" class="label-space">  توضیحات درخواست: </label>
+          <textarea type="text" id="request-description-review1-id"  readonly placeholder="اطلاعاتی وجود ندارد" ></textarea>
+        </div>
+
+        <div class="request-document-review input-space">
+          <label for="request-document-review1-id" class="label-space"> مستندات درخواست:  </label>
+          <input type="file" id="request-document-review1-id" multiple hidden readonly>
+          <label for="request-document-review1-id" class="upload-label" id="label-for-file-input">اطلاعاتی وجود ندارد </label>
+        </div>
+
+      </form>
+
+      <!-- ------------------------------------------------------------------------------ -->
+
+      <div class="next-back-btn">
+        <button class="back-button-review">
+          <img src="media/icons/back_icon.svg" alt=" ">
+          <span> قبلی</span>
+        </button>
+
+        <button type="submit" class="submit-button-review">
+          <span> تأیید نهایی و ارسال</span>
+        </button>
+      </div>
+
+      <div></div>
+
+    </main>
+
+    <!-- ------------------------------------------------------------------------------ -->
+
+    <nav class="nav">
+      <ul class="nav-list">
+        <li><a href=""> 
+          <div class="nav-icon"><img src="media/icons/home_nav.svg" alt=""></div>  خانه </a></li>
+        <li><a href="" id="active-nav">
+          <div class="nav-icon"> <img src="media/icons/creation_nav_active.svg" alt=""></div> ایجاد درخواست </a></li>
+        <li><a href="">
+          <div class="nav-icon"> <img src="media/icons/requests_nav.svg" alt=""></div> سوابق درخواست </a></li>
+        <li><a href=""> 
+          <div class="nav-icon"><img src="media/icons/account_nav.svg" alt=""></div> حساب کاربری </a></li>
+      </ul>
+    </nav>
+
+  </div>
+</body>
+</html>
