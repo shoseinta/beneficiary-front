@@ -111,3 +111,110 @@
   </div>
 </body>
 </html>
+
+<div className="container">
+  <header className="header">
+    <button type="menu" id="hamburger">
+      <img src="media/icons/hamburger_icon.svg" alt="منوی تنظیمات" />
+    </button>
+    <img src="media/images/charity_typo_white.png" id="typo" alt="تایپوگرافی نام خیریه" />
+    <img src="media/images/charity_logo.png" id="logo" alt="لوگوی خیریه" />
+  </header>
+
+  <main className="main">
+    <nav className="nav-up">
+      <ol className="nav-list-up">
+        <li className="nav-item-up step-completed">
+          <div> 
+            <span className="step-icon"><img src="media/icons/step1_completed.svg" alt="" /></span>
+            <p> نوع درخواست </p> 
+          </div>
+        </li>
+        <li className="nav-item-up step-completed">
+          <div> 
+            <span className="step-icon"><img src="media/icons/step2_completed.svg" alt="" /></span>
+            <p> تعیین تاریخ </p> 
+          </div>
+        </li>
+        <li className="nav-item-up" id="active-nav-up">
+          <div> 
+            <span className="step-icon"><img src="media/icons/step3_active.svg" alt="" /></span>
+            <p> اطلاعات تکمیلی </p>
+          </div>
+        </li>
+        <li className="nav-item-up">
+          <div> 
+            <span className="step-icon"><img src="media/icons/step4.svg" alt="" /></span>
+            <p> تأیید نهایی </p> 
+          </div>
+        </li>
+      </ol>
+    </nav>
+
+    <form action="sign_in.php" method="POST" className="form">
+      <div className="form-title input-space">
+        <label className="label-space" htmlFor="form-title-id"> می‌خواهید برای درخواست خود یک عنوان بنویسید؟ </label>
+        <input type="text" id="form-title-id" required />
+      </div>
+
+      <div className="form-description input-space">
+        <label htmlFor="form-description-id" className="label-space"> می‌خواهید برای درخواست خود توضیحات اضافی بنویسید؟</label>
+        <textarea id="form-description-id"></textarea>
+      </div>
+      
+      <div className="form-document input-space">
+        <label htmlFor="form-document-id" className="label-space"> می‌خواهید برای درخواست خود مستندات مورد نیاز را بارگذاری کنید؟</label>
+        <input type="file" id="form-document-id" multiple hidden />
+        <label htmlFor="form-document-id" className="upload-label">
+          <img src="media/icons/attach_icon.svg" alt="" />
+          برای انتخاب فایل کلیک کنید
+        </label>
+      </div>
+
+      <div></div>
+    </form>
+
+    <div className="next-back-btn">
+      <button>
+        <img src="media/icons/back_icon.svg" alt=" " />
+        <span> قبلی</span>
+      </button>
+
+      <button type="submit">
+        <span> بعدی</span>
+        <img src="media/icons/next_icon.svg" alt=" " />
+      </button>
+    </div>
+
+    <div></div>
+  </main>
+
+  <nav className="nav">
+    <ul className="nav-list">
+      <li>
+        <a href=""> 
+          <div className="nav-icon"><img src="media/icons/home_nav.svg" alt="" /></div>
+          خانه
+        </a>
+      </li>
+      <li>
+        <a href="" id="active-nav">
+          <div className="nav-icon"><img src="media/icons/creation_nav_active.svg" alt="" /></div>
+          ایجاد درخواست
+        </a>
+      </li>
+      <li>
+        <a href="">
+          <div className="nav-icon"><img src="media/icons/requests_nav.svg" alt="" /></div>
+          سوابق درخواست
+        </a>
+      </li>
+      <li>
+        <a href=""> 
+          <div className="nav-icon"><img src="media/icons/account_nav.svg" alt="" /></div>
+          حساب کاربری
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>
