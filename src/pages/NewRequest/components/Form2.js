@@ -9,7 +9,7 @@ import back_icon from '../../../media/icons/back_icon.svg'
 import next_icon from '../../../media/icons/next_icon.svg'
 import './Form2.css'
 function Form2({setOneTimeData, setRecurringData, duration, setRequestData, onetimeData, recurringData, requestData, setNextActive, setStep}){
-    const [selectedDuration,setSelectedDuration] = useState(null);
+    const [selectedDuration,setSelectedDuration] = useState(requestData.beneficiary_request_duration);
     
     const handleDeadLineChange = (event) => {
         setOneTimeData(pre => ({...pre,beneficiary_request_duration_onetime_deadline:event.target.value}))
@@ -17,24 +17,29 @@ function Form2({setOneTimeData, setRecurringData, duration, setRequestData, onet
     const handleLimitChange = (event) => {
         setRecurringData(pre => ({...pre,beneficiary_request_duration_recurring_limit:Number(event.target.value)}))
     }
-     useEffect(() => {
-            if(selectedDuration){
-                setRequestData(pre => ({...pre, beneficiary_request_duration:selectedDuration.beneficiary_request_duration_id}))
-            }
-            
-        },[selectedDuration])
-    useEffect(() => {
-            if (duration && duration.length > 0) {
-                setSelectedDuration(duration[0]);
-            }
-        }, [duration]);
 
-    useEffect(() => {
-        if (selectedDuration){
-console.log(selectedDuration.beneficiary_request_duration_name)
-        }
+    const handleDurationChange = (event) => {
+      setSelectedDuration(Number(event.target.value))
+      setRequestData(pre => ({...pre, beneficiary_request_duration:Number(event.target.value)}))
+    }
+    //  useEffect(() => {
+    //         if(selectedDuration){
+    //             setRequestData(pre => ({...pre, beneficiary_request_duration:selectedDuration.beneficiary_request_duration_id}))
+    //         }
+            
+    //     },[selectedDuration])
+    // useEffect(() => {
+    //         if (duration && duration.length > 0) {
+    //             setSelectedDuration(duration[0]);
+    //         }
+    //     }, [duration]);
+
+//     useEffect(() => {
+//         if (selectedDuration){
+// console.log(selectedDuration.beneficiary_request_duration_name)
+//         }
         
-    })
+//     })
 
 
     useEffect(() => {
@@ -60,9 +65,9 @@ console.log(selectedDuration.beneficiary_request_duration_name)
         return <p>Loading options...</p>;
     }
 
-    if (!selectedDuration) {
-        return <p>Loading selection...</p>;
-    }
+    // if (!selectedDuration) {
+    //     return <p>Loading selection...</p>;
+    // }
     return(
         <div className="container">
             <Header />
@@ -107,8 +112,8 @@ console.log(selectedDuration.beneficiary_request_duration_name)
           id="one-time" 
           name="request_time" 
           value={duration[0].beneficiary_request_duration_id}
-          onChange={() => setSelectedDuration(duration[0])}
-          checked={selectedDuration.beneficiary_request_duration_id === duration[0].beneficiary_request_duration_id}/>
+          onChange={handleDurationChange}
+          checked={selectedDuration === duration[0].beneficiary_request_duration_id}/>
           <label htmlFor="one-time">فقط یکبار </label>
 
           <input 
@@ -116,8 +121,8 @@ console.log(selectedDuration.beneficiary_request_duration_name)
           id="recurring" 
           name="request_time" 
           value={duration[1].beneficiary_request_duration_id}
-          onChange={() => setSelectedDuration(duration[1])} 
-          checked={selectedDuration.beneficiary_request_duration_id === duration[1].beneficiary_request_duration_id}
+          onChange={handleDurationChange} 
+          checked={selectedDuration === duration[1].beneficiary_request_duration_id}
           />
           <label htmlFor="recurring"> به‌صورت ماهانه </label>
 
@@ -126,20 +131,20 @@ console.log(selectedDuration.beneficiary_request_duration_name)
           id="permanent" 
           name="request_time" 
           value={duration[2].beneficiary_request_duration_id}
-          onChange={() => setSelectedDuration(duration[2])}
-          checked={selectedDuration.beneficiary_request_duration_id === duration[2].beneficiary_request_duration_id}
+          onChange={handleDurationChange}
+          checked={selectedDuration === duration[2].beneficiary_request_duration_id}
           />
           <label htmlFor="permanent"> به‌صورت دائمی </label>
         </div>
       </fieldset>
 
-      {selectedDuration.beneficiary_request_duration_name === 'one_time'?
+      {duration.find(item => item.beneficiary_request_duration_name=== 'one_time').beneficiary_request_duration_id === selectedDuration ?
             <div className="time-layer2 input-space" id="time-layer2-one-time">
         <label htmlFor="time-layer2-one-time-id" className="label-space"> آخرین زمانی که می‌خواهید درخواست شما انجام شود، چه تاریخی است؟<sup>*</sup></label>
         <input type="date" id="time-layer2-one-time-id" placeholder="تاریخ را انتخاب کنید"  required value={onetimeData.beneficiary_request_duration_onetime_deadline} onChange={handleDeadLineChange}/>
       </div>:null}
             {
-                selectedDuration.beneficiary_request_duration_name === 'recurring'?
+                duration.find(item => item.beneficiary_request_duration_name=== 'recurring').beneficiary_request_duration_id === selectedDuration ?
                  <div className="time-layer2 input-space" id="time-layer2-recurring">
         <label htmlFor="time-layer2-recurring-id" className="label-space"> دوره‌های ماهانه درخواست شما چه تعداد است؟ <sup>*</sup></label>
         <input type="number" id="time-layer2-recurring-id" placeholder=" برای مثال: ۱۲" required min="1" step="1" value={recurringData.beneficiary_request_duration_recurring_limit} onChange={handleLimitChange}/>
@@ -150,10 +155,10 @@ console.log(selectedDuration.beneficiary_request_duration_name)
      
 
       <div className="cash-input-wrapper input-space">
-        {selectedDuration.beneficiary_request_duration_name === 'one_time'?<label htmlFor="cash-amount" className="label-space" id="cash-input-one-time-permanent"> مبلغ (به تومان) مورد نیاز شما برای این درخواست چه مقدار است؟ <sup>*</sup></label>:null}
-        {selectedDuration.beneficiary_request_duration_name === 'recurring'?<label htmlFor="cash-amount" className="label-space" id="cash-input-recurring"> مبلغ (به تومان) مورد نیاز شما برای هر ماه چه مقدار است؟ <sup>*</sup></label>:null}
+        {duration.find(item => item.beneficiary_request_duration_name=== 'one_time').beneficiary_request_duration_id === selectedDuration ?<label htmlFor="cash-amount" className="label-space" id="cash-input-one-time-permanent"> مبلغ (به تومان) مورد نیاز شما برای این درخواست چه مقدار است؟ <sup>*</sup></label>:null}
+        {duration.find(item => item.beneficiary_request_duration_name=== 'recurring').beneficiary_request_duration_id === selectedDuration ?<label htmlFor="cash-amount" className="label-space" id="cash-input-recurring"> مبلغ (به تومان) مورد نیاز شما برای هر ماه چه مقدار است؟ <sup>*</sup></label>:null}
         {
-            selectedDuration.beneficiary_request_duration_name === 'one_time' || selectedDuration.beneficiary_request_duration_name === 'recurring'?
+            duration.find(item => item.beneficiary_request_duration_name=== 'one_time').beneficiary_request_duration_id === selectedDuration || duration.find(item => item.beneficiary_request_duration_name=== 'recurring').beneficiary_request_duration_id === selectedDuration?
                 <><div className="cash-input-box">
           <input type="text" id="cash-amount" name="cash_amount" inputMode="numeric" placeholder="برای مثال: ۱٫۰۰۰٫۰۰۰" value={requestData.beneficiary_request_amount} onChange={handleAmountChange}/>
         </div>

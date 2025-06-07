@@ -10,30 +10,30 @@ import './Form1.css'
 
 function Form1({ requestData, setRequestData, setNextActive, typeLayerOne, typeLayerTwo, setStep }) {
     // Initialize with null and only set after typeLayerOne is loaded
-    const [selectedTypeLayerOne, setSelectedTypeLayerOne] = useState(null);
+    const [selectedTypeLayerOne, setSelectedTypeLayerOne] = useState(requestData.beneficiary_request_type_layer1);
     
 
     // Set the default selection when typeLayerOne loads
-    useEffect(() => {
-        if (typeLayerOne && typeLayerOne.length > 0) {
-            setSelectedTypeLayerOne(typeLayerOne[0]);
-        }
-    }, [typeLayerOne]);
+    // useEffect(() => {
+    //     if (typeLayerOne && typeLayerOne.length > 0) {
+    //         setSelectedTypeLayerOne(typeLayerOne[0]);
+    //     }
+    // }, [typeLayerOne]);
 
     useEffect(() => {
         const isFormComplete = (requestData.beneficiary_request_type_layer1 && requestData.beneficiary_request_type_layer2)
         setNextActive(isFormComplete)
     },[requestData])
 
-    useEffect(() => {
-        if(selectedTypeLayerOne){
-            setRequestData(pre => ({...pre, beneficiary_request_type_layer1:selectedTypeLayerOne, beneficiary_request_type_layer2:""}))
-        }
+    // useEffect(() => {
+    //     if(selectedTypeLayerOne){
+    //         setRequestData(pre => ({...pre, beneficiary_request_type_layer1:selectedTypeLayerOne, beneficiary_request_type_layer2:""}))
+    //     }
         
-    },[selectedTypeLayerOne])
+    // },[selectedTypeLayerOne])
     const typeLayerOneSelection = (e) => {
         setSelectedTypeLayerOne(Number(e.target.value));
-        setRequestData(pre => ({...pre, beneficiary_request_type_layer1:selectedTypeLayerOne,beneficiary_request_type_layer2:""}))
+        setRequestData(pre => ({...pre, beneficiary_request_type_layer1:Number(e.target.value),beneficiary_request_type_layer2:""}))
         
     }
 
@@ -50,9 +50,9 @@ function Form1({ requestData, setRequestData, setNextActive, typeLayerOne, typeL
         return <p>Loading options...</p>;
     }
 
-    if (!selectedTypeLayerOne) {
-        return <p>Loading selection...</p>;
-    }
+    // if (!selectedTypeLayerOne) {
+    //     return <p>Loading selection...</p>;
+    // }
 
     return (
         <div className="container">
@@ -126,12 +126,12 @@ function Form1({ requestData, setRequestData, setNextActive, typeLayerOne, typeL
                 </fieldset>
 
                 <div className="type-layer2 input-space">
-                    <label htmlFor="type-layer2-id" className="label-space"> {selectedTypeLayerOne === 1 ?
-                    'کالای درخواستی شما در کدامیک از دسته های زیر قرار دارد؟' :
-                    selectedTypeLayerOne === 2 ?
-                'وجه نقد درخواستی شما در کدامیک از دسته های زیر قرار دارد؟' :
-                'خدمت درخواستی شما در کدامیک از دسته های زیر قرار دارد؟'}<sup>*</sup></label>
-                    <select 
+                    <label htmlFor="type-layer2-id" className="label-space"> {selectedTypeLayerOne === 1 &&
+                    'کالای درخواستی شما در کدامیک از دسته های زیر قرار دارد؟' }
+                   { selectedTypeLayerOne === 2 &&
+                'وجه نقد درخواستی شما در کدامیک از دسته های زیر قرار دارد؟' }
+                {selectedTypeLayerOne === 3 && 'خدمت درخواستی شما در کدامیک از دسته های زیر قرار دارد؟'}<sup>*</sup></label>
+                    {selectedTypeLayerOne && <select 
                     id="type-layer2-id" 
                     name="type-layer2" 
                     required
@@ -151,7 +151,7 @@ function Form1({ requestData, setRequestData, setNextActive, typeLayerOne, typeL
                             })
                         }
 
-                    </select>
+                    </select>}
                 </div>
 
                 <div></div>
