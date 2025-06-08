@@ -58,7 +58,7 @@
     --black50-color: rgba(0, 0, 0, 0.5);
     --error-red: #ff0000;
 }
-body {
+.login-body {
   background-color: var(--white-gray-color);
   overflow-y: auto;
 }

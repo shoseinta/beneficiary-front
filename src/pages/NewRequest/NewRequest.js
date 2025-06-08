@@ -5,6 +5,7 @@ import Form2 from "./components/Form2";
 import Form3 from "./components/Form3";
 import Form4 from "./components/Form4";
 import { useLookup } from "../../context/LookUpContext";
+import FinalForm from "./components/FinalForm";
 
 function NewRequest() {
     const navigate = useNavigate();
@@ -124,22 +125,7 @@ function NewRequest() {
     if (error) return <p>Error loading lookups: {error}</p>;
     if (submitSuccess) {
         return (
-            <div style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                height: '100vh',
-                textAlign: 'center',
-                padding: '20px'
-            }}>
-                <h2 style={{ color: 'green', marginBottom: '20px' }}>
-                    Request Submitted Successfully!
-                </h2>
-                <p style={{ fontSize: '18px' }}>
-                    You will be redirected to your requests page shortly...
-                </p>
-            </div>
+            <FinalForm />
         );
     }
 

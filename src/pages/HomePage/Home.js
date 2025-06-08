@@ -129,6 +129,14 @@ function Home() {
 
   useEffect(() => console.log(notifications))
 
+  useEffect(() => {
+    document.body.classList.add('home-body')
+
+    return () => {
+      document.body.classList.remove('home-body')
+    }
+  },[])
+
   return (
     <div className="home-container">
       <Header />
@@ -177,7 +185,7 @@ function Home() {
             </section>
           </footer>
         </div>
-        <NavigationBar />
+        <NavigationBar selected={1}/>
       </div>
     </div>
   );

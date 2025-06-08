@@ -72,7 +72,13 @@ function Login() {
           setLoginError(true)
         }
       };
+      useEffect(() => {
+        document.body.classList.add('login-body')
 
+        return () => {
+          document.body.classList.remove('login-body')
+        }
+      },[])
   return (
     <div className="login-container">
       <div className="logo-typo">

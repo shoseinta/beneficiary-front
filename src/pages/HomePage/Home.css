@@ -62,7 +62,7 @@
     --error-red: #ff0000;
     --bluelinenav-color : #8BAECF
 }
-body {
+.home-body {
   background-color: var(--white-color);
   overflow-y: auto;
 }

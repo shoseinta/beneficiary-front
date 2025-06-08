@@ -45,6 +45,16 @@ function Form1({ requestData, setRequestData, setNextActive, typeLayerOne, typeL
         setRequestData(pre => ({...pre,beneficiary_request_type_layer2:selectedItem.beneficiary_request_type_layer2_id}));
     };
 
+    useEffect(()=>{
+        document.documentElement.classList.add('form1-html')
+        document.body.classList.add('form1-body')
+
+        return ()=>{
+            document.documentElement.classList.remove('form1-html')
+            document.body.classList.remove('form1-body')
+        }
+    },[])
+
     // Add loading state
     if (!typeLayerOne || !Array.isArray(typeLayerOne)) {
         return <p>Loading options...</p>;
@@ -167,7 +177,7 @@ function Form1({ requestData, setRequestData, setNextActive, typeLayerOne, typeL
                 <div></div>
             </main>
 
-            <NavigationBar />
+            <NavigationBar selected={2}/>
         </div>
     );
 }

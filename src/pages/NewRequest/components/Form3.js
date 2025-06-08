@@ -71,6 +71,16 @@ function Form3({ requestData, setRequestData, setStep }) {
         }
     };
 
+    useEffect(()=>{
+        document.documentElement.classList.add('form3-html')
+        document.body.classList.add('form3-body')
+
+        return ()=>{
+            document.documentElement.classList.remove('form3-html')
+            document.body.classList.remove('form3-body')
+        }
+    },[])
+
     return (
         <div className="form3-container">
             <Header />
@@ -181,7 +191,7 @@ function Form3({ requestData, setRequestData, setStep }) {
                 </div>
             )} */}
 
-            <NavigationBar />
+            <NavigationBar selected={2}/>
         </div>
     );
 }

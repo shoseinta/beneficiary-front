@@ -61,6 +61,16 @@ function Form2({setOneTimeData, setRecurringData, duration, setRequestData, onet
             return {...pre, beneficiary_request_amount:Number(e.target.value)}
         })
     }
+
+    useEffect(()=>{
+        document.documentElement.classList.add('form2-html')
+        document.body.classList.add('form2-body')
+
+        return ()=>{
+            document.documentElement.classList.remove('form2-html')
+            document.body.classList.remove('form2-body')
+        }
+    },[])
     if (!duration || !Array.isArray(duration)) {
         return <p>Loading options...</p>;
     }
@@ -186,7 +196,7 @@ function Form2({setOneTimeData, setRecurringData, duration, setRequestData, onet
 
     <div></div>
   </main>
-  <NavigationBar />
+  <NavigationBar selected={2}/>
             {/* <p>select duration</p>
             {duration.map(element => {
                 return (

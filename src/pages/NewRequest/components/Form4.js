@@ -119,6 +119,16 @@ function formatPersianNumber(number) {
         
     },[requestData,onetimeData,recurringData])
 
+    useEffect(()=>{
+            document.documentElement.classList.add('form4-html')
+            document.body.classList.add('form4-body')
+    
+            return ()=>{
+                document.documentElement.classList.remove('form4-html')
+                document.body.classList.remove('form4-body')
+            }
+        },[])
+
     // Function to render file preview based on file type
     const renderFilePreview = () => {
         const file = requestData.beneficiary_request_document;
@@ -271,7 +281,7 @@ function formatPersianNumber(number) {
 
     <div></div>
   </main>
-  <NavigationBar />
+  <NavigationBar selected={2}/>
             </div>
     );
 }

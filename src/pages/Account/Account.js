@@ -2,7 +2,7 @@ import NavigationBar from "../../components/navigationBar/NavigationBar"
 function Account() {
     return(
         <>
-            <NavigationBar />
+            <NavigationBar selected={4}/>
         </>
     )
 }

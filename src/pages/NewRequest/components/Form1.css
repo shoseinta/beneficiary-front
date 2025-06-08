@@ -62,10 +62,10 @@
     --error-red: #ff0000;
     --bluelinenav-color : #8BAECF
 }
-html {
+.form1-html {
   background-color: var(--main-color);
 }
-body {
+.form1-body {
   background-color: var(--white-color);
   overflow-y: auto;
 }
