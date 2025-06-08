@@ -6,8 +6,14 @@
   <meta name="description" content="صفحه حساب کاربری مددجویان خیریه دست مهربان">
   <meta name="keywords" content="صفحه حساب کاربری خیریه، مددجو، مددجویان، خیریه دست مهربان، دست مهربان">
   <meta name="author" content="محمد جواد عزیزی">
-  <link rel="stylesheet" href="5.account_page.css">
+  <link rel="stylesheet" href="5.2.account_page.css">
   <title>صفحه حساب کاربری خیریه</title>
+
+  <!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 
 <body>
@@ -34,15 +40,15 @@
         <nav class="nav-up">
           <ul class="nav-list-up">
 
-            <li class="nav-item-up" id="active-nav-up">
+            <li class="nav-item-up" >
               <a>   اطلاعات حساب کاربری  </a>
             </li>
 
-            <li class="nav-item-up">
+            <li class="nav-item-up" >
               <a>  اطلاعات شخصی کاربر  </a>
             </li>
 
-            <li class="nav-item-up">
+            <li class="nav-item-up" id="active-nav-up">
               <a>  اطلاعات آدرس کاربر  </a>
             </li>
 
@@ -52,34 +58,73 @@
           </ul>
         </nav>
 
-        <form action="" class="account-form1">
+        <form action="" class="account-form3">
 
-          <div>
-          <label for="account-support"> تحت پوشش خیریه: </label>
-          <input type="text" id="account-support" readonly value="هستید">
+          <div action="" class="form-up">
+            <div>
+            <label for="account-province"> استان: </label>
+            <select id="account-province">
+              <option value=""> </option>
+              <option value="tehran">تهران</option>
+              <option value="isfahan">اصفهان</option>
+            </select>
+            </div>
+
+            <div>
+            <label for="account-city"> شهر: </label>
+            <select id="account-city">
+              <option value=""> </option>
+              <option value="tehran">تهران</option>
+              <option value="isfahan">اصفهان</option>
+            </select>
+            </div>
+
+            <div>
+            <label for="account-neighbor"> محله: </label>
+            <input type="text" id="account-neighbor">
+            </div>
+
+            <div>
+            <label for="account-postal"> کد پستی:</label>
+            <input type="text" id="account-postal" pattern="^[0-9۰-۹]{10}$" inputmode="numeric">
+            </div>
+
+            <div>
+            <label for="account-street"> خیابان: </label>
+            <input type="text" id="account-street">
+            </div>
+
+            <div>
+            <label for="account-alley"> کوچه: </label>
+            <input type="text" id="account-alley">
+            </div>
+
+            <div>
+            <label for="account-building-num"> پلاک: </label>
+            <input type="text" id="account-building-num" inputmode="numeric">
+            </div>
+
+            <div>
+            <label for="account-unit"> واحد: </label>
+            <input type="text" id="account-unit" inputmode="numeric">
+            </div>
           </div>
 
-          <div>
-          <label for="account-id"> کد مددجویی: </label>
-          <input type="text" id="account-id" readonly value="۱۴۵۸۷۳۶۴۹۲">
-          </div>
+          <section>
 
-          <div>
-          <label for="account-password"> رمز عبور: </label>
-          <input type="text" id="account-password" readonly value="0018423472">
-          </div>
+            <p>آدرس خود را برروی نقشه زیر تعیین کنید:</p>
+              <div id="map"> <img src="media/images/map_preview.png" alt=""></div>
 
-          <div>
-          <label for="account-phone-number"> شماره تلفن همراه: </label>
-          <input type="tel" id="account-phone-number" pattern="^(۰۹|09)[0-9۰-۹]{9}$" maxlength="11" inputmode="numeric" placeholder="مثال: ۰۹۱۲۰۱۲۳۴۵۶">
-          </div>
+              <!-- Hidden Inputs to Store Coordinates -->
+              <input type="hidden" name="latitude" id="latitude">
+              <input type="hidden" name="longitude" id="longitude">
 
-          <div>
-          <label for="account-email"> آدرس ایمیل: </label>
-          <input type="email" id="account-email">
-          </div>
+              <!-- Submit Button -->
+              <button type="submit">ثبت موقعیت</button>
 
-          <div id="account-submit1">
+          </section>
+
+          <div id="account-submit3">
             <div>
               <svg width="16" height="14" viewBox="0 0 16 14" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path d="M14.7373 0L4.94741 11.1961L1.22585 6.93997L0 8.34191L4.94741 14L15.9631 1.40194L14.7373 0Z"/>

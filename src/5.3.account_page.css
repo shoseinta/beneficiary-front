@@ -61,7 +61,6 @@
     --black25-color: rgba(0, 0, 0, 0.25);
     --error-red: #ff0000;
     --bluelinenav-color : #8BAECF;
-    --green-color: #3F9633;
 }
 html {
   background-color: var(--main-color);
@@ -116,228 +115,130 @@ body {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  align-items: center;
   row-gap: 10px;
-  padding: 10px;
+}
+.main h1 {
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: normal;
+  line-height: 2;
 }
 .nav-up {
-  width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 50px;
+  
 }
 .nav-list-up {
   display: flex;
-  flex-direction: row;
-  justify-content: space-around;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
 }
 .nav-item-up {
-  text-decoration: none;
   list-style: none;
-  position: relative;
-  flex: 1;
-}
-.nav-item-up > div{
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  justify-content: center;
-  text-decoration: none;
-  color: var(--main50-color);
-  font-size: 0.7rem;
-  font-weight: normal;
-  position: relative;
-}
-.step-icon {
-  position: relative;
-  display: inline-block;
-  margin-bottom: 5px;
-
-}
-.nav-item-up:not(:last-child) .step-icon::after {
-  content: '';
-  position: absolute;
-  top: 50%; /* Middle of the image */
-  right: calc(100% - 1px); /* Extend to the next step */
-  width: 330%; /* Adjust line length */
-  height: 1px;
-  background-color: var(--main50-color);
-  transform: translateY(-50%);
-  z-index: 0;
-}
-/* ✅ Completed lines before active step */
-#active-nav-up ~ .nav-item-up .step-icon::after {
-  background-color: var(--main50-color); /* make sure they remain light blue (upcoming steps) */
-}
-
-.nav-item-up.step-completed .step-icon::after {
-  background-color: var(--main-color); /* dark blue */
-}
-
-/* ✅ In-progress line (gradient after current step) */
-#active-nav-up .step-icon::after {
-  background: linear-gradient(to left, var(--main-color) , var(--main50-color)); /* RTL gradient */
-}
-.step-icon img {
-  display: block;
-  width: 7vw;
-  max-width: 36px;
-  height: auto;
-  position: relative;
-  z-index: 1;
-  border-radius: 50%;
-
-}
-#active-nav-up > div{
-  color: var(--main-color);
-}
-
-.form {
-  width: 100%;
-  max-width: 500px;
-  margin: 0 auto;
-}
-.form > * {
-  font-size: 0.8rem;
-  font-weight: normal;
-}
-
-sup {
-  color: var(--error-red);
-}
-.type-layer1 {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: transparent;
+  background-color: var(--main10-color);
   border: none;
-}
-#legend-id {
-  display: flex;
-  justify-content: flex-start;
-}
-.choice-group {
-  display: flex;
-  justify-content: space-between;
-  width: 80%;
-  max-width: 400px;
-}
-
-.choice-group input[type="radio"] {
-  display: none;
-}
-
-.choice-group label {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10px 0;
-  width: 70px;
-  background-color: var(--white-gray-color);
-  border: var(--main-color) 1px solid;
   border-radius: 6px;
+  width: 170px;
+  padding: 10px 0;
+  text-align: center;
   cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 0.7rem;
 }
 
-.choice-group input[type="radio"]:checked + label {
+.nav-item-up > a {
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: normal;
+}
+#active-nav-up {
   background-color: var(--main-color);
   color: var(--white-color);
 }
-.type-layer2 {
+/* ----------------------------------------- */
+.additional-info-container {
   display: flex;
   flex-direction: column;
-
+  row-gap: 30px;
+  width: 90%;
+  max-width: 500px;
 }
-.type-layer2 select {
-  width: 80%;
-  max-width: 400px;
-  height: 35px;
-  align-self: center;
-  background-color: var(--white-gray-color);
-  border: var(--main-color) 1px solid;
-  border-radius: 6px;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;            /* Remove default arrow */
-  background-image: url(media/icons/down_arrow_icon.svg);
-  background-repeat: no-repeat;
-  background-position: left 10px center; /* RTL support */
-  background-size: 14px;
-  padding-left: 2rem;          /* space for arrow */
-  cursor: pointer;
+.additional-info {
+  display: flex;
+  flex-direction: column;
+  row-gap: 15px;
   font-size: 0.7rem;
   font-weight: normal;
 }
-option {
-  text-align: center;
-  text-align-last: center;
-}
-.cash-input-wrapper {
-  display: flex;
-  flex-direction: column;
-  
-}
-.cash-input-box {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.cash-input-box input {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 80%;
-  max-width: 400px;
-  height: 35px;
+.additional-info-box {
+  display: grid;
+  grid-auto-flow: column;         /* Add items by column */
+  grid-template-rows: auto auto;  /* Two rows per column */ 
+  gap: 10px;
+  overflow-x: scroll;
+  padding: 10px;
   background-color: var(--white-gray-color);
-  border: var(--main-color) 1px solid;
-  border-radius: 6px;
-  text-align: center;
+  border: 1px solid var(--main-color);
+  border-radius: 10px;
+  transition: all 0.3s ease;
 }
-.label-space {
-  margin-bottom: 15px;
-}
-.input-space {
-  margin-bottom: 40px;
-}
-.next-btn {
-  display: flex;
-  justify-content: left;
-  width: 100%;
-  max-width: 500px;
-  margin: 0 auto;
-}
-.next-btn button {
+.additional-info-value {
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 10px;
+  height: 40px;
+  padding: 10px;
+  background-color: var(--white-color);
+  border-radius: 6px;
+  border: 1px solid var(--main-color);
+  white-space: nowrap;
+  transition: all 0.3s ease;
+}
+.additional-info-value > button {
+  all: unset;
   cursor: pointer;
+}
+.additional-info-value svg {
+  width: 7px;
+  height: auto;
+  color: var(--error-red);
+}
+/* --------------------------------add button style */
+.additional-info-button-container {
+  display: flex;
+  justify-content: flex-end;
+}
+.additional-info-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
   border: none;
-  background-color: transparent;
+  border-radius: 6px;
+  color: var(--white-color);
+  background-color: var(--main-color);
+  font-size: 0.7rem;
+  font-weight: normal;
+  height: 35px;
+  padding: 10px;
+  cursor: pointer;
 }
-.next-btn span{
-  color: var(--black-color);
-  margin-left: 5px;
-  padding-bottom: 5px;
+.additional-info-button svg {
+  width: 10px;
+  height: auto;
 }
-.next-btn svg {
-  fill: var(--green-color);
-  stroke: var(--black-color);
-  stroke-width: 1px;
-}
-/* --------------------------------disable next button style */
-.next-lock-btn button {
-  cursor: not-allowed;
-}
-.next-lock-btn span {
+
+input::placeholder {
   color: var(--black50-color);
 }
-.next-lock-btn svg {
-  fill: var(--black25-color);
-}
+
+
+
+
+
+
 
 
 

@@ -119,14 +119,11 @@ body {
   align-items: center;
   row-gap: 10px;
 }
-.main h1 {
-  text-align: center;
-  font-size: 0.8rem;
-  font-weight: normal;
-  line-height: 2;
-}
+/* ---------------------------------up navigation style */
 .nav-up {
   display: flex;
+  justify-content: center;
+  align-items: center;
   flex-wrap: wrap;
   margin-bottom: 50px;
   
@@ -138,116 +135,94 @@ body {
   gap: 10px;
 }
 .nav-item-up {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   list-style: none;
-  background-color: var(--main10-color);
-  border: none;
+  background-color: var(--white-gray-color);
+  border: 1px solid var(--main-color);
   border-radius: 6px;
-  width: 170px;
-  padding: 10px 0;
-  text-align: center;
+  padding: 0 5px;
+  height: 35px;
   cursor: pointer;
 }
-
 .nav-item-up > a {
   text-decoration: none;
-  font-size: 0.9rem;
+  font-size: 0.7rem;
   font-weight: normal;
 }
 #active-nav-up {
   background-color: var(--main-color);
   color: var(--white-color);
+  box-shadow: 0px 4px 4px var(--black25-color);
 }
-/* ----------------------------------------- */
-.account-form1 {
-  display: flex;
-  flex-direction: column;
-  row-gap: 15px;
-  width: 90%;
-  max-width: 500px;
-}
-.account-form1 div {
-  display: flex;
-  justify-content: space-between;
-}
-.account-form1 label {
-  display: flex;
-  align-items: center;
-  font-size: 0.8rem;
-  font-weight: normal;
-}
-.account-form1 input {
-  background-color: var(--white-gray-color);
-  border: 1px solid var(--main-color);
-  border-radius: 6px;
-  width: 65%;
-  padding-right: 10px;
-  padding-left: 45px;
-  height: 35px;
-  text-align: left;
-}
-#account-support {
-  text-align: right;
-}
-#account-support,
-#account-id {
-  background-image:
-    url(media/icons/lock_icon.svg),         /* Lock icon */
-    linear-gradient(to bottom, var(--main-color), var(--main-color)); /* Vertical line */
-  background-repeat: no-repeat;
-  background-position:
-    left 10px center,     /* Icon position */
-    left 31px center;     /* Vertical line position */
-  background-size:
-    11px 14px,            /* Icon size */
-    1px 100%;              /* Line width and height */
-  padding-left: 45px;      /* Space for icon + line + buffer */
-}
-#account-submit1 {
-  margin-top: 45px;
-  display: flex;
-  justify-content: space-between;
-}
-#account-submit1 > div {
+/* -----------------------------------------requests table style */
+.request-table-container {
   display: flex;
   justify-content: center;
-  align-items: center;
-  gap: 5px;
-  padding: 10px;
-  background-color: var(--green-color);
+  max-height: 50vh; /* 5 rows + 1 header row, each approx 35px */
+  overflow-y: scroll;
+  width: 97%;
+  max-width: 610px;
+  box-shadow: 0 4px 4px var(--black25-color);
+}
+.request-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.request-table th {
+  background-color: var(--main-color);
   color: var(--white-color);
-  border-radius: 6px;
-  box-shadow: 0px 4px 4px var(--black25-color);
+  border: 1px solid var(--white-color);
+  padding: 3vh 1px;
+  text-align: center;
+  font-size: 0.7rem;
+  font-weight: 500;
+  
+}
+/* Sticky header */
+.request-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.request-table td {
+  padding: 3vh 1px;
+  text-align: center;
+  border: 1px solid var(--main-color); /* blue border */
   font-size: 0.7rem;
   font-weight: normal;
 }
-#account-submit1 > div > svg {
+.request-table td,
+.request-table th {
+  white-space: nowrap;         /* Prevents line breaks */
+  overflow: hidden;            /* Hides overflow text */
+  text-overflow: ellipsis;     /* Shows "..." at the end */
+  max-width: 120px;            /* Adjust as needed */
+}
+
+/* Alternating row colors */
+.request-table tbody tr:nth-child(odd) {
+  background-color: var(--white-color);
+}
+.request-table tbody tr:nth-child(even) {
+  background-color: var(--white-gray-color); /* light gray */
+}
+.request-table img {
   width: 10px;
   height: auto;
-  color: var(--white-color);
-}
-#account-submit1 input {
-  width: 75px;
-  padding: 0;
-  text-align: center;
-  background-color: var(--main-color);
-  border: none;
-  color: var(--white-color);
-  cursor: pointer;
-
-}
-input::placeholder {
-  color: var(--black50-color);
 }
 
-
-
-
-
-
-
-
-
-
+p {
+  display: none;
+  margin-top: 20px;
+  font-size: 12px;
+  font-weight: 300;
+  letter-spacing: 0.1rem;
+}
+/* -----------------------------------------bottom navigation style */
 .nav {
   padding: 5px 0 5px 0;
   border-top: var(--bluelinenav-color) 3px solid;

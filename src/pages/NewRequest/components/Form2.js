@@ -8,19 +8,27 @@ import step4 from '../../../media/icons/step4.svg';
 import back_icon from '../../../media/icons/back_icon.svg'
 import next_icon from '../../../media/icons/next_icon.svg'
 import './Form2.css'
-function Form2({setOneTimeData, setRecurringData, duration, setRequestData, onetimeData, recurringData, requestData, setNextActive, setStep}){
+function Form2({setOneTimeData, setRecurringData, duration, setRequestData, onetimeData, recurringData, requestData, nextActive, setNextActive, setStep}){
     const [selectedDuration,setSelectedDuration] = useState(requestData.beneficiary_request_duration);
     
     const handleDeadLineChange = (event) => {
         setOneTimeData(pre => ({...pre,beneficiary_request_duration_onetime_deadline:event.target.value}))
     }
     const handleLimitChange = (event) => {
+        if (!event.target.value){
+         setRecurringData(pre => ({...pre,beneficiary_request_duration_recurring_limit:""})) 
+        }else{
         setRecurringData(pre => ({...pre,beneficiary_request_duration_recurring_limit:Number(event.target.value)}))
+        }
     }
 
     const handleDurationChange = (event) => {
       setSelectedDuration(Number(event.target.value))
+      if (!event.target.value){
+        setRequestData(pre => ({...pre, beneficiary_request_duration:""}))
+      }else{
       setRequestData(pre => ({...pre, beneficiary_request_duration:Number(event.target.value)}))
+      }
     }
     //  useEffect(() => {
     //         if(selectedDuration){
@@ -44,22 +52,28 @@ function Form2({setOneTimeData, setRecurringData, duration, setRequestData, onet
 
     useEffect(() => {
         let isFormComplete = false
-        if (requestData.beneficiary_request_duration && selectedDuration?.beneficiary_request_duration_name === 'one_time' && onetimeData?.beneficiary_request_duration_onetime_deadline){
+        if (requestData.beneficiary_request_duration && selectedDuration===1 && onetimeData?.beneficiary_request_duration_onetime_deadline && requestData.beneficiary_request_amount){
             isFormComplete = true
         }
-        if (requestData.beneficiary_request_duration && selectedDuration?.beneficiary_request_duration_name === 'recurring' && recurringData?.beneficiary_request_duration_recurring_limit){
+        if (requestData.beneficiary_request_duration && selectedDuration===2 && recurringData?.beneficiary_request_duration_recurring_limit && requestData.beneficiary_request_amount){
             isFormComplete = true
         }
-        if(requestData.beneficiary_request_duration && selectedDuration?.beneficiary_request_duration_name === 'permanent'){
+        if(requestData.beneficiary_request_duration && selectedDuration===3){
             isFormComplete = true
         }
        setNextActive(isFormComplete) 
     },[requestData,onetimeData,recurringData])
 
     const handleAmountChange = e => {
+      if(!e.target.value){
+        setRequestData(pre => {
+            return {...pre, beneficiary_request_amount:""}
+        })
+      }else {
         setRequestData(pre => {
             return {...pre, beneficiary_request_amount:Number(e.target.value)}
         })
+      }
     }
 
     useEffect(()=>{
@@ -188,10 +202,21 @@ function Form2({setOneTimeData, setRecurringData, duration, setRequestData, onet
         <span> قبلی</span>
       </button>
 
-      <button onClick={() => setStep(pre => pre + 1)}>
-        <span> بعدی</span>
-        <img src={next_icon} alt=" " />
-      </button>
+      {nextActive ?<div className="next-btn">
+                <button onClick={() => setStep(pre => pre + 1)}>
+                    <span> بعدی</span>
+                    <img src={next_icon} alt="دکمه بعدی" />
+                </button>
+                </div>:
+                <div class="next-lock-btn">
+                    <button>
+                    <span> بعدی</span>
+                    <svg width="21" height="32" viewBox="0 0 21 32" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M17.3184 1.22266C16.7343 0.75704 15.884 0.790223 15.3379 1.32227L1.38574 14.9258L1.2793 15.041C0.817171 15.5952 0.81717 16.4048 1.2793 16.959L1.38574 17.0742L15.3379 30.6777C15.884 31.2098 16.7343 31.243 17.3184 30.7773L17.4316 30.6777L19.6152 28.5479C20.2185 27.9596 20.2189 26.9903 19.6162 26.4014L9.33789 16.3574L9.27148 16.2783C9.15894 16.1106 9.15894 15.8894 9.27148 15.7217L9.33789 15.6426L19.6162 5.59863C20.2189 5.00974 20.2185 4.04041 19.6152 3.45215L17.4316 1.32227L17.3184 1.22266Z"/>
+                    </svg>
+
+                    </button>
+                </div>}
     </div>
 
     <div></div>

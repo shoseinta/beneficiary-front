@@ -328,3 +328,13 @@
   max-height: 36px;
   width: auto;
 }
+
+.form3-container .next-lock-btn button {
+  cursor: not-allowed;
+}
+.form3-container .next-lock-btn span {
+  color: var(--black50-color);
+}
+.form3-container .next-lock-btn svg {
+  fill: var(--black25-color);
+}

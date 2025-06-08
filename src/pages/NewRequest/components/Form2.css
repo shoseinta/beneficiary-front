@@ -381,3 +381,39 @@
   max-height: 36px;
   width: auto;
 }
+
+.form2-container .next-lock-btn {
+  display: flex;
+  justify-content: left;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+}
+.form2-container .next-lock-btn button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+}
+.form2-container .next-lock-btn span{
+  color: var(--black-color);
+  margin-left: 5px;
+  padding-bottom: 5px;
+}
+.form2-container .next-lock-btn svg {
+  fill: var(--green-color);
+  stroke: var(--black-color);
+  stroke-width: 1px;
+}
+.form2-container .next-lock-btn button {
+  cursor: not-allowed;
+}
+.form2-container .next-lock-btn span {
+  color: var(--black50-color);
+}
+.form2-container .next-lock-btn svg {
+  fill: var(--black25-color);
+}
+

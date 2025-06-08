@@ -6,7 +6,7 @@
   <meta name="description" content="صفحه حساب کاربری مددجویان خیریه دست مهربان">
   <meta name="keywords" content="صفحه حساب کاربری خیریه، مددجو، مددجویان، خیریه دست مهربان، دست مهربان">
   <meta name="author" content="محمد جواد عزیزی">
-  <link rel="stylesheet" href="5.account_page.css">
+  <link rel="stylesheet" href="5.1.account_page.css">
   <title>صفحه حساب کاربری خیریه</title>
 </head>
 
@@ -34,11 +34,11 @@
         <nav class="nav-up">
           <ul class="nav-list-up">
 
-            <li class="nav-item-up" id="active-nav-up">
+            <li class="nav-item-up" >
               <a>   اطلاعات حساب کاربری  </a>
             </li>
 
-            <li class="nav-item-up">
+            <li class="nav-item-up" id="active-nav-up">
               <a>  اطلاعات شخصی کاربر  </a>
             </li>
 
@@ -52,34 +52,38 @@
           </ul>
         </nav>
 
-        <form action="" class="account-form1">
+        <form action="" class="account-form2">
 
           <div>
-          <label for="account-support"> تحت پوشش خیریه: </label>
-          <input type="text" id="account-support" readonly value="هستید">
+          <label for="account-ident-num"> کد ملی: </label>
+          <input type="text" id="account-ident-num" readonly value="۰۰۱۸۴۲۳۴۷۲">
           </div>
 
           <div>
-          <label for="account-id"> کد مددجویی: </label>
-          <input type="text" id="account-id" readonly value="۱۴۵۸۷۳۶۴۹۲">
+          <label for="account-name"> نام: </label>
+          <input type="text" id="account-name">
           </div>
 
           <div>
-          <label for="account-password"> رمز عبور: </label>
-          <input type="text" id="account-password" readonly value="0018423472">
+          <label for="account-family"> نام خانوادگی: </label>
+          <input type="text" id="account-family">
           </div>
 
           <div>
-          <label for="account-phone-number"> شماره تلفن همراه: </label>
-          <input type="tel" id="account-phone-number" pattern="^(۰۹|09)[0-9۰-۹]{9}$" maxlength="11" inputmode="numeric" placeholder="مثال: ۰۹۱۲۰۱۲۳۴۵۶">
+          <label for="account-bd"> تاریخ تولد: </label>
+          <input type="text" id="account-bd" readonly placeholder="مثال: ۱۳۲۲/۲/۲۲">
           </div>
 
-          <div>
-          <label for="account-email"> آدرس ایمیل: </label>
-          <input type="email" id="account-email">
+          <div class="account-gender-div">
+          <label for="account-gender"> جنسیت: </label>
+          <select id="account-gender">
+            <option value="">انتخاب کنید</option>
+            <option value="female">زن</option>
+            <option value="male">مرد</option>
+          </select>
           </div>
 
-          <div id="account-submit1">
+          <div id="account-submit2">
             <div>
               <svg width="16" height="14" viewBox="0 0 16 14" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path d="M14.7373 0L4.94741 11.1961L1.22585 6.93997L0 8.34191L4.94741 14L15.9631 1.40194L14.7373 0Z"/>

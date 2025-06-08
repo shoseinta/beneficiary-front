@@ -63,7 +63,6 @@
     --bluelinenav-color : #8BAECF;
     --green-color: #3F9633;
 }
-
 html, body {
   background-color: var(--black25-color);
   overflow-y: auto;
@@ -71,31 +70,111 @@ html, body {
   justify-content: center;
   align-items: center;
   height: 100%;
+  width: 100%;
 }
-div {
+.family-overlay-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  position: fixed;
-  align-self: center;
-  justify-self: center;
+  gap: 20px;
   background-color: var(--white-color);
   border: 1px solid var(--main-color);
-  border-radius: 10px;
+  border-radius: 11px;
   box-shadow: 0px 4px 4px var(--black25-color);
-  padding: 10px 40px 20px 40px;
+  padding: 30px 10px;
+  width: 90%;
+  max-width: 360px;
 }
-svg {
-  color: var(--green-color);
-  margin-bottom: 10px;
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
-h1 {
-  font-size: 1rem;
-  font-weight: bold;
-  margin-bottom: 20px;
+form > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
-p {
+label {
   font-size: 0.8rem;
   font-weight: normal;
+}
+sup {
+  color: var(--error-red);
+}
+input , select {
+  height: 35px;
+  width: 75%;
+  background-color: var(--white-gray-color);
+  border: 1px solid var(--main-color);
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: normal;
+  padding: 0 10px 0 30px;
+}
+#family-ident-num {
+  text-align: left;
+}
+#family-bd {
+  text-align: center;
+}
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;            /* Remove default arrow */
+  background-image: url(media/icons/down_arrow_icon.svg);
+  background-repeat: no-repeat;
+  background-position: left 10px center; /* RTL support */
+  background-size: 14px;
+  padding-left: 2rem;          /* space for arrow */
+  cursor: pointer;
+}
+#family-bd {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none; /* Remove default arrow */
+  background-image: url(media/icons/calendar_icon.svg);
+  background-repeat: no-repeat;
+  background-position: left 10px center; /* RTL support */
+  background-size: 14px;
+  padding-left: 2rem;
+  cursor: pointer;
+}
+input::placeholder {
+  color: var(--black50-color);
+}
+
+
+
+
+
+
+
+
+
+
+
+/* ----------------------------------buttons style */
+.family-overlay-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+}
+button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  border-radius: 6px;
+  width: 75px;
+  height: 35px;
+  color: var(--white-color);
+  font-size: 0.8rem;
+  font-weight: normal;
+  cursor: pointer;
+}
+.no-button {
+  background-color: var(--error-red);
+}
+.yes-button {
+  background-color: var(--main-color);
 }

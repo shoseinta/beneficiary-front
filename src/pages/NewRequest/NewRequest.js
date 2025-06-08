@@ -118,9 +118,8 @@ function NewRequest() {
             setIsSubmitting(false);
         }
     };
-    useEffect(() => {
-        console.log(requestData)
-    })
+    
+
     if (loading) return <p>Loading lookups...</p>;
     if (error) return <p>Error loading lookups: {error}</p>;
     if (submitSuccess) {
@@ -131,8 +130,8 @@ function NewRequest() {
 
     return (
         <>
-            {step === 1 && <Form1 requestData={requestData} setRequestData={setRequestData} setNextActive={setNextActive} typeLayerOne={typeLayerOne} typeLayerTwo={typeLayerTwo} setStep={setStep}/>}
-            {step === 2 && <Form2 duration={duration} setOneTimeData={setOneTimeData} setRecurringData={setRecurringData} setRequestData={setRequestData} onetimeData={onetimeData} recurringData={recurringData} requestData={requestData} setNextActive={setNextActive} setStep={setStep}/>}
+            {step === 1 && <Form1 requestData={requestData} setRequestData={setRequestData} nextActive={nextActive} setNextActive={setNextActive} typeLayerOne={typeLayerOne} typeLayerTwo={typeLayerTwo} setStep={setStep}/>}
+            {step === 2 && <Form2 duration={duration} setOneTimeData={setOneTimeData} setRecurringData={setRecurringData} setRequestData={setRequestData} onetimeData={onetimeData} recurringData={recurringData} requestData={requestData} nextActive={nextActive} setNextActive={setNextActive} setStep={setStep}/>}
             {step === 3 && <Form3 requestData={requestData} setRequestData={setRequestData} setStep={setStep}/>}
             {step === 4 && <Form4 requestData={requestData} onetimeData={onetimeData} recurringData={recurringData} typeLayerOne={typeLayerOne} typeLayerTwo={typeLayerTwo} duration={duration} setStep={setStep} handleSubmit={handleSubmit}/>}
             

@@ -25,7 +25,7 @@
         <div class="username-input">
           <label for="username">نام کاربری</label>
           <div class="username-icons">
-            <input type="text" id="username" name="username" pattern="\d{7}" maxlength="7" title="کد مددجویی شما دارای ۷ رقم است، لطفا مقدار درست را وارد فرمایید." placeholder="کد مددجویی خود در خیریه را وارد کنید" autocomplete="on" required>
+            <input type="text" id="username" name="username" pattern="^[0-9۰-۹]{7}$ maxlength="7" title="کد مددجویی شما دارای ۷ رقم است، لطفا مقدار درست را وارد فرمایید." placeholder="کد مددجویی خود در خیریه را وارد کنید" autocomplete="on" required inputmode="numeric">
             <img src="media/icons/alert_icon.svg" alt="" id="alert-icon1" >
           </div>
         </div>

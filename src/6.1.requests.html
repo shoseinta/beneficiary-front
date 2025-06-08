@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fa-IR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="صفحه سوابق درخواست مددجویان خیریه دست مهربان">
+  <meta name="keywords" content="صفحه سوابق درخواست خیریه، مددجو، مددجویان، خیریه دست مهربان، دست مهربان">
+  <meta name="author" content="محمد جواد عزیزی">
+  <link rel="stylesheet" href="6.1.requests.css">
+  <title>صفحه سوابق درخواست خیریه</title>
+</head>
+
+<body>
+  <div class="container">
+
+    <header class="header">
+      <button type="button" id="hamburger">
+        <img src="media/icons/hamburger_icon.svg" alt="منوی تنظیمات">
+      </button>
+      <img src="media/images/charity_typo_white.png" id="typo" alt="تایپوگرافی نام خیریه">
+      <img src="media/images/charity_logo.png" id="logo" alt="لوگوی خیریه">
+    </header>
+
+    <main class="main">
+
+      <div class="observe-forms">
+        <form action="">
+          <label for="observe-type1">نوع درخواست:</label>
+          <input type="text" id="observe-type1" readonly value="وجه نقد">
+
+          <label for="observe-type2">دسته درخواست:</label>
+          <input type="text" id="observe-type2" readonly value="">
+
+          <label for="observe-time1">نوع زمانی درخواست:</label>
+          <input type="text" id="observe-time2" readonly value="">
+
+          <label for="observe-time2">تاریخ دریافت درخواست:</label>
+          <input type="text" id="observe-time2" readonly value="">
+
+          <label for="observe-cash">مبلغ درخواست:</label>
+          <input type="text" id="observe-cash" readonly value="">
+
+          <label for="observe-title">عنوان درخواست:</label>
+          <input type="text" id="observe-title" readonly value="">
+
+          <label for="observe-description">توضیحات درخواست:</label>
+          <textarea type="text" id="observe-description" readonly placeholder="اطلاعاتی وجود ندارد" ></textarea>
+
+          <label for="observe-document">مستندات درخواست:</label>
+          <input type="file" id="observe-document" multiple hidden readonly>
+          <label for="observe-document" class="upload-label" id="label-for-file-input">اطلاعاتی وجود ندارد</label>
+        </form>
+
+        <form action="">
+
+        </form>
+      </div>
+
+      <div class="observe-child-request">
+        <button class="observe-chid-creation"></button>
+        <button class="observe-child-list"></button>
+      </div>
+
+      <div class="observe-edit-delete">
+        <button class="observe-edit"></button>
+        <button class="observe-back"></button>
+        <button class="observe-delete"></button>
+
+      </div>
+
+    </main>
+
+    <nav class="nav">
+      <ul class="nav-list">
+        <li><a href=""> 
+          <div class="nav-icon"><img src="media/icons/home_nav.svg" alt=""></div>  خانه </a></li>
+        <li><a href="">
+          <div class="nav-icon"> <img src="media/icons/creation_nav.svg" alt=""></div> ایجاد درخواست </a></li>
+        <li><a href="">
+          <div class="nav-icon"> <img src="media/icons/requests_nav.svg" alt=""></div> سوابق درخواست </a></li>
+        <li><a href="" id="active-nav"> 
+          <div class="nav-icon"><img src="media/icons/account_nav_active.svg" alt=""></div> حساب کاربری </a></li>
+      </ul>
+    </nav>
+
+  </div>
+</body>
+</html>

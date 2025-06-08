@@ -326,23 +326,23 @@
 
 
 
-.nav {
+.form1-container .nav {
   padding: 5px 0 5px 0;
   border-top: var(--bluelinenav-color) 3px solid;
   position: sticky;
   bottom: 0;
   background-color: var(--white-color);
 }
-.nav > .nav-list {
+.form1-container .nav > .nav-list {
   display: flex;
   justify-content: space-around;
   align-items: center;
   height: 100%;
 }
-.nav > .nav-list > li {
+.form1-container .nav > .nav-list > li {
   list-style: none;
 }
-.nav > .nav-list > li > a {
+.form1-container .nav > .nav-list > li > a {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -353,13 +353,48 @@
   font-size: 0.7rem;
   font-weight: normal;
 }
-.nav > .nav-list > li > #active-nav {
+.form1-container .nav > .nav-list > li > #active-nav {
   color: var(--main-color);
 }
-.nav > .nav-list > li > a > .nav-icon > img{
+.form1-container .nav > .nav-list > li > a > .nav-icon > img{
   display: block;
   margin-bottom: 5px;
   height: 7vw;
   max-height: 36px;
   width: auto;
+}
+
+.form1-container .next-lock-btn {
+  display: flex;
+  justify-content: left;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+}
+.form1-container .next-lock-btn button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+}
+.form1-container .next-lock-btn span{
+  color: var(--black-color);
+  margin-left: 5px;
+  padding-bottom: 5px;
+}
+.form1-container .next-lock-btn svg {
+  fill: var(--green-color);
+  stroke: var(--black-color);
+  stroke-width: 1px;
+}
+.form1-container .next-lock-btn button {
+  cursor: not-allowed;
+}
+.form1-container .next-lock-btn span {
+  color: var(--black50-color);
+}
+.form1-container .next-lock-btn svg {
+  fill: var(--black25-color);
 }
