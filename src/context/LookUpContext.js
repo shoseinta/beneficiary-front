@@ -87,6 +87,8 @@ export const LookupProvider = ({ children }) => {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const [selected, setSelected] = useState(1);
  // Empty dependency array
 
   useEffect(() => {
@@ -154,6 +156,8 @@ export const LookupProvider = ({ children }) => {
   return (
     <LookupContext.Provider
       value={{
+        selected,
+        setSelected,
         loading,
         error,
         typeLayerOne,
