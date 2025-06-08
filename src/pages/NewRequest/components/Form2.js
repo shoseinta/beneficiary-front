@@ -10,6 +10,7 @@ import next_icon from '../../../media/icons/next_icon.svg'
 import './Form2.css'
 function Form2({setOneTimeData, setRecurringData, duration, setRequestData, onetimeData, recurringData, requestData, nextActive, setNextActive, setStep}){
     const [selectedDuration,setSelectedDuration] = useState(requestData.beneficiary_request_duration);
+    const [dispalyValue, setDisplayValue] = useState("")
     
     const handleDeadLineChange = (event) => {
         setOneTimeData(pre => ({...pre,beneficiary_request_duration_onetime_deadline:event.target.value}))
@@ -22,6 +23,25 @@ function Form2({setOneTimeData, setRecurringData, duration, setRequestData, onet
         }
     }
 
+    const toPersianDigits = (num) => {
+    const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+    return num.toString().replace(/\d/g, (x) => persianDigits[x]);
+  };
+
+  // Add commas as thousand separators
+  const addCommas = (num) => {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
+  // Convert Persian digits to English
+  const toEnglishDigits = (str) => {
+    const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+    return str.toString().split('').map((c) => {
+      const index = persianDigits.indexOf(c);
+      return index >= 0 ? index : c;
+    }).join('').replace(/,/g, '');
+  };
+
     const handleDurationChange = (event) => {
       setSelectedDuration(Number(event.target.value))
       if (!event.target.value){
@@ -30,6 +50,8 @@ function Form2({setOneTimeData, setRecurringData, duration, setRequestData, onet
       setRequestData(pre => ({...pre, beneficiary_request_duration:Number(event.target.value)}))
       }
     }
+
+    
     //  useEffect(() => {
     //         if(selectedDuration){
     //             setRequestData(pre => ({...pre, beneficiary_request_duration:selectedDuration.beneficiary_request_duration_id}))
@@ -65,15 +87,23 @@ function Form2({setOneTimeData, setRecurringData, duration, setRequestData, onet
     },[requestData,onetimeData,recurringData])
 
     const handleAmountChange = e => {
-      if(!e.target.value){
+      const inputValue = e.target.value;
+    
+    // Convert Persian to English and remove commas for storage
+      const englishValue = toEnglishDigits(inputValue);
+      if(!englishValue){
         setRequestData(pre => {
             return {...pre, beneficiary_request_amount:""}
         })
       }else {
         setRequestData(pre => {
-            return {...pre, beneficiary_request_amount:Number(e.target.value)}
+            return {...pre, beneficiary_request_amount:englishValue}
         })
       }
+      const formattedValue = englishValue === '' 
+        ? '' 
+        : toPersianDigits(addCommas(englishValue));
+      setDisplayValue(formattedValue);
     }
 
     useEffect(()=>{
@@ -184,7 +214,7 @@ function Form2({setOneTimeData, setRecurringData, duration, setRequestData, onet
         {
             duration.find(item => item.beneficiary_request_duration_name=== 'one_time').beneficiary_request_duration_id === selectedDuration || duration.find(item => item.beneficiary_request_duration_name=== 'recurring').beneficiary_request_duration_id === selectedDuration?
                 <><div className="cash-input-box">
-          <input type="text" id="cash-amount" name="cash_amount" inputMode="numeric" placeholder="برای مثال: ۱٫۰۰۰٫۰۰۰" value={requestData.beneficiary_request_amount} onChange={handleAmountChange}/>
+          <input type="text" id="cash-amount" name="cash_amount" inputMode="numeric" placeholder="برای مثال: ۱٫۰۰۰٫۰۰۰" value={dispalyValue} onChange={handleAmountChange}/>
         </div>
         <div id="cash-in-words" className="amount-preview"></div></>:
         null
