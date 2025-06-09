@@ -265,6 +265,8 @@
   font-size: 0.7rem;
   font-weight: normal;
   text-align: center;
+
+  margin: 0 auto;
 }
 /* #time-layer2-recurring {
   display: none;
@@ -416,4 +418,49 @@
 .form2-container .next-lock-btn svg {
   fill: var(--black25-color);
 }
+
+.rmdp-container {
+  text-align: center;
+}
+
+/* Force day content inside circle to be vertically & horizontally centered */
+/* Force day content inside circle to be vertically & horizontally centered */
+/* 📦 Apply to the day cell */
+.rmdp-day {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 50% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+
+.rmdp-day .sd {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100%;
+  height: 100%;
+  line-height: 1 !important;
+  font-size: 0.75rem; /* adjust to your liking */
+  text-align: center;
+}
+
+/* Center month names */
+.rmdp-month-picker .rmdp-day span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Center year numbers */
+.rmdp-year-picker .rmdp-day span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 

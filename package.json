@@ -12,6 +12,7 @@
     "jszip": "^3.10.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-multi-date-picker": "^4.5.2",
     "react-number-format": "^5.4.4",
     "react-router-dom": "^7.6.0",
     "react-scripts": "5.0.1",

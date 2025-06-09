@@ -1,4 +1,4 @@
-import { useState,useEffect } from "react";
+import { useState,useEffect,useRef } from "react";
 import Header from "../../../components/header/Header";
 import NavigationBar from "../../../components/navigationBar/NavigationBar";
 import step1_completed from '../../../media/icons/step1_completed.svg';
@@ -8,10 +8,93 @@ import step4 from '../../../media/icons/step4.svg';
 import back_icon from '../../../media/icons/back_icon.svg'
 import next_icon from '../../../media/icons/next_icon.svg'
 import './Form2.css'
+import DatePicker from "react-multi-date-picker";
+import persian from "react-date-object/calendars/persian";
+import persian_fa from "react-date-object/locales/persian_fa";
+import DateObject from "react-date-object";
+
+
+
 function Form2({setOneTimeData, setRecurringData, duration, setRequestData, onetimeData, recurringData, requestData, nextActive, setNextActive, setStep}){
     const [selectedDuration,setSelectedDuration] = useState(requestData.beneficiary_request_duration);
     const [dispalyValue, setDisplayValue] = useState("")
+    const [jalaliValue, setJalaliValue] = useState(null);
+    const todayJalali = new DateObject({ calendar: persian, locale: persian_fa });
+
+
+    const datepickerRef = useRef();
+        const persian_fa_custom = {
+  months: [
+    ["فروردین", "فروردین"],
+    ["اردیبهشت", "اردیبهشت"],
+    ["خرداد", "خرداد"],
+    ["تیر", "تیر"],
+    ["مرداد", "مرداد"],
+    ["شهریور", "شهریور"],
+    ["مهر", "مهر"],
+    ["آبان", "آبان"],
+    ["آذر", "آذر"],
+    ["دی", "دی"],
+    ["بهمن", "بهمن"],
+    ["اسفند", "اسفند"]
+  ],
+  weekDays: [
+    ["شنبه", "شنبه"],
+    ["یک‌شنبه", "یک"],
+    ["دوشنبه", "دو"],
+    ["سه‌شنبه", "سه"],
+    ["چهارشنبه", "چهار"],
+    ["پنج‌شنبه", "پنج"],
+    ["جمعه", "جمعه"]
+  ],
+  digits: ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"]
+}
+
+
     
+
+useEffect(() => {
+  const wrapperDiv = datepickerRef.current?.querySelector(".rmdp-wrapper");
+  if (wrapperDiv) {
+    wrapperDiv.style.display = "block";
+    wrapperDiv.style.width = "100%";
+    wrapperDiv.style.maxWidth = "100%";
+  }
+}, [jalaliValue]); // or use [] if once is enough
+
+useEffect(() => {
+  if (onetimeData?.beneficiary_request_duration_onetime_deadline) {
+    const newDate = new DateObject({
+      date: onetimeData.beneficiary_request_duration_onetime_deadline,
+      calendar: "gregorian",
+    }).convert(persian).setLocale(persian_fa);
+
+    // Avoid unnecessary update that causes flicker
+    if (
+  !jalaliValue ||
+  jalaliValue.year !== newDate.year ||
+  jalaliValue.month.number !== newDate.month.number ||
+  jalaliValue.day !== newDate.day
+) {
+  setJalaliValue(newDate);
+}
+
+  }
+}, [onetimeData]);
+
+
+    const handleJalaliDateChange = (dateObj) => {
+  if (dateObj) {
+    const gregorianDate = dateObj.toDate(); // native JS Date
+    const isoDate = gregorianDate.toISOString().split("T")[0]; // "YYYY-MM-DD"
+    
+    setOneTimeData(prev => ({
+      ...prev,
+      beneficiary_request_duration_onetime_deadline: isoDate,
+    }));
+  }
+};
+
     const handleDeadLineChange = (event) => {
         setOneTimeData(pre => ({...pre,beneficiary_request_duration_onetime_deadline:event.target.value}))
     }
@@ -195,8 +278,29 @@ function Form2({setOneTimeData, setRecurringData, duration, setRequestData, onet
       {duration.find(item => item.beneficiary_request_duration_name=== 'one_time').beneficiary_request_duration_id === selectedDuration ?
             <div className="time-layer2 input-space" id="time-layer2-one-time">
         <label htmlFor="time-layer2-one-time-id" className="label-space"> آخرین زمانی که می‌خواهید درخواست شما انجام شود، چه تاریخی است؟<sup>*</sup></label>
-        <input type="date" id="time-layer2-one-time-id" placeholder="تاریخ را انتخاب کنید"  required value={onetimeData.beneficiary_request_duration_onetime_deadline} onChange={handleDeadLineChange}/>
-      </div>:null}
+        
+  <DatePicker
+    value={jalaliValue}
+    onChange={(dateObj) => {
+      setJalaliValue(dateObj);
+      const gregorianDate = dateObj.toDate();
+      const isoDate = gregorianDate.toISOString().split("T")[0];
+      setOneTimeData(prev => ({
+        ...prev,
+        beneficiary_request_duration_onetime_deadline: isoDate,
+      }));
+    }}
+    calendar={persian}
+    locale={persian_fa_custom}
+    calendarPosition="bottom-center"
+    placeholder="تاریخ را انتخاب کنید"
+    inputClass="custom-datepicker-input"
+    minDate={todayJalali}
+  />
+
+
+
+</div>:null}
             {
                 duration.find(item => item.beneficiary_request_duration_name=== 'recurring').beneficiary_request_duration_id === selectedDuration ?
                  <div className="time-layer2 input-space" id="time-layer2-recurring">

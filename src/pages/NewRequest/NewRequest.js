@@ -120,7 +120,7 @@ function NewRequest() {
     };
     
     useEffect(() => {
-        console.log(requestData)
+        console.log(onetimeData)
     })
     if (loading) return <p>Loading lookups...</p>;
     if (error) return <p>Error loading lookups: {error}</p>;
