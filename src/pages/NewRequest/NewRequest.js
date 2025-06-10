@@ -11,6 +11,7 @@ function NewRequest() {
     const navigate = useNavigate();
 
     const {loading, error, duration, typeLayerOne, typeLayerTwo, setActiveEndpoint} = useLookup()
+    const [files, setFiles] = useState([]);
     
     const [requestData, setRequestData] = useState({
         beneficiary_request_title: "",
@@ -134,7 +135,7 @@ function NewRequest() {
         <>
             {step === 1 && <Form1 requestData={requestData} setRequestData={setRequestData} nextActive={nextActive} setNextActive={setNextActive} typeLayerOne={typeLayerOne} typeLayerTwo={typeLayerTwo} setStep={setStep}/>}
             {step === 2 && <Form2 duration={duration} setOneTimeData={setOneTimeData} setRecurringData={setRecurringData} setRequestData={setRequestData} onetimeData={onetimeData} recurringData={recurringData} requestData={requestData} nextActive={nextActive} setNextActive={setNextActive} setStep={setStep}/>}
-            {step === 3 && <Form3 requestData={requestData} setRequestData={setRequestData} setStep={setStep}/>}
+            {step === 3 && <Form3 requestData={requestData} setRequestData={setRequestData} setStep={setStep} files={files} setFiles={setFiles}/>}
             {step === 4 && <Form4 requestData={requestData} onetimeData={onetimeData} recurringData={recurringData} typeLayerOne={typeLayerOne} typeLayerTwo={typeLayerTwo} duration={duration} setStep={setStep} handleSubmit={handleSubmit}/>}
             
         </>

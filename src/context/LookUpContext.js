@@ -1,4 +1,5 @@
 // context/LookupContext.js
+import { file } from 'jszip';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
 const LookupContext = createContext();
@@ -88,6 +89,8 @@ export const LookupProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const [files, setFiles] = useState([]);
+
  // Empty dependency array
 
   useEffect(() => {
@@ -168,6 +171,8 @@ export const LookupProvider = ({ children }) => {
         activeEndpoint,
         setActiveEndpoint,
         setIsRequestPage,
+        files,
+        setFiles,
       }}
     >
       {children}

@@ -338,3 +338,18 @@
 .form3-container .next-lock-btn svg {
   fill: var(--black25-color);
 }
+
+.selected-files {
+  display: flex;
+  flex-wrap: wrap; /* Optional: allows wrapping to next line on smaller screens */
+  gap: 10px; /* Optional: space between items */
+  margin-top: 10px;
+}
+
+.file-item {
+  display: flex;
+  align-items: center;
+  background-color: #f0f0f0; /* Optional styling */
+  padding: 5px 10px;
+  border-radius: 4px;
+}

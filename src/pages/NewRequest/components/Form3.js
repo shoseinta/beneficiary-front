@@ -11,10 +11,15 @@ import attach_icon from '../../../media/icons/attach_icon.svg';
 import next_icon from '../../../media/icons/next_icon.svg';
 import back_icon from '../../../media/icons/back_icon.svg';
 import './Form3.css'
+import { useLookup } from "../../../context/LookUpContext";
 
-function Form3({ requestData, setRequestData, setStep }) {
-    const [files, setFiles] = useState([]);
+function Form3({ requestData, setRequestData, setStep, files, setFiles }) {
+    
     const [isCreatingZip, setIsCreatingZip] = useState(false);
+
+    useEffect(() => {
+      console.log(files)
+    })
 
     const handleTitleChange = (e) => {
         setRequestData(prev => ({
@@ -30,9 +35,44 @@ function Form3({ requestData, setRequestData, setStep }) {
         }));
     };
 
+    const handleRemoveFile = (indexToRemove) => {
+  setFiles(prevFiles => {
+    const updated = [...prevFiles];
+    updated.splice(indexToRemove, 1);
+    
+    // Create new zip from updated list
+    if (updated.length > 0) {
+      const zip = new JSZip();
+      updated.forEach(file => {
+        zip.file(file.name, file);
+      });
+
+      zip.generateAsync({ type: "blob" }).then(zipContent => {
+        const zipFile = new File([zipContent], "documents.zip", {
+          type: "application/zip"
+        });
+        setRequestData(prev => ({
+          ...prev,
+          beneficiary_request_document: zipFile
+        }));
+      });
+    } else {
+      setRequestData(prev => ({
+        ...prev,
+        beneficiary_request_document: null
+      }));
+    }
+
+    return updated;
+  });
+};
+
+
     const handleFileChange = async (e) => {
         const selectedFiles = Array.from(e.target.files);
-        setFiles(selectedFiles);
+        setFiles(pre => {
+          return [...pre,...selectedFiles]
+        });
         
         if (selectedFiles.length > 0) {
             setIsCreatingZip(true);
@@ -134,6 +174,28 @@ function Form3({ requestData, setRequestData, setStep }) {
           <img src={attach_icon} alt="" />
           برای انتخاب فایل کلیک کنید
         </label>
+        {files.length > 0 && (
+          <div className="selected-files">
+            {files.map((file, index) => (
+              <div key={index} className="file-item">
+                <span 
+                  className="file-name" 
+                  onClick={() => window.open(URL.createObjectURL(file), '_blank')}
+                >
+                  {file.name}
+                </span>
+                <button 
+                  className="remove-file-btn" 
+                  onClick={() => handleRemoveFile(index)}
+                  type="button"
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+
       </div>
 
       <div></div>
@@ -153,43 +215,7 @@ function Form3({ requestData, setRequestData, setStep }) {
 
     <div></div>
   </main>
-            {/* <p>type title</p>
-            <input 
-                type="text" 
-                value={requestData.beneficiary_request_title || ''} 
-                onChange={handleTitleChange} 
-            />
             
-            <p>type description</p>
-            <textarea 
-                value={requestData.beneficiary_request_description || ''} 
-                onChange={handleDescriptionChange} 
-                rows={4}
-            />
-            
-            <p>document</p>
-            <input 
-                type="file" 
-                onChange={handleFileChange}
-                multiple
-                disabled={isCreatingZip}
-            />
-            
-            {isCreatingZip && <p>Creating zip file...</p>} */}
-            
-            {/* {files.length > 0 && (
-                <div>
-                    <p>Selected files:</p>
-                    <ul>
-                        {files.map((file, index) => (
-                            <li key={index}>{file.name}</li>
-                        ))}
-                    </ul>
-                    {requestData.beneficiary_request_document && (
-                        <p>Zip file ready: {requestData.beneficiary_request_document.name}</p>
-                    )}
-                </div>
-            )} */}
 
             <NavigationBar selected={2}/>
         </div>
