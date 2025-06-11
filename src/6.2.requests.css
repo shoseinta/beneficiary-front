@@ -137,8 +137,8 @@ body {
 form {
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
   row-gap: 5px;
+  justify-content: space-evenly;
   background-color: var(--white-gray-color);
   border: 1px solid var(--main-color);
   border-radius: 10px;
@@ -155,7 +155,6 @@ form > div {
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  flex-grow: 1;
 }
 label {
   font-size: 0.7rem;
@@ -171,6 +170,7 @@ input {
   box-shadow: 0 1px 4px var(--black25-color);
   font-size: 0.7rem;
   font-weight: normal;
+  color: var(--black50-color);
 }
 .upload-label {
   width: 60%;
@@ -193,7 +193,7 @@ textarea {
   box-shadow: 0 1px 4px var(--black25-color);
   font-size: 0.7rem;
   font-weight: normal;
-  height: 7.5vh;
+  height: 6vh;
   border: none;
   border-radius: 6px;
   resize: none;
@@ -202,89 +202,65 @@ textarea {
   vertical-align: top;
   overflow-y: auto;
 }
+.observe-forms form:first-of-type div:not(:nth-of-type(1)):not(:nth-of-type(2)) input, .upload-label, textarea {
+  background-image: url(media/icons/edit_gray_icon.svg);
+  background-repeat: no-repeat;
+  background-position: left 10px center; /* RTL support */
+  background-size: 10px;
+  cursor: pointer;
+  color: var(--black-color);
+}
+/* When input is focused: green icon */
+.observe-forms form:first-of-type div:not(:nth-of-type(1)):not(:nth-of-type(2)) input:focus, .upload-label:focus, textarea:focus {
+  background-image: url(media/icons/edit_green_icon.svg);
+}
 ::placeholder {
   color: var(--black50-color);
 }
 .display-none-element {
   display: none;
 }
-/* -----------------------------------------buttons style */
-.buttons-container {
+/* -----------------------------------------confirm edit button style */
+.buttons {
   display: flex;
-  flex-direction: column;
-  gap: 15px;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
 }
 button {
+  cursor: pointer;
+}
+.observe-confirm-edit {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 5px;
-  padding: 5px;
-  cursor: pointer;
+  padding: 0 5px;
+  height: 35px;
   background-color: transparent;
-  font-size: 0.7rem;
-  font-weight: normal;
+  border: 1px solid var(--green-color);
   border-radius: 6px;
 }
-.observe-line-button {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.observe-chid-creation {
-  border: 1px solid var(--green-color);
-}
-.observe-child-list {
-  border: none;
-  color: var(--main-color);
-  text-decoration: underline;
-}
-.observe-edit {
-  border: 1px solid var(--main-color);
-}
-.observe-delete {
-  width: 105.95px;
-  border: 1px solid var(--error-red);
+.observe-confirm-edit img {
+  width: 14px;
+  height: auto;
 }
 .observe-back {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background-color: transparent;
   border: none;
-}
-/* -----------------------------------------svg style */
-.observe-chid-creation svg {
-  width: 12px;
-  height: auto;
-  fill: var(--green-color);
-}
-.observe-child-list svg {
-  width: 12px;
-  height: auto;
-  fill: var(--main-color);  
-}
-.observe-edit svg {
-  width: 12px;
-  height: auto;
-  fill: var(--main-color);
+  font-size: 0.7rem;
+  font-weight: normal;
 }
 .observe-back img {
   width: 12px;
   height: auto;
 }
-.observe-delete svg {
-  width: 10px;
-  height: auto;
-  fill: var(--error-red);
-}
-/* -----------------------------------------disable button style */
-/*
-.observe-chid-creation , .observe-edit , .observe-delete {
-  border-color: var(--black50-color) !important;
-  color: var(--black50-color) !important;
-  cursor: not-allowed;
-}
-.observe-chid-creation > svg , .observe-edit > svg , .observe-delete > svg {
-  fill: var(--black50-color) !important;
-}
-*/
+
+
+
 /* -----------------------------------------bottom navigation style */
 .nav {
   padding: 5px 0 5px 0;

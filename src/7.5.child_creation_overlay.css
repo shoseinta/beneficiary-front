@@ -63,7 +63,6 @@
     --bluelinenav-color : #8BAECF;
     --green-color: #3F9633;
 }
-
 html, body {
   background-color: var(--black25-color);
   overflow-y: auto;
@@ -71,37 +70,107 @@ html, body {
   justify-content: center;
   align-items: center;
   height: 100%;
+  width: 100%;
 }
-div {
+.child-creation-overlay-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  position: fixed;
-  align-self: center;
-  justify-self: center;
-  background-color: var(--white-color);
+  gap: 20px;
+  background-color: var(--white-gray-color);
   border: 1px solid var(--main-color);
-  border-radius: 10px;
+  border-radius: 11px;
   box-shadow: 0px 4px 4px var(--black25-color);
-  padding: 10px 40px 20px 40px;
-  width: 400px;
-  max-width: 90%;
+  padding: 10px 10px 30px 10px;
+  width: 90%;
+  max-width: 400px;
 }
-svg {
-  color: var(--green-color);
-  margin-bottom: 10px;
-  width: 40px;
-  height: auto;
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
-h1 {
+form > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+label {
   font-size: 0.8rem;
-  font-weight: 500;
-  margin-bottom: 20px;
-  text-align: center;
+  white-space: nowrap;
 }
-p {
+sup {
+  color: var(--error-red);
+}
+input , textarea {
+  width: 65%;
+  background-color: var(--white-color);
+  border: none;
+  border-radius: 6px;
+  box-shadow: 0 1px 4px var(--black25-color);
+}
+textarea {
+  height: 70px;
+  padding: 8px;
+  resize: none;
+  line-height: 1.5;
+  text-align: justify;
+  vertical-align: top;
+  overflow-y: auto;
   font-size: 0.7rem;
   font-weight: normal;
-  text-align: center;
+}
+.upload-label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70px;
+  width: 65%;
+  background-color: var(--white-color);
+  border: none;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: normal;
+  cursor: pointer;
+  color: var(--black50-color);
+  box-shadow: 0 1px 4px var(--black25-color);
+}
+.upload-label img {
+  margin-left: 5px;
+}
+
+
+
+
+
+
+
+
+
+
+/* ----------------------------------buttons style */
+.child-creation-overlay-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 30px;
+}
+button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  border-radius: 6px;
+  height: 35px;
+  color: var(--white-color);
+  font-size: 0.8rem;
+  font-weight: normal;
+  cursor: pointer;
+  box-shadow: 0 4px 4px var(--black25-color);
+}
+.no-button {
+  background-color: var(--error-red);
+  padding: 0 20px;
+}
+.yes-button {
+  background-color: var(--main-color);
+  padding: 0 10px;
 }

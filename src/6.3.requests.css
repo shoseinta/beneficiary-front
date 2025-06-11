@@ -1,0 +1,201 @@
+@font-face {
+  font-family: vazir;
+  src: url('media/fonts/Vazir-Regular-UI.woff2') format('woff2'),
+       url('media/fonts/Vazir-Regular-UI.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+    font-family: vazir;
+    src: url('media/fonts/Vazir-Bold-UI.woff2') format('woff2'),
+         url('media/fonts/Vazir-Bold-UI.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+}
+@font-face {
+    font-family: vazir;
+    src: url('media/fonts/Vazir-Black-UI.woff2') format('woff2'),
+         url('media/fonts/Vazir-Black-UI.woff') format('woff');
+    font-weight: 900;
+    font-style: normal;
+}
+@font-face {
+    font-family: vazir;
+    src: url('media/fonts/Vazir-Medium-UI.woff2') format('woff2'),
+         url('media/fonts/Vazir-Medium-UI.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+}
+@font-face {
+    font-family: vazir;
+    src: url('media/fonts/Vazir-Light-UI.woff2') format('woff2'),
+         url('media/fonts/Vazir-Light-UI.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+}
+@font-face {
+    font-family: vazir;
+    src: url('media/fonts/Vazir-Thin-UI.woff2') format('woff2'),
+         url('media/fonts/Vazir-Thin-UI.woff') format('woff');
+    font-weight: 100;
+    font-style: normal;
+}
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "vazir", sans-serif;
+  direction: rtl;
+  unicode-bidi: embed;
+  text-align: right;
+}
+:root {
+    --main-color: #185ea7;
+    --main50-color: rgba(24, 94, 160, 0.5);
+    --main10-color: rgba(24, 94, 160, 0.1);
+    --white-color: #ffffff;
+    --white-gray-color: #f5f5f5;
+    --gray-color: #f9f9f9;
+    --black-color: #000000;
+    --black50-color: rgba(0, 0, 0, 0.5);
+    --black25-color: rgba(0, 0, 0, 0.25);
+    --error-red: #ff0000;
+    --bluelinenav-color : #8BAECF;
+    --green-color: #3F9633;
+}
+html, body {
+  background-color: var(--black25-color);
+  overflow-y: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+/* ----------------------------------------------main style */
+.child-request-list-overlay {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background-color: var(--white-color);
+  max-height: 75vh;
+  width: 400px;
+  max-width: 97%;
+  overflow-y: scroll;
+  padding: 0 10px 10px 10px;
+  position: relative;
+}
+#close-button-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: var(--white-color);
+  padding: 10px 0;
+  border-bottom: 1px solid var(--main-color);
+}
+section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: var(--white-gray-color);
+  border: 1px solid var(--main-color);
+  border-radius: 10px;
+  padding: 10px;
+}
+.textarea-div , .file-input-div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.file-input-div > input {
+  background-color: var(--white-color);
+  border: none;
+  border-radius: 6px;
+  box-shadow: 0 1px 4px var(--black25-color);
+  height: 25px;
+  width: 80%;
+  padding: 0 10px;
+}
+textarea {
+  background-color: var(--white-color);
+  border: none;
+  border-radius: 6px;
+  box-shadow: 0 1px 4px var(--black25-color);
+  resize: none;
+  overflow-y: auto;
+  height: 50px;
+  width: 80%;
+  padding: 0 10px;
+}
+.file-input-div input {
+  height: 50px;
+}
+.input-divider {
+  border: none;
+  border-top: 1px solid var(--main-color);
+  margin: 5px 0;
+}
+.metadata-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.text-input-div {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background-color: var(--white-color);
+  border: none;
+  border-radius: 6px;
+  box-shadow: 0 1px 4px var(--black25-color);
+  height: 25px;
+  padding: 0 5px;
+}
+/* ----------------------------------------------font style */
+h2 {
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+label {
+  font-size: 0.7rem;
+  font-weight: normal;
+  line-height: 1.5;
+}
+input {
+  font-size: 0.7rem;
+  font-weight: normal;
+}
+textarea {
+  font-size: 0.7rem;
+  font-weight: normal;
+  line-height: 2;
+  text-align: justify;
+  vertical-align: top;
+}
+.text-input-div {
+  font-size: 0.7rem;
+  font-weight: normal;
+  white-space: nowrap;
+}
+/* -----------------------------------------------button style */
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background-color: transparent;
+  border: none;
+  font-size: 0.7rem;
+  font-weight: normal;
+  color: var(--error-red);
+  cursor: pointer;
+}
+svg {
+  fill: var(--error-red);
+  height: 10px;
+  width: auto;
+}

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fa-IR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="صفحه سوابق درخواست مددجویان خیریه دست مهربان">
+  <meta name="keywords" content="صفحه سوابق درخواست خیریه، مددجو، مددجویان، خیریه دست مهربان، دست مهربان">
+  <meta name="author" content="محمد جواد عزیزی">
+  <link rel="stylesheet" href="6.2.requests.css">
+  <title>صفحه سوابق درخواست خیریه</title>
+</head>
+
+<body>
+  <div class="container">
+
+    <header class="header">
+      <button type="button" id="hamburger">
+        <img src="media/icons/hamburger_icon.svg" alt="منوی تنظیمات">
+      </button>
+      <img src="media/images/charity_typo_white.png" id="typo" alt="تایپوگرافی نام خیریه">
+      <img src="media/images/charity_logo.png" id="logo" alt="لوگوی خیریه">
+    </header>
+
+    <main class="main">
+      <div class="main-container">
+
+      <div class="observe-forms">
+        <form action="" id="form1">
+          <div>
+          <label for="observe-type1">نوع درخواست:</label>
+          <input type="text" id="observe-type1" readonly value="وجه نقد">
+          </div>
+
+          <div>
+          <label for="observe-type2">دسته درخواست:</label>
+          <input type="text" id="observe-type2" readonly value="اجاره خانه">
+          </div>
+
+          <div>
+          <label for="observe-time1">نوع زمانی درخواست:</label>
+          <input type="text" id="observe-time1" value="به صورت ماهانه">
+          </div>
+
+          <div>
+          <label for="observe-time2">تعداد دوره‌های درخواست:</label>
+          <label for="observe-time2" class="display-none-element">تعداد دوره‌های درخواست:</label>
+          <input type="text" id="observe-time2" value="۱۲ دوره ماهانه">
+          </div>
+
+          <div>
+          <label for="observe-cash">مبلغ درخواست:</label>
+          <input type="text" id="observe-cash" value="۸٫۰۰۰٫۰۰۰">
+          </div>
+
+          <div>
+          <label for="observe-title">عنوان درخواست:</label>
+          <input type="text" id="observe-title" value="وجه نقد - اجاره خانه">
+          </div>
+
+          <div>
+          <label for="observe-description">توضیحات درخواست:</label>
+          <textarea type="text" id="observe-description" placeholder="اطلاعاتی وجود ندارد" ></textarea>
+          </div>
+
+          <div>
+          <label for="observe-document">مستندات درخواست:</label>
+          <input type="file" id="observe-document" multiple hidden>
+          <label for="observe-document" class="upload-label">اطلاعاتی وجود ندارد</label>
+          </div>
+        </form>
+
+        <form action="" id="form2">
+          <div>
+          <label for="observe-created-at">تاریخ ثبت:</label>
+          <input type="text" id="observe-created-at" readonly value="۱۴۰۴/۵/۲۳">
+          </div>
+
+          <div>
+          <label for="observe-created-by">ایجاد شده توسط:</label>
+          <input type="text" id="observe-created-by" readonly value="مدیر سامانه">
+          </div>
+
+          <div>
+          <label for="observe-proccesing-stage">وضعیت درخواست:</label>
+          <input type="text" id="observe-proccesing-stage" readonly value="ثبت شده">
+          </div>
+        </form>
+      </div>
+
+      <div class="buttons">
+
+      <div class="observe-back-container">
+        <button class="observe-back"><img src="media/icons/back_icon.svg" alt="">بازگشت</button>
+      </div>
+
+      <div class="observe-confirm-edit-container">
+        <button class="observe-confirm-edit">اعمال ویرایش
+          <img src="media/icons/confirm_icon.svg" alt="">
+        </button>
+      </div>
+
+      </div>
+
+      </div>
+    </main>
+
+    <nav class="nav">
+      <ul class="nav-list">
+        <li><a href=""> 
+          <div class="nav-icon"><img src="media/icons/home_nav.svg" alt=""></div>  خانه </a></li>
+        <li><a href="">
+          <div class="nav-icon"> <img src="media/icons/creation_nav.svg" alt=""></div> ایجاد درخواست </a></li>
+        <li><a href="" id="active-nav">
+          <div class="nav-icon"> <img src="media/icons/requests_nav_active.svg" alt=""></div> سوابق درخواست </a></li>
+        <li><a href=""> 
+          <div class="nav-icon"><img src="media/icons/account_nav.svg" alt=""></div> حساب کاربری </a></li>
+      </ul>
+    </nav>
+
+  </div>
+</body>
+</html>

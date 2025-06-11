@@ -329,13 +329,13 @@ option {
   stroke-width: 1px;
 }
 /* --------------------------------disable next button style */
-.next-lock-btn button {
+.next-btn button {
   cursor: not-allowed;
 }
-.next-lock-btn span {
+.next-btn span {
   color: var(--black50-color);
 }
-.next-lock-btn svg {
+.next-btn svg {
   fill: var(--black25-color);
 }
 
