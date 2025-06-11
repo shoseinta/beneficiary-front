@@ -2,10 +2,13 @@ import NavigationBar from "../../components/navigationBar/NavigationBar";
 import Header from "../../components/header/Header";
 import Account1 from "./components/Account1";
 import { useState,useEffect } from "react";
+import Account2 from "./components/Account2";
 
 function Account() {
     const [step, setStep] = useState(1);
     const [accountData, setAccountData] = useState(null);
+    const [load,setLoad] = useState(true)
+    const [hasInformation,setHasInformation] = useState(false)
     
 
      // Function to load account data
@@ -24,17 +27,25 @@ function Account() {
                 }
                 const data = await response.json();
                 setAccountData(data);
+                setLoad(false)
+                if (data.beneficiary_user_information){
+                    setHasInformation(true)
+                }
                 // Process the data as needed
             }catch (error) {
                 console.error('Error fetching account data:', error);
             }
         }
     useEffect(() => {
-        loadAccountData();
-    }, []);
+        if (load) {
+            loadAccountData();
+        }
+        
+    }, [load]);
     return(
         <>
-        {step === 1 && <Account1 accountData={accountData} setAccountData={setAccountData} setStep={setStep}/>}
+        {step === 1 && <Account1 accountData={accountData} setAccountData={setAccountData} setStep={setStep} setLoad={setLoad}/>}
+        {step === 2 && <Account2 accountData={accountData} setAccountData={setAccountData} setStep={setStep} setLoad={setLoad} hasInformation={hasInformation}/>}
         </>
     )
 }

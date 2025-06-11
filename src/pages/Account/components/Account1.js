@@ -5,7 +5,7 @@ import NavigationBar from "../../../components/navigationBar/NavigationBar";
 import './Account1.css';
 
 
-function Account1({accountData, setAccountData, setStep}) {
+function Account1({accountData, setAccountData, setStep, setLoad}) {
     const [submit, setSubmit] = useState(false)
     const [validation, setValidation] = useState({
   phone_number: true,
@@ -34,6 +34,7 @@ const handleSubmit = async (e) => {
           setSubmit(true);
     
         // Reset after 5 seconds
+        setLoad(true)
         setTimeout(() => setSubmit(false), 5000);
 
         } catch (err) {
@@ -120,10 +121,10 @@ const handlePhoneChange = (e) => {
                     <li onClick={() => setStep(2)} className="nav-item-up">
                         <a>اطلاعات شخصی کاربر</a>
                     </li>
-                    <li onClick={setStep(3)} className="nav-item-up">
+                    <li onClick={() => setStep(3)} className="nav-item-up">
                         <a>اطلاعات آدرس کاربر</a>
                     </li>
-                    <li onClick={setStep(4)} className="nav-item-up">
+                    <li onClick={() => setStep(4)} className="nav-item-up">
                         <a>اطلاعات تکمیلی کاربر</a>
                     </li>
                     </ul>
