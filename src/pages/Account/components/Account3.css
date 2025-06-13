@@ -1,0 +1,313 @@
+@font-face {
+  font-family: vazir;
+  src: url('../../../media/fonts/Vazir-Regular-UI.woff2') format('woff2'),
+       url('../../../media/fonts/Vazir-Regular-UI.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+    font-family: vazir;
+    src: url('../../../media/fonts/Vazir-Bold-UI.woff2') format('woff2'),
+         url('../../../media/fonts/Vazir-Bold-UI.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+}
+@font-face {
+    font-family: vazir;
+    src: url('../../../media/fonts/Vazir-Black-UI.woff2') format('woff2'),
+         url('../../../media/fonts/Vazir-Black-UI.woff') format('woff');
+    font-weight: 900;
+    font-style: normal;
+}
+@font-face {
+    font-family: vazir;
+    src: url('../../../media/fonts/Vazir-Medium-UI.woff2') format('woff2'),
+         url('../../../media/fonts/Vazir-Medium-UI.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+}
+@font-face {
+    font-family: vazir;
+    src: url('../../../media/fonts/Vazir-Light-UI.woff2') format('woff2'),
+         url('../../../media/fonts/Vazir-Light-UI.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+}
+@font-face {
+    font-family: vazir;
+    src: url('../../../media/fonts/Vazir-Thin-UI.woff2') format('woff2'),
+         url('../../../media/fonts/Vazir-Thin-UI.woff') format('woff');
+    font-weight: 100;
+    font-style: normal;
+}
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "vazir", sans-serif;
+  direction: rtl;
+  unicode-bidi: embed;
+  text-align: right;
+}
+:root {
+    --main-color: #185ea7;
+    --main50-color: rgba(24, 94, 160, 0.5);
+    --main10-color: rgba(24, 94, 160, 0.1);
+    --white-color: #ffffff;
+    --white-gray-color: #f5f5f5;
+    --gray-color: #f9f9f9;
+    --black-color: #000000;
+    --black50-color: rgba(0, 0, 0, 0.5);
+    --black25-color: rgba(0, 0, 0, 0.25);
+    --error-red: #ff0000;
+    --bluelinenav-color : #8BAECF;
+}
+.account-container3-html {
+  background-color: var(--main-color);
+}
+.account-container3-body {
+  background-color: var(--white-color);
+  overflow-y: auto;
+}
+.account-container3 {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  row-gap: 10px;
+}
+.account-container3 .header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--main-color);
+  padding: 5px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.account-container3 .header > #hamburger {
+  width: auto;
+  height: auto;
+  border: none;
+  padding: 0;
+  background-color: transparent;
+  display: inline-block;
+  cursor: pointer;
+}
+.account-container3 .header > #hamburger > img {
+  display: block;
+  width: 9vw;
+  max-width: 60px;
+  height: auto;
+}
+.account-container3 .header > #typo {
+  width: 25vw;
+  max-width: 150px;
+  height: auto;
+}
+.account-container3 .header > #logo {
+  width: 9vw;
+  max-width: 60px;
+  height: auto;
+  border-radius: 50%;
+}
+.account-container3 .main {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 10px;
+}
+.account-container3 .main h1 {
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: normal;
+  line-height: 2;
+}
+.account-container3 .nav-up {
+  display: flex;
+  margin-bottom: 30px;
+
+}
+.account-container3 .nav-list-up {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+.account-container3 .nav-item-up {
+  list-style: none;
+  background-color: var(--main10-color);
+  border: none;
+  border-radius: 6px;
+  width: 170px;
+  padding: 10px 0;
+  text-align: center;
+  cursor: pointer;
+}
+
+.account-container3 .nav-item-up > a {
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: normal;
+}
+.account-container3 #active-nav-up {
+  background-color: var(--main-color);
+  color: var(--white-color);
+}
+/* ----------------------------------------- */
+.account-container3 .account-form3 {
+  display: flex;
+  flex-direction: column;
+  row-gap: 15px;
+  width: 90%;
+  max-width: 500px;
+}
+.account-container3 .form-up > div {
+  display: flex;
+  background-color: var(--white-gray-color);
+  border: 1px solid var(--main-color);
+  border-radius: 6px;
+  height: 35px;
+  padding-right: 5px;
+
+}
+.account-container3 .account-form3 label {
+  display: flex;
+  align-items: center;
+  font-size: 0.7rem;
+  font-weight: normal;
+  white-space: nowrap;
+}
+.account-container3 .account-form3 input , select{
+  width: 100%;
+  border: none;
+  background-color: transparent;
+  padding-right: 5px;
+  padding-left: 5px;
+  text-align: right;
+  font-size: 0.7rem;
+  font-weight: normal;
+}
+.account-container3 .account-form3 select {
+  padding-left: 45px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;            /* Remove default arrow */
+  background-image: url(../../../media/icons/down_arrow_icon.svg);
+  background-repeat: no-repeat;
+  background-position: left 10px center; /* RTL support */
+  background-size: 14px;
+  padding-left: 2rem;
+  cursor: pointer;
+
+}
+.account-container3 #account-postal , #account-building-num , #account-unit {
+  text-align: left;
+}
+.account-container3 input::placeholder {
+  color: var(--black50-color);
+}
+/* ------------------------form-up grid style */
+.account-container3 .form-up {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 columns */
+  grid-template-rows: repeat(4, auto);   /* 4 rows */
+  gap: 15px 10px;                         /* row gap, column gap */
+  margin: 0 ;                         /* center horizontally */
+}
+
+/* ------------------------submit button style */
+.account-container3 #account-submit3 {
+  margin-top: 0px;
+  display: flex;
+  justify-content: space-between;
+}
+.account-container3 #account-submit3 > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  padding: 10px;
+  background-color: var(--green-color);
+  color: var(--white-color);
+  border-radius: 6px;
+  box-shadow: 0px 4px 4px var(--black25-color);
+  font-size: 0.7rem;
+  font-weight: normal;
+}
+.account-container3 #account-submit3 > div > svg {
+  width: 10px;
+  height: auto;
+  color: var(--white-color);
+}
+.account-container3 #account-submit3 input {
+  width: 75px;
+  padding: 0;
+  text-align: center;
+  background-color: var(--main-color);
+  border: none;
+  color: var(--white-color);
+  cursor: pointer;
+  border-radius: 6px;
+  height: 35px;
+}
+/* ------------------------------------ map style */
+.account-container3 p {
+  font-size: 0.7rem;
+  font-weight: normal;
+  margin: 10px 0;
+}
+.account-container3 #map {
+  direction: ltr !important;
+  display: flex;
+  justify-content: center;
+}
+
+
+
+
+
+
+
+
+
+
+
+.nav {
+  padding: 5px 0 5px 0;
+  border-top: var(--bluelinenav-color) 3px solid;
+  position: sticky;
+  bottom: 0;
+  background-color: var(--white-color);
+}
+.nav > .nav-list {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 100%;
+}
+.nav > .nav-list > li {
+  list-style: none;
+}
+.nav > .nav-list > li > a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  text-decoration: none;
+  color: var(--main50-color);
+  font-size: 0.7rem;
+  font-weight: normal;
+}
+.nav > .nav-list > li > #active-nav {
+  color: var(--main-color);
+}
+.nav > .nav-list > li > a > .nav-icon > img{
+  display: block;
+  margin-bottom: 5px;
+  height: 7vw;
+  max-height: 36px;
+  width: auto;
+}
