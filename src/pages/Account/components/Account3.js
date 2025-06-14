@@ -136,8 +136,8 @@ function Account3({ accountData, setAccountData, setStep, setLoad, hasAddress })
             alley: accountData?.beneficiary_user_address?.alley || null,
             building_number: accountData?.beneficiary_user_address?.building_number || null,
             city: accountData?.beneficiary_user_address?.city || null,
-            latitude: position[0],
-            longitude: position[1],
+            latitude: accountData?.beneficiary_user_address?.latitude || null,
+            longitude: accountData?.beneficiary_user_address?.longitude || null,
             neighborhood: accountData?.beneficiary_user_address?.neighborhood || null,
             postal_code: accountData?.beneficiary_user_address?.postal_code || null,
             province: accountData?.beneficiary_user_address?.province || null,
@@ -171,8 +171,8 @@ function Account3({ accountData, setAccountData, setStep, setLoad, hasAddress })
             alley: accountData?.beneficiary_user_address?.alley || null,
             building_number: accountData?.beneficiary_user_address?.building_number || null,
             city: accountData?.beneficiary_user_address?.city || null,
-            latitude: position[0],
-            longitude: position[1],
+            latitude: accountData?.beneficiary_user_address?.latitude || null,
+            longitude: accountData?.beneficiary_user_address?.longitude || null,
             neighborhood: accountData?.beneficiary_user_address?.neighborhood || null,
             postal_code: accountData?.beneficiary_user_address?.postal_code || null,
             province: accountData?.beneficiary_user_address?.province || null,
@@ -206,6 +206,10 @@ function Account3({ accountData, setAccountData, setStep, setLoad, hasAddress })
       document.body.classList.remove('account-container3-body');
     };
   }, []);
+
+  useEffect(() => {
+    console.log(accountData)
+  })
 
   return (
     <div className="account-container3">
