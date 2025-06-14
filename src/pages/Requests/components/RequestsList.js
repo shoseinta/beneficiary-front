@@ -114,7 +114,7 @@ function RequestsList({ data, index}) {
                         <td>{`${convertTypeLayer1(request.beneficiary_request_type_layer1)} - ${request.beneficiary_request_type_layer2}`}</td>
                         <td>{convertStage(request.beneficiary_request_processing_stage)}</td>
                         <td>
-                            <Link to={`/requests/${request.beneficiary_request_id}`}>مشاهده</Link>
+                            <Link to={`/${request.beneficiary_request_id}/request-detail`}>مشاهده</Link>
                             <img src={observe_icon} alt="مشاهده" />
                         </td>
                     </tr>
