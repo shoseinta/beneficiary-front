@@ -6,6 +6,7 @@ import NavigationBar from '../../components/navigationBar/NavigationBar';
 import './RequestDetail.css'
 import back_icon from '../../media/icons/back_icon.svg'
 import confirm_icon from '../../media/icons/confirm_icon.svg'
+import RequestDetailEdit from './components/RequestDetailEdit';
 
 function RequestDetail() {
   const { id } = useParams();
@@ -32,7 +33,9 @@ function RequestDetail() {
     useEffect(()=>{
     fetchData();
   },[])
-    function formatPersianNumber(number) {
+    const formatPersianNumber = (number) => {
+  if (number === null || number === undefined || number === '') return '';
+  
   // Convert to Persian digits
   const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
   
@@ -245,196 +248,7 @@ function RequestDetail() {
     navigate('/requests');
   }
 
-  const handleFinishEdit = async () => {
-  const isConfirmed = window.confirm('are you sure about the edit?');
-  if (isConfirmed) {
-    try {
-      // Prepare the main request data
-      const requestDataToSend = {
-        beneficiary_request_title: updateData.beneficiary_request_title,
-        beneficiary_request_description: updateData.beneficiary_request_description,
-        beneficiary_request_amount: updateData.beneficiary_request_amount,
-        beneficiary_request_duration: updateData.beneficiary_request_duration,
-      };
-
-      // Send main request update
-      const response = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-single-update/${id}/`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Token ${localStorage.getItem('access_token')}`,
-        },
-        body: JSON.stringify(requestDataToSend),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || 'request update failed');
-      }
-
-      // Handle duration-specific updates
-      if (updateData.beneficiary_request_duration === 1) {
-        const updateOnetime = {
-          beneficiary_request_duration_onetime_deadline: 
-            updateData.beneficiary_request_duration_onetime?.beneficiary_request_duration_onetime_deadline
-        };
-
-        if (requestData.beneficiary_request_duration_onetime) {
-          // Update existing one-time
-          const onetimeResponse = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-single-update-onetime/${id}/`, {
-            method: 'PATCH',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Token ${localStorage.getItem('access_token')}`,
-            },
-            body: JSON.stringify(updateOnetime),
-          });
-          if (!onetimeResponse.ok) {
-            const errorData = await onetimeResponse.json();
-            throw new Error(errorData.detail || 'onetime update failed');
-          }
-        } else {
-          // Create new one-time
-          const onetimeResponse = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-create-onetime/${id}/`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Token ${localStorage.getItem('access_token')}`,
-            },
-            body: JSON.stringify(updateOnetime),
-          });
-          if (!onetimeResponse.ok) {
-            const errorData = await onetimeResponse.json();
-            throw new Error(errorData.detail || 'onetime create failed');
-          }
-        }
-      } 
-      else if (updateData.beneficiary_request_duration === 2) {
-        const updateRecurring = {
-          beneficiary_request_duration_recurring_limit: 
-            updateData.beneficiary_request_duration_recurring?.beneficiary_request_duration_recurring_limit
-        };
-
-        if (requestData.beneficiary_request_duration_recurring) {
-          // Update existing recurring
-          const recurringResponse = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-single-update-recurring/${id}/`, {
-            method: 'PATCH',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Token ${localStorage.getItem('access_token')}`,
-            },
-            body: JSON.stringify(updateRecurring),
-          });
-          if (!recurringResponse.ok) {
-            const errorData = await recurringResponse.json();
-            throw new Error(errorData.detail || 'recurring update failed');
-          }
-        } else {
-          // Create new recurring
-          const recurringResponse = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-create-recurring/${id}/`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Token ${localStorage.getItem('access_token')}`,
-            },
-            body: JSON.stringify(updateRecurring),
-          });
-          if (!recurringResponse.ok) {
-            const errorData = await recurringResponse.json();
-            throw new Error(errorData.detail || 'recurring create failed');
-          }
-        }
-      }
-
-      // Refresh data
-      setRequestData(null);
-      setIsEdit(false);
-      await fetchData();
-    } catch (err) {
-      console.error('Error during update:', err);
-    }
-  } else {
-    // User canceled - reset to original data
-    setIsEdit(false);
-    let updateDuration;
-    if (requestData.beneficiary_request_duration === 'One Time') {
-      updateDuration = 1;
-    } else if (requestData.beneficiary_request_duration === 'Recurring') {
-      updateDuration = 2;
-    } else {
-      updateDuration = 3;
-    }
-    
-    setUpdateData({
-      beneficiary_request_title: requestData.beneficiary_request_title,
-      beneficiary_request_description: requestData.beneficiary_request_description,
-      beneficiary_request_amount: requestData.beneficiary_request_amount,
-      beneficiary_request_duration: updateDuration,
-      beneficiary_request_duration_onetime: requestData.beneficiary_request_duration_onetime || 
-        { beneficiary_request_duration_onetime_deadline: null },
-      beneficiary_request_duration_recurring: requestData.beneficiary_request_duration_recurring || 
-        { beneficiary_request_duration_recurring_limit: null },
-    });
-  }
-};
-
-
-
-  const handleAmountUpdate = (event) => {
-    setUpdateData(pre => {
-        if (event.target.value !== ''){
-        return {...pre,beneficiary_request_amount:Number(event.target.value)}
-        } else {
-            return {...pre,beneficiary_request_amount:null}
-        }
-    })
-  }
-
-  const handleDurationUpdate = (event) => {
-    setUpdateData(pre => {
-      return {...pre, beneficiary_request_duration:Number(event.target.value)}
-    })
-  }
-
-  const handleTitleChange = (event) => {
-    setUpdateData(pre => {
-      return {...pre, beneficiary_request_title: event.target.value}
-    })
-  }
-
-  const handleDescriptionChange = (event) => {
-    setUpdateData(pre => {
-      return {...pre, beneficiary_request_description: event.target.value}
-    })
-  }
   
-  const handleDeadlineChange = (event) => {
-    setUpdateData(pre => {
-      const newData = pre
-      const onetime = newData.beneficiary_request_duration_onetime
-      if (onetime) {
-        newData.beneficiary_request_duration_onetime.beneficiary_request_duration_onetime_deadline = event.target.value
-      }else {
-        newData.beneficiary_request_duration_onetime = {beneficiary_request_duration_onetime_deadline:event.target.value}
-      }
-      return newData
-      
-    })
-  }
-
-  const handleLimitChange = (event) => {
-    setUpdateData(pre => {
-      const newData = pre
-      const recurring = newData.beneficiary_request_duration_recurring
-      if (recurring) {
-        newData.beneficiary_request_duration_recurring.beneficiary_request_duration_recurring_limit = Number(event.target.value)
-      }else {
-        newData.beneficiary_request_duration_recurring = {beneficiary_request_duration_recurring_limit:Number(event.target.value)}
-      }
-      return newData
-      
-    })
-  }
 
  
 
@@ -444,98 +258,19 @@ function RequestDetail() {
 
   if (isEdit) {
     return (
-      <div className='request-detail-edit-container'>
-        <Header />
-        <main className="main">
-    <div className="main-container">
-
-      <div className="observe-forms">
-        <form id="form1">
-          <div>
-            <label htmlFor="observe-type1">نوع درخواست:</label>
-            <input type="text" id="observe-type1" readOnly value="وجه نقد" />
-          </div>
-
-          <div>
-            <label htmlFor="observe-type2">دسته درخواست:</label>
-            <input type="text" id="observe-type2" readOnly value="اجاره خانه" />
-          </div>
-
-          <div>
-            <label htmlFor="observe-time1">نوع زمانی درخواست:</label>
-            <input type="text" id="observe-time1" value="به صورت ماهانه" />
-          </div>
-
-          <div>
-            <label htmlFor="observe-time2">تعداد دوره‌های درخواست:</label>
-            <label htmlFor="observe-time2" className="display-none-element">
-              تعداد دوره‌های درخواست:
-            </label>
-            <input type="text" id="observe-time2" value="۱۲ دوره ماهانه" />
-          </div>
-
-          <div>
-            <label htmlFor="observe-cash">مبلغ درخواست:</label>
-            <input type="text" id="observe-cash" value="۸٫۰۰۰٫۰۰۰" />
-          </div>
-
-          <div>
-            <label htmlFor="observe-title">عنوان درخواست:</label>
-            <input type="text" id="observe-title" value="وجه نقد - اجاره خانه" />
-          </div>
-
-          <div>
-            <label htmlFor="observe-description">توضیحات درخواست:</label>
-            <textarea id="observe-description" placeholder="اطلاعاتی وجود ندارد" />
-          </div>
-
-          <div>
-            <label htmlFor="observe-document">مستندات درخواست:</label>
-            <input type="file" id="observe-document" multiple hidden />
-            <label htmlFor="observe-document" className="upload-label">
-              اطلاعاتی وجود ندارد
-            </label>
-          </div>
-        </form>
-
-        <form id="form2">
-          <div>
-            <label htmlFor="observe-created-at">تاریخ ثبت:</label>
-            <input type="text" id="observe-created-at" readOnly value="۱۴۰۴/۵/۲۳" />
-          </div>
-
-          <div>
-            <label htmlFor="observe-created-by">ایجاد شده توسط:</label>
-            <input type="text" id="observe-created-by" readOnly value="مدیر سامانه" />
-          </div>
-
-          <div>
-            <label htmlFor="observe-proccesing-stage">وضعیت درخواست:</label>
-            <input type="text" id="observe-proccesing-stage" readOnly value="ثبت شده" />
-          </div>
-        </form>
-      </div>
-
-      <div className="buttons">
-        <div className="observe-back-container">
-          <button className="observe-back">
-            <img src={back_icon} alt="" />
-            بازگشت
-          </button>
-        </div>
-
-        <div className="observe-confirm-edit-container">
-          <button className="observe-confirm-edit">
-            اعمال ویرایش
-            <img src={confirm_icon} alt="" />
-          </button>
-        </div>
-      </div>
-
-    </div>
-  </main>
-        <NavigationBar selected={3}/>
-      </div>
+      <RequestDetailEdit 
+      isEdit={isEdit} 
+      setIsEdit={setIsEdit} 
+      updateData={updateData} 
+      setUpdateData={setUpdateData} 
+      requestData={requestData} 
+      setRequestData={setRequestData} 
+      fetchData={fetchData} 
+      id={id}
+      convertTypeLayer1={convertTypeLayer1}
+      convertStage={convertStage}
+      formatPersianNumber={formatPersianNumber}
+      />
     )
   }
   
@@ -673,7 +408,7 @@ function RequestDetail() {
 
             <div className="observe-line-button">
               <div className="observe-back-container">
-                <button className="observe-back">
+                <button className="observe-back" onClick={() => {navigate('/requests');}}>
                   <img src={back_icon} alt="" />
                   بازگشت
                 </button>

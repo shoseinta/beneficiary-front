@@ -161,7 +161,7 @@
   font-size: 0.7rem;
   font-weight: normal;
 }
-.request-detail-container input {
+.request-detail-container input, select {
   width: 60%;
   padding: 0 10px 0 30px;
   height: 4vh;
@@ -411,7 +411,7 @@
   font-size: 0.7rem;
   font-weight: normal;
 }
-.request-detail-edit-container input {
+.request-detail-edit-container input, select {
   width: 60%;
   padding: 0 10px 0 30px;
   height: 4vh;
@@ -453,7 +453,7 @@
   vertical-align: top;
   overflow-y: auto;
 }
-.request-detail-edit-container .observe-forms form:first-of-type div:not(:nth-of-type(1)):not(:nth-of-type(2)) input, .upload-label, textarea {
+.request-detail-edit-container .observe-forms form:first-of-type div:not(:nth-of-type(1)):not(:nth-of-type(2)) input, select,  .upload-label, textarea {
   background-image: url(../../media/icons/edit_gray_icon.svg);
   background-repeat: no-repeat;
   background-position: left 10px center; /* RTL support */
@@ -462,7 +462,7 @@
   color: var(--black-color);
 }
 /* When input is focused: green icon */
-.request-detail-edit-container .observe-forms form:first-of-type div:not(:nth-of-type(1)):not(:nth-of-type(2)) input:focus, .upload-label:focus, textarea:focus {
+.request-detail-edit-container .observe-forms form:first-of-type div:not(:nth-of-type(1)):not(:nth-of-type(2)) input:focus, select:focus, .upload-label:focus, textarea:focus {
   background-image: url(../../media/icons/edit_green_icon.svg);
 }
 .request-detail-edit-container ::placeholder {
@@ -507,7 +507,13 @@
   width: 12px;
   height: auto;
 }
+select {
+  appearance: none;
+}
 
+.request-detail-edit-container input.custom-datepicker-input {
+  width: 100%;
+}
 
 
 /* -----------------------------------------bottom navigation style */
@@ -547,4 +553,62 @@
   height: 7vw;
   max-height: 36px;
   width: auto;
+}
+
+
+
+.delete-overlay-container-html {
+  background-color: var(--black25-color) !important ;
+  /* overflow-y: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%; */
+}
+
+.delete-overlay-container {
+  background-color: var(--white-color);
+  border: 1px solid var(--main-color);
+  border-radius: 11px;
+  box-shadow: 0px 4px 4px var(--black25-color);
+  padding: 10px;
+  width: 75%;
+  max-width: 310px;
+  position:absolute;
+  left: 0;
+  right: 0;
+  /* bottom: 0; */
+  top: 50%;
+  margin: auto;
+  z-index: 100;
+}
+.delete-overlay-container p {
+  font-size: 0.8rem;
+  font-weight: normal;
+  margin-bottom: 15px;
+}
+.delete-overlay-container .delete-overlay-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+}
+.delete-overlay-container button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  border-radius: 6px;
+  width: 75px;
+  height: 35px;
+  color: var(--white-color);
+  font-size: 0.8rem;
+  font-weight: normal;
+  cursor: pointer;
+}
+.delete-overlay-container .no-button {
+  background-color: var(--error-red);
+}
+.delete-overlay-container .yes-button {
+  background-color: var(--main-color);
 }
