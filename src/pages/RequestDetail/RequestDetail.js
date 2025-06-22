@@ -26,10 +26,6 @@ function RequestDetail() {
       };
     }, []);
 
-    useEffect(() => {
-      console.log(requestData)
-    })
-
     useEffect(()=>{
     fetchData();
   },[])

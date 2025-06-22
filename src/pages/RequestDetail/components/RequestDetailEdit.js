@@ -25,7 +25,7 @@ function RequestDetailEdit ({isEdit, setIsEdit, updateData, setUpdateData, reque
         deadline:true,
         limit:true,
     })
-
+    const [finishEdit, setFinishEdit] = useState(false)
     useEffect(() => {
         if(updateData.beneficiary_request_duration === 1 && updateData?.beneficiary_request_duration_onetime?.beneficiary_request_duration_onetime_deadline){
             setValidation(pre => ({...pre,deadline:true}))
@@ -153,8 +153,8 @@ function RequestDetailEdit ({isEdit, setIsEdit, updateData, setUpdateData, reque
         if((updateData?.beneficiary_request_duration === 1 && !validation.deadline) || (updateData?.beneficiary_request_duration === 2 && !validation.limit)){
             return
         }
-  const isConfirmed = window.confirm('are you sure about the edit?');
-  if (isConfirmed) {
+  
+  
     try {
       // Prepare the main request data
       const requestDataToSend = {
@@ -187,9 +187,10 @@ function RequestDetailEdit ({isEdit, setIsEdit, updateData, setUpdateData, reque
         };
 
         if (requestData.beneficiary_request_duration_onetime) {
+          const onetimeId = requestData.beneficiary_request_duration_onetime.beneficiary_request_duration_onetime_id
           // Update existing one-time
-          const onetimeResponse = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-single-update-onetime/${id}/`, {
-            method: 'PATCH',
+          const onetimeResponse = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-single-update-onetime/${onetimeId}/`, {
+            method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
               'Authorization': `Token ${localStorage.getItem('access_token')}`,
@@ -223,9 +224,10 @@ function RequestDetailEdit ({isEdit, setIsEdit, updateData, setUpdateData, reque
         };
 
         if (requestData.beneficiary_request_duration_recurring) {
+          const recurringId = requestData.beneficiary_request_duration_recurring.beneficiary_request_duration_recurring_id
           // Update existing recurring
-          const recurringResponse = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-single-update-recurring/${id}/`, {
-            method: 'PATCH',
+          const recurringResponse = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-single-update-recurring/${recurringId}/`, {
+            method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
               'Authorization': `Token ${localStorage.getItem('access_token')}`,
@@ -254,38 +256,69 @@ function RequestDetailEdit ({isEdit, setIsEdit, updateData, setUpdateData, reque
       }
 
       // Refresh data
-      setRequestData(null);
-      setIsEdit(false);
-      await fetchData();
+      
+      // setEditApplied(false)
+      setFinishEdit(true)
+      setTimeout(async () => {
+        setFinishEdit(false)
+        setRequestData(null);
+        // setEditApplied(false);
+        setIsEdit(false);
+      // if (document.documentElement.classList.contains('delete-overlay-container-html')){
+      //   document.documentElement.classList.remove('delete-overlay-container-html')
+      //   document.body.classList.remove('delete-overlay-container-html')
+      //   const containerDiv = document.getElementsByClassName('request-detail-edit-container')[0].querySelectorAll('*')
+      //   for(var i=0; i<containerDiv.length; i++){
+      //       containerDiv[i].classList.remove('delete-overlay-container-html')
+      //   }
+        
+      //   }
+      if(document.documentElement.classList.contains('edit-finish-body')){
+        document.documentElement.classList.remove('edit-finish-body')
+        document.body.classList.remove('edit-finish-body')
+      }
+      if (document.documentElement.classList.contains('delete-overlay-container-html')){
+        document.documentElement.classList.remove('delete-overlay-container-html')
+        document.body.classList.remove('delete-overlay-container-html')
+        }
+        await fetchData();
+      }, 5000)
+      
     } catch (err) {
       console.error('Error during update:', err);
     }
-  } else {
-    // User canceled - reset to original data
-    setIsEdit(false);
-    let updateDuration;
-    if (requestData.beneficiary_request_duration === 'One Time') {
-      updateDuration = 1;
-    } else if (requestData.beneficiary_request_duration === 'Recurring') {
-      updateDuration = 2;
-    } else {
-      updateDuration = 3;
-    }
+  //  else {
+  //   // User canceled - reset to original data
+  //   setIsEdit(false);
+  //   let updateDuration;
+  //   if (requestData.beneficiary_request_duration === 'One Time') {
+  //     updateDuration = 1;
+  //   } else if (requestData.beneficiary_request_duration === 'Recurring') {
+  //     updateDuration = 2;
+  //   } else {
+  //     updateDuration = 3;
+  //   }
     
-    setUpdateData({
-      beneficiary_request_title: requestData.beneficiary_request_title,
-      beneficiary_request_description: requestData.beneficiary_request_description,
-      beneficiary_request_amount: requestData.beneficiary_request_amount,
-      beneficiary_request_duration: updateDuration,
-      beneficiary_request_duration_onetime: requestData.beneficiary_request_duration_onetime || 
-        { beneficiary_request_duration_onetime_deadline: null },
-      beneficiary_request_duration_recurring: requestData.beneficiary_request_duration_recurring || 
-        { beneficiary_request_duration_recurring_limit: null },
-    });
-  }
+  //   setUpdateData({
+  //     beneficiary_request_title: requestData.beneficiary_request_title,
+  //     beneficiary_request_description: requestData.beneficiary_request_description,
+  //     beneficiary_request_amount: requestData.beneficiary_request_amount,
+  //     beneficiary_request_duration: updateDuration,
+  //     beneficiary_request_duration_onetime: requestData.beneficiary_request_duration_onetime || 
+  //       { beneficiary_request_duration_onetime_deadline: null },
+  //     beneficiary_request_duration_recurring: requestData.beneficiary_request_duration_recurring || 
+  //       { beneficiary_request_duration_recurring_limit: null },
+  //   });
+  // }
 };
 
-
+  // useEffect(() => {
+  //   if(finishEdit){
+  //     setRequestData(null);
+  //     setIsEdit(false);
+  //     setEditApplied(false)
+  //   }
+  // },[finishEdit])
 
   const handleAmountUpdate = (event) => {
   // Remove Persian digits and commas from the input value
@@ -341,23 +374,86 @@ function RequestDetailEdit ({isEdit, setIsEdit, updateData, setUpdateData, reque
     if(editApplied){
         document.documentElement.classList.add('delete-overlay-container-html')
         document.body.classList.add('delete-overlay-container-html')
-        const containerDiv = document.getElementsByClassName('request-detail-edit-container')[0].querySelectorAll("*")
-         for(var i=0; i<containerDiv.length; i++){
-            containerDiv[i].classList.add('delete-overlay-container-html')
+        document.getElementById('form1').classList.add('delete-overlay-container-form')
+        document.getElementById('form2').classList.add('delete-overlay-container-form')
+        const inputs = document.getElementsByTagName('input')
+        const selects = document.getElementsByTagName('select')
+        const textareas = document.getElementsByTagName('textarea')
+        for (var i=0;i<inputs.length;i++){
+          inputs[i].classList.add('delete-overlay-container-form')
+        }
+        for (var i=0;i<selects.length;i++){
+          selects[i].classList.add('delete-overlay-container-form')
+        }
+        for (var i=0;i<textareas.length;i++){
+          textareas[i].classList.add('delete-overlay-container-form')
         }
         
     } else {
         if (document.documentElement.classList.contains('delete-overlay-container-html')){
         document.documentElement.classList.remove('delete-overlay-container-html')
         document.body.classList.remove('delete-overlay-container-html')
-        const containerDiv = document.getElementsByClassName('request-detail-edit-container')[0].querySelectorAll('*')
-        for(var i=0; i<containerDiv.length; i++){
-            containerDiv[i].classList.remove('delete-overlay-container-html')
+        }
+        if(document.getElementById('form1').classList.contains('delete-overlay-container-form')){
+          document.getElementById('form1').classList.remove('delete-overlay-container-form')
+        }
+        if(document.getElementById('form2').classList.contains('delete-overlay-container-form')){
+          document.getElementById('form2').classList.remove('delete-overlay-container-form')
+        }
+        const inputs = document.getElementsByTagName('input')
+        const selects = document.getElementsByTagName('select')
+        const textareas = document.getElementsByTagName('textarea')
+        if (inputs[0].classList.contains('delete-overlay-container-html')){
+          for (var i=0;i<inputs.length;i++){
+          inputs[i].classList.remove('delete-overlay-container-form')
         }
         
         }
+
+        if (selects[0].classList.contains('delete-overlay-container-html')){
+          for (var i=0;i<selects.length;i++){
+          selects[i].classList.remove('delete-overlay-container-form')
+        }
+        
+        }
+
+        if (textareas[0].classList.contains('delete-overlay-container-html')){
+          for (var i=0;i<textareas.length;i++){
+          textareas[i].classList.remove('delete-overlay-container-form')
+        }
+        
+        }
+
     }
   },[editApplied])
+
+
+
+  useEffect(() => {
+    if(finishEdit){
+      document.documentElement.classList.add('edit-finish-body')
+      document.body.classList.add('edit-finish-body')
+    }
+  },[finishEdit])
+    if(finishEdit){
+      return(
+        <div className="edit-finish-container">
+
+        <svg width="59" height="59" viewBox="0 0 59 59" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path d="M26.25 42L12.5417 28.2917L16.625 24.2083L26.25 33.8333L50.75 9.33333C45.2083 3.79167 37.625 0 29.1667 0C13.125 0 0 13.125 0 29.1667C0 45.2083 13.125 58.3333 29.1667 58.3333C45.2083 58.3333 58.3333 45.2083 58.3333 29.1667C58.3333 23.625 56.875 18.6667 54.25 14.2917L26.25 42Z"/>
+        </svg>
+
+        <h1>
+          درخواست شما با موفقیت ویرایش گردید.
+        </h1>
+
+        <p>
+          تا لحظاتی دیگر به صفحه اصلی همین درخواست منتقل می‌شوید.
+        </p>
+
+      </div>
+      )
+    }
     return (
         <>
         <div className='request-detail-edit-container'>
@@ -458,7 +554,7 @@ function RequestDetailEdit ({isEdit, setIsEdit, updateData, setUpdateData, reque
         
                   <div>
                     <label htmlFor="observe-description">توضیحات درخواست:</label>
-                    <textarea id="observe-description" placeholder={updateData.beneficiary_request_description} onChange={handleDescriptionChange} />
+                    <textarea id="observe-description" value={updateData.beneficiary_request_description} placeholder="اطلاعاتی وجود ندارد" onChange={handleDescriptionChange} />
                   </div>
         
                   <div>
@@ -529,7 +625,7 @@ function RequestDetailEdit ({isEdit, setIsEdit, updateData, setUpdateData, reque
                     <p>آیا از اعمال ویرایش اطمینان دارید؟</p>
                     <div class="delete-overlay-buttons">
                     <button class="no-button" onClick={() => setEditApplied(false)}>خیر</button>
-                    <button class="yes-button">بلی</button>
+                    <button class="yes-button" onClick={handleFinishEdit}>بلی</button>
                     </div>
                 </div>
               }

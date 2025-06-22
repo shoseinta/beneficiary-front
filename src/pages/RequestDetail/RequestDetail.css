@@ -555,6 +555,14 @@ select {
   width: auto;
 }
 
+.request-detail-edit-container .rmdp-container {
+  width: 60%;
+}
+
+.request-detail-edit-container .delete-overlay-container-form{
+  background-color: transparent !important;
+}
+
 
 
 .delete-overlay-container-html {
@@ -612,3 +620,50 @@ select {
 .delete-overlay-container .yes-button {
   background-color: var(--main-color);
 }
+
+
+
+
+.edit-finish-body {
+  background-color: var(--black25-color);
+  overflow-y: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+.edit-finish-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* position: fixed; */
+  align-self: center;
+  justify-self: center;
+  background-color: var(--white-color);
+  border: 1px solid var(--main-color);
+  border-radius: 10px;
+  box-shadow: 0px 4px 4px var(--black25-color);
+  padding: 10px 40px 20px 40px;
+  width: 400px;
+  max-width: 90%;
+  margin: auto auto;
+}
+.edit-finish-container svg {
+  color: var(--green-color);
+  margin-bottom: 10px;
+  width: 40px;
+  height: auto;
+}
+.edit-finish-container h1 {
+  font-size: 0.8rem;
+  font-weight: 500;
+  margin-bottom: 20px;
+  text-align: center;
+}
+.edit-finish-container p {
+  font-size: 0.7rem;
+  font-weight: normal;
+  text-align: center;
+}
+
