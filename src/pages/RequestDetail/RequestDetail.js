@@ -14,6 +14,8 @@ function RequestDetail() {
   const [isEdit,setIsEdit] = useState(false)
   const [requestData,setRequestData] = useState(null)
   const [updateData, setUpdateData] = useState(null)
+  const [isDelete, setIsDelete] = useState(false)
+  const [isDeleteFinished, setIsDeleteFinished] = useState(false)
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -192,10 +194,6 @@ function RequestDetail() {
     if(requestData.beneficiary_request_is_created_by_charity || (requestData.beneficiary_request_processing_stage !== 'Submitted' && requestData.beneficiary_request_processing_stage !== 'Pending Review' && requestData.beneficiary_request_processing_stage !== 'Under Evaluation')){
         return
     }
-    const isConfirmed = window.confirm('are you sure you want to delete this request?')
-    if (!isConfirmed) {
-      return
-    } else {
       try {
         const response = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-single-update/${id}/`, {
         method: 'DELETE',
@@ -210,39 +208,119 @@ function RequestDetail() {
         throw new Error(errorData.detail || 'request delete failed');
       }
 
-      if(requestData.beneficiary_request_duration === 'One Time' && requestData.beneficiary_request_duration_onetime){
-        const onetimeResponse = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-single-update-onetime/${id}/`, {
-            method: 'DELETE',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Token ${localStorage.getItem('access_token')}`,
-            },
-          });
-          if (!onetimeResponse.ok) {
-            const errorData = await onetimeResponse.json();
-            throw new Error(errorData.detail || 'onetime delete failed');
-          }
-      }
+      // if(requestData.beneficiary_request_duration === 'One Time' && requestData.beneficiary_request_duration_onetime){
+      //   const onetimeId = requestData.beneficiary_request_duration_onetime.beneficiary_request_duration_onetime_id
+      //   const onetimeResponse = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-single-update-onetime/${onetimeId}/`, {
+      //       method: 'DELETE',
+      //       headers: {
+      //         'Content-Type': 'application/json',
+      //         'Authorization': `Token ${localStorage.getItem('access_token')}`,
+      //       },
+      //     });
+      //     if (!onetimeResponse.ok) {
+      //       const errorData = await onetimeResponse.json();
+      //       throw new Error(errorData.detail || 'onetime delete failed');
+      //     }
+      // }
 
-      if(requestData.beneficiary_request_duration === 'Recurring' && requestData.beneficiary_request_duration_recurring){
-        const recurringResponse = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-single-update-recurring/${id}/`, {
-            method: 'DELETE',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Token ${localStorage.getItem('access_token')}`,
-            },
-          });
-          if (!recurringResponse.ok) {
-            const errorData = await recurringResponse.json();
-            throw new Error(errorData.detail || 'recurring delete failed');
-          }
+      // if(requestData.beneficiary_request_duration === 'Recurring' && requestData.beneficiary_request_duration_recurring){
+      //   const recurringId = requestData.beneficiary_request_duration_recurring.beneficiary_request_duration_recurring_id
+      //   const recurringResponse = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-single-update-recurring/${recurringId}/`, {
+      //       method: 'DELETE',
+      //       headers: {
+      //         'Content-Type': 'application/json',
+      //         'Authorization': `Token ${localStorage.getItem('access_token')}`,
+      //       },
+      //     });
+      //     if (!recurringResponse.ok) {
+      //       const errorData = await recurringResponse.json();
+      //       throw new Error(errorData.detail || 'recurring delete failed');
+      //     }
+      // }
+
+      setIsDeleteFinished(true)
+      setTimeout(() => {
+        setIsDeleteFinished(false)
+        if(document.documentElement.classList.contains('edit-finish-body')){
+        document.documentElement.classList.remove('edit-finish-body')
+        document.body.classList.remove('edit-finish-body')
       }
+      // if (document.documentElement.classList.contains('delete-overlay-container-html')){
+      //   document.documentElement.classList.remove('delete-overlay-container-html')
+      //   document.body.classList.remove('delete-overlay-container-html')
+      //   }
+        navigate('/requests');
+
+      },5000)
       } catch(err) {
         console.log(err)
       }
-    }
-    navigate('/requests');
+    
+    
   }
+
+  useEffect(() => {
+    if(isDeleteFinished){
+      document.documentElement.classList.add('edit-finish-body')
+      document.body.classList.add('edit-finish-body')
+    }
+  },[isDeleteFinished])
+
+  useEffect(() => {
+      if(isDelete){
+          document.documentElement.classList.add('delete-overlay-container-html')
+          document.body.classList.add('delete-overlay-container-html')
+          document.getElementById('form1').classList.add('delete-overlay-container-form')
+        document.getElementById('form2').classList.add('delete-overlay-container-form')
+        const inputs = document.getElementsByTagName('input')
+        const selects = document.getElementsByTagName('select')
+        const textareas = document.getElementsByTagName('textarea')
+        for (var i=0;i<inputs.length;i++){
+          inputs[i].classList.add('delete-overlay-container-form')
+        }
+        for (var i=0;i<selects.length;i++){
+          selects[i].classList.add('delete-overlay-container-form')
+        }
+        for (var i=0;i<textareas.length;i++){
+          textareas[i].classList.add('delete-overlay-container-form')
+        }
+      } 
+      else {
+          if (document.documentElement.classList.contains('delete-overlay-container-html')){
+        document.documentElement.classList.remove('delete-overlay-container-html')
+        document.body.classList.remove('delete-overlay-container-html')
+        }
+        if(document.getElementById('form1').classList.contains('delete-overlay-container-form')){
+          document.getElementById('form1').classList.remove('delete-overlay-container-form')
+        }
+        if(document.getElementById('form2').classList.contains('delete-overlay-container-form')){
+          document.getElementById('form2').classList.remove('delete-overlay-container-form')
+        }
+        const inputs = document.getElementsByTagName('input')
+        // const selects = document.getElementsByTagName('select')
+        // const textareas = document.getElementsByTagName('textarea')
+        if (inputs[0].classList.contains('delete-overlay-container-form')){
+          for (var i=0;i<inputs.length;i++){
+          inputs[i].classList.remove('delete-overlay-container-form')
+        }
+        
+        }
+
+        // if (selects[0].classList.contains('delete-overlay-container-form')){
+        //   for (var i=0;i<selects.length;i++){
+        //   selects[i].classList.remove('delete-overlay-container-form')
+        // }
+        
+        // }
+
+        // if (textareas[0].classList.contains('delete-overlay-container-form')){
+        //   for (var i=0;i<textareas.length;i++){
+        //   textareas[i].classList.remove('delete-overlay-container-form')
+        // }
+        
+        // }
+      }
+    },[isDelete])
 
   
 
@@ -269,9 +347,30 @@ function RequestDetail() {
       />
     )
   }
+
+  if(isDeleteFinished){
+    return(
+      <div className='edit-finish-container'>
+
+        <svg width="59" height="59" viewBox="0 0 59 59" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path d="M26.25 42L12.5417 28.2917L16.625 24.2083L26.25 33.8333L50.75 9.33333C45.2083 3.79167 37.625 0 29.1667 0C13.125 0 0 13.125 0 29.1667C0 45.2083 13.125 58.3333 29.1667 58.3333C45.2083 58.3333 58.3333 45.2083 58.3333 29.1667C58.3333 23.625 56.875 18.6667 54.25 14.2917L26.25 42Z"/>
+        </svg>
+
+        <h1>
+          درخواست شما با موفقیت حذف گردید.
+        </h1>
+
+        <p>
+          تا لحظاتی دیگر به صفحه سوابق درخواست منتقل می‌شوید.
+        </p>
+
+      </div>
+    )
+  }
   
   
   return (
+    <>
     <div className='request-detail-container'>
       <Header />
       <main className="main">
@@ -393,7 +492,7 @@ function RequestDetail() {
                 </button>
               </div>
               <div className="observe-delete-container">
-                <button className="observe-delete">
+                <button className="observe-delete" onClick={() => setIsDelete(true)}>
                   حذف درخواست
                   <svg width="11" height="14" viewBox="0 0 11 14" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                     <path d="M8.64286 4.66667V12.4444H2.35714V4.66667H8.64286ZM7.46429 0H3.53571L2.75 0.777778H0V2.33333H11V0.777778H8.25L7.46429 0ZM10.2143 3.11111H0.785714V12.4444C0.785714 13.3 1.49286 14 2.35714 14H8.64286C9.50714 14 10.2143 13.3 10.2143 12.4444V3.11111Z" />
@@ -417,6 +516,21 @@ function RequestDetail() {
 
       <NavigationBar selected={3} />
     </div>
+
+    {
+                isDelete && 
+                <>
+                <div className="block-overlay-container"></div>
+                <div className="delete-overlay-container">
+                    <p>آیا از حذف این درخواست اطمینان دارید؟</p>
+                    <div className="delete-overlay-buttons">
+                    <button className="no-button" onClick={() => setIsDelete(false)}>خیر</button>
+                    <button className="yes-button" onClick={handleDelete}>بلی</button>
+                    </div>
+                </div>
+                </>
+              }
+  </>
   );
   
 }

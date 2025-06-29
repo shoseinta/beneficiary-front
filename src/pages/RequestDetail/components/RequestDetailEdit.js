@@ -403,21 +403,21 @@ function RequestDetailEdit ({isEdit, setIsEdit, updateData, setUpdateData, reque
         const inputs = document.getElementsByTagName('input')
         const selects = document.getElementsByTagName('select')
         const textareas = document.getElementsByTagName('textarea')
-        if (inputs[0].classList.contains('delete-overlay-container-html')){
+        if (inputs[0].classList.contains('delete-overlay-container-form')){
           for (var i=0;i<inputs.length;i++){
           inputs[i].classList.remove('delete-overlay-container-form')
         }
         
         }
 
-        if (selects[0].classList.contains('delete-overlay-container-html')){
+        if (selects[0].classList.contains('delete-overlay-container-form')){
           for (var i=0;i<selects.length;i++){
           selects[i].classList.remove('delete-overlay-container-form')
         }
         
         }
 
-        if (textareas[0].classList.contains('delete-overlay-container-html')){
+        if (textareas[0].classList.contains('delete-overlay-container-form')){
           for (var i=0;i<textareas.length;i++){
           textareas[i].classList.remove('delete-overlay-container-form')
         }

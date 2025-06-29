@@ -563,6 +563,10 @@ select {
   background-color: transparent !important;
 }
 
+.request-detail-container .delete-overlay-container-form{
+  background-color: transparent !important;
+}
+
 
 
 .delete-overlay-container-html {
