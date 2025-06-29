@@ -591,6 +591,16 @@ select {
   margin: auto;
   z-index: 100;
 }
+.block-overlay-container {
+  z-index: 99;
+  background-color: transparent;
+  cursor: not-allowed;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
 .delete-overlay-container p {
   font-size: 0.8rem;
   font-weight: normal;
@@ -631,6 +641,7 @@ select {
   justify-content: center;
   align-items: center;
   height: 100%;
+  width: 100%;
 }
 .edit-finish-container {
   display: flex;

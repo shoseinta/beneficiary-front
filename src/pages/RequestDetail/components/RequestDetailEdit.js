@@ -621,13 +621,16 @@ function RequestDetailEdit ({isEdit, setIsEdit, updateData, setUpdateData, reque
 
               {
                 editApplied && 
-                <div class="delete-overlay-container">
+                <>
+                <div className="block-overlay-container"></div>
+                <div className="delete-overlay-container">
                     <p>آیا از اعمال ویرایش اطمینان دارید؟</p>
-                    <div class="delete-overlay-buttons">
-                    <button class="no-button" onClick={() => setEditApplied(false)}>خیر</button>
-                    <button class="yes-button" onClick={handleFinishEdit}>بلی</button>
+                    <div className="delete-overlay-buttons">
+                    <button className="no-button" onClick={() => setEditApplied(false)}>خیر</button>
+                    <button className="yes-button" onClick={handleFinishEdit}>بلی</button>
                     </div>
                 </div>
+                </>
               }
               </>
     )
