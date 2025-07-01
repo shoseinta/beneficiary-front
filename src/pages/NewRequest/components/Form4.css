@@ -226,7 +226,8 @@
   text-overflow: ellipsis;
 }
 
-.form4-container form div input , textarea {
+.form4-container form div input,
+.form4-container form div textarea {
   flex: 1;
   height: 30px;
   background-color: var(--white-color);

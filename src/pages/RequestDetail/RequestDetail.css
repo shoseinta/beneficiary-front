@@ -682,3 +682,115 @@ select {
   text-align: center;
 }
 
+
+.child-creation-overlay-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background-color: var(--white-gray-color);
+  border: 1px solid var(--main-color);
+  border-radius: 11px;
+  box-shadow: 0px 4px 4px var(--black25-color);
+  padding: 10px 10px 30px 10px;
+  width: 90%;
+  max-width: 400px;
+  position:absolute;
+  left: 0;
+  right: 0;
+  /* bottom: 0; */
+  top: 50%;
+  transform: translateY(-50%);
+  margin: auto;
+  z-index: 100;
+}
+.child-creation-overlay-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.child-creation-overlay-container form > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.child-creation-overlay-container label {
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+.child-creation-overlay-container sup {
+  color: var(--error-red);
+}
+.child-creation-overlay-container input , textarea {
+  width: 65%;
+  background-color: var(--white-color);
+  border: none;
+  border-radius: 6px;
+  box-shadow: 0 1px 4px var(--black25-color);
+}
+.child-creation-overlay-container textarea {
+  height: 70px;
+  padding: 8px;
+  resize: none;
+  line-height: 1.5;
+  text-align: justify;
+  vertical-align: top;
+  overflow-y: auto;
+  font-size: 0.7rem;
+  font-weight: normal;
+}
+.child-creation-overlay-container .upload-label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70px;
+  width: 65%;
+  background-color: var(--white-color);
+  border: none;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: normal;
+  cursor: pointer;
+  color: var(--black50-color);
+  box-shadow: 0 1px 4px var(--black25-color);
+}
+.child-creation-overlay-container .upload-label img {
+  margin-left: 5px;
+}
+
+
+
+
+
+
+
+
+
+
+/* ----------------------------------buttons style */
+.child-creation-overlay-container .child-creation-overlay-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 30px;
+}
+.child-creation-overlay-container button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  border-radius: 6px;
+  height: 35px;
+  color: var(--white-color);
+  font-size: 0.8rem;
+  font-weight: normal;
+  cursor: pointer;
+  box-shadow: 0 4px 4px var(--black25-color);
+}
+.child-creation-overlay-container .no-button {
+  background-color: var(--error-red);
+  padding: 0 20px;
+}
+.child-creation-overlay-container .yes-button {
+  background-color: var(--main-color);
+  padding: 0 10px;
+}
+

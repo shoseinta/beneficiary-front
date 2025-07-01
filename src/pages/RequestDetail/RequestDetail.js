@@ -6,7 +6,9 @@ import NavigationBar from '../../components/navigationBar/NavigationBar';
 import './RequestDetail.css'
 import back_icon from '../../media/icons/back_icon.svg'
 import confirm_icon from '../../media/icons/confirm_icon.svg'
+import attach_icon from '../../media/icons/attach_icon.svg'
 import RequestDetailEdit from './components/RequestDetailEdit';
+import JSZip from "jszip";
 
 function RequestDetail() {
   const { id } = useParams();
@@ -15,8 +17,132 @@ function RequestDetail() {
   const [requestData,setRequestData] = useState(null)
   const [updateData, setUpdateData] = useState(null)
   const [isDelete, setIsDelete] = useState(false)
+  const [isChildCreate, setIsChildCreate] = useState(false)
+  const [isChildCreateFinish, setIsChildCreateFinish] = useState(false)
+  const [childData,setChildData] = useState({
+    beneficiary_request_child_description:null,
+    beneficiary_request_child_document:[],
+  })
   const [isDeleteFinished, setIsDeleteFinished] = useState(false)
   const navigate = useNavigate();
+
+  const createChildRequestBody = async () => {
+  const data = {
+    beneficiary_request_child_description: childData.beneficiary_request_child_description,
+    beneficiary_request_child_document: null,
+  };
+
+  try {
+    if (childData.beneficiary_request_child_document.length !== 0) {
+      const zip = new JSZip();
+      
+      // Add each file to the zip
+      childData.beneficiary_request_child_document.forEach((file, index) => {
+        zip.file(file.name, file);
+      });
+              
+      // Generate the zip file
+      const zipContent = await zip.generateAsync({ type: "blob" });
+      
+      // Create a File object from the zip blob
+      const zipFile = new File([zipContent], `child_documents_beneficiary_${localStorage.getItem('user_id')}_request_${id}.zip`, {
+        type: "application/zip"
+      });
+      data.beneficiary_request_child_document = zipFile;
+    }
+    console.log(data)
+    return data;
+  } catch (error) {
+    console.log(data)
+    console.error("Error creating zip file:", error);
+    return data;
+  }
+};
+  const handleChildDescriptionChange = (e) => {
+    setChildData(pre => {
+      return {...pre,beneficiary_request_child_description:e.target.value}
+    })
+  }
+
+  const handleChildDocumentChange = (e) => {
+    const selectedFiles = Array.from(e.target.files)
+    setChildData(pre => {
+      const document = pre.beneficiary_request_child_document
+      return {...pre,beneficiary_request_child_document:[...document,...selectedFiles]}
+    })
+  }
+
+  useEffect(() => {
+    console.log(childData)
+  })
+
+
+  const handleChildCreation = async () => {
+  if (!childData.beneficiary_request_child_description) {
+    return;
+  }
+  
+  try {
+    // Create FormData instead of JSON
+    const formData = new FormData();
+    formData.append('beneficiary_request_child_description', childData.beneficiary_request_child_description);
+
+    // Only add the zip file if documents exist
+    if (childData.beneficiary_request_child_document.length > 0) {
+      const zip = new JSZip();
+      
+      // Add each file to the zip
+      childData.beneficiary_request_child_document.forEach((file) => {
+        zip.file(file.name, file);
+      });
+              
+      // Generate the zip file
+      const zipContent = await zip.generateAsync({ type: "blob" });
+      
+      // Create a File object from the zip blob
+      const zipFile = new File([zipContent], `child_documents_beneficiary_${localStorage.getItem('user_id')}_request_${id}.zip`, {
+        type: "application/zip"
+      });
+      
+      formData.append('beneficiary_request_child_document', zipFile);
+    }
+
+    const response = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-child-create/${id}/`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Token ${localStorage.getItem('access_token')}`,
+        // Don't set Content-Type - let the browser set it with the correct boundary
+      },
+      body: formData
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.detail || 'Request creation failed');
+    }
+
+    setIsChildCreateFinish(true)
+
+    // Handle success
+    setIsChildCreate(false);
+    setChildData({
+    beneficiary_request_child_description: null,
+    beneficiary_request_child_document: [],
+    });
+    setTimeout(() => {
+      setIsChildCreateFinish(false)
+      if(document.documentElement.classList.contains('edit-finish-body')){
+        document.documentElement.classList.remove('edit-finish-body')
+        document.body.classList.remove('edit-finish-body')
+      }
+    },5000)
+    // fetchData();
+    
+  } catch (err) {
+    console.error('Error creating child request:', err);
+    // Add error handling UI here
+  }
+};
 
   useEffect(() => {
       document.documentElement.classList.add('request-detail-html');
@@ -239,6 +365,7 @@ function RequestDetail() {
       // }
 
       setIsDeleteFinished(true)
+      setIsDelete(false)
       setTimeout(() => {
         setIsDeleteFinished(false)
         if(document.documentElement.classList.contains('edit-finish-body')){
@@ -260,67 +387,61 @@ function RequestDetail() {
   }
 
   useEffect(() => {
-    if(isDeleteFinished){
+    if(isDeleteFinished || isChildCreateFinish){
       document.documentElement.classList.add('edit-finish-body')
       document.body.classList.add('edit-finish-body')
     }
-  },[isDeleteFinished])
+  },[isDeleteFinished, isChildCreateFinish])
 
   useEffect(() => {
-      if(isDelete){
-          document.documentElement.classList.add('delete-overlay-container-html')
-          document.body.classList.add('delete-overlay-container-html')
-          document.getElementById('form1').classList.add('delete-overlay-container-form')
-        document.getElementById('form2').classList.add('delete-overlay-container-form')
-        const inputs = document.getElementsByTagName('input')
-        const selects = document.getElementsByTagName('select')
-        const textareas = document.getElementsByTagName('textarea')
-        for (var i=0;i<inputs.length;i++){
-          inputs[i].classList.add('delete-overlay-container-form')
-        }
-        for (var i=0;i<selects.length;i++){
-          selects[i].classList.add('delete-overlay-container-form')
-        }
-        for (var i=0;i<textareas.length;i++){
-          textareas[i].classList.add('delete-overlay-container-form')
-        }
-      } 
-      else {
-          if (document.documentElement.classList.contains('delete-overlay-container-html')){
-        document.documentElement.classList.remove('delete-overlay-container-html')
-        document.body.classList.remove('delete-overlay-container-html')
-        }
-        if(document.getElementById('form1').classList.contains('delete-overlay-container-form')){
-          document.getElementById('form1').classList.remove('delete-overlay-container-form')
-        }
-        if(document.getElementById('form2').classList.contains('delete-overlay-container-form')){
-          document.getElementById('form2').classList.remove('delete-overlay-container-form')
-        }
-        const inputs = document.getElementsByTagName('input')
-        // const selects = document.getElementsByTagName('select')
-        // const textareas = document.getElementsByTagName('textarea')
-        if (inputs[0].classList.contains('delete-overlay-container-form')){
-          for (var i=0;i<inputs.length;i++){
-          inputs[i].classList.remove('delete-overlay-container-form')
-        }
-        
-        }
-
-        // if (selects[0].classList.contains('delete-overlay-container-form')){
-        //   for (var i=0;i<selects.length;i++){
-        //   selects[i].classList.remove('delete-overlay-container-form')
-        // }
-        
-        // }
-
-        // if (textareas[0].classList.contains('delete-overlay-container-form')){
-        //   for (var i=0;i<textareas.length;i++){
-        //   textareas[i].classList.remove('delete-overlay-container-form')
-        // }
-        
-        // }
+  if(isDelete || isChildCreate){
+    document.documentElement.classList.add('delete-overlay-container-html')
+    document.body.classList.add('delete-overlay-container-html')
+    
+    const form1 = document.getElementById('form1');
+    const form2 = document.getElementById('form2');
+    
+    if (form1) form1.classList.add('delete-overlay-container-form');
+    if (form2) form2.classList.add('delete-overlay-container-form');
+    
+    const inputs = document.getElementsByTagName('input');
+    const selects = document.getElementsByTagName('select');
+    const textareas = document.getElementsByTagName('textarea');
+    
+    for (let i = 0; i < inputs.length; i++) {
+      inputs[i].classList.add('delete-overlay-container-form');
+    }
+    for (let i = 0; i < selects.length; i++) {
+      selects[i].classList.add('delete-overlay-container-form');
+    }
+    for (let i = 0; i < textareas.length; i++) {
+      textareas[i].classList.add('delete-overlay-container-form');
+    }
+  } 
+  else {
+    if (document.documentElement.classList.contains('delete-overlay-container-html')) {
+      document.documentElement.classList.remove('delete-overlay-container-html');
+      document.body.classList.remove('delete-overlay-container-html');
+    }
+    
+    const form1 = document.getElementById('form1');
+    const form2 = document.getElementById('form2');
+    
+    if (form1 && form1.classList.contains('delete-overlay-container-form')) {
+      form1.classList.remove('delete-overlay-container-form');
+    }
+    if (form2 && form2.classList.contains('delete-overlay-container-form')) {
+      form2.classList.remove('delete-overlay-container-form');
+    }
+    
+    const inputs = document.getElementsByTagName('input');
+    if (inputs.length > 0 && inputs[0].classList.contains('delete-overlay-container-form')) {
+      for (let i = 0; i < inputs.length; i++) {
+        inputs[i].classList.remove('delete-overlay-container-form');
       }
-    },[isDelete])
+    }
+  }
+}, [isDelete,isChildCreate]);
 
   
 
@@ -365,6 +486,26 @@ function RequestDetail() {
         </p>
 
       </div>
+    )
+  }
+
+  if(isChildCreateFinish){
+    return (
+  <div className='edit-finish-container'>
+
+    <svg width="59" height="59" viewBox="0 0 59 59" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+      <path d="M26.25 42L12.5417 28.2917L16.625 24.2083L26.25 33.8333L50.75 9.33333C45.2083 3.79167 37.625 0 29.1667 0C13.125 0 0 13.125 0 29.1667C0 45.2083 13.125 58.3333 29.1667 58.3333C45.2083 58.3333 58.3333 45.2083 58.3333 29.1667C58.3333 23.625 56.875 18.6667 54.25 14.2917L26.25 42Z"/>
+    </svg>
+
+    <h1>
+  درخواست جزئی شما با موفقیت ایجاد گردید.
+    </h1>
+
+    <p>
+      تا لحظاتی دیگر به صفحه اصلی همین درخواست منتقل می‌شوید.
+    </p>
+
+  </div>
     )
   }
   
@@ -461,7 +602,7 @@ function RequestDetail() {
           <div className="buttons-container">
             <div className="observe-line-button">
               <div className="observe-child-creation-container">
-                <button className="observe-chid-creation">
+                <button className="observe-chid-creation" onClick={() => setIsChildCreate(true)}>
                   ایجاد درخواست جزئی
                   <svg width="13" height="14" viewBox="0 0 13 14" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                     <path
@@ -530,6 +671,33 @@ function RequestDetail() {
                 </div>
                 </>
               }
+    {
+      isChildCreate &&
+      <>
+      <div className="block-overlay-container"></div>
+      <div className="child-creation-overlay-container">
+        <form>
+
+          <div>
+          <label for="child-creation-description">توضیحات درخواست:<sup>*</sup></label>
+          <textarea id="child-creation-description" required value={childData.beneficiary_request_child_description} onChange={handleChildDescriptionChange}></textarea>
+          </div>
+
+          <div>
+          <label for="child-creation-document">مستندات درخواست:</label>
+          <input type="file" id="child-creation-document" multiple hidden onChange={handleChildDocumentChange}/>
+          <label for="child-creation-document" className="upload-label"><img src={attach_icon} alt="" />برای انتخاب فایل کلیک کنید </label>
+          </div>
+
+        </form>
+
+        <div className="child-creation-overlay-buttons">
+          <button className="no-button" onClick={() => setIsChildCreate(false)}>لغو</button>
+          <button className="yes-button" onClick={handleChildCreation}>ایجاد درخواست جزئی</button>
+        </div>
+      </div>
+      </>
+    }
   </>
   );
   
