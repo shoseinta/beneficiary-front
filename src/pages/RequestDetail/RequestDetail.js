@@ -16,6 +16,7 @@ function RequestDetail() {
   const [isEdit,setIsEdit] = useState(false)
   const [requestData,setRequestData] = useState(null)
   const [updateData, setUpdateData] = useState(null)
+  const [childSeeData, setChildSeeData] = useState(null)
   const [isDelete, setIsDelete] = useState(false)
   const [isChildCreate, setIsChildCreate] = useState(false)
   const [isChildCreateFinish, setIsChildCreateFinish] = useState(false)
@@ -26,6 +27,15 @@ function RequestDetail() {
   const [isChildSee, setIsChildSee] = useState(false)
   const [isDeleteFinished, setIsDeleteFinished] = useState(false)
   const navigate = useNavigate();
+
+  const handleChildRemove = async (index, id) => {
+    const newData = [...childSeeData]
+    setChildData(newData.filter((item,ind) => {
+      return ind !== index
+    }))
+
+    
+  }
 
   const createChildRequestBody = async () => {
   const data = {
@@ -130,6 +140,7 @@ function RequestDetail() {
     beneficiary_request_child_description: null,
     beneficiary_request_child_document: [],
     });
+    fetchData();
     setTimeout(() => {
       setIsChildCreateFinish(false)
       if(document.documentElement.classList.contains('edit-finish-body')){
@@ -307,6 +318,27 @@ function RequestDetail() {
         } catch (err) {
           console.log(err)
         }
+        
+        
+         try {
+          const response = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-childs-get/${id}/`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Token ${localStorage.getItem('access_token')}`,
+            },
+          });
+          if (!response.ok) {  // Check for HTTP errors (4xx/5xx)
+            const errorData = await response.json();
+            throw new Error(errorData.detail || 'Login failed');
+          }
+          const result = await response.json();
+          setChildSeeData(result)
+          
+        } catch (err) {
+          console.log(err)
+        }
+
       }
   
 
@@ -715,16 +747,16 @@ function RequestDetail() {
       </div>
       
       {/* Repeatable request section */}
-      {[1, 2, 3, 4].map((item, index) => (
-        <section key={index}>
-          <h2>درخواست جزئی شماره {item}</h2>
+      {childSeeData.map((item, index) => (
+        <section key={item.beneficiary_request_child_id}>
+          <h2>درخواست جزئی شماره {index + 1}</h2>
 
           <div className="textarea-div">
             <label htmlFor={`request-description-${index}`}>توضیحات<br />درخواست:</label>
             <textarea 
               id={`request-description-${index}`} 
               readOnly 
-              value="نخپتدزتد حنث خه صثههثص ههتثبص عتصثحخ هختتصثته خهتتهخصتثیبه تتهصثب ت ختهتصیث"
+              value={item.beneficiary_request_child_description}
             />
           </div>
           
@@ -743,15 +775,15 @@ function RequestDetail() {
           <div className="metadata-container">
             <div className="text-input-div">
               <p>ایجاد شده توسط:</p>
-              <span>شخص کاربر</span>
+              <span>{item.beneficiary_request_child_is_created_by_charity?"اپراتور خیریه":"شخص کاربر"}</span>
             </div>
             <div className="text-input-div">
               <p>وضعیت درخواست:</p>
-              <span>ثبت شده</span>
+              <span>{convertStage(item.beneficiary_request_child_processing_stage)}</span>
             </div>
             <div className="text-input-div">
               <p>تاریخ ثبت:</p>
-              <span>۱۴۰۴/۵/۲۳</span>
+              <span>{gregorianToJalali(item.beneficiary_request_child_created_at)}</span>
             </div>
           </div>
           
