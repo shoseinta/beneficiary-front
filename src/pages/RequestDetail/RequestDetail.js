@@ -23,6 +23,7 @@ function RequestDetail() {
     beneficiary_request_child_description:null,
     beneficiary_request_child_document:[],
   })
+  const [isChildSee, setIsChildSee] = useState(false)
   const [isDeleteFinished, setIsDeleteFinished] = useState(false)
   const navigate = useNavigate();
 
@@ -394,7 +395,7 @@ function RequestDetail() {
   },[isDeleteFinished, isChildCreateFinish])
 
   useEffect(() => {
-  if(isDelete || isChildCreate){
+  if(isDelete || isChildCreate || isChildSee){
     document.documentElement.classList.add('delete-overlay-container-html')
     document.body.classList.add('delete-overlay-container-html')
     
@@ -441,7 +442,7 @@ function RequestDetail() {
       }
     }
   }
-}, [isDelete,isChildCreate]);
+}, [isDelete,isChildCreate,isChildSee]);
 
   
 
@@ -625,7 +626,7 @@ function RequestDetail() {
 
             <div className="observe-line-button">
               <div className="observe-child-list-container">
-                <button className="observe-child-list">
+                <button className="observe-child-list" onClick={() => setIsChildSee(true)}>
                   مشاهده درخواست‌های جزئی
                   <svg width="14" height="9" viewBox="0 0 14 9" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                     <path d="M7 1.2C9.41182 1.2 11.5627 2.478 12.6127 4.5C11.5627 6.522 9.41818 7.8 7 7.8C4.58182 7.8 2.43727 6.522 1.38727 4.5C2.43727 2.478 4.58818 1.2 7 1.2ZM7 0C3.81818 0 1.10091 1.866 0 4.5C1.10091 7.134 3.81818 9 7 9C10.1818 9 12.8991 7.134 14 4.5C12.8991 1.866 10.1818 0 7 0ZM7 3C7.87818 3 8.59091 3.672 8.59091 4.5C8.59091 5.328 7.87818 6 7 6C6.12182 6 5.40909 5.328 5.40909 4.5C5.40909 3.672 6.12182 3 7 3ZM7 1.8C5.42182 1.8 4.13636 3.012 4.13636 4.5C4.13636 5.988 5.42182 7.2 7 7.2C8.57818 7.2 9.86364 5.988 9.86364 4.5C9.86364 3.012 8.57818 1.8 7 1.8Z" />
@@ -697,6 +698,75 @@ function RequestDetail() {
         </div>
       </div>
       </>
+    }
+
+    {
+      isChildSee && 
+      <>
+      <div className="block-overlay-container"></div>
+      <div className="child-request-list-overlay">
+      <div className="button-container" id="close-button-sticky">
+        <button onClick={() => setIsChildSee(false)}>
+          بستن
+          <svg width="30" height="30" viewBox="0 0 30 30" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M29.2929 3.72853C29.6834 3.33801 29.6834 2.70485 29.2929 2.31432L27.6857 0.707107C27.2952 0.316583 26.662 0.316583 26.2715 0.707107L15.7071 11.2715C15.3166 11.662 14.6834 11.662 14.2929 11.2715L3.72853 0.707106C3.33801 0.316582 2.70485 0.316582 2.31432 0.707107L0.707107 2.31432C0.316583 2.70485 0.316583 3.33801 0.707107 3.72853L11.2715 14.2929C11.662 14.6834 11.662 15.3166 11.2715 15.7071L0.707106 26.2715C0.316582 26.662 0.316582 27.2952 0.707107 27.6857L2.31432 29.2929C2.70485 29.6834 3.33801 29.6834 3.72853 29.2929L14.2929 18.7285C14.6834 18.338 15.3166 18.338 15.7071 18.7285L26.2715 29.2929C26.662 29.6834 27.2952 29.6834 27.6857 29.2929L29.2929 27.6857C29.6834 27.2952 29.6834 26.662 29.2929 26.2715L18.7285 15.7071C18.338 15.3166 18.338 14.6834 18.7285 14.2929L29.2929 3.72853Z"/>
+          </svg>
+        </button>
+      </div>
+      
+      {/* Repeatable request section */}
+      {[1, 2, 3, 4].map((item, index) => (
+        <section key={index}>
+          <h2>درخواست جزئی شماره {item}</h2>
+
+          <div className="textarea-div">
+            <label htmlFor={`request-description-${index}`}>توضیحات<br />درخواست:</label>
+            <textarea 
+              id={`request-description-${index}`} 
+              readOnly 
+              value="نخپتدزتد حنث خه صثههثص ههتثبص عتصثحخ هختتصثته خهتتهخصتثیبه تتهصثب ت ختهتصیث"
+            />
+          </div>
+          
+          <div className="file-input-div">
+            <label htmlFor={`request-document-${index}`}>مستندات<br />درخواست:</label>
+            <input 
+              type="text" 
+              id={`request-document-${index}`} 
+              placeholder="اطلاعاتی وجود ندارد" 
+              readOnly 
+            />
+          </div>
+
+          <hr className="input-divider" />
+
+          <div className="metadata-container">
+            <div className="text-input-div">
+              <p>ایجاد شده توسط:</p>
+              <span>شخص کاربر</span>
+            </div>
+            <div className="text-input-div">
+              <p>وضعیت درخواست:</p>
+              <span>ثبت شده</span>
+            </div>
+            <div className="text-input-div">
+              <p>تاریخ ثبت:</p>
+              <span>۱۴۰۴/۵/۲۳</span>
+            </div>
+          </div>
+          
+          <div className="button-container">
+            <button>
+              حذف
+              <svg width="11" height="14" viewBox="0 0 11 14" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8.64286 4.66667V12.4444H2.35714V4.66667H8.64286ZM7.46429 0H3.53571L2.75 0.777778H0V2.33333H11V0.777778H8.25L7.46429 0ZM10.2143 3.11111H0.785714V12.4444C0.785714 13.3 1.49286 14 2.35714 14H8.64286C9.50714 14 10.2143 13.3 10.2143 12.4444V3.11111Z"/>
+              </svg>
+            </button>
+          </div>
+        </section>
+      ))}
+    </div>
+    </>
     }
   </>
   );
