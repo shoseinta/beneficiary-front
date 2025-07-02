@@ -12,7 +12,7 @@ import JSZip from "jszip";
 
 function RequestDetail() {
   const { id } = useParams();
-  const {duration} = useLookup();
+  const {duration,processingStage} = useLookup();
   const [isEdit,setIsEdit] = useState(false)
   const [requestData,setRequestData] = useState(null)
   const [updateData, setUpdateData] = useState(null)
@@ -28,13 +28,33 @@ function RequestDetail() {
   const [isDeleteFinished, setIsDeleteFinished] = useState(false)
   const navigate = useNavigate();
 
-  const handleChildRemove = async (index, id) => {
+  const handleChildRemove = async (index, requestId) => {
     const newData = [...childSeeData]
-    setChildData(newData.filter((item,ind) => {
+    const filterData = newData.filter((item,ind) => {
       return ind !== index
-    }))
+    })
+    setChildSeeData(filterData)
 
-    
+    try {
+    // Create FormData instead of JSON
+    const response = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-single-child-update/${requestId}/`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${localStorage.getItem('access_token')}`,
+        // Don't set Content-Type - let the browser set it with the correct boundary
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.detail || 'Request creation failed');
+    }
+  } catch (err) {
+    console.error('Error creating child request:', err);
+    // Add error handling UI here
+  }
+
   }
 
   const createChildRequestBody = async () => {
@@ -205,6 +225,35 @@ function RequestDetail() {
      }else if (type === 'Completed'){
         return "تکمیل شده";
      }else if (type === 'In Progress'){
+        return "در حال انجام";
+
+     }
+    }
+
+    const convertStageChild = (proccesingId) => {
+      let type = 'pending_review';
+      if(processingStage){
+      processingStage.forEach((item,idx) => {
+        if(Number(item.beneficiary_request_processing_stage_id) === Number(proccesingId)){
+          type = item.beneficiary_request_processing_stage_name
+        }
+      })
+    }
+
+      if (type === 'submitted'){
+        return "ثبت شده";
+     }else if (type === 'pending_review'){
+        return "در انتظار بررسی";
+     }else if (type === 'under_evaluation') {
+        return "در حال ارزیابی";
+     }else if (type === 'approved'){
+        return "تایید شده";
+
+     }else if (type === 'rejected'){
+        return "رد شده";
+     }else if (type === 'completed'){
+        return "تکمیل شده";
+     }else if (type === 'in_progress'){
         return "در حال انجام";
 
      }
@@ -779,7 +828,7 @@ function RequestDetail() {
             </div>
             <div className="text-input-div">
               <p>وضعیت درخواست:</p>
-              <span>{convertStage(item.beneficiary_request_child_processing_stage)}</span>
+              <span>{convertStageChild(item.beneficiary_request_child_processing_stage)}</span>
             </div>
             <div className="text-input-div">
               <p>تاریخ ثبت:</p>
@@ -788,7 +837,7 @@ function RequestDetail() {
           </div>
           
           <div className="button-container">
-            <button>
+            <button onClick={() => handleChildRemove(index,item.beneficiary_request_child_id)}>
               حذف
               <svg width="11" height="14" viewBox="0 0 11 14" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path d="M8.64286 4.66667V12.4444H2.35714V4.66667H8.64286ZM7.46429 0H3.53571L2.75 0.777778H0V2.33333H11V0.777778H8.25L7.46429 0ZM10.2143 3.11111H0.785714V12.4444C0.785714 13.3 1.49286 14 2.35714 14H8.64286C9.50714 14 10.2143 13.3 10.2143 12.4444V3.11111Z"/>
