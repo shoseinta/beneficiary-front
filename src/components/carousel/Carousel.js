@@ -199,9 +199,9 @@ function Carousel({ notification, notifIndex, endpointStates, setEndpointStates,
     }
   };
 
-  if (!notification || !notification.items || notification.items.length === 0) {
-    return null;
-  }
+  // if (!notification || !notification.items || notification.items.length === 0) {
+  //   return null;
+  // }
 
   return (
     <>
@@ -211,7 +211,9 @@ function Carousel({ notification, notifIndex, endpointStates, setEndpointStates,
   >
     <div className="carousel">
         <article className="notification" id="notif1">
-          <section className="h1">
+          { notification.items.length !== 0 ?
+          <>
+            <section className="h1">
             <img src="media/icons/bell_icon.svg" alt="" />
             <h1>{notification.title || "اطلاعیه‌های شما"}</h1>
           </section>
@@ -226,14 +228,37 @@ function Carousel({ notification, notifIndex, endpointStates, setEndpointStates,
               {notification.items[0]?.content || "توضیحات اطلاعیه"}
             </p>
           </div>
-          <div className="details" onClick={() => {
+          </>:
+            <>
+            <section className="h1" style={{marginBottom:"0"}}>
+            <img src="media/icons/bell_icon.svg" alt="" />
+            <h1>{"اطلاعیه‌های شما"}</h1>
+          </section>
+          <div style={{height:"100%"}}>
+          <section className="h3" style={{justifyContent:"center",alignItems:"center",height:"50%",position:"relative",top:"50%",transform:"translateY(-50%)"}}>
+            <h3>{"موردی وجود ندارد."}</h3>
+            {/* <time dateTime={notification.items[0]?.date || ""}>
+              
+            </time> */}
+          </section>
+          
+          <div>
+            <p className="paragraph" id="para1">
+              
+            </p>
+          </div>
+          </div>
+          </>
+          }
+          {notification.items.length !== 0 &&
+            <div className="details" onClick={() => {
             setMoreItems(true);
             document.body.classList.add('more-active');
           }}>
             <details>
               <summary className="summary"> موارد بیشتر <img src={more_icon} alt="" /> </summary>
             </details>
-          </div>
+          </div>}
         </article>
       </div>
       <div className="carousel-dots">

@@ -142,10 +142,10 @@ function Home() {
       <Header />
       {/* <Carousel notifications={notifications} endpointStates={endpointStates}/> */}
 
-      {whichNotif === 0 && notifications[0]?.items?.length > 0 && (
+      {whichNotif === 0 &&  (
         <Carousel notification={notifications[0]} notifIndex={0} endpointStates={endpointStates} setEndpointStates={setEndpointStates} setWhichNotif={setWhichNotif}/>
       )}
-      {whichNotif === 1 && notifications[1]?.items?.length > 0 && (
+      {whichNotif === 1 && (
         <Carousel notification={notifications[1]} notifIndex={1} endpointStates={endpointStates} setEndpointStates={setEndpointStates} setWhichNotif={setWhichNotif}/>
       )}
       <section className="video">
