@@ -133,7 +133,7 @@ const handlePhoneChange = (e) => {
                 <form  className="account-form1">
                     <div>
                     <label htmlFor="account-support"> تحت پوشش خیریه: </label>
-                    <input type="text" id="account-support" readOnly value={accountData?.beneficiary_user_information?"هستید":"نیستید" || ""} />
+                    <input type="text" id="account-support" readOnly value={accountData?.beneficiary_user_information?.under_charity_support ?"هستید":"نیستید" || ""} />
                     </div>
 
                     <div>

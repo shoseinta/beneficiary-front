@@ -1,0 +1,282 @@
+@font-face {
+  font-family: vazir;
+  src: url('../../../media/fonts/Vazir-Regular-UI.woff2') format('woff2'),
+       url('../../../media/fonts/Vazir-Regular-UI.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+    font-family: vazir;
+    src: url('../../../media/fonts/Vazir-Bold-UI.woff2') format('woff2'),
+         url('../../../media/fonts/Vazir-Bold-UI.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+}
+@font-face {
+    font-family: vazir;
+    src: url('../../../media/fonts/Vazir-Black-UI.woff2') format('woff2'),
+         url('../../../media/fonts/Vazir-Black-UI.woff') format('woff');
+    font-weight: 900;
+    font-style: normal;
+}
+@font-face {
+    font-family: vazir;
+    src: url('../../../media/fonts/Vazir-Medium-UI.woff2') format('woff2'),
+         url('../../../media/fonts/Vazir-Medium-UI.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+}
+@font-face {
+    font-family: vazir;
+    src: url('../../../media/fonts/Vazir-Light-UI.woff2') format('woff2'),
+         url('../../../media/fonts/Vazir-Light-UI.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+}
+@font-face {
+    font-family: vazir;
+    src: url('../../../media/fonts/Vazir-Thin-UI.woff2') format('woff2'),
+         url('../../../media/fonts/Vazir-Thin-UI.woff') format('woff');
+    font-weight: 100;
+    font-style: normal;
+}
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "vazir", sans-serif;
+  direction: rtl;
+  unicode-bidi: embed;
+  text-align: right;
+}
+:root {
+    --main-color: #185ea7;
+    --main50-color: rgba(24, 94, 160, 0.5);
+    --main10-color: rgba(24, 94, 160, 0.1);
+    --white-color: #ffffff;
+    --white-gray-color: #f5f5f5;
+    --gray-color: #f9f9f9;
+    --black-color: #000000;
+    --black50-color: rgba(0, 0, 0, 0.5);
+    --black25-color: rgba(0, 0, 0, 0.25);
+    --error-red: #ff0000;
+    --bluelinenav-color : #8BAECF;
+}
+.account-container4-html {
+  background-color: var(--main-color);
+}
+.account-container4-body {
+  background-color: var(--white-color);
+  overflow-y: auto;
+}
+.account-container4 {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  row-gap: 10px;
+}
+.account-container4 .header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--main-color);
+  padding: 5px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.account-container4 .header > #hamburger {
+  width: auto;
+  height: auto;
+  border: none;
+  padding: 0;
+  background-color: transparent;
+  display: inline-block;
+  cursor: pointer;
+}
+.account-container4 .header > #hamburger > img {
+  display: block;
+  width: 9vw;
+  max-width: 60px;
+  height: auto;
+}
+.account-container4 .header > #typo {
+  width: 25vw;
+  max-width: 150px;
+  height: auto;
+}
+.account-container4 .header > #logo {
+  width: 9vw;
+  max-width: 60px;
+  height: auto;
+  border-radius: 50%;
+}
+.account-container4 .main {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 10px;
+}
+.account-container4 .main h1 {
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: normal;
+  line-height: 2;
+}
+.account-container4 .nav-up {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 50px;
+  
+}
+.account-container4 .nav-list-up {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+.account-container4 .nav-item-up {
+  list-style: none;
+  background-color: var(--main10-color);
+  border: none;
+  border-radius: 6px;
+  width: 170px;
+  padding: 10px 0;
+  text-align: center;
+  cursor: pointer;
+}
+
+.account-container4 .nav-item-up > a {
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: normal;
+}
+.account-container4 #active-nav-up {
+  background-color: var(--main-color);
+  color: var(--white-color);
+}
+/* ----------------------------------------- */
+.account-container4 .additional-info-container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 30px;
+  width: 90%;
+  max-width: 500px;
+}
+.account-container4 .additional-info {
+  display: flex;
+  flex-direction: column;
+  row-gap: 15px;
+  font-size: 0.7rem;
+  font-weight: normal;
+}
+.account-container4 .additional-info-box {
+  display: grid;
+  grid-auto-flow: column;         /* Add items by column */
+  grid-template-rows: auto auto;  /* Two rows per column */ 
+  gap: 10px;
+  overflow-x: scroll;
+  padding: 10px;
+  background-color: var(--white-gray-color);
+  border: 1px solid var(--main-color);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+.account-container4 .additional-info-value {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  height: 40px;
+  padding: 10px;
+  background-color: var(--white-color);
+  border-radius: 6px;
+  border: 1px solid var(--main-color);
+  white-space: nowrap;
+  transition: all 0.3s ease;
+}
+.account-container4 .additional-info-value > button {
+  all: unset;
+  cursor: pointer;
+}
+.account-container4 .additional-info-value svg {
+  width: 7px;
+  height: auto;
+  color: var(--error-red);
+}
+/* --------------------------------add button style */
+.account-container4 .additional-info-button-container {
+  display: flex;
+  justify-content: flex-end;
+}
+.account-container4 .additional-info-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  border: none;
+  border-radius: 6px;
+  color: var(--white-color);
+  background-color: var(--main-color);
+  font-size: 0.7rem;
+  font-weight: normal;
+  height: 35px;
+  padding: 10px;
+  cursor: pointer;
+}
+.account-container4 .additional-info-button svg {
+  width: 10px;
+  height: auto;
+}
+
+.account-container4 input::placeholder {
+  color: var(--black50-color);
+}
+
+
+
+
+
+
+
+
+
+
+.nav {
+  padding: 5px 0 5px 0;
+  border-top: var(--bluelinenav-color) 3px solid;
+  position: sticky;
+  bottom: 0;
+  background-color: var(--white-color);
+}
+.nav > .nav-list {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 100%;
+}
+.nav > .nav-list > li {
+  list-style: none;
+}
+.nav > .nav-list > li > a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  text-decoration: none;
+  color: var(--main50-color);
+  font-size: 0.7rem;
+  font-weight: normal;
+}
+.nav > .nav-list > li > #active-nav {
+  color: var(--main-color);
+}
+.nav > .nav-list > li > a > .nav-icon > img{
+  display: block;
+  margin-bottom: 5px;
+  height: 7vw;
+  max-height: 36px;
+  width: auto;
+}
