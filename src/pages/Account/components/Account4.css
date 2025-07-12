@@ -236,6 +236,76 @@
 
 
 
+.family-delete-overlay-body{
+  background-color: var(--black25-color);
+}
+
+.family-delete-overlay-body .additional-info-box,
+.family-delete-overlay-body .additional-info-value {
+  background-color: transparent !important;
+}
+
+
+.family-delete-overlay-container {
+  background-color: var(--white-color);
+  border: 1px solid var(--main-color);
+  border-radius: 11px;
+  box-shadow: 0px 4px 4px var(--black25-color);
+  padding: 10px;
+  width: 75%;
+  max-width: 310px;
+  margin: auto;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  z-index: 100;
+}
+.family-delete-overlay-container p {
+  font-size: 0.8rem;
+  font-weight: normal;
+  margin-bottom: 15px;
+}
+.family-delete-overlay-container .family-delete-overlay-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+}
+.family-delete-overlay-container button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  border-radius: 6px;
+  width: 75px;
+  height: 35px;
+  color: var(--white-color);
+  font-size: 0.8rem;
+  font-weight: normal;
+  cursor: pointer;
+}
+.family-delete-overlay-container .family-no-button {
+  background-color: var(--error-red);
+}
+.family-delete-overlay-container .family-yes-button {
+  background-color: var(--main-color);
+}
+
+.family-delete-overlay-body .family-block-overlay-container {
+  z-index: 99;
+  background-color: transparent;
+  cursor: not-allowed;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
+
+
+
+
 
 
 
