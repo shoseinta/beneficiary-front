@@ -80,7 +80,7 @@ function Form3({ requestData, setRequestData, setStep, files, setFiles }) {
                 const zip = new JSZip();
                 
                 // Add each file to the zip
-                selectedFiles.forEach((file, index) => {
+                files.forEach((file, index) => {
                     zip.file(file.name, file);
                 });
                 

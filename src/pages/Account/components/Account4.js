@@ -6,6 +6,8 @@ import DatePicker from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
 import DateObject from "react-date-object";
+import attach_icon from '../../../media/icons/attach_icon.svg';
+import JSZip from "jszip";
 
 function Account4 ({accountData,setAccountData,setStep,setLoad}) {
     useEffect(()=>{
@@ -36,6 +38,50 @@ function Account4 ({accountData,setAccountData,setStep,setLoad}) {
     beneficiary_user_family_info_gender: null
 }
     )
+
+    const [additionalData, setAdditionalData] = useState({
+    beneficiary_user_additional_info_title: null,
+    beneficiary_user_additional_info_description: null,
+    beneficiary_user_additional_info_document: null
+})
+
+    useEffect(() => {
+      console.log(additionalData)
+    })
+    const [files,setFiles] = useState([])
+    const handleFileChange = async (e) => {
+            const selectedFiles = Array.from(e.target.files);
+            setFiles(pre => {
+              return [...pre,...selectedFiles]
+            });
+            
+            if (selectedFiles.length > 0) {
+                try {
+                    const zip = new JSZip();
+                    
+                    // Add each file to the zip
+                    files.forEach((file, index) => {
+                        zip.file(file.name, file);
+                    });
+                    
+                    // Generate the zip file
+                    const zipContent = await zip.generateAsync({ type: "blob" });
+                    
+                    // Create a File object from the zip blob
+                    const zipFile = new File([zipContent], `beneficiary_${localStorage.getItem('user_id')}_additional_info.zip`, {
+                        type: "application/zip"
+                    });
+                    
+                    // Update requestData with the zip file
+                    setAdditionalData(pre => {
+                      return {...pre,beneficiary_user_additional_info_document:zipFile}
+                    })
+                    
+                } catch (error) {
+                    console.error("Error creating zip file:", error);
+                }
+            } 
+        };
 
     const [jalaliValue, setJalaliValue] = useState(null);
         const todayJalali = new DateObject({ calendar: persian, locale: persian_fa });
@@ -165,6 +211,39 @@ function Account4 ({accountData,setAccountData,setStep,setLoad}) {
         }
     }
 
+    const handleAddAdditional = async (e) => {
+      e.preventDefault()
+      try {
+          const formData = new FormData();
+          formData.append("beneficiary_user_additional_info_title", additionalData.beneficiary_user_additional_info_title)
+          formData.append("beneficiary_user_additional_info_description",additionalData.beneficiary_user_additional_info_description)
+          formData.append("beneficiary_user_additional_info_document",additionalData.beneficiary_user_additional_info_document)
+          const response = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/create-user-additional-info/`, {
+            method: 'POST',
+            headers: {
+              // 'Content-Type': 'application/json',
+              'Authorization': `Token ${localStorage.getItem('access_token')}`,
+            },
+            body: formData
+          });
+          if (!response.ok) {  // Check for HTTP errors (4xx/5xx)
+            const errorData = await response.json();
+            throw new Error(errorData.detail || 'Login failed');
+          }
+          setLoad(true)
+          setAdditionalData(
+            {
+    beneficiary_user_additional_info_title: null,
+    beneficiary_user_additional_info_description: null,
+    beneficiary_user_additional_info_document: null
+}
+          )
+        setTimeout(() => setAddAdditional(false),3000)
+
+        } catch (err) {
+          console.log(err)
+        }
+    }
     return(
       <>
         <div className="account-container4">
@@ -392,6 +471,46 @@ function Account4 ({accountData,setAccountData,setStep,setLoad}) {
 
     
    </div>
+      </>
+    }
+
+    {
+      addAdditional && 
+      <>
+      <div className="family-block-overlay-container"></div>
+      <div className="additional-info-overlay-container">
+      <form>
+        <div>
+        <label htmlFor="additional-info-title">عنوان:<sup>*</sup></label>
+        <input type="text" id="additional-info-title" value={additionalData.beneficiary_user_additional_info_title} onChange={e => {
+          setAdditionalData(pre => {
+            return {...pre, beneficiary_user_additional_info_title:e.target.value}
+          })
+        }}/>
+        </div>
+
+        <div>
+        <label htmlFor="additional-info-description">توضیحات:</label>
+        <textarea id="additional-info-description" value={additionalData.beneficiary_user_additional_info_description} onChange={e => {
+          setAdditionalData(pre => {
+            return {...pre, beneficiary_user_additional_info_description:e.target.value}
+          })
+        }}></textarea>
+        </div>
+
+        <div>
+        <label htmlFor="additional-info-document">مستندات:</label>
+        <input type="file" id="additional-info-document" multiple hidden onChange={handleFileChange}/>
+        <label htmlFor="additional-info-document" className="upload-label"><img src={attach_icon} alt="" />برای انتخاب فایل کلیک کنید </label>
+        </div>
+
+      </form>
+
+      <div className="additional-info-overlay-buttons">
+        <button className="no-button" onClick={() => setAddAdditional(false)}>لغو</button>
+        <button className="yes-button" onClick={handleAddAdditional}>تأیید</button>
+      </div>
+    </div>
       </>
     }
     </>
