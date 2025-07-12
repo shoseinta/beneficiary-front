@@ -305,6 +305,139 @@
 
 
 
+.family-overlay-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background-color: var(--white-color);
+  border: 1px solid var(--main-color);
+  border-radius: 11px;
+  box-shadow: 0px 4px 4px var(--black25-color);
+  padding: 30px 10px;
+  width: 90%;
+  max-width: 360px;
+  margin: auto;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  z-index: 100;
+}
+.family-overlay-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.family-overlay-container form > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.family-overlay-container label {
+  font-size: 0.8rem;
+  font-weight: normal;
+}
+.family-overlay-container sup {
+  color: var(--error-red);
+}
+.family-overlay-container input , 
+.family-overlay-container select {
+  height: 35px;
+  width: 75%;
+  background-color: var(--white-gray-color);
+  border: 1px solid var(--main-color);
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: normal;
+  padding: 0 10px 0 30px;
+}
+.family-overlay-container #family-ident-num {
+  text-align: left;
+}
+.family-overlay-container #family-bd {
+  text-align: center;
+}
+.family-overlay-container select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;            /* Remove default arrow */
+  background-image: url(../../../media/icons/down_arrow_icon.svg);
+  background-repeat: no-repeat;
+  background-position: left 10px center; /* RTL support */
+  background-size: 14px;
+  padding-left: 2rem;          /* space for arrow */
+  cursor: pointer;
+}
+.family-overlay-container #family-bd {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none; /* Remove default arrow */
+  background-image: url(../../../media/icons/calendar_icon.svg);
+  background-repeat: no-repeat;
+  background-position: left 10px center; /* RTL support */
+  background-size: 14px;
+  padding-left: 2rem;
+  cursor: pointer;
+}
+.family-overlay-container input::placeholder {
+  color: var(--black50-color);
+}
+
+
+
+
+
+
+
+
+
+
+
+/* ----------------------------------buttons style */
+.family-overlay-container .family-overlay-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+}
+.family-overlay-container button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  border-radius: 6px;
+  width: 75px;
+  height: 35px;
+  color: var(--white-color);
+  font-size: 0.8rem;
+  font-weight: normal;
+  cursor: pointer;
+}
+.family-overlay-container .no-button {
+  background-color: var(--error-red);
+}
+.family-overlay-container .yes-button {
+  background-color: var(--main-color);
+}
+
+.family-overlay-container .rmdp-container {
+  width:75%;
+}
+
+.family-overlay-container .custom-datepicker-input {
+  width: 100% !important;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none; /* Remove default arrow */
+  background-image: url(../../../media/icons/calendar_icon.svg);
+  background-repeat: no-repeat;
+  background-position: left 10px center; /* RTL support */
+  background-size: 14px;
+  padding-left: 2rem;
+  cursor: pointer;
+}
+
+
 
 
 

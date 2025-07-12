@@ -2,6 +2,10 @@ import Header from "../../../components/header/Header";
 import NavigationBar from "../../../components/navigationBar/NavigationBar";
 import { useState,useEffect } from "react";
 import './Account4.css';
+import DatePicker from "react-multi-date-picker";
+import persian from "react-date-object/calendars/persian";
+import persian_fa from "react-date-object/locales/persian_fa";
+import DateObject from "react-date-object";
 
 function Account4 ({accountData,setAccountData,setStep,setLoad}) {
     useEffect(()=>{
@@ -22,25 +26,58 @@ function Account4 ({accountData,setAccountData,setStep,setLoad}) {
     const [familyIndex, setFamilyIndex] = useState(null)
     const [additionalIndex, setAdditionalIndex] = useState(null)
 
-    useEffect(() => {
-      if(removeFamily){
-        document.documentElement.classList.add('family-delete-overlay-body')
-        document.body.classList.add('family-delete-overlay-body')
-      }else {
-        document.documentElement.classList.remove('family-delete-overlay-body')
-        document.body.classList.remove('family-delete-overlay-body')
-      }
-    },[removeFamily])
+    const [familyData, setFamilyData] = useState(
+      {
+    beneficiary_user_family_info_family_relation: null,
+    beneficiary_user_family_info_identification_number: null,
+    beneficiary_user_family_info_first_name: null,
+    beneficiary_user_family_info_last_name: null,
+    beneficiary_user_family_info_birth_date: null,
+    beneficiary_user_family_info_gender: null
+}
+    )
+
+    const [jalaliValue, setJalaliValue] = useState(null);
+        const todayJalali = new DateObject({ calendar: persian, locale: persian_fa });
+    
+    
+            const persian_fa_custom = {
+      months: [
+        ["فروردین", "فروردین"],
+        ["اردیبهشت", "اردیبهشت"],
+        ["خرداد", "خرداد"],
+        ["تیر", "تیر"],
+        ["مرداد", "مرداد"],
+        ["شهریور", "شهریور"],
+        ["مهر", "مهر"],
+        ["آبان", "آبان"],
+        ["آذر", "آذر"],
+        ["دی", "دی"],
+        ["بهمن", "بهمن"],
+        ["اسفند", "اسفند"]
+      ],
+      weekDays: [
+        ["شنبه", "شنبه"],
+        ["یک‌شنبه", "یک"],
+        ["دوشنبه", "دو"],
+        ["سه‌شنبه", "سه"],
+        ["چهارشنبه", "چهار"],
+        ["پنج‌شنبه", "پنج"],
+        ["جمعه", "جمعه"]
+      ],
+      digits: ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"]
+    }
 
     useEffect(() => {
-      if(removeAdditional){
+      if(removeFamily || removeAdditional || addFamily || addAdditional){
         document.documentElement.classList.add('family-delete-overlay-body')
         document.body.classList.add('family-delete-overlay-body')
       }else {
         document.documentElement.classList.remove('family-delete-overlay-body')
         document.body.classList.remove('family-delete-overlay-body')
       }
-    },[removeAdditional])
+    },[removeFamily,removeAdditional,addFamily,addAdditional])
+
     const handleFamilyDelete = async(index) => {
       try {
           const response = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/delete-user-family/${accountData.beneficiary_user_family_info[index].beneficiary_user_family_info_id}/`, {
@@ -96,6 +133,38 @@ function Account4 ({accountData,setAccountData,setStep,setLoad}) {
           console.log(err)
         }
     }
+
+    const handleAddFamily = async (e) => {
+      e.preventDefault()
+      try {
+          const response = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/create-user-family/`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Token ${localStorage.getItem('access_token')}`,
+            },
+            body: JSON.stringify(familyData)
+          });
+          if (!response.ok) {  // Check for HTTP errors (4xx/5xx)
+            const errorData = await response.json();
+            throw new Error(errorData.detail || 'Login failed');
+          }
+          setLoad(true)
+          setFamilyData({
+    beneficiary_user_family_info_family_relation: null,
+    beneficiary_user_family_info_identification_number: null,
+    beneficiary_user_family_info_first_name: null,
+    beneficiary_user_family_info_last_name: null,
+    beneficiary_user_family_info_birth_date: null,
+    beneficiary_user_family_info_gender: null
+})
+        setTimeout(() => setAddFamily(false),3000)
+
+        } catch (err) {
+          console.log(err)
+        }
+    }
+
     return(
       <>
         <div className="account-container4">
@@ -228,6 +297,101 @@ function Account4 ({accountData,setAccountData,setStep,setLoad}) {
           <button className="family-yes-button" onClick={() => handleAdditionalDelete(additionalIndex)}>بلی</button>
         </div>
       </div>
+      </>
+    }
+
+    {
+      addFamily && 
+      <>
+      <div className="family-block-overlay-container"></div>
+      <div class="family-overlay-container">
+    <form action="">
+      <div>
+        <label htmlFor="family-relation">نسبت فامیلی:<sup>*</sup></label>
+        <select id="family-relation" value={familyData.beneficiary_user_family_info_family_relation} onChange={(e) => {
+          setFamilyData(pre => {
+            return {...pre, beneficiary_user_family_info_family_relation:e.target.value}
+          })
+        }}>
+          <option value="">انتخاب کنید</option>
+          <option value="child">فرزند</option>
+          <option value="partner">همسر</option>
+        </select>
+      </div>
+
+      <div>
+      <label htmlFor="family-ident-num">کد ملی:<sup>*</sup></label>
+      <input type="number" id="family-ident-num" inputMode="numeric"  value={familyData.beneficiary_user_family_info_identification_number}
+      onChange={(e) => {
+        setFamilyData(pre => {
+          return {...pre, beneficiary_user_family_info_identification_number:Number(e.target.value)}
+        })
+      }}
+      />
+      </div>
+
+      <div>
+      <label htmlFor="family-fn">نام:</label>
+      <input type="text" id="family-fn" value={familyData.beneficiary_user_family_info_first_name} onChange={e => {
+        setFamilyData(pre => {
+          return {...pre, beneficiary_user_family_info_first_name:e.target.value}
+        })
+      }}/>
+      </div>
+
+      <div>
+      <label htmlFor="family-ln">نام خانوادگی:</label>
+      <input type="text" id="family-ln" value={familyData.beneficiary_user_family_info_last_name} onChange={e => {
+        setFamilyData(pre => {
+          return {...pre, beneficiary_user_family_info_last_name:e.target.value}
+        })
+      }}/>
+      </div>
+
+      <div>
+      <label htmlFor="family-bd">تاریخ تولد:</label>
+      <DatePicker
+          value={jalaliValue}
+          onChange={(dateObj) => {
+            setJalaliValue(dateObj);
+            const gregorianDate = dateObj.toDate();
+            const isoDate = gregorianDate.toISOString().split("T")[0];
+            setFamilyData(prev => ({
+              ...prev,
+              beneficiary_user_family_info_birth_date: isoDate,
+            }));
+          }}
+          calendar={persian}
+          locale={persian_fa_custom}
+          calendarPosition="bottom-center"
+          placeholder="تاریخ را انتخاب کنید"
+          inputClass="custom-datepicker-input"
+          maxDate={todayJalali}
+        />
+      </div>
+
+      <div>
+        <label htmlFor="family-gender"> جنسیت: </label>
+        <select id="family-gender" value={familyData.beneficiary_user_family_info_gender} onChange={e => {
+          setFamilyData(pre => {
+            return {...pre, beneficiary_user_family_info_gender:e.target.value}
+          })
+        }}>
+          <option value="" >انتخاب کنید</option>
+          <option value="female">زن</option>
+          <option value="male">مرد</option>
+        </select>
+      </div>
+
+      <div className="family-overlay-buttons">
+        <button type="button" class="no-button" onClick={() => setAddFamily(false)}>لغو</button>
+        <button type="submit" class="yes-button" onClick={handleAddFamily}>تأیید</button>
+      </div>
+
+    </form>
+
+    
+   </div>
       </>
     }
     </>
