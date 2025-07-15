@@ -9,6 +9,7 @@ import confirm_icon from '../../media/icons/confirm_icon.svg'
 import attach_icon from '../../media/icons/attach_icon.svg'
 import RequestDetailEdit from './components/RequestDetailEdit';
 import JSZip from "jszip";
+import { FiFile, FiImage, FiVideo, FiMusic, FiFileText, FiX } from "react-icons/fi";
 
 function RequestDetail() {
   const { id } = useParams();
@@ -28,6 +29,72 @@ function RequestDetail() {
   const [isDeleteFinished, setIsDeleteFinished] = useState(false)
   const navigate = useNavigate();
 
+  const [files, setFiles] = useState([])
+  const getFileIcon = (file) => {
+              const extension = file.name.split('.').pop().toLowerCase();
+              const type = file.type.split('/')[0];
+              
+              switch(type) {
+                  case 'image': return <FiImage className="file-icon" />;
+                  case 'video': return <FiVideo className="file-icon" />;
+                  case 'audio': return <FiMusic className="file-icon" />;
+                  default:
+                      switch(extension) {
+                          case 'pdf': return <FiFileText className="file-icon pdf" />;
+                          case 'doc':
+                          case 'docx': return <FiFileText className="file-icon word" />;
+                          case 'xls':
+                          case 'xlsx': return <FiFileText className="file-icon excel" />;
+                          case 'txt': return <FiFileText className="file-icon" />;
+                          default: return <FiFile className="file-icon" />;
+                      }
+              }
+          };
+
+ const downloadAndExtractZip = async (url) => {
+  const filename = url.split("/").pop()
+  try {
+    // // 1. Fetch the ZIP file silently (no browser download prompt)
+    const response = await fetch(`http://localhost:8000/beneficiary-platform/request-docs/${filename}/`, {
+      headers: {
+        'Authorization': `Token ${localStorage.getItem('access_token')}`,
+      },
+    });
+
+    if (!response.ok) throw new Error("Failed to fetch ZIP file");
+
+    const blob = await response.blob();
+    const zip = new JSZip();
+    const zipContent = await zip.loadAsync(blob);
+
+    // 2. Extract files in memory
+    const extractedFiles = [];
+    const filePromises = [];
+
+    zipContent.forEach((relativePath, file) => {
+      if (!file.dir) {
+        filePromises.push(
+          file.async('blob').then((blob) => {
+            extractedFiles.push({
+              name: file.name,
+              size: file._data.uncompressedSize,
+              type: blob.type || 'application/octet-stream',
+              blob,
+              url: URL.createObjectURL(blob), // Create a downloadable link
+            });
+          })
+        );
+      }
+    });
+
+    await Promise.all(filePromises);
+    return extractedFiles;
+
+  } catch (error) {
+    console.error("ZIP download/extraction failed:", error);
+    return []; // Return empty array on failure
+  }
+};
   const handleChildRemove = async (index, requestId) => {
     const newData = [...childSeeData]
     const filterData = newData.filter((item,ind) => {
@@ -334,6 +401,12 @@ function RequestDetail() {
           }
           const result = await response.json();
           setRequestData(result)
+
+          // Handle document download if exists
+    if (result.beneficiary_request_document) {
+      const extractedFiles = await downloadAndExtractZip(result.beneficiary_request_document);
+      setFiles(extractedFiles);
+    }
           let updateDuration;
           if (result.beneficiary_request_duration === 'One Time'){
             updateDuration = 1
@@ -656,10 +729,28 @@ function RequestDetail() {
 
               <div>
                 <label htmlFor="observe-document">مستندات درخواست:</label>
+                {files.length === 0 && 
+                <>
                 <input type="file" id="observe-document" multiple hidden readOnly />
                 <label htmlFor="observe-document" className="upload-label">
                   اطلاعاتی وجود ندارد
                 </label>
+                </>
+                }
+                {files.length > 0 &&
+          <div className="file-previews">
+              {files.map((file, index) => (
+                <div key={index} className="file-preview">
+                  <div className="file-info">
+                    {getFileIcon(file)}
+                    <span className="file-name" onClick={() => window.open(URL.createObjectURL(file))}>
+                      {file.name}
+                    </span>
+                    {/* <span className="file-size">{(file.size / 1024 / 1024).toFixed(2)}MB</span> */}
+                  </div>
+                </div>
+              ))}
+        </div>}
               </div>
             </form>
 

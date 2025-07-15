@@ -569,6 +569,80 @@ select {
 
 
 
+.request-detail-container .file-previews {
+  display: flex;
+  overflow-x: auto;
+  gap: 12px; /* optional: spacing between file previews */
+  padding: 8px;
+  margin: auto;
+  flex: 1 1;
+  padding-right: 0;
+
+}
+
+.request-detail-container .file-preview {
+  box-shadow: 0px 1px 4px var(--black25-color);
+  flex-shrink: 0; /* Don't shrink */
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  /* border: 1px solid; */
+  padding: 8px;
+  border-radius: 6px;
+  background-color: var(--white-color);
+  height: fit-content;
+}
+
+/* .form4-container .file-preview:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+} */
+
+.request-detail-container .file-info {
+  display: flex;
+  flex-direction: column; /* or 'row' depending on layout */
+  align-items: center;     /* horizontal centering */
+  justify-content: center; /* vertical centering */
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+  text-align: center;      /* centers text inside spans */
+}
+
+
+.request-detail-container .file-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.request-detail-container .file-icon.pdf {
+    color: #e74c3c;
+}
+
+.request-detail-container .file-icon.word {
+    color: #2b579a;
+}
+
+.request-detail-container .file-icon.excel {
+    color: #217346;
+}
+
+.request-detail-container .file-name {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    color: var(--main-color);
+}
+
+/* .form4-container .file-name:hover {
+    text-decoration: underline;
+} */
+
+
+
+
 .delete-overlay-container-html {
   background-color: var(--black25-color) !important ;
   /* overflow-y: auto;

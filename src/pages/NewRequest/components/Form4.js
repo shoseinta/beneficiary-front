@@ -7,13 +7,35 @@ import step4_active from '../../../media/icons/step4_active.svg';
 import back_icon from '../../../media/icons/back_icon.svg';
 import { useEffect, useState } from "react";
 import './Form4.css'
+import { FiFile, FiImage, FiVideo, FiMusic, FiFileText, FiX } from "react-icons/fi";
 
-function Form4({ requestData, onetimeData, recurringData, typeLayerOne, typeLayerTwo, duration, setStep, handleSubmit }) {
+function Form4({ requestData, onetimeData, recurringData, typeLayerOne, typeLayerTwo, duration, setStep, handleSubmit, files, setFiles }) {
     const [typeLayerOneValue, setTypeLayerOneValue] = useState(null)
     const [typeLayerTwoValue, setTypeLayerTwoValue] = useState(null)
     const [durationValue, setDurationValue] = useState(null)
     const [durationTwoValue, setDurationTwoValue] = useState(null)
     const [amountValue, setAmountValue] = useState(null)
+
+    const getFileIcon = (file) => {
+            const extension = file.name.split('.').pop().toLowerCase();
+            const type = file.type.split('/')[0];
+            
+            switch(type) {
+                case 'image': return <FiImage className="file-icon" />;
+                case 'video': return <FiVideo className="file-icon" />;
+                case 'audio': return <FiMusic className="file-icon" />;
+                default:
+                    switch(extension) {
+                        case 'pdf': return <FiFileText className="file-icon pdf" />;
+                        case 'doc':
+                        case 'docx': return <FiFileText className="file-icon word" />;
+                        case 'xls':
+                        case 'xlsx': return <FiFileText className="file-icon excel" />;
+                        case 'txt': return <FiFileText className="file-icon" />;
+                        default: return <FiFile className="file-icon" />;
+                    }
+            }
+        };
 
 function formatPersianNumber(number) {
   // Convert to Persian digits
@@ -263,8 +285,25 @@ function formatPersianNumber(number) {
 
       <div className="request-document-review input-space">
         <label htmlFor="request-document-review1-id" className="label-space"> مستندات درخواست: </label>
-        <input type="file" id="request-document-review1-id" multiple hidden readOnly />
+        {files.length > 0 &&
+          <div className="file-previews">
+              {files.map((file, index) => (
+                <div key={index} className="file-preview">
+                  <div className="file-info">
+                    {getFileIcon(file)}
+                    <span className="file-name" onClick={() => window.open(URL.createObjectURL(file))}>
+                      {file.name}
+                    </span>
+                    {/* <span className="file-size">{(file.size / 1024 / 1024).toFixed(2)}MB</span> */}
+                  </div>
+                </div>
+              ))}
+        </div>}
+        {files.length === 0 &&
+          <>
+          <input type="file" id="request-document-review1-id" multiple hidden readOnly />
         <label htmlFor="request-document-review1-id" className="upload-label" id="label-for-file-input">اطلاعاتی وجود ندارد </label>
+        </>}
       </div>
     </form>
 
