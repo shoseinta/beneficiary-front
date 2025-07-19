@@ -321,6 +321,15 @@
   width: auto;
 }
 
+.request-detail-container .file-previews-transparent {
+  background-color: transparent !important;
+}
+
+.request-detail-container .file-preview-transparent {
+  background-color: transparent !important;
+  border: none !important;
+}
+
 .request-detail-edit-container {
   display: flex;
   flex-direction: column;
@@ -561,7 +570,210 @@ select {
 
 .request-detail-edit-container .delete-overlay-container-form{
   background-color: transparent !important;
+  transition: none !important;
 }
+
+
+
+/* Dropzone Styles */
+.request-detail-edit-container .dropzone {
+  width: 60%;
+  height: 6vh;
+  border-radius: 6px;
+  padding: 5px 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  background-color: var(--white-color);
+  box-shadow: 0 1px 4px var(--black25-color);
+  /* margin-bottom: 20px; */
+}
+
+
+.request-detail-edit-container .dropzone.active {
+    border-color: var(--main-color);
+    background-color: var(--main10-color);
+}
+
+.request-detail-edit-container .upload-content {
+    font-size: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width:100%;
+  height: 100%;
+}
+
+.request-detail-edit-container .upload-content img {
+    width: 10px;
+    height: 10px;
+}
+
+.request-detail-edit-container .upload-content p {
+    font-size: 0.5rem;
+    margin: 0;
+    color: var(--main-color);
+    font-weight: 500;
+}
+
+.request-detail-edit-container .upload-content small {
+    color: var(--black50-color);
+    font-size: 0.5rem;
+}
+
+/* File Previews */
+.request-detail-edit-container .file-previews {
+    display: flex;
+  overflow-x: auto;
+  white-space: nowrap;
+  gap:10px;
+    width: 100%;
+}
+
+.request-detail-edit-container .file-preview {
+    flex-shrink: 0; /* Prevent shrinking when overflowing */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+    padding: 10px 15px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: all 0.2s;
+}
+
+.request-detail-edit-container .file-previews-transparent {
+  background-color: transparent !important;
+}
+
+.request-detail-edit-container .file-preview-transparent {
+  background-color: transparent !important;
+  border: none !important;
+}
+
+.request-detail-edit-container .file-preview:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.request-detail-edit-container .file-info {
+  display: flex;
+  flex-direction: column; /* or 'row' depending on layout */
+  align-items: center;     /* horizontal centering */
+  justify-content: center; /* vertical centering */
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+  text-align: center;      /* centers text inside spans */
+}
+
+
+.request-detail-edit-container .file-icon {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.request-detail-edit-container .file-icon.pdf {
+    color: #e74c3c;
+}
+
+.request-detail-edit-container .file-icon.word {
+    color: #2b579a;
+}
+
+.request-detail-edit-container .file-icon.excel {
+    color: #217346;
+}
+
+.request-detail-edit-container .file-name {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    color: var(--main-color);
+}
+
+.request-detail-edit-container .file-name:hover {
+    text-decoration: underline;
+}
+
+.request-detail-edit-container .file-size {
+    color: var(--black50-color);
+    font-size: 0.8rem;
+    white-space: nowrap;
+}
+
+.request-detail-edit-container .remove-file {
+    background: none;
+    border: none;
+    color: var(--error-red);
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 5px;
+    margin-left: 10px;
+}
+
+.request-detail-edit-container .remove-file:hover {
+    color: #c0392b;
+}
+
+
+.request-detail-edit-container .file-previews {
+  display: flex;
+  overflow-x: auto;
+  gap: 12px; /* optional: spacing between file previews */
+  padding: 0 8px;
+  margin: auto;
+}
+
+.request-detail-edit-container .file-preview {
+  flex-shrink: 0; /* Don't shrink */
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #ccc;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background-color: #f9f9f9;
+  height: fit-content;
+  font-size: 0.7rem;
+}
+
+.request-detail-edit-container .file-info {
+  display: flex;
+  flex-direction: column; /* or 'row' if you want icon + name + size in one line */
+  gap: 4px;
+}
+
+
+.request-detail-edit-container .upload-files-wrapper {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+/* Left section: upload button */
+.request-detail-edit-container .upload-content-with-files {
+  width: fit-content;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  border-left: 1px solid var(--main-color); /* Vertical divider */
+  /* min-width: 120px; */
+  gap: 8px;
+  cursor: pointer;
+  font-size: 0.7rem;
+}
+
+
+
 
 .request-detail-container .delete-overlay-container-form{
   background-color: transparent !important;
@@ -573,18 +785,19 @@ select {
   display: flex;
   overflow-x: auto;
   gap: 12px; /* optional: spacing between file previews */
-  padding: 8px;
+  /* padding: 8px;
   margin: auto;
   flex: 1 1;
-  padding-right: 0;
+  padding-right: 0; */
+  width: 60%;
 
 }
 
 .request-detail-container .file-preview {
   box-shadow: 0px 1px 4px var(--black25-color);
-  flex-shrink: 0; /* Don't shrink */
-  display: flex;
-  align-items: center;
+  /* flex-shrink: 0; */
+  /* display: flex;
+  align-items: center; */
   gap: 8px;
   /* border: 1px solid; */
   padding: 8px;
@@ -846,7 +1059,7 @@ select {
   justify-content: flex-end;
   gap: 30px;
 }
-.child-creation-overlay-container button {
+.child-creation-overlay-container button:not(.remove-file) {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -867,6 +1080,204 @@ select {
   background-color: var(--main-color);
   padding: 0 10px;
 }
+
+
+.child-creation-overlay-container .dropzone {
+  width: 60%;
+  height: 6vh;
+  border-radius: 6px;
+  padding: 5px 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  background-color: var(--white-color);
+  box-shadow: 0 1px 4px var(--black25-color);
+  /* margin-bottom: 20px; */
+}
+
+
+.child-creation-overlay-container .dropzone.active {
+    border-color: var(--main-color);
+    background-color: var(--main10-color);
+}
+
+.child-creation-overlay-container .upload-content {
+    font-size: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width:100%;
+  height: 100%;
+}
+
+.child-creation-overlay-container .upload-content img {
+    width: 10px;
+    height: 10px;
+}
+
+.child-creation-overlay-container .upload-content p {
+    font-size: 0.5rem;
+    margin: 0;
+    color: var(--main-color);
+    font-weight: 500;
+}
+
+.child-creation-overlay-container .upload-content small {
+    color: var(--black50-color);
+    font-size: 0.5rem;
+}
+
+/* File Previews */
+.child-creation-overlay-container .file-previews {
+    display: flex;
+  overflow-x: auto;
+  white-space: nowrap;
+  gap:10px;
+    width: 100%;
+}
+
+.child-creation-overlay-container .file-preview {
+    flex-shrink: 0; /* Prevent shrinking when overflowing */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+    padding: 10px 15px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: all 0.2s;
+}
+
+.child-creation-overlay-container .file-previews-transparent {
+  background-color: transparent !important;
+}
+
+.child-creation-overlay-container .file-preview-transparent {
+  background-color: transparent !important;
+  border: none !important;
+}
+
+.child-creation-overlay-container .file-preview:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.child-creation-overlay-container .file-info {
+  display: flex;
+  flex-direction: column; /* or 'row' depending on layout */
+  align-items: center;     /* horizontal centering */
+  justify-content: center; /* vertical centering */
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+  text-align: center;      /* centers text inside spans */
+}
+
+
+.child-creation-overlay-container .file-icon {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.child-creation-overlay-container .file-icon.pdf {
+    color: #e74c3c;
+}
+
+.child-creation-overlay-container .file-icon.word {
+    color: #2b579a;
+}
+
+.child-creation-overlay-container .file-icon.excel {
+    color: #217346;
+}
+
+.child-creation-overlay-container .file-name {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    color: var(--main-color);
+}
+
+.child-creation-overlay-container .file-name:hover {
+    text-decoration: underline;
+}
+
+.child-creation-overlay-container .file-size {
+    color: var(--black50-color);
+    font-size: 0.8rem;
+    white-space: nowrap;
+}
+
+.child-creation-overlay-container .remove-file {
+    background: none;
+    border: none;
+    color: var(--error-red);
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 5px;
+    margin-left: 10px;
+}
+
+.child-creation-overlay-container .remove-file:hover {
+    color: #c0392b;
+}
+
+
+.child-creation-overlay-container .file-previews {
+  display: flex;
+  overflow-x: auto;
+  gap: 12px; /* optional: spacing between file previews */
+  padding: 0 8px;
+  margin: auto;
+}
+
+.child-creation-overlay-container .file-preview {
+  flex-shrink: 0; /* Don't shrink */
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #ccc;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background-color: #f9f9f9;
+  height: fit-content;
+  font-size: 0.7rem;
+}
+
+.child-creation-overlay-container .file-info {
+  display: flex;
+  flex-direction: column; /* or 'row' if you want icon + name + size in one line */
+  gap: 4px;
+}
+
+
+.child-creation-overlay-container .upload-files-wrapper {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+/* Left section: upload button */
+.child-creation-overlay-container .upload-content-with-files {
+  width: fit-content;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  border-left: 1px solid var(--main-color); /* Vertical divider */
+  /* min-width: 120px; */
+  gap: 8px;
+  cursor: pointer;
+  font-size: 0.7rem;
+}
+
 
 
 .child-request-list-overlay {
@@ -1001,4 +1412,81 @@ select {
   fill: var(--error-red);
   height: 10px;
   width: auto;
+}
+
+
+.child-request-list-overlay .file-previews {
+    display: flex;
+  overflow-x: auto;
+  white-space: nowrap;
+  gap:10px;
+    width: 100%;
+}
+
+.child-request-list-overlay .file-preview {
+    flex-shrink: 0; /* Prevent shrinking when overflowing */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+    padding: 10px 15px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: all 0.2s;
+}
+
+.child-request-list-overlay .file-previews-transparent {
+  background-color: transparent !important;
+}
+
+.child-request-list-overlay .file-preview-transparent {
+  background-color: transparent !important;
+  border: none !important;
+}
+
+.child-request-list-overlay .file-preview:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.child-request-list-overlay .file-info {
+  display: flex;
+  flex-direction: column; /* or 'row' depending on layout */
+  align-items: center;     /* horizontal centering */
+  justify-content: center; /* vertical centering */
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+  text-align: center;      /* centers text inside spans */
+}
+
+
+.child-request-list-overlay .file-icon {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.child-request-list-overlay .file-icon.pdf {
+    color: #e74c3c;
+}
+
+.child-request-list-overlay .file-icon.word {
+    color: #2b579a;
+}
+
+.child-request-list-overlay .file-icon.excel {
+    color: #217346;
+}
+
+.child-request-list-overlay .file-name {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    color: var(--main-color);
+}
+
+.child-request-list-overlay .file-name:hover {
+    text-decoration: underline;
 }

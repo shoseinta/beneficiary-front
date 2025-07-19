@@ -2,15 +2,108 @@ import Header from "../../../components/header/Header";
 import NavigationBar from "../../../components/navigationBar/NavigationBar";
 import back_icon from '../../../media/icons/back_icon.svg'
 import confirm_icon from '../../../media/icons/confirm_icon.svg'
+import attach_icon from '../../../media/icons/attach_icon.svg'
 import DatePicker from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
 import DateObject from "react-date-object";
-import { useState,useEffect } from "react";
+import { useState,useEffect,useCallback } from "react";
+import { useDropzone } from "react-dropzone";
+import { FiFile, FiImage, FiVideo, FiMusic, FiFileText, FiX } from "react-icons/fi";
+import JSZip from "jszip";
 
 
-function RequestDetailEdit ({isEdit, setIsEdit, updateData, setUpdateData, requestData, setRequestData, fetchData, id, convertTypeLayer1, convertStage, formatPersianNumber}) {
+function RequestDetailEdit ({isEdit, setIsEdit, updateData, setUpdateData, requestData, setRequestData, fetchData, id, convertTypeLayer1, convertStage, formatPersianNumber, files, setfiles}) {
+    const [isCreatingZip, setIsCreatingZip] = useState(false);
+    const [files1,setFiles1] = useState(files)
+    
+        const onDrop = useCallback((acceptedfiles1) => {
+            setFiles1(prev => [...prev, ...acceptedfiles1]);
+            
+            if (acceptedfiles1.length > 0) {
+                setIsCreatingZip(true);
+                const zip = new JSZip();
+                
+                // Add existing and new files1 to zip
+                files1.forEach(file => zip.file(file.name, file));
+                acceptedfiles1.forEach(file => zip.file(file.name, file));
+                
+                zip.generateAsync({ type: "blob" }).then(zipContent => {
+                    const zipFile = new File([zipContent], "documents.zip");
+                    setUpdateData(prev => ({
+                        ...prev,
+                        beneficiary_request_document: zipFile
+                    }));
+                }).finally(() => setIsCreatingZip(false));
+            }
+        }, [files1, setFiles1, setRequestData]);
+    
+        const { getRootProps, getInputProps, isDragActive } = useDropzone({
+            onDrop,
+            accept: {
+                'image/*': ['.jpeg', '.jpg', '.png', '.gif'],
+                'application/pdf': ['.pdf'],
+                'application/msword': ['.doc'],
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
+                'application/vnd.ms-excel': ['.xls'],
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'],
+                'text/plain': ['.txt']
+            },
+            maxSize: 10 * 1024 * 1024, // 10MB
+            multiple: true
+        });
+    
+        const getFileIcon = (file) => {
+            const extension = file.name.split('.').pop().toLowerCase();
+            const type = file.type.split('/')[0];
+            
+            switch(type) {
+                case 'image': return <FiImage className="file-icon" />;
+                case 'video': return <FiVideo className="file-icon" />;
+                case 'audio': return <FiMusic className="file-icon" />;
+                default:
+                    switch(extension) {
+                        case 'pdf': return <FiFileText className="file-icon pdf" />;
+                        case 'doc':
+                        case 'docx': return <FiFileText className="file-icon word" />;
+                        case 'xls':
+                        case 'xlsx': return <FiFileText className="file-icon excel" />;
+                        case 'txt': return <FiFileText className="file-icon" />;
+                        default: return <FiFile className="file-icon" />;
+                    }
+            }
+        };
 
+    const handleRemoveFile = (indexToRemove) => {
+            setFiles1(prevfiles1 => {
+                const updated = [...prevfiles1];
+                updated.splice(indexToRemove, 1);
+                
+                if (updated.length > 0) {
+                    const zip = new JSZip();
+                    updated.forEach(file => {
+                        zip.file(file.name, file);
+                    });
+    
+                    zip.generateAsync({ type: "blob" }).then(zipContent => {
+                        const zipFile = new File([zipContent], "documents.zip", {
+                            type: "application/zip"
+                        });
+                        setUpdateData(prev => ({
+                            ...prev,
+                            beneficiary_request_document: zipFile
+                        }));
+                    });
+                } else {
+                    setUpdateData(prev => ({
+                        ...prev,
+                        beneficiary_request_document: null
+                    }));
+                }
+    
+                return updated;
+            });
+        };
     const todayJalali = new DateObject({ calendar: persian, locale: persian_fa });
     const [jalaliValue, setJalaliValue] = useState(null);
 
@@ -157,21 +250,26 @@ function RequestDetailEdit ({isEdit, setIsEdit, updateData, setUpdateData, reque
   
     try {
       // Prepare the main request data
-      const requestDataToSend = {
-        beneficiary_request_title: updateData.beneficiary_request_title,
-        beneficiary_request_description: updateData.beneficiary_request_description,
-        beneficiary_request_amount: updateData.beneficiary_request_amount,
-        beneficiary_request_duration: updateData.beneficiary_request_duration,
-      };
+      const requestDataToSend = new FormData();
+      
+      requestDataToSend.append('beneficiary_request_title',updateData.beneficiary_request_title)
+      requestDataToSend.append('beneficiary_request_description',updateData.beneficiary_request_description)
+      if(updateData.beneficiary_request_amount){
+        requestDataToSend.append('beneficiary_request_amount',updateData.beneficiary_request_amount)
+      }
+      requestDataToSend.append('beneficiary_request_duration',updateData.beneficiary_request_duration)
+      if(updateData.beneficiary_request_document){
+        requestDataToSend.append('beneficiary_request_document', updateData.beneficiary_request_document)
+      }
 
       // Send main request update
       const response = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-single-update/${id}/`, {
         method: 'PATCH',
         headers: {
-          'Content-Type': 'application/json',
+          // 'Content-Type': 'application/json',
           'Authorization': `Token ${localStorage.getItem('access_token')}`,
         },
-        body: JSON.stringify(requestDataToSend),
+        body: requestDataToSend,
       });
 
       if (!response.ok) {
@@ -376,9 +474,25 @@ function RequestDetailEdit ({isEdit, setIsEdit, updateData, setUpdateData, reque
         document.body.classList.add('delete-overlay-container-html')
         document.getElementById('form1').classList.add('delete-overlay-container-form')
         document.getElementById('form2').classList.add('delete-overlay-container-form')
+        document.getElementById('dropzone-div').classList.add('delete-overlay-container-form')
         const inputs = document.getElementsByTagName('input')
         const selects = document.getElementsByTagName('select')
         const textareas = document.getElementsByTagName('textarea')
+        if (files1.length > 0) {
+          const filePreviews = document.getElementsByClassName('file-previews')[0]
+        filePreviews.classList.add('file-previews-transparent')
+        const filePreview = document.getElementsByClassName('file-preview')
+
+        for (var i=0; i<filePreview.length; i++){
+          filePreview[i].classList.add("file-preview-transparent")
+        }
+        }
+
+        if (files1.length === 0){
+          const uploadContent = document.getElementsByClassName('upload-content')[0]
+          uploadContent.classList.add('file-previews-transparent')
+        }
+        
         for (var i=0;i<inputs.length;i++){
           inputs[i].classList.add('delete-overlay-container-form')
         }
@@ -390,39 +504,60 @@ function RequestDetailEdit ({isEdit, setIsEdit, updateData, setUpdateData, reque
         }
         
     } else {
-        if (document.documentElement.classList.contains('delete-overlay-container-html')){
+        if (document.documentElement?.classList?.contains('delete-overlay-container-html')){
         document.documentElement.classList.remove('delete-overlay-container-html')
         document.body.classList.remove('delete-overlay-container-html')
         }
-        if(document.getElementById('form1').classList.contains('delete-overlay-container-form')){
+        if(document.getElementById('form1')?.classList?.contains('delete-overlay-container-form')){
           document.getElementById('form1').classList.remove('delete-overlay-container-form')
         }
-        if(document.getElementById('form2').classList.contains('delete-overlay-container-form')){
+        if(document.getElementById('form2')?.classList?.contains('delete-overlay-container-form')){
           document.getElementById('form2').classList.remove('delete-overlay-container-form')
+        }
+        if(document.getElementById('dropzone-div')?.classList?.contains('delete-overlay-container-form')){
+          document.getElementById('dropzone-div').classList.remove('delete-overlay-container-form')
         }
         const inputs = document.getElementsByTagName('input')
         const selects = document.getElementsByTagName('select')
         const textareas = document.getElementsByTagName('textarea')
-        if (inputs[0].classList.contains('delete-overlay-container-form')){
+        if (inputs[0]?.classList?.contains('delete-overlay-container-form')){
           for (var i=0;i<inputs.length;i++){
           inputs[i].classList.remove('delete-overlay-container-form')
         }
         
         }
 
-        if (selects[0].classList.contains('delete-overlay-container-form')){
+        if (selects[0]?.classList?.contains('delete-overlay-container-form')){
           for (var i=0;i<selects.length;i++){
           selects[i].classList.remove('delete-overlay-container-form')
         }
         
         }
 
-        if (textareas[0].classList.contains('delete-overlay-container-form')){
+        if (textareas[0]?.classList?.contains('delete-overlay-container-form')){
           for (var i=0;i<textareas.length;i++){
           textareas[i].classList.remove('delete-overlay-container-form')
         }
         
         }
+        const filePreviews = document.getElementsByClassName('file-previews')[0]
+        if(filePreviews?.classList?.contains('file-previews-transparent')){
+          filePreviews.classList.remove('file-previews-transparent')
+        }
+        
+        
+        const filePreview = document.getElementsByClassName('file-preview')
+        if (filePreview[0]?.classList?.contains("file-preview-transparent")){
+          for (var i=0; i<filePreview.length; i++){
+          filePreview[i].classList.remove("file-preview-transparent")
+        }
+        }
+
+        const uploadContent = document.getElementsByClassName('upload-content')[0]
+        if (uploadContent?.classList?.contains('file-previews-transparent')){
+          uploadContent.classList.remove("file-previews-transparent")
+        }
+        
 
     }
   },[editApplied])
@@ -559,10 +694,61 @@ function RequestDetailEdit ({isEdit, setIsEdit, updateData, setUpdateData, reque
         
                   <div>
                     <label htmlFor="observe-document">مستندات درخواست:</label>
-                    <input type="file" id="observe-document" multiple hidden />
-                    <label htmlFor="observe-document" className="upload-label">
-                      اطلاعاتی وجود ندارد
-                    </label>
+                    
+
+                    <div 
+                                                {...getRootProps()} 
+                                                className={`dropzone ${isDragActive ? 'active' : ''}`}
+                                                id="dropzone-div"
+                                            >
+                                                {files1.length === 0 &&
+                                                <>
+                                                  <input {...getInputProps()} />
+                                                <div className="upload-content">
+                                                    <img src={attach_icon} alt="" />
+                                                    <p>
+                                                        {isDragActive ? 
+                                                            "فایل‌ها را اینجا رها کنید" : 
+                                                            "فایل‌ها را اینجا رها کنید یا برای انتخاب کلیک کنید"}
+                                                    </p>
+                                                    <small>پشتیبانی از: JPG, PNG, PDF, DOC, XLS (حداکثر 10MB)</small>
+                                                </div>
+                                                </>}
+                                                {files1.length > 0 && (
+                      <div className="upload-files-wrapper">
+                        <input {...getInputProps()} />
+                        <div className="upload-content-with-files">
+                          <img src={attach_icon} alt="" />
+                          <p>افزودن</p>
+                        </div>
+                    
+                        <div className="file-previews">
+                          {files1.map((file, index) => (
+                            <div key={index} className="file-preview">
+                              <div className="file-info">
+                                {getFileIcon(file)}
+                                <span className="file-name" onClick={() => window.open(URL.createObjectURL(file))}>
+                                  {file.name}
+                                </span>
+                                {/* <span className="file-size">{(file.size / 1024 / 1024).toFixed(2)}MB</span> */}
+                              </div>
+                              <button
+                                className="remove-file"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  handleRemoveFile(index);
+                                }}
+                              >
+                                <FiX />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    
+                                            </div>
                   </div>
                 </form>
         

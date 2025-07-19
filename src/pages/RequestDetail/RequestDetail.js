@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useLookup } from '../../context/LookUpContext';
 import Header from '../../components/header/Header';
@@ -10,6 +10,7 @@ import attach_icon from '../../media/icons/attach_icon.svg'
 import RequestDetailEdit from './components/RequestDetailEdit';
 import JSZip from "jszip";
 import { FiFile, FiImage, FiVideo, FiMusic, FiFileText, FiX } from "react-icons/fi";
+import { useDropzone } from "react-dropzone";
 
 function RequestDetail() {
   const { id } = useParams();
@@ -30,31 +31,68 @@ function RequestDetail() {
   const navigate = useNavigate();
 
   const [files, setFiles] = useState([])
-  const getFileIcon = (file) => {
-              const extension = file.name.split('.').pop().toLowerCase();
-              const type = file.type.split('/')[0];
-              
-              switch(type) {
-                  case 'image': return <FiImage className="file-icon" />;
-                  case 'video': return <FiVideo className="file-icon" />;
-                  case 'audio': return <FiMusic className="file-icon" />;
-                  default:
-                      switch(extension) {
-                          case 'pdf': return <FiFileText className="file-icon pdf" />;
-                          case 'doc':
-                          case 'docx': return <FiFileText className="file-icon word" />;
-                          case 'xls':
-                          case 'xlsx': return <FiFileText className="file-icon excel" />;
-                          case 'txt': return <FiFileText className="file-icon" />;
-                          default: return <FiFile className="file-icon" />;
-                      }
-              }
-          };
+  const [childFiles, setChildFiles] = useState([])
+  const onDrop = useCallback((acceptedFiles) => {
+          if (acceptedFiles.length > 0) {
+            setChildData(pre => {
+              const document = pre.beneficiary_request_child_document
+              return {...pre,beneficiary_request_child_document:[...document,...acceptedFiles]}
+            })
+   
+          }
+      }, [setChildData]);
+
+      const handleRemoveFile = (indexToRemove) => {
+  setChildData(prev => {
+    const updatedFiles = [...prev.beneficiary_request_child_document];
+    updatedFiles.splice(indexToRemove, 1);
+    
+    return {
+      ...prev,
+      beneficiary_request_child_document: updatedFiles.length > 0 ? updatedFiles : []
+    };
+  });
+};
+  
+      const { getRootProps, getInputProps, isDragActive } = useDropzone({
+          onDrop,
+          accept: {
+              'image/*': ['.jpeg', '.jpg', '.png', '.gif'],
+              'application/pdf': ['.pdf'],
+              'application/msword': ['.doc'],
+              'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
+              'application/vnd.ms-excel': ['.xls'],
+              'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'],
+              'text/plain': ['.txt']
+          },
+          maxSize: 10 * 1024 * 1024, // 10MB
+          multiple: true
+      });
+  
+      const getFileIcon = (file) => {
+          const extension = file.name.split('.').pop().toLowerCase();
+          const type = file.type.split('/')[0];
+          
+          switch(type) {
+              case 'image': return <FiImage className="file-icon" />;
+              case 'video': return <FiVideo className="file-icon" />;
+              case 'audio': return <FiMusic className="file-icon" />;
+              default:
+                  switch(extension) {
+                      case 'pdf': return <FiFileText className="file-icon pdf" />;
+                      case 'doc':
+                      case 'docx': return <FiFileText className="file-icon word" />;
+                      case 'xls':
+                      case 'xlsx': return <FiFileText className="file-icon excel" />;
+                      case 'txt': return <FiFileText className="file-icon" />;
+                      default: return <FiFile className="file-icon" />;
+                  }
+          }
+      };
 
  const downloadAndExtractZip = async (url) => {
-  const filename = url.split("/").pop()
+  const filename = url.split("/").pop();
   try {
-    // // 1. Fetch the ZIP file silently (no browser download prompt)
     const response = await fetch(`http://localhost:8000/beneficiary-platform/request-docs/${filename}/`, {
       headers: {
         'Authorization': `Token ${localStorage.getItem('access_token')}`,
@@ -67,7 +105,6 @@ function RequestDetail() {
     const zip = new JSZip();
     const zipContent = await zip.loadAsync(blob);
 
-    // 2. Extract files in memory
     const extractedFiles = [];
     const filePromises = [];
 
@@ -75,13 +112,17 @@ function RequestDetail() {
       if (!file.dir) {
         filePromises.push(
           file.async('blob').then((blob) => {
-            extractedFiles.push({
-              name: file.name,
-              size: file._data.uncompressedSize,
+            // Create a proper File object that matches dropzone format
+            const fileObj = new File([blob], file.name, {
               type: blob.type || 'application/octet-stream',
-              blob,
-              url: URL.createObjectURL(blob), // Create a downloadable link
+              lastModified: Date.now()
             });
+            
+            // Add properties to match dropzone file objects
+            fileObj.preview = URL.createObjectURL(blob);
+            fileObj.path = file.name;
+            
+            extractedFiles.push(fileObj);
           })
         );
       }
@@ -92,7 +133,54 @@ function RequestDetail() {
 
   } catch (error) {
     console.error("ZIP download/extraction failed:", error);
-    return []; // Return empty array on failure
+    return [];
+  }
+};
+
+  const downloadAndExtractZipChild = async (url) => {
+  const filename = url.split("/").pop();
+  try {
+    const response = await fetch(`http://localhost:8000/beneficiary-platform/child-docs/${filename}/`, {
+      headers: {
+        'Authorization': `Token ${localStorage.getItem('access_token')}`,
+      },
+    });
+
+    if (!response.ok) throw new Error("Failed to fetch ZIP file");
+
+    const blob = await response.blob();
+    const zip = new JSZip();
+    const zipContent = await zip.loadAsync(blob);
+
+    const extractedFiles = [];
+    const filePromises = [];
+
+    zipContent.forEach((relativePath, file) => {
+      if (!file.dir) {
+        filePromises.push(
+          file.async('blob').then((blob) => {
+            // Create a proper File object that matches dropzone format
+            const fileObj = new File([blob], file.name, {
+              type: blob.type || 'application/octet-stream',
+              lastModified: Date.now()
+            });
+            
+            // Add properties to match dropzone file objects
+            fileObj.preview = URL.createObjectURL(blob);
+            fileObj.path = file.name;
+            
+            extractedFiles.push(fileObj);
+          })
+        );
+      }
+    });
+
+    await Promise.all(filePromises);
+    return extractedFiles;
+
+  } catch (error) {
+    console.error("ZIP download/extraction failed:", error);
+    return [];
   }
 };
   const handleChildRemove = async (index, requestId) => {
@@ -162,13 +250,7 @@ function RequestDetail() {
     })
   }
 
-  const handleChildDocumentChange = (e) => {
-    const selectedFiles = Array.from(e.target.files)
-    setChildData(pre => {
-      const document = pre.beneficiary_request_child_document
-      return {...pre,beneficiary_request_child_document:[...document,...selectedFiles]}
-    })
-  }
+  
 
   useEffect(() => {
     console.log(childData)
@@ -387,81 +469,93 @@ function RequestDetail() {
 
 
   const fetchData = async () => {
-        try {
-          const response = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-single-get/${id}/`, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Token ${localStorage.getItem('access_token')}`,
-            },
-          });
-          if (!response.ok) {  // Check for HTTP errors (4xx/5xx)
-            const errorData = await response.json();
-            throw new Error(errorData.detail || 'Login failed');
-          }
-          const result = await response.json();
-          setRequestData(result)
+  try {
+    const response = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-single-get/${id}/`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${localStorage.getItem('access_token')}`,
+      },
+    });
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.detail || 'Login failed');
+    }
+    const result = await response.json();
+    setRequestData(result);
 
-          // Handle document download if exists
+    // Handle document download if exists
     if (result.beneficiary_request_document) {
       const extractedFiles = await downloadAndExtractZip(result.beneficiary_request_document);
       setFiles(extractedFiles);
     }
-          let updateDuration;
-          if (result.beneficiary_request_duration === 'One Time'){
-            updateDuration = 1
-          } else if (result.beneficiary_request_duration === 'Recurring'){
-            updateDuration = 2
-          } else {
-            updateDuration = 3
-          }
-          let updateDurationOnetime;
-          if (result.beneficiary_request_duration_onetime){
-            updateDurationOnetime = result.beneficiary_request_duration_onetime
-          } else {
-            updateDurationOnetime = {beneficiary_request_duration_onetime_deadline: null}
-          }
-          let updateDurationRecurring;
-          if (result.beneficiary_request_duration_recurring){
-            updateDurationRecurring = result.beneficiary_request_duration_recurring
-          }else {
-            updateDurationRecurring = {beneficiary_request_duration_recurring_limit: null}
-          }
-          setUpdateData({
-            beneficiary_request_title: result.beneficiary_request_title,
-            beneficiary_request_description:result.beneficiary_request_description,
-            beneficiary_request_amount:result.beneficiary_request_amount,
-            beneficiary_request_duration_onetime:result.beneficiary_request_duration_onetime,
-            beneficiary_request_duration_recurring:result.beneficiary_request_duration_recurring,
-            beneficiary_request_duration: updateDuration,
-            beneficiary_request_duration_onetime: updateDurationOnetime,
-            beneficiary_request_duration_recurring: updateDurationRecurring,
-          })
-        } catch (err) {
-          console.log(err)
-        }
-        
-        
-         try {
-          const response = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-childs-get/${id}/`, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Token ${localStorage.getItem('access_token')}`,
-            },
-          });
-          if (!response.ok) {  // Check for HTTP errors (4xx/5xx)
-            const errorData = await response.json();
-            throw new Error(errorData.detail || 'Login failed');
-          }
-          const result = await response.json();
-          setChildSeeData(result)
-          
-        } catch (err) {
-          console.log(err)
-        }
 
-      }
+    let updateDuration;
+    if (result.beneficiary_request_duration === 'One Time') {
+      updateDuration = 1;
+    } else if (result.beneficiary_request_duration === 'Recurring') {
+      updateDuration = 2;
+    } else {
+      updateDuration = 3;
+    }
+
+    let updateDurationOnetime = result.beneficiary_request_duration_onetime || 
+      { beneficiary_request_duration_onetime_deadline: null };
+    
+    let updateDurationRecurring = result.beneficiary_request_duration_recurring || 
+      { beneficiary_request_duration_recurring_limit: null };
+
+    setUpdateData({
+      beneficiary_request_title: result.beneficiary_request_title,
+      beneficiary_request_description: result.beneficiary_request_description,
+      beneficiary_request_amount: result.beneficiary_request_amount,
+      beneficiary_request_duration_onetime: result.beneficiary_request_duration_onetime,
+      beneficiary_request_duration_recurring: result.beneficiary_request_duration_recurring,
+      beneficiary_request_duration: updateDuration,
+      beneficiary_request_duration_onetime: updateDurationOnetime,
+      beneficiary_request_duration_recurring: updateDurationRecurring,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+
+  try {
+    const response = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-childs-get/${id}/`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${localStorage.getItem('access_token')}`,
+      },
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.detail || 'Login failed');
+    }
+
+    const result = await response.json();
+    setChildSeeData(result);
+
+    // Process child documents
+    if (result.length > 0) {
+      const childFilesPromises = result.map(async (item) => {
+        if (item.beneficiary_request_child_document) {
+          return await downloadAndExtractZipChild(item.beneficiary_request_child_document);
+        }
+        return [];
+      });
+
+      const childFiles = await Promise.all(childFilesPromises);
+      setChildFiles(childFiles);
+    } else {
+      setChildFiles([]);
+    }
+
+  } catch (err) {
+    console.log(err);
+  }
+};
+    
   
 
   const handleEditClick = () => {
@@ -572,6 +666,21 @@ function RequestDetail() {
     for (let i = 0; i < textareas.length; i++) {
       textareas[i].classList.add('delete-overlay-container-form');
     }
+
+    if (files.length > 0) {
+          const filePreviews = document.getElementsByClassName('file-previews')[0]
+        filePreviews.classList.add('file-previews-transparent')
+        const filePreview = document.getElementsByClassName('file-preview')
+
+        for (var i=0; i<filePreview.length; i++){
+          filePreview[i].classList.add("file-preview-transparent")
+        }
+        }
+
+        if (files.length === 0){
+          const uploadContent = document.getElementsByClassName('upload-label')[0]
+          uploadContent.classList.add('file-previews-transparent')
+        }
   } 
   else {
     if (document.documentElement.classList.contains('delete-overlay-container-html')) {
@@ -595,6 +704,24 @@ function RequestDetail() {
         inputs[i].classList.remove('delete-overlay-container-form');
       }
     }
+
+    const filePreviews = document.getElementsByClassName('file-previews')[0]
+        if(filePreviews?.classList?.contains('file-previews-transparent')){
+          filePreviews.classList.remove('file-previews-transparent')
+        }
+        
+        
+        const filePreview = document.getElementsByClassName('file-preview')
+        if (filePreview[0]?.classList?.contains("file-preview-transparent")){
+          for (var i=0; i<filePreview.length; i++){
+          filePreview[i].classList.remove("file-preview-transparent")
+        }
+        }
+
+        const uploadContent = document.getElementsByClassName('upload-label')[0]
+        if (uploadContent?.classList?.contains('file-previews-transparent')){
+          uploadContent.classList.remove("file-previews-transparent")
+        }
   }
 }, [isDelete,isChildCreate,isChildSee]);
 
@@ -620,6 +747,8 @@ function RequestDetail() {
       convertTypeLayer1={convertTypeLayer1}
       convertStage={convertStage}
       formatPersianNumber={formatPersianNumber}
+      files={files}
+      setFiles={setFiles}
       />
     )
   }
@@ -858,8 +987,58 @@ function RequestDetail() {
 
           <div>
           <label for="child-creation-document">مستندات درخواست:</label>
-          <input type="file" id="child-creation-document" multiple hidden onChange={handleChildDocumentChange}/>
-          <label for="child-creation-document" className="upload-label"><img src={attach_icon} alt="" />برای انتخاب فایل کلیک کنید </label>
+           <div 
+                                      {...getRootProps()} 
+                                      className={`dropzone ${isDragActive ? 'active' : ''}`}
+                                  >
+                                      {childData.beneficiary_request_child_document.length === 0 &&
+                                      <>
+                                        <input {...getInputProps()} />
+                                      <div className="upload-content">
+                                          <img src={attach_icon} alt="" />
+                                          <p>
+                                              {isDragActive ? 
+                                                  "فایل‌ها را اینجا رها کنید" : 
+                                                  "فایل‌ها را اینجا رها کنید یا برای انتخاب کلیک کنید"}
+                                          </p>
+                                          <small>پشتیبانی از: JPG, PNG, PDF, DOC, XLS (حداکثر 10MB)</small>
+                                      </div>
+                                      </>}
+                                      {childData.beneficiary_request_child_document.length > 0 && (
+            <div className="upload-files-wrapper">
+              <input {...getInputProps()} />
+              <div className="upload-content-with-files">
+                <img src={attach_icon} alt="" />
+                <p>افزودن</p>
+              </div>
+          
+              <div className="file-previews">
+                {childData.beneficiary_request_child_document.map((file, index) => (
+                  <div key={index} className="file-preview">
+                    <div className="file-info">
+                      {getFileIcon(file)}
+                      <span className="file-name" onClick={() => window.open(URL.createObjectURL(file))}>
+                        {file.name}
+                      </span>
+                      {/* <span className="file-size">{(file.size / 1024 / 1024).toFixed(2)}MB</span> */}
+                    </div>
+                    <button
+                      className="remove-file"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handleRemoveFile(index);
+                      }}
+                    >
+                      <FiX />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          
+                                  </div>
           </div>
 
         </form>
@@ -901,13 +1080,36 @@ function RequestDetail() {
           </div>
           
           <div className="file-input-div">
-            <label htmlFor={`request-document-${index}`}>مستندات<br />درخواست:</label>
+            {childFiles[index].length === 0 &&
+            <>
+              <label htmlFor={`request-document-${index}`}>مستندات<br />درخواست:</label>
             <input 
               type="text" 
               id={`request-document-${index}`} 
               placeholder="اطلاعاتی وجود ندارد" 
               readOnly 
             />
+            </>
+            }
+
+
+            {childFiles[index].length > 0 &&
+            <>
+            <label htmlFor={`request-document-${index}`}>مستندات<br />درخواست:</label>
+          <div className="file-previews">
+              {childFiles[index].map((file, index) => (
+                <div key={index} className="file-preview">
+                  <div className="file-info">
+                    {getFileIcon(file)}
+                    <span className="file-name" onClick={() => window.open(URL.createObjectURL(file))}>
+                      {file.name}
+                    </span>
+                    {/* <span className="file-size">{(file.size / 1024 / 1024).toFixed(2)}MB</span> */}
+                  </div>
+                </div>
+              ))}
+        </div>
+        </>}
           </div>
 
           <hr className="input-divider" />
