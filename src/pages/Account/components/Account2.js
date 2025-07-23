@@ -89,7 +89,7 @@ function Account2({accountData, setAccountData, setStep, setLoad, hasInformation
         e.preventDefault()
         if(hasInformation && validation.first_name && validation.last_name){
             try {
-          const response = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/update-user-information/`, {
+          const response = await fetch(`https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/update-user-information/`, {
             method: 'PATCH',
             headers: {
               'Content-Type': 'application/json',
@@ -119,7 +119,7 @@ function Account2({accountData, setAccountData, setStep, setLoad, hasInformation
         }
         }else if (!hasInformation && validation.first_name && validation.last_name) {
             try {
-          const response = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/create-user-information/`, {
+          const response = await fetch(`https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/create-user-information/`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

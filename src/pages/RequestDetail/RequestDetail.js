@@ -93,7 +93,7 @@ function RequestDetail() {
  const downloadAndExtractZip = async (url) => {
   const filename = url.split("/").pop();
   try {
-    const response = await fetch(`http://localhost:8000/beneficiary-platform/request-docs/${filename}/`, {
+    const response = await fetch(`https://charity-backend-staging.liara.run/beneficiary-platform/request-docs/${filename}/`, {
       headers: {
         'Authorization': `Token ${localStorage.getItem('access_token')}`,
       },
@@ -140,7 +140,7 @@ function RequestDetail() {
   const downloadAndExtractZipChild = async (url) => {
   const filename = url.split("/").pop();
   try {
-    const response = await fetch(`http://localhost:8000/beneficiary-platform/child-docs/${filename}/`, {
+    const response = await fetch(`https://charity-backend-staging.liara.run/beneficiary-platform/child-docs/${filename}/`, {
       headers: {
         'Authorization': `Token ${localStorage.getItem('access_token')}`,
       },
@@ -192,7 +192,7 @@ function RequestDetail() {
 
     try {
     // Create FormData instead of JSON
-    const response = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-single-child-update/${requestId}/`, {
+    const response = await fetch(`https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-single-child-update/${requestId}/`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -287,7 +287,7 @@ function RequestDetail() {
       formData.append('beneficiary_request_child_document', zipFile);
     }
 
-    const response = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-child-create/${id}/`, {
+    const response = await fetch(`https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-child-create/${id}/`, {
       method: 'POST',
       headers: {
         'Authorization': `Token ${localStorage.getItem('access_token')}`,
@@ -470,7 +470,7 @@ function RequestDetail() {
 
   const fetchData = async () => {
   try {
-    const response = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-single-get/${id}/`, {
+    const response = await fetch(`https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-single-get/${id}/`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -520,7 +520,7 @@ function RequestDetail() {
   }
 
   try {
-    const response = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-childs-get/${id}/`, {
+    const response = await fetch(`https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-childs-get/${id}/`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -570,7 +570,7 @@ function RequestDetail() {
         return
     }
       try {
-        const response = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-single-update/${id}/`, {
+        const response = await fetch(`https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-single-update/${id}/`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -585,7 +585,7 @@ function RequestDetail() {
 
       // if(requestData.beneficiary_request_duration === 'One Time' && requestData.beneficiary_request_duration_onetime){
       //   const onetimeId = requestData.beneficiary_request_duration_onetime.beneficiary_request_duration_onetime_id
-      //   const onetimeResponse = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-single-update-onetime/${onetimeId}/`, {
+      //   const onetimeResponse = await fetch(`https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-single-update-onetime/${onetimeId}/`, {
       //       method: 'DELETE',
       //       headers: {
       //         'Content-Type': 'application/json',
@@ -600,7 +600,7 @@ function RequestDetail() {
 
       // if(requestData.beneficiary_request_duration === 'Recurring' && requestData.beneficiary_request_duration_recurring){
       //   const recurringId = requestData.beneficiary_request_duration_recurring.beneficiary_request_duration_recurring_id
-      //   const recurringResponse = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-single-update-recurring/${recurringId}/`, {
+      //   const recurringResponse = await fetch(`https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-single-update-recurring/${recurringId}/`, {
       //       method: 'DELETE',
       //       headers: {
       //         'Content-Type': 'application/json',
@@ -1097,8 +1097,8 @@ function RequestDetail() {
             <>
             <label htmlFor={`request-document-${index}`}>مستندات<br />درخواست:</label>
           <div className="file-previews">
-              {childFiles[index].map((file, index) => (
-                <div key={index} className="file-preview">
+              {childFiles[index].map((file, idx) => (
+                <div key={idx} className="file-preview">
                   <div className="file-info">
                     {getFileIcon(file)}
                     <span className="file-name" onClick={() => window.open(URL.createObjectURL(file))}>

@@ -21,7 +21,7 @@ function Account() {
      // Function to load account data
     const loadAccountData = async () => {
             try {
-                const response = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/information/`,
+                const response = await fetch(`https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/information/`,
                     {
                         headers: {
                             'Content-Type': 'application/json',

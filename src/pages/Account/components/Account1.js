@@ -16,7 +16,7 @@ const handleSubmit = async (e) => {
     e.preventDefault();
     if (validation.phone_number && validation.email){
         try {
-          const response = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/update-user-register/`, {
+          const response = await fetch(`https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/update-user-register/`, {
             method: 'PATCH',
             headers: {
               'Content-Type': 'application/json',

@@ -126,7 +126,7 @@ function Account3({ accountData, setAccountData, setStep, setLoad, hasAddress })
     e.preventDefault();
     if (hasAddress && validation.neighbor && validation.street && validation.alley && validation.postal_code) {
       try {
-        const response = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/update-user-address/`, {
+        const response = await fetch(`https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/update-user-address/`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
@@ -161,7 +161,7 @@ function Account3({ accountData, setAccountData, setStep, setLoad, hasAddress })
       }
     } else if (!hasAddress && validation.neighbor && validation.street && validation.alley && validation.postal_code) {
       try {
-        const response = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/create-user-address/`, {
+        const response = await fetch(`https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/create-user-address/`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

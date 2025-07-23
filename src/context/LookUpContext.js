@@ -18,35 +18,35 @@ export const LookupProvider = ({ children }) => {
       ];
   const [requestsData, setRequestsData] = useState([
     {
-        url: `http://localhost:8000/beneficiary-platform/beneficiary`,
+        url: `https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary`,
         data: null,
         page: 1,
         pageCount: 1,
         loading: false,
     },
     {
-        url: `http://localhost:8000/beneficiary-platform/beneficiary`,
+        url: `https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary`,
         data: null,
         page: 1,
         pageCount: 1,
         loading: false,
     },
     {
-        url: `http://localhost:8000/beneficiary-platform/beneficiary`,
+        url: `https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary`,
         data: null,
         page: 1,
         pageCount: 1,
         loading: false,
     },
     {
-        url: `http://localhost:8000/beneficiary-platform/beneficiary`,
+        url: `https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary`,
         data: null,
         page: 1,
         pageCount: 1,
         loading: false,
     },
     {
-        url: `http://localhost:8000/beneficiary-platform/beneficiary`,
+        url: `https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary`,
         data: null,
         page: 1,
         pageCount: 1,
@@ -97,12 +97,12 @@ export const LookupProvider = ({ children }) => {
     const fetchLookups = async () => {
       try {
         const [typeLayer1Res, typeLayer2Res, processingStageRes, durationRes, provincesRes, citiesRes] = await Promise.all([
-          fetch(`http://localhost:8000/beneficiary-platform/requests/type-layer1/`),
-          fetch(`http://localhost:8000/beneficiary-platform/requests/type-layer2/`),
-          fetch(`http://localhost:8000/beneficiary-platform/requests/processing-stage/`),
-          fetch(`http://localhost:8000/beneficiary-platform/requests/duration/`),
-          fetch(`http://localhost:8000/beneficiary-platform/provinces/`),
-          fetch(`http://localhost:8000/beneficiary-platform/cities/`),
+          fetch(`https://charity-backend-staging.liara.run/beneficiary-platform/requests/type-layer1/`),
+          fetch(`https://charity-backend-staging.liara.run/beneficiary-platform/requests/type-layer2/`),
+          fetch(`https://charity-backend-staging.liara.run/beneficiary-platform/requests/processing-stage/`),
+          fetch(`https://charity-backend-staging.liara.run/beneficiary-platform/requests/duration/`),
+          fetch(`https://charity-backend-staging.liara.run/beneficiary-platform/provinces/`),
+          fetch(`https://charity-backend-staging.liara.run/beneficiary-platform/cities/`),
 
         ]);
 

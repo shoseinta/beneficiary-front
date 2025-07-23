@@ -52,7 +52,7 @@ function Home() {
     
     try {
       const response = await fetch(
-        `http://localhost:8000/beneficiary-platform/beneficiary/${
+        `https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${
           localStorage.getItem('user_id')
         }/${endpoint}/?page=1`,
         {

@@ -263,7 +263,7 @@ function RequestDetailEdit ({isEdit, setIsEdit, updateData, setUpdateData, reque
       }
 
       // Send main request update
-      const response = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-single-update/${id}/`, {
+      const response = await fetch(`https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-single-update/${id}/`, {
         method: 'PATCH',
         headers: {
           // 'Content-Type': 'application/json',
@@ -287,7 +287,7 @@ function RequestDetailEdit ({isEdit, setIsEdit, updateData, setUpdateData, reque
         if (requestData.beneficiary_request_duration_onetime) {
           const onetimeId = requestData.beneficiary_request_duration_onetime.beneficiary_request_duration_onetime_id
           // Update existing one-time
-          const onetimeResponse = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-single-update-onetime/${onetimeId}/`, {
+          const onetimeResponse = await fetch(`https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-single-update-onetime/${onetimeId}/`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
@@ -301,7 +301,7 @@ function RequestDetailEdit ({isEdit, setIsEdit, updateData, setUpdateData, reque
           }
         } else {
           // Create new one-time
-          const onetimeResponse = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-create-onetime/${id}/`, {
+          const onetimeResponse = await fetch(`https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-create-onetime/${id}/`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -324,7 +324,7 @@ function RequestDetailEdit ({isEdit, setIsEdit, updateData, setUpdateData, reque
         if (requestData.beneficiary_request_duration_recurring) {
           const recurringId = requestData.beneficiary_request_duration_recurring.beneficiary_request_duration_recurring_id
           // Update existing recurring
-          const recurringResponse = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-single-update-recurring/${recurringId}/`, {
+          const recurringResponse = await fetch(`https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-single-update-recurring/${recurringId}/`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
@@ -338,7 +338,7 @@ function RequestDetailEdit ({isEdit, setIsEdit, updateData, setUpdateData, reque
           }
         } else {
           // Create new recurring
-          const recurringResponse = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-create-recurring/${id}/`, {
+          const recurringResponse = await fetch(`https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-create-recurring/${id}/`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

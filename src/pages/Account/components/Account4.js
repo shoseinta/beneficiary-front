@@ -126,7 +126,7 @@ function Account4 ({accountData,setAccountData,setStep,setLoad}) {
 
     const handleFamilyDelete = async(index) => {
       try {
-          const response = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/delete-user-family/${accountData.beneficiary_user_family_info[index].beneficiary_user_family_info_id}/`, {
+          const response = await fetch(`https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/delete-user-family/${accountData.beneficiary_user_family_info[index].beneficiary_user_family_info_id}/`, {
             method: 'DELETE',
             headers: {
               'Content-Type': 'application/json',
@@ -154,7 +154,7 @@ function Account4 ({accountData,setAccountData,setStep,setLoad}) {
 
     const handleAdditionalDelete = async(index) => {
       try {
-          const response = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/update-user-additional-info/${accountData.beneficiary_user_additional_info[index].beneficiary_user_additional_info_id}/`, {
+          const response = await fetch(`https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/update-user-additional-info/${accountData.beneficiary_user_additional_info[index].beneficiary_user_additional_info_id}/`, {
             method: 'DELETE',
             headers: {
               'Content-Type': 'application/json',
@@ -183,7 +183,7 @@ function Account4 ({accountData,setAccountData,setStep,setLoad}) {
     const handleAddFamily = async (e) => {
       e.preventDefault()
       try {
-          const response = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/create-user-family/`, {
+          const response = await fetch(`https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/create-user-family/`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -218,7 +218,7 @@ function Account4 ({accountData,setAccountData,setStep,setLoad}) {
           formData.append("beneficiary_user_additional_info_title", additionalData.beneficiary_user_additional_info_title)
           formData.append("beneficiary_user_additional_info_description",additionalData.beneficiary_user_additional_info_description)
           formData.append("beneficiary_user_additional_info_document",additionalData.beneficiary_user_additional_info_document)
-          const response = await fetch(`http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/create-user-additional-info/`, {
+          const response = await fetch(`https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/create-user-additional-info/`, {
             method: 'POST',
             headers: {
               // 'Content-Type': 'application/json',

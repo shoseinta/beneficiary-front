@@ -44,7 +44,7 @@ function NewRequest() {
             });
 
             const response = await fetch(
-                `http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-create/`,
+                `https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-create/`,
                 {
                     method: 'POST',
                     headers: {
@@ -70,7 +70,7 @@ function NewRequest() {
 
             if (selectedDuration.beneficiary_request_duration_name === 'one_time') {
                 const durationResponse = await fetch(
-                    `http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-create-onetime/${result.beneficiary_request_id}/`,
+                    `https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-create-onetime/${result.beneficiary_request_id}/`,
                     {
                         method: 'POST',
                         headers: {
@@ -90,7 +90,7 @@ function NewRequest() {
             } 
             else if (selectedDuration.beneficiary_request_duration_name === 'recurring') {
                 const durationResponse = await fetch(
-                    `http://localhost:8000/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-create-recurring/${result.beneficiary_request_id}/`,
+                    `https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-create-recurring/${result.beneficiary_request_id}/`,
                     {
                         method: 'POST',
                         headers: {

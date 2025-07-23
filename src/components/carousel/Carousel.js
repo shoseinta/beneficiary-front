@@ -89,7 +89,7 @@ function Carousel({ notification, notifIndex, endpointStates, setEndpointStates,
 
       try {
       await fetch(
-        `http://localhost:8000/beneficiary-platform/beneficiary/${
+        `https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${
           localStorage.getItem('user_id')
         }/request-announcement-seen/${id}/`,
         {
@@ -132,7 +132,7 @@ function Carousel({ notification, notifIndex, endpointStates, setEndpointStates,
 
       try {
       await fetch(
-        `http://localhost:8000/beneficiary-platform/beneficiary/${
+        `https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${
           localStorage.getItem('user_id')
         }/announcement-seen/${id}/`,
         {
