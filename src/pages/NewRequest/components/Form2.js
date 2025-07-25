@@ -126,6 +126,9 @@ useEffect(() => {
   if (englishValue && Number(englishValue) > 12) {
     englishValue = '12';
   }
+  if (englishValue && Number(englishValue) < 1){
+    englishValue = '1'
+  }
 
   // Update the state with the English number (or empty string)
   const newValue = englishValue === '' ? '' : Number(englishValue);

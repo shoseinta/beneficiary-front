@@ -19,9 +19,9 @@ function RequestDetailEdit ({isEdit, setIsEdit, updateData, setUpdateData, reque
     const [files1,setFiles1] = useState(files)
     
         const onDrop = useCallback((acceptedfiles1) => {
-            setFiles1(prev => [...prev, ...acceptedfiles1]);
-            
-            if (acceptedfiles1.length > 0) {
+            setFiles1(prev => {
+              const newFiles = [...prev, ...acceptedfiles1];
+              if (acceptedfiles1.length > 0) {
                 setIsCreatingZip(true);
                 const zip = new JSZip();
                 
@@ -36,8 +36,10 @@ function RequestDetailEdit ({isEdit, setIsEdit, updateData, setUpdateData, reque
                         beneficiary_request_document: zipFile
                     }));
                 }).finally(() => setIsCreatingZip(false));
-            }
-        }, [files1, setFiles1, setRequestData]);
+              }
+              return newFiles;
+            });
+          }, []);
     
         const { getRootProps, getInputProps, isDragActive } = useDropzone({
             onDrop,
@@ -112,26 +114,26 @@ function RequestDetailEdit ({isEdit, setIsEdit, updateData, setUpdateData, reque
 
     const [validation, setValidation] = useState({
         deadline:true,
-        limit:true
+        limit:true,
+        amount:true,
     })
 
     const [blur, setBlur] = useState({
         deadline:true,
         limit:true,
+        amount:true
     })
     const [finishEdit, setFinishEdit] = useState(false)
     useEffect(() => {
-        if(updateData.beneficiary_request_duration === 1 && updateData?.beneficiary_request_duration_onetime?.beneficiary_request_duration_onetime_deadline){
-            setValidation(pre => ({...pre,deadline:true}))
-        }else {
-            setValidation(pre => ({...pre,deadline:false}))
-        }
-
-        if(updateData.beneficiary_request_duration === 2 && updateData?.beneficiary_request_duration_recurring?.beneficiary_request_duration_recurring_limit !== "" && updateData?.beneficiary_request_duration_recurring?.beneficiary_request_duration_recurring_limit >= 1 && updateData?.beneficiary_request_duration_recurring?.beneficiary_request_duration_recurring_limit <= 12){
-            setValidation(pre => ({...pre,limit:true}))
-        }else {
-            setValidation(pre => ({...pre,limit:false}))
-        }
+        const newValidation = {
+    deadline: updateData.beneficiary_request_duration !== 1 || 
+             !!updateData?.beneficiary_request_duration_onetime?.beneficiary_request_duration_onetime_deadline,
+    limit: updateData.beneficiary_request_duration !== 2 || 
+           (updateData?.beneficiary_request_duration_recurring?.beneficiary_request_duration_recurring_limit >= 1 &&
+            updateData?.beneficiary_request_duration_recurring?.beneficiary_request_duration_recurring_limit <= 12),
+    amount: updateData?.beneficiary_request_duration === 3 || (updateData?.beneficiary_request_duration !== 3 && updateData?.beneficiary_request_amount)
+  };
+  setValidation(newValidation);
     },[updateData])
     
     useEffect(()=>{
@@ -208,36 +210,59 @@ function RequestDetailEdit ({isEdit, setIsEdit, updateData, setUpdateData, reque
     }
     
       }
-    }, [updateData.beneficiary_request_duration_onetime]);
+    }, [updateData?.beneficiary_request_duration_onetime?.beneficiary_request_duration_onetime_deadline]);
 
     const handleFinishEdit = async () => {
-        if((updateData?.beneficiary_request_duration === 1 && !validation.deadline) || (updateData?.beneficiary_request_duration === 2 && !validation.limit)){
+        if((updateData?.beneficiary_request_duration === 1 && !validation.deadline) || (updateData?.beneficiary_request_duration === 2 && !validation.limit) || !validation.amount){
             return
         }
   
   
     try {
-      // Prepare the main request data
+      var sendData;
+      var requestHeaders;
+      if(updateData.beneficiary_request_document){
+        // Prepare the main request data
       const requestDataToSend = new FormData();
       
       requestDataToSend.append('beneficiary_request_title',updateData.beneficiary_request_title)
       requestDataToSend.append('beneficiary_request_description',updateData.beneficiary_request_description)
-      if(updateData.beneficiary_request_amount){
+      if(updateData.beneficiary_request_amount && updateData.beneficiary_request_duration !== 3){
         requestDataToSend.append('beneficiary_request_amount',updateData.beneficiary_request_amount)
+      }else{
+        requestDataToSend.append('beneficiary_request_amount',null)
       }
       requestDataToSend.append('beneficiary_request_duration',updateData.beneficiary_request_duration)
       if(updateData.beneficiary_request_document){
         requestDataToSend.append('beneficiary_request_document', updateData.beneficiary_request_document)
+      }else {
+        requestDataToSend.append('beneficiary_request_document', null)
       }
+      sendData = requestDataToSend
+      requestHeaders = {
+          // 'Content-Type': 'application/json',
+          'Authorization': `Token ${localStorage.getItem('access_token')}`,
+        }
+      }else{
+        sendData = JSON.stringify({
+          beneficiary_request_title:updateData.beneficiary_request_title,
+          beneficiary_request_description:updateData.beneficiary_request_description,
+          beneficiary_request_amount:updateData?.beneficiary_request_amount || null,
+          beneficiary_request_duration:updateData.beneficiary_request_duration,
+          beneficiary_request_document:null
+        })
+        requestHeaders = {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${localStorage.getItem('access_token')}`,
+        }
+      }
+      
 
       // Send main request update
       const response = await fetch(`https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-single-update/${id}/`, {
         method: 'PATCH',
-        headers: {
-          // 'Content-Type': 'application/json',
-          'Authorization': `Token ${localStorage.getItem('access_token')}`,
-        },
-        body: requestDataToSend,
+        headers: requestHeaders,
+        body: sendData,
       });
 
       if (!response.ok) {
@@ -387,6 +412,7 @@ function RequestDetailEdit ({isEdit, setIsEdit, updateData, setUpdateData, reque
   // },[finishEdit])
 
   const handleAmountUpdate = (event) => {
+    setBlur(pre => ({...pre, amount:false}))
   // Remove Persian digits and commas from the input value
   const englishValue = event.target.value
     .replace(/[۰-۹]/g, d => ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'].indexOf(d))
@@ -423,17 +449,44 @@ function RequestDetailEdit ({isEdit, setIsEdit, updateData, setUpdateData, reque
 
   const handleLimitChange = (event) => {
     setBlur(pre => ({...pre, limit:false}))
-    setUpdateData(pre => {
+    let englishValue = event.target.value
+    .split('')
+    .map(c => {
+      const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+      const index = persianDigits.indexOf(c);
+      return index >= 0 ? index.toString() : c;
+    })
+    .join('')
+    .replace(/\D/g, '');
+
+  // Enforce max limit of 12
+  if (englishValue && Number(englishValue) > 12) {
+    englishValue = '12';
+  }
+  if (englishValue && Number(englishValue) < 1){
+    englishValue = '1'
+  }
+
+  // Update the state with the English number (or empty string)
+  const newValue = englishValue === '' ? '' : Number(englishValue);
+  setUpdateData(pre => {
       const newData = {...pre}
       const recurring = newData.beneficiary_request_duration_recurring
       if (recurring) {
-        newData.beneficiary_request_duration_recurring.beneficiary_request_duration_recurring_limit = Number(event.target.value)
+        newData.beneficiary_request_duration_recurring.beneficiary_request_duration_recurring_limit = newValue
       }else {
-        newData.beneficiary_request_duration_recurring = {beneficiary_request_duration_recurring_limit:Number(event.target.value)}
+        newData.beneficiary_request_duration_recurring = {beneficiary_request_duration_recurring_limit:newValue}
       }
       return newData
       
     })
+
+  // Update the displayed value with Persian digits (no commas)
+  const displayValue = englishValue === '' 
+    ? '' 
+    : toPersianDigits(englishValue);
+  event.target.value = displayValue;
+    
   }
 
   useEffect(() => {
@@ -629,9 +682,15 @@ function RequestDetailEdit ({isEdit, setIsEdit, updateData, setUpdateData, reque
                         updateData.beneficiary_request_duration === 2 &&
                         <>
                             <label htmlFor="observe-time2">تعداد دوره‌های درخواست:</label>
-                            <input type="number" id="observe-time2" value={updateData?.beneficiary_request_duration_recurring?.beneficiary_request_duration_recurring_limit || null} onChange={handleLimitChange} min={1} max={12} onBlur={() => {
-                                setBlur(pre => ({...pre,limit:true}))
-                            }}/>
+                            <input 
+                              type="text" 
+                              id="observe-time2" 
+                              value={updateData?.beneficiary_request_duration_recurring?.beneficiary_request_duration_recurring_limit? toPersianDigits(updateData?.beneficiary_request_duration_recurring?.beneficiary_request_duration_recurring_limit.toString()):null}
+                          
+                              onChange={handleLimitChange} 
+                              onBlur={() => setBlur(pre => ({...pre, limit: true}))}
+                              inputMode="numeric"
+                            />
                         </>
                     }
 
@@ -646,6 +705,7 @@ function RequestDetailEdit ({isEdit, setIsEdit, updateData, setUpdateData, reque
                         id="observe-cash" 
                         value={updateData?.beneficiary_request_amount ? formatPersianNumber(updateData.beneficiary_request_amount) : ''} 
                         onChange={handleAmountUpdate} 
+                        onBlur={() => {setBlur(pre => ({...pre,amount:true}))}}
                         inputMode="numeric"
                     />
                   </div>}
@@ -746,6 +806,11 @@ function RequestDetailEdit ({isEdit, setIsEdit, updateData, setUpdateData, reque
               {
                 !validation.limit && blur.limit && updateData.beneficiary_request_duration === 2 &&
                 <p>لطفا تعداد دوره های درخواست را انتخاب کنید بین یک دوره تا دوازده دوره</p>
+              }
+
+              {
+                !validation.amount && blur.amount &&
+                <p>مبلغ درخواست نمی تواند خالی باشد</p>
               }
         
               <div className="buttons">

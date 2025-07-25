@@ -789,7 +789,7 @@ function RequestDetail() {
                 <input type="text" id="observe-time1" readOnly value={
                   requestData?.beneficiary_request_duration ?
                   requestData.beneficiary_request_duration === 'Permanent' ? "به طور دائمی":
-                  requestData.beneficiary_request_amount === 'One Time' ? "فقط یکبار" : "به صورت ماهانه"
+                  requestData.beneficiary_request_duration === 'One Time' ? "فقط یکبار" : "به صورت ماهانه"
                   : null
                 } />
               </div>
