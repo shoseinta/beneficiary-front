@@ -6,11 +6,15 @@ import './Account1.css';
 
 
 function Account1({accountData, setAccountData, setStep, setLoad}) {
+    const [account1Data, setAccount1Data] = useState(accountData)
     const [submit, setSubmit] = useState(false)
     const [validation, setValidation] = useState({
   phone_number: true,
   email: true,
 });
+  useEffect(() => {
+    setAccount1Data(accountData)
+  },[accountData])
 
 const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,7 +26,7 @@ const handleSubmit = async (e) => {
               'Content-Type': 'application/json',
               'Authorization': `Token ${localStorage.getItem('access_token')}`,
             },
-            body: JSON.stringify({email:accountData.email,phone_number:accountData.phone_number}),
+            body: JSON.stringify({email:account1Data.email,phone_number:account1Data.phone_number}),
           });
           if (!response.ok) {  // Check for HTTP errors (4xx/5xx)
             const errorData = await response.json();
@@ -58,9 +62,9 @@ const handleEmailChange = (e) => {
   setBlur(pre => ({...pre,email:false}))
   const value = e.target.value;
   if (!value){
-    setAccountData(prev => ({...prev, email: null}))
+    setAccount1Data(prev => ({...prev, email: null}))
   } else{
-    setAccountData(prev => ({...prev, email: value}));
+    setAccount1Data(prev => ({...prev, email: value}));
   }
   
   
@@ -78,9 +82,9 @@ const handlePhoneChange = (e) => {
   setBlur(pre => ({...pre, phone_number:false}))
   const value = e.target.value;
   if (!value){
-    setAccountData(prev => ({...prev,phone_number: null}))
+    setAccount1Data(prev => ({...prev,phone_number: null}))
   }else {
-    setAccountData(prev => ({...prev, phone_number: value}));
+    setAccount1Data(prev => ({...prev, phone_number: value}));
   }
   
   
@@ -133,17 +137,17 @@ const handlePhoneChange = (e) => {
                 <form  className="account-form1">
                     <div>
                     <label htmlFor="account-support"> تحت پوشش خیریه: </label>
-                    <input type="text" id="account-support" readOnly value={accountData?.beneficiary_user_information?.under_charity_support ?"هستید":"نیستید" || ""} />
+                    <input type="text" id="account-support" readOnly value={account1Data?.beneficiary_user_information?.under_charity_support ?"هستید":"نیستید" || ""} />
                     </div>
 
                     <div>
                     <label htmlFor="account-id"> کد مددجویی: </label>
-                    <input type="text" id="account-id" readOnly value={accountData?.beneficiary_id || ""} />
+                    <input type="text" id="account-id" readOnly value={account1Data?.beneficiary_id || ""} />
                     </div>
 
                     <div>
                     <label htmlFor="account-password"> رمز عبور: </label>
-                    <input type="password" id="account-password" readOnly value={accountData?.password || ""} />
+                    <input type="password" id="account-password" readOnly value={account1Data?.password || ""} />
                     </div>
 
                     <div>
@@ -155,7 +159,7 @@ const handlePhoneChange = (e) => {
                         maxLength="11"
                         inputMode="numeric"
                         placeholder="مثال: ۰۹۱۲۰۱۲۳۴۵۶"
-                        value={accountData?.phone_number || ""}
+                        value={account1Data?.phone_number || ""}
                         onChange={handlePhoneChange}
                         onBlur={() => setBlur(pre => ({...pre,phone_number:true}))}
                         className={!validation.phone_number && blur.phone_number ? "invalid-input" : ""}
@@ -171,7 +175,7 @@ const handlePhoneChange = (e) => {
                     <input 
                     type="email" 
                     id="account-email" 
-                    value={accountData?.email || ""} 
+                    value={account1Data?.email || ""} 
                     onChange={handleEmailChange} 
                     onBlur={() => setBlur(pre => ({...pre,email:true}))}
                     className={!validation.email && blur.email ? "invalid-input" : ""}

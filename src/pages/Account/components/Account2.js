@@ -8,9 +8,14 @@ import persian_fa from "react-date-object/locales/persian_fa";
 import DateObject from "react-date-object";
 
 function Account2({accountData, setAccountData, setStep, setLoad, hasInformation}){
+    const [account1Data, setAccount1Data] = useState(accountData)
     const [submit,setSubmit] = useState(false)
     const todayJalali = new DateObject({ calendar: persian, locale: persian_fa });
     const [jalaliValue, setJalaliValue] = useState(null);
+
+    useEffect(() => {
+      setAccount1Data(accountData)
+    },[accountData])
 
     const [validation, setValidation] = useState({
         first_name:true,
@@ -21,7 +26,10 @@ function Account2({accountData, setAccountData, setStep, setLoad, hasInformation
         first_name:true,
         last_name:true,
     })
-
+    const toPersianDigits = (num) => {
+    const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+    return num.toString().replace(/\d/g, (d) => persianDigits[d]);
+  };
     const isPersian = (text) => {
   // Persian Unicode range: \u0600-\u06FF
   // Also includes Persian numbers \u06F0-\u06F9
@@ -67,9 +75,9 @@ function Account2({accountData, setAccountData, setStep, setLoad, hasInformation
   digits: ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"]
 }
     useEffect(() => {
-      if (accountData?.beneficiary_user_information?.birth_date) {
+      if (account1Data?.beneficiary_user_information?.birth_date) {
         const newDate = new DateObject({
-          date: accountData.beneficiary_user_information.birth_date,
+          date: account1Data.beneficiary_user_information.birth_date,
           calendar: "gregorian",
         }).convert(persian).setLocale(persian_fa);
     
@@ -87,7 +95,7 @@ function Account2({accountData, setAccountData, setStep, setLoad, hasInformation
     }, []);
     const handleSubmit = async (e) => {
         e.preventDefault()
-        if(hasInformation && validation.first_name && validation.last_name){
+        if(hasInformation && (validation.first_name || account1Data?.beneficiary_user_information?.first_name === "") && (validation.last_name || account1Data?.beneficiary_user_information?.last_name === "")){
             try {
           const response = await fetch(`https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/update-user-information/`, {
             method: 'PATCH',
@@ -95,10 +103,11 @@ function Account2({accountData, setAccountData, setStep, setLoad, hasInformation
               'Content-Type': 'application/json',
               'Authorization': `Token ${localStorage.getItem('access_token')}`,
             },
-            body: JSON.stringify({first_name:accountData.beneficiary_user_information.first_name,
-                last_name:accountData?.beneficiary_user_information?.last_name || null,
-                birth_date:accountData?.beneficiary_user_information?.birth_date || null,
-                gender:accountData?.beneficiary_user_information?.gender || null
+            body: JSON.stringify({
+                first_name:account1Data?.beneficiary_user_information?.first_name || null,
+                last_name:account1Data?.beneficiary_user_information?.last_name || null,
+                birth_date:account1Data?.beneficiary_user_information?.birth_date || null,
+                gender:account1Data?.beneficiary_user_information?.gender || null
             }),
           });
           if (!response.ok) {  // Check for HTTP errors (4xx/5xx)
@@ -117,7 +126,7 @@ function Account2({accountData, setAccountData, setStep, setLoad, hasInformation
         } catch (err) {
           console.log(err)
         }
-        }else if (!hasInformation && validation.first_name && validation.last_name) {
+        }else if (!hasInformation && (validation.first_name || account1Data?.beneficiary_user_information?.first_name === "") && (validation.last_name || account1Data?.beneficiary_user_information?.last_name === "")) {
             try {
           const response = await fetch(`https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/create-user-information/`, {
             method: 'POST',
@@ -125,10 +134,11 @@ function Account2({accountData, setAccountData, setStep, setLoad, hasInformation
               'Content-Type': 'application/json',
               'Authorization': `Token ${localStorage.getItem('access_token')}`,
             },
-            body: JSON.stringify({first_name:accountData.beneficiary_user_information.first_name,
-                last_name:accountData?.beneficiary_user_information?.last_name || null,
-                birth_date:accountData?.beneficiary_user_information?.birth_date || null,
-                gender:accountData?.beneficiary_user_information?.gender || null
+            body: JSON.stringify({
+                first_name:account1Data?.beneficiary_user_information?.first_name || null,
+                last_name:account1Data?.beneficiary_user_information?.last_name || null,
+                birth_date:account1Data?.beneficiary_user_information?.birth_date || null,
+                gender:account1Data?.beneficiary_user_information?.gender || null
             }),
           });
           if (!response.ok) {  // Check for HTTP errors (4xx/5xx)
@@ -186,7 +196,7 @@ function Account2({accountData, setAccountData, setStep, setLoad, hasInformation
                     type="text" 
                     id="account-ident-num" 
                     readOnly 
-                    value={accountData?.identification_number || ""} 
+                    value={toPersianDigits(account1Data?.identification_number || "")} 
                 />
                 </div>
 
@@ -195,10 +205,15 @@ function Account2({accountData, setAccountData, setStep, setLoad, hasInformation
                 <input 
                     type="text" 
                     id="account-name"
-                    value={accountData?.beneficiary_user_information?.first_name || ""}
+                    value={account1Data?.beneficiary_user_information?.first_name || ""}
                     onChange={(e) => {
                         setBlur(pre => ({...pre,first_name:false}))
-                        setAccountData(pre => ({
+                        if(!isPersian(e.target.value)){
+                          setValidation(pre =>({...pre,first_name:false}))
+                        }else{
+                          setValidation(pre => ({...pre,first_name:true}))
+                        }
+                        setAccount1Data(pre => ({
                         ...pre,
                         beneficiary_user_information:{
                           ...pre.beneficiary_user_information,
@@ -220,10 +235,15 @@ function Account2({accountData, setAccountData, setStep, setLoad, hasInformation
                 <input 
                     type="text" 
                     id="account-family"
-                    value={accountData?.beneficiary_user_information?.last_name || ""} 
+                    value={account1Data?.beneficiary_user_information?.last_name || ""} 
                     onChange={(e) => {
                         setBlur(pre => ({...pre,last_name:false}))
-                        setAccountData(pre => ({
+                        if(!isPersian(e.target.value)){
+                          setValidation(pre =>({...pre,last_name:false}))
+                        }else{
+                          setValidation(pre => ({...pre,last_name:true}))
+                        }
+                        setAccount1Data(pre => ({
                         ...pre,
                         beneficiary_user_information:{
                           ...pre.beneficiary_user_information,
@@ -232,7 +252,6 @@ function Account2({accountData, setAccountData, setStep, setLoad, hasInformation
                         
                     }))
                     
-                        setValidation(pre => ({...pre,last_name:isPersian(e.target.value)}))
                     
                 
                 }
@@ -249,7 +268,7 @@ function Account2({accountData, setAccountData, setStep, setLoad, hasInformation
                       setJalaliValue(dateObj);
                       const gregorianDate = dateObj.toDate();
                       const isoDate = gregorianDate.toISOString().split("T")[0];
-                      setAccountData(pre => ({
+                      setAccount1Data(pre => ({
                         ...pre,
                         beneficiary_user_information:{
                           ...pre.beneficiary_user_information,
@@ -276,8 +295,8 @@ function Account2({accountData, setAccountData, setStep, setLoad, hasInformation
 
                 <div className="account-gender-div">
                 <label htmlFor="account-gender">جنسیت:</label>
-                <select id="account-gender" value={accountData?.beneficiary_user_information?.gender || ""} onChange={e => {
-                    setAccountData(pre => ({
+                <select id="account-gender" value={account1Data?.beneficiary_user_information?.gender || ""} onChange={e => {
+                    setAccount1Data(pre => ({
                         ...pre,
                         beneficiary_user_information:{
                           ...pre.beneficiary_user_information,
@@ -318,9 +337,9 @@ function Account2({accountData, setAccountData, setStep, setLoad, hasInformation
                     تغییرات با موفقیت اعمال شد
                 </div>
                 }
-                {(!validation.first_name ||!validation.last_name)  && blur.first_name && blur.last_name && (
-                        <div className="error-message">  لطفا نام و نام خانوادگی خود را به فارسی وارد کنید</div>
-                        )}
+                {((!validation.first_name && blur.first_name && account1Data?.beneficiary_user_information?.first_name !== "" && account1Data?.beneficiary_user_information?.first_name !== null) ||(!validation.last_name  && blur.last_name && account1Data?.beneficiary_user_information?.last_name !== "" && account1Data?.beneficiary_user_information?.last_name !== null)) && 
+                        <div>  لطفا نام و نام خانوادگی خود را به فارسی وارد کنید</div>
+                        }
                 <input type="submit" value="تأیید" onClick={handleSubmit} />
                 </div>
             </form>
