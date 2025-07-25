@@ -26,6 +26,7 @@ function RequestDetail() {
   const [isDelete, setIsDelete] = useState(false)
   const [isChildCreate, setIsChildCreate] = useState(false)
   const [isChildCreateFinish, setIsChildCreateFinish] = useState(false)
+  const [childCreationValidation, setChildCreationValidation] = useState(true)
   const [childData,setChildData] = useState({
     beneficiary_request_child_description:null,
     beneficiary_request_child_document:[],
@@ -249,6 +250,7 @@ function RequestDetail() {
   }
 };
   const handleChildDescriptionChange = (e) => {
+    setChildCreationValidation(true)
     setChildData(pre => {
       return {...pre,beneficiary_request_child_description:e.target.value}
     })
@@ -263,6 +265,7 @@ function RequestDetail() {
 
   const handleChildCreation = async () => {
   if (!childData.beneficiary_request_child_description) {
+    setChildCreationValidation(false)
     return;
   }
   
@@ -954,7 +957,7 @@ function RequestDetail() {
 
           <div>
           <label for="child-creation-description">توضیحات درخواست:<sup>*</sup></label>
-          <textarea id="child-creation-description" required value={childData.beneficiary_request_child_description} onChange={handleChildDescriptionChange}></textarea>
+          <textarea id="child-creation-description"  value={childData.beneficiary_request_child_description} onChange={handleChildDescriptionChange}></textarea>
           </div>
 
           <div>
@@ -1014,6 +1017,12 @@ function RequestDetail() {
           </div>
 
         </form>
+        {
+          !childCreationValidation &&
+          <div>
+            لطفا بخش توضیحات درخواست را پر کنید
+          </div>
+        }
 
         <div className="child-creation-overlay-buttons">
           <button className="no-button" onClick={() => setIsChildCreate(false)}>لغو</button>
@@ -1036,9 +1045,12 @@ function RequestDetail() {
           </svg>
         </button>
       </div>
-      
+      {
+        childSeeData.length === 0 &&
+        <p>موردی وجود ندارد.</p>
+      }
       {/* Repeatable request section */}
-      {childSeeData.map((item, index) => (
+      {childSeeData.length > 0 && childSeeData.map((item, index) => (
         <section key={item.beneficiary_request_child_id}>
           <h2>درخواست جزئی شماره {index + 1}</h2>
 
