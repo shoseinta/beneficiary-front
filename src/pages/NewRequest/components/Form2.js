@@ -17,7 +17,19 @@ import DateObject from "react-date-object";
 
 function Form2({setOneTimeData, setRecurringData, duration, setRequestData, onetimeData, recurringData, requestData, nextActive, setNextActive, setStep}){
     const [selectedDuration,setSelectedDuration] = useState(requestData.beneficiary_request_duration);
-    const [dispalyValue, setDisplayValue] = useState("")
+    const toPersianDigits = (num) => {
+    const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+    return num.toString().replace(/\d/g, (x) => persianDigits[x]);
+  };
+
+  // Add commas as thousand separators
+  const addCommas = (num) => {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+    const formattedValue = requestData.beneficiary_request_amount === '' 
+        ? '' 
+        : toPersianDigits(addCommas(requestData.beneficiary_request_amount));
+    const [dispalyValue, setDisplayValue] = useState(formattedValue)
     const [jalaliValue, setJalaliValue] = useState(null);
     const todayJalali = new DateObject({ calendar: persian, locale: persian_fa });
 
@@ -106,15 +118,7 @@ useEffect(() => {
         }
     }
 
-    const toPersianDigits = (num) => {
-    const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
-    return num.toString().replace(/\d/g, (x) => persianDigits[x]);
-  };
-
-  // Add commas as thousand separators
-  const addCommas = (num) => {
-    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  };
+    
 
   // Convert Persian digits to English
   const toEnglishDigits = (str) => {

@@ -8,6 +8,8 @@ import back_icon from '../../../media/icons/back_icon.svg';
 import { useEffect, useState } from "react";
 import './Form4.css'
 import { FiFile, FiImage, FiVideo, FiMusic, FiFileText, FiX } from "react-icons/fi";
+import { toJalaali } from 'jalaali-js';
+
 
 function Form4({ requestData, onetimeData, recurringData, typeLayerOne, typeLayerTwo, duration, setStep, handleSubmit, files, setFiles }) {
     const [typeLayerOneValue, setTypeLayerOneValue] = useState(null)
@@ -56,48 +58,16 @@ function formatPersianNumber(number) {
 
   // Function to convert Gregorian to Jalali date
   const gregorianToJalali = (dateString) => {
-    if (!dateString) return "تاریخ نامشخص";
-    
-    try {
-      // Extract YYYY-MM-DD part from ISO string
-      const [year, month, day] = dateString.split('T')[0].split('-').map(Number);
+      if (!dateString) return "تاریخ نامشخص";
       
-      // Simple conversion algorithm (approximate)
-      const gregorianYear = year;
-      const gregorianMonth = month;
-      const gregorianDay = day;
-      
-      let jalaliYear, jalaliMonth, jalaliDay;
-      
-      if (gregorianMonth > 2 || (gregorianMonth === 2 && gregorianDay > 20)) {
-        jalaliYear = gregorianYear - 621;
-      } else {
-        jalaliYear = gregorianYear - 622;
+      try {
+          const [year, month, day] = dateString.split('T')[0].split('-').map(Number);
+          const { jy, jm, jd } = toJalaali(year, month, day);
+          return `${toPersianDigits(jy)}/${toPersianDigits(jm)}/${toPersianDigits(jd)}`;
+      } catch (error) {
+          console.error("Date conversion error:", error);
+          return "تاریخ نامشخص";
       }
-      
-      // Simple month/day conversion (not precise for all dates)
-      if (gregorianMonth < 3) {
-        jalaliMonth = gregorianMonth + 9;
-        jalaliDay = gregorianDay + 10;
-        if (jalaliDay > 30) {
-          jalaliDay -= 30;
-          jalaliMonth++;
-        }
-      } else {
-        jalaliMonth = gregorianMonth - 3;
-        jalaliDay = gregorianDay + 10;
-        if (jalaliDay > 31) {
-          jalaliDay -= 31;
-          jalaliMonth++;
-        }
-      }
-      
-      // Format with Persian digits
-      return `${toPersianDigits(jalaliYear)}/${toPersianDigits(jalaliMonth)}/${toPersianDigits(jalaliDay)}`;
-    } catch (error) {
-      console.error("Date conversion error:", error);
-      return "تاریخ نامشخص";
-    }
   };
 
     useEffect(() => {

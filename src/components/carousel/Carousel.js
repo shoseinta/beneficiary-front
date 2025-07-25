@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import more_icon from '../../media/icons/more_icon.svg';
-import bell_icon from '../../media/icons/bell_icon.svg'
+import bell_icon from '../../media/icons/bell_icon.svg';
+import { toJalaali } from 'jalaali-js';
 
 
 
@@ -154,50 +155,19 @@ function Carousel({ notification, notifIndex, endpointStates, setEndpointStates,
   };
 
   // Function to convert Gregorian to Jalali date
-  const gregorianToJalali = (dateString) => {
+  // Using jalaali-js library
+const gregorianToJalali = (dateString) => {
     if (!dateString) return "تاریخ نامشخص";
     
     try {
-      // Extract YYYY-MM-DD part from ISO string
-      const [year, month, day] = dateString.split('T')[0].split('-').map(Number);
-      
-      // Simple conversion algorithm (approximate)
-      const gregorianYear = year;
-      const gregorianMonth = month;
-      const gregorianDay = day;
-      
-      let jalaliYear, jalaliMonth, jalaliDay;
-      
-      if (gregorianMonth > 2 || (gregorianMonth === 2 && gregorianDay > 20)) {
-        jalaliYear = gregorianYear - 621;
-      } else {
-        jalaliYear = gregorianYear - 622;
-      }
-      
-      // Simple month/day conversion (not precise for all dates)
-      if (gregorianMonth < 3) {
-        jalaliMonth = gregorianMonth + 9;
-        jalaliDay = gregorianDay + 10;
-        if (jalaliDay > 30) {
-          jalaliDay -= 30;
-          jalaliMonth++;
-        }
-      } else {
-        jalaliMonth = gregorianMonth - 3;
-        jalaliDay = gregorianDay + 10;
-        if (jalaliDay > 31) {
-          jalaliDay -= 31;
-          jalaliMonth++;
-        }
-      }
-      
-      // Format with Persian digits
-      return `${toPersianDigits(jalaliYear)}/${toPersianDigits(jalaliMonth)}/${toPersianDigits(jalaliDay)}`;
+        const [year, month, day] = dateString.split('T')[0].split('-').map(Number);
+        const { jy, jm, jd } = toJalaali(year, month, day);
+        return `${toPersianDigits(jy)}/${toPersianDigits(jm)}/${toPersianDigits(jd)}`;
     } catch (error) {
-      console.error("Date conversion error:", error);
-      return "تاریخ نامشخص";
+        console.error("Date conversion error:", error);
+        return "تاریخ نامشخص";
     }
-  };
+};
 
   // if (!notification || !notification.items || notification.items.length === 0) {
   //   return null;
@@ -291,7 +261,7 @@ function Carousel({ notification, notifIndex, endpointStates, setEndpointStates,
     <div className="notif-overlay-body">
       <section className="notif-overlay-title">
         <h3>{item?.heading || 'empty'}</h3>
-        <time dateTime="۰۴/۳/۲۵"> ۰۴/۳/۲۵ </time>
+        <time dateTime="۰۴/۳/۲۵"> {gregorianToJalali(item?.date || null)} </time>
       </section>
 
       <div className="notif-overlay-content">
