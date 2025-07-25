@@ -111,13 +111,35 @@ useEffect(() => {
         setOneTimeData(pre => ({...pre,beneficiary_request_duration_onetime_deadline:event.target.value}))
     }
     const handleLimitChange = (event) => {
-        if (!event.target.value){
-         setRecurringData(pre => ({...pre,beneficiary_request_duration_recurring_limit:""})) 
-        }else{
-        setRecurringData(pre => ({...pre,beneficiary_request_duration_recurring_limit:Number(event.target.value)}))
-        }
-    }
+  // Convert Persian digits to English and remove all non-digit characters
+  let englishValue = event.target.value
+    .split('')
+    .map(c => {
+      const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+      const index = persianDigits.indexOf(c);
+      return index >= 0 ? index.toString() : c;
+    })
+    .join('')
+    .replace(/\D/g, '');
 
+  // Enforce max limit of 12
+  if (englishValue && Number(englishValue) > 12) {
+    englishValue = '12';
+  }
+
+  // Update the state with the English number (or empty string)
+  const newValue = englishValue === '' ? '' : Number(englishValue);
+  setRecurringData(prev => ({
+    ...prev,
+    beneficiary_request_duration_recurring_limit: newValue
+  }));
+
+  // Update the displayed value with Persian digits (no commas)
+  const displayValue = englishValue === '' 
+    ? '' 
+    : toPersianDigits(englishValue);
+  event.target.value = displayValue;
+};
     
 
   // Convert Persian digits to English
@@ -309,8 +331,17 @@ useEffect(() => {
                 duration.find(item => item.beneficiary_request_duration_name=== 'recurring').beneficiary_request_duration_id === selectedDuration ?
                  <div className="time-layer2 input-space" id="time-layer2-recurring">
         <label htmlFor="time-layer2-recurring-id" className="label-space"> دوره‌های ماهانه درخواست شما چه تعداد است؟ <sup>*</sup></label>
-        <input type="number" id="time-layer2-recurring-id" placeholder=" برای مثال: ۱۲" required min="1" step="1" value={recurringData.beneficiary_request_duration_recurring_limit} onChange={handleLimitChange}/>
-      </div>:null
+        <input 
+  type="text" 
+  id="time-layer2-recurring-id" 
+  placeholder="برای مثال: ۱۲"  
+  value={recurringData.beneficiary_request_duration_recurring_limit 
+    ? toPersianDigits(recurringData.beneficiary_request_duration_recurring_limit.toString())
+    : ''
+  } 
+  onChange={handleLimitChange}
+  inputMode="numeric"
+/></div>:null
             }
 
       
