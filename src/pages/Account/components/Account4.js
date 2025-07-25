@@ -348,7 +348,7 @@ function Account4 ({accountData,setAccountData,setStep,setLoad}) {
 
     </main>
 
-            <NavigationBar />
+            <NavigationBar selected={4}/>
 
         </div>
     {

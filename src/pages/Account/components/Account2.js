@@ -198,11 +198,13 @@ function Account2({accountData, setAccountData, setStep, setLoad, hasInformation
                     value={accountData?.beneficiary_user_information?.first_name || ""}
                     onChange={(e) => {
                         setBlur(pre => ({...pre,first_name:false}))
-                        setAccountData(pre => {
-                        const newList = {...pre}
-                        newList.beneficiary_user_information.first_name = e.target.value
-                        return newList
-                    })
+                        setAccountData(pre => ({
+                        ...pre,
+                        beneficiary_user_information:{
+                          ...pre.beneficiary_user_information,
+                          first_name : e.target.value
+                        }
+                    }))
                     
                         setValidation(pre => ({...pre,first_name:isPersian(e.target.value)}))
                     
@@ -221,11 +223,14 @@ function Account2({accountData, setAccountData, setStep, setLoad, hasInformation
                     value={accountData?.beneficiary_user_information?.last_name || ""} 
                     onChange={(e) => {
                         setBlur(pre => ({...pre,last_name:false}))
-                        setAccountData(pre => {
-                        const newList = {...pre}
-                        newList.beneficiary_user_information.last_name = e.target.value
-                        return newList
-                    })
+                        setAccountData(pre => ({
+                        ...pre,
+                        beneficiary_user_information:{
+                          ...pre.beneficiary_user_information,
+                          last_name : e.target.value
+                        }
+                        
+                    }))
                     
                         setValidation(pre => ({...pre,last_name:isPersian(e.target.value)}))
                     
@@ -244,11 +249,14 @@ function Account2({accountData, setAccountData, setStep, setLoad, hasInformation
                       setJalaliValue(dateObj);
                       const gregorianDate = dateObj.toDate();
                       const isoDate = gregorianDate.toISOString().split("T")[0];
-                      setAccountData(pre => {
-                        const newData = {...pre}
-                        newData.beneficiary_user_information.birth_date = isoDate
-                        return newData
-                      })
+                      setAccountData(pre => ({
+                        ...pre,
+                        beneficiary_user_information:{
+                          ...pre.beneficiary_user_information,
+                          birth_date : isoDate
+                        }
+                        
+                      }))
                     }}
                     calendar={persian}
                     locale={persian_fa_custom}
@@ -268,12 +276,14 @@ function Account2({accountData, setAccountData, setStep, setLoad, hasInformation
 
                 <div className="account-gender-div">
                 <label htmlFor="account-gender">جنسیت:</label>
-                <select id="account-gender" value={accountData.beneficiary_user_information.gender} onChange={e => {
-                    setAccountData(pre => {
-                        const newData = {...pre}
-                        newData.beneficiary_user_information.gender = e.target.value
-                        return newData
-                    })
+                <select id="account-gender" value={accountData?.beneficiary_user_information?.gender || ""} onChange={e => {
+                    setAccountData(pre => ({
+                        ...pre,
+                        beneficiary_user_information:{
+                          ...pre.beneficiary_user_information,
+                          gender : e.target.value
+                        }
+                    }))
                 }}>
                     <option value="" disabled>انتخاب کنید</option>
                     <option value="female">زن</option>

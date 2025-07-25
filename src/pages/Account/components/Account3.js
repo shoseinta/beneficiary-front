@@ -94,31 +94,37 @@ function Account3({ accountData, setAccountData, setStep, setLoad, hasAddress })
 
   const handleNeighborChange = e => {
     setBlur(pre => ({...pre, neighbor: false}));
-    setAccountData(pre => {
-      const newData = {...pre};
-      newData.beneficiary_user_address.neighborhood = e.target.value;
-      return newData;
-    });
+    setAccountData(pre => ({
+      ...pre,
+      beneficiary_user_address: {
+        ...pre.beneficiary_user_address,
+        neighborhood : e.target.value
+      }
+    }));
     setValidation(pre => ({...pre, neighbor: isPersian(e.target.value)}));
   };
 
   const handleStreetChange = e => {
     setBlur(pre => ({...pre, street: false}));
-    setAccountData(pre => {
-      const newData = {...pre};
-      newData.beneficiary_user_address.street = e.target.value;
-      return newData;
-    });
+    setAccountData(pre => ({
+      ...pre,
+      beneficiary_user_address: {
+        ...pre.beneficiary_user_address,
+        street : e.target.value
+      }
+    }));
     setValidation(pre => ({...pre, street: isPersian(e.target.value)}));
   };
 
   const handleAlleyChange = e => {
     setBlur(pre => ({...pre, alley: false}));
-    setAccountData(pre => {
-      const newData = {...pre};
-      newData.beneficiary_user_address.alley = e.target.value;
-      return newData;
-    });
+    setAccountData(pre => ({
+      ...pre,
+      beneficiary_user_address: {
+        ...pre.beneficiary_user_address,
+        alley : e.target.value
+      }
+    }));
     setValidation(pre => ({...pre, alley: isPersian(e.target.value)}));
   };
 
@@ -246,11 +252,14 @@ function Account3({ accountData, setAccountData, setStep, setLoad, hasAddress })
                 id="account-province" 
                 value={accountData?.beneficiary_user_address?.province || ""} 
                 onChange={(e) => {
-                  setAccountData(pre => {
-                    const newData = {...pre};
-                    newData.beneficiary_user_address.province = Number(e.target.value);
-                    return newData;
-                  });
+                  setAccountData(pre => ({
+                    ...pre,
+                    beneficiary_user_address: {
+                      ...pre.beneficiary_user_address,
+                      province: Number(e.target.value)
+                    }
+
+                  }));
                 }}
               >
                 <option value=""></option>
@@ -267,12 +276,15 @@ function Account3({ accountData, setAccountData, setStep, setLoad, hasAddress })
                   id="account-city" 
                   value={accountData?.beneficiary_user_address?.city || ""} 
                   onChange={(e) => {
-                    setAccountData(pre => {
-                      const newData = {...pre};
-                      newData.beneficiary_user_address.city = Number(e.target.value);
-                      return newData;
-                    });
-                  }}
+                  setAccountData(pre => ({
+                    ...pre,
+                    beneficiary_user_address: {
+                      ...pre.beneficiary_user_address,
+                      city: Number(e.target.value)
+                    }
+
+                  }));
+                }}
                 >
                   <option value=""> </option>
                   {cities
