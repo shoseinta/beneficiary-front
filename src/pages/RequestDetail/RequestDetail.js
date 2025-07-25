@@ -14,6 +14,9 @@ import { useDropzone } from "react-dropzone";
 import { toJalaali } from 'jalaali-js';
 
 function RequestDetail() {
+  useEffect(() => {
+        document.title = "صفحه سوابق درخواست خیریه"
+    },[])
   const { id } = useParams();
   const {duration,processingStage} = useLookup();
   const [isEdit,setIsEdit] = useState(false)

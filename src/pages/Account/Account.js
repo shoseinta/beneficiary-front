@@ -13,6 +13,11 @@ function Account() {
     const [hasInformation,setHasInformation] = useState(false)
     const [hasAddress, setHasAddress] = useState(false)
 
+
+    useEffect(() => {
+        document.title = "صفحه حساب کاربری خیریه"
+    },[])
+
     useEffect(() => {
         console.log(accountData)
     })

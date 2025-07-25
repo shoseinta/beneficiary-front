@@ -8,6 +8,10 @@ import hide_icon from '../../media/icons/hide_icon.svg';
 
 import { useLookup } from "../../context/LookUpContext"
 function Login() {
+
+    useEffect(() => {
+        document.title = "صفحه ورود خیریه"
+    },[])
     const navigate = useNavigate()
     const [formData, setFormData] = useState({username:"",
         password:"",

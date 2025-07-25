@@ -6,6 +6,10 @@ import './Requests.css'; // Assuming you have a CSS file for styling
 import Header from "../../components/header/Header";
 
 function Requests() {
+
+    useEffect(() => {
+        document.title = "صفحه سوابق درخواست خیریه"
+    },[])
     const {requestsData,setRequestsData, activeEndpoint, setActiveEndpoint, setIsRequestPage} = useLookup()
     const endpoints = [
         'request-all-get/',

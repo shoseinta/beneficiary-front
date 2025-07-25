@@ -33,6 +33,10 @@ function Home() {
     }
   });
 
+  useEffect(() => {
+        document.title = "صفحه خانه خیریه"
+    },[])
+
   const [whichNotif, setWhichNotif] = useState(0);
 
   // Contact information

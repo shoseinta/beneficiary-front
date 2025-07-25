@@ -9,6 +9,9 @@ import FinalForm from "./components/FinalForm";
 
 function NewRequest() {
     const navigate = useNavigate();
+    useEffect(() => {
+        document.title = "صفحه ایجاد درخواست خیریه"
+    },[])
 
     const {loading, error, duration, typeLayerOne, typeLayerTwo, setActiveEndpoint} = useLookup()
     const [files, setFiles] = useState([]);
