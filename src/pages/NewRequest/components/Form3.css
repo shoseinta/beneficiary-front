@@ -227,7 +227,7 @@
   border-radius: 6px;
   font-size: 0.7rem;
   font-weight: normal;
-  text-align: center;
+  padding: 0 8px;
 }
 .form3-container form div:not(:first-of-type) input , 
 .form3-container form div:not(:first-of-type) textarea {
@@ -360,7 +360,7 @@
 
 /* Dropzone Styles */
 .form3-container .dropzone {
-  height: fit-content;
+  height: 70px;
   width: 80%;
   max-width: 400px;
   border: 1px solid var(--main-color);
@@ -383,6 +383,7 @@
 .form3-container .upload-content {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
     gap: 10px;
     width:100%;
@@ -396,8 +397,7 @@
 
 .form3-container .upload-content p {
     margin: 0;
-    color: var(--main-color);
-    font-weight: 500;
+    font-size: 0.6rem;
 }
 
 .form3-container .upload-content small {

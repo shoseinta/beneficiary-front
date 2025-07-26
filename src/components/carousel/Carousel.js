@@ -184,8 +184,8 @@ const gregorianToJalali = (dateString) => {
           { notification.items.length !== 0 ?
           <>
             <section className="h1">
-            <img src="media/icons/bell_icon.svg" alt="" />
-            <h1>{notification.title || "اطلاعیه‌های شما"}</h1>
+            <img src={bell_icon} alt="" />
+            <h1>{notifIndex === 0 ? " اطلاعیه‌های شما":" اعلانات سامانه"}</h1>
           </section>
           <section className="h3">
             <h3>{notification.items[0]?.heading || "عنوان اطلاعیه"}</h3>
@@ -201,8 +201,8 @@ const gregorianToJalali = (dateString) => {
           </>:
             <>
             <section className="h1" style={{marginBottom:"0"}}>
-            <img src="media/icons/bell_icon.svg" alt="" />
-            <h1>{"اطلاعیه‌های شما"}</h1>
+            <img src={bell_icon} alt="" />
+            <h1>{notifIndex === 0 ? " اطلاعیه‌های شما":" اعلانات سامانه"}</h1>
           </section>
           <div style={{height:"100%"}}>
           <section className="h3" style={{justifyContent:"center",alignItems:"center",height:"50%",position:"relative",top:"50%",transform:"translateY(-50%)"}}>

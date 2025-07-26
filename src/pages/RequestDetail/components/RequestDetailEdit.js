@@ -44,13 +44,12 @@ function RequestDetailEdit ({isEdit, setIsEdit, updateData, setUpdateData, reque
         const { getRootProps, getInputProps, isDragActive } = useDropzone({
             onDrop,
             accept: {
-                'image/*': ['.jpeg', '.jpg', '.png', '.gif'],
+                'image/*': ['.jpeg', '.jpg', '.png', '.gif', '.heic', '.heif'],
                 'application/pdf': ['.pdf'],
                 'application/msword': ['.doc'],
                 'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
                 'application/vnd.ms-excel': ['.xls'],
                 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'],
-                'text/plain': ['.txt']
             },
             maxSize: 10 * 1024 * 1024, // 10MB
             multiple: true
@@ -737,9 +736,9 @@ function RequestDetailEdit ({isEdit, setIsEdit, updateData, setUpdateData, reque
                                                     <p>
                                                         {isDragActive ? 
                                                             "فایل‌ها را اینجا رها کنید" : 
-                                                            "فایل‌ها را اینجا رها کنید یا برای انتخاب کلیک کنید"}
+                                                            "برای انتخاب مستندات کلیک کنید"}
                                                     </p>
-                                                    <small>پشتیبانی از: JPG, PNG, PDF, DOC, XLS (حداکثر 10MB)</small>
+                                                     
                                                 </div>
                                                 </>}
                                                 {files1.length > 0 && (

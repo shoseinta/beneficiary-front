@@ -140,7 +140,7 @@ function Form1({ requestData, setRequestData,nextActive,setNextActive, typeLayer
                     'کالای درخواستی شما در کدامیک از دسته های زیر قرار دارد؟' }
                    { selectedTypeLayerOne === 2 &&
                 'وجه نقد درخواستی شما در کدامیک از دسته های زیر قرار دارد؟' }
-                {selectedTypeLayerOne === 3 && 'خدمت درخواستی شما در کدامیک از دسته های زیر قرار دارد؟'}<sup>*</sup></label>
+                {selectedTypeLayerOne === 3 && 'خدمت درخواستی شما در کدامیک از دسته های زیر قرار دارد؟'}{(selectedTypeLayerOne === 1 || selectedTypeLayerOne ===2 || selectedTypeLayerOne === 3) &&<sup>*</sup>}</label>
                     {selectedTypeLayerOne && <select 
                     id="type-layer2-id" 
                     name="type-layer2" 
