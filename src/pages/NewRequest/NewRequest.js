@@ -32,6 +32,9 @@ function NewRequest() {
     const [recurringData, setRecurringData] = useState({
         beneficiary_request_duration_recurring_limit: "",
     });
+    useEffect(() => {
+        console.log(recurringData)
+})
     const [nextActive, setNextActive] = useState(false);
     const [submitSuccess, setSubmitSuccess] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);

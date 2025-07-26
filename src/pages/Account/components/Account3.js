@@ -31,6 +31,10 @@ function LocationMarker({ position, setPosition }) {
 }
 
 function Account3({ accountData, setAccountData, setStep, setLoad, hasAddress }) {
+  const toPersianDigits = (num) => {
+    const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+    return num.toString().replace(/\d/g, (x) => persianDigits[x]);
+  };
   const [account1Data, setAccount1Data] = useState(accountData)
   const { provinces, cities } = useLookup();
   const [submit, setSubmit] = useState(false);
@@ -53,7 +57,7 @@ function Account3({ accountData, setAccountData, setStep, setLoad, hasAddress })
     neighbor: true,
     street: true,
     alley: true,
-    postal_code: true,
+    postal_code: true
   });
 
   const [blur, setBlur] = useState({
@@ -96,6 +100,99 @@ function Account3({ accountData, setAccountData, setStep, setLoad, hasAddress })
     return digitRegex.test(text);
   };
 
+
+  const handlePostalCodeChange = (event) => {
+    setBlur(pre => ({...pre, postal_code: false}));
+  // Convert Persian digits to English and remove all non-digit characters
+  let englishValue = event.target.value
+    .split('')
+    .map(c => {
+      const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+      const index = persianDigits.indexOf(c);
+      return index >= 0 ? index.toString() : c;
+    })
+    .join('')
+    .replace(/\D/g, '');
+
+  // Update the state with the English number (or empty string)
+  const newValue = englishValue === '' ? null : englishValue;
+  setAccount1Data(pre => ({
+                      ...pre,
+                      beneficiary_user_address:{
+                        ...pre.beneficiary_user_address,
+                        postal_code:newValue
+                      }
+              
+                    }));
+  if (newValue.length !== 10 && newValue !== null) {
+    setValidation(pre => ({...pre, postal_code: false}));
+  } else {
+    setValidation(pre => ({...pre, postal_code: true}));
+  }
+
+  // Update the displayed value with Persian digits (no commas)
+  const displayValue = englishValue === '' 
+    ? '' 
+    : toPersianDigits(englishValue);
+  event.target.value = displayValue;
+};
+
+  const handleUnitChange = (event) => {
+  // Convert Persian digits to English and remove all non-digit characters
+  let englishValue = event.target.value
+    .split('')
+    .map(c => {
+      const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+      const index = persianDigits.indexOf(c);
+      return index >= 0 ? index.toString() : c;
+    })
+    .join('')
+    .replace(/\D/g, '');
+
+  // Update the state with the English number (or empty string)
+  const newValue = englishValue === '' ? null : Number(englishValue);
+  setAccount1Data(pre => ({
+                      ...pre,
+                      beneficiary_user_address:{
+                        ...pre.beneficiary_user_address,
+                        unit:newValue
+                      }
+              
+                    }));
+  // Update the displayed value with Persian digits (no commas)
+  const displayValue = englishValue === '' 
+    ? '' 
+    : toPersianDigits(englishValue);
+  event.target.value = displayValue;
+};
+  const handleBuildingNumberChange = (event) => {
+  // Convert Persian digits to English and remove all non-digit characters
+  let englishValue = event.target.value
+    .split('')
+    .map(c => {
+      const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+      const index = persianDigits.indexOf(c);
+      return index >= 0 ? index.toString() : c;
+    })
+    .join('')
+    .replace(/\D/g, '');
+
+  // Update the state with the English number (or empty string)
+  const newValue = englishValue === '' ? null : Number(englishValue);
+  setAccount1Data(pre => ({
+                      ...pre,
+                      beneficiary_user_address:{
+                        ...pre.beneficiary_user_address,
+                        building_number:newValue
+                      }
+              
+                    }));
+  // Update the displayed value with Persian digits (no commas)
+  const displayValue = englishValue === '' 
+    ? '' 
+    : toPersianDigits(englishValue);
+  event.target.value = displayValue;
+};
   const handleMapConfirm = () => {
     setAccount1Data(pre => ({
       ...pre,
@@ -370,22 +467,8 @@ function Account3({ accountData, setAccountData, setStep, setLoad, hasAddress })
                 id="account-postal" 
                 pattern="^[0-9۰-۹]{10}$" 
                 inputMode="numeric"
-                value={account1Data?.beneficiary_user_address?.postal_code || ""} 
-                onChange={(e) => {
-                  setBlur(pre => ({...pre, postal_code: false}));
-                  if (isDigit(e.target.value) || e.target.value === '') {
-                    setAccount1Data(pre => {
-                      const newData = {...pre};
-                      newData.beneficiary_user_address.postal_code = e.target.value;
-                      return newData;
-                    });
-                  }
-                  if ((e.target.value.length) !== 10 && e.target.value !== "") {
-                    setValidation(pre => ({...pre, postal_code: false}));
-                  } else {
-                    setValidation(pre => ({...pre, postal_code: true}));
-                  }
-                }}
+                value={account1Data?.beneficiary_user_address?.postal_code ? toPersianDigits(account1Data?.beneficiary_user_address?.postal_code).toString() :null} 
+                onChange={handlePostalCodeChange}
                 onBlur={() => setBlur(pre => ({...pre, postal_code: true}))}
                 maxLength={10}
               />
@@ -419,16 +502,8 @@ function Account3({ accountData, setAccountData, setStep, setLoad, hasAddress })
                 type="text" 
                 id="account-building-num" 
                 inputMode="numeric" 
-                value={account1Data?.beneficiary_user_address?.unit || ""}
-                onChange={(e) => {
-                  if (isDigit(e.target.value) || e.target.value === '') {
-                    setAccount1Data(pre => {
-                      const newData = {...pre};
-                      newData.beneficiary_user_address.unit = Number(e.target.value);
-                      return newData;
-                    });
-                  }
-                }}
+                value={account1Data?.beneficiary_user_address?.building_number ? toPersianDigits(account1Data?.beneficiary_user_address?.building_number.toString()): null}
+                onChange={handleBuildingNumberChange}
               />
             </div>
 
@@ -438,16 +513,8 @@ function Account3({ accountData, setAccountData, setStep, setLoad, hasAddress })
                 type="text" 
                 id="account-unit" 
                 inputMode="numeric" 
-                value={account1Data?.beneficiary_user_address?.building_number || ""}
-                onChange={(e) => {
-                  if (isDigit(e.target.value) || e.target.value === '') {
-                    setAccount1Data(pre => {
-                      const newData = {...pre};
-                      newData.beneficiary_user_address.building_number = Number(e.target.value);
-                      return newData;
-                    });
-                  }
-                }}
+                value={account1Data?.beneficiary_user_address?.unit ? toPersianDigits(account1Data?.beneficiary_user_address?.unit.toString()):null}
+                onChange={handleUnitChange}
               />
             </div>
           </div>
