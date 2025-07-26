@@ -31,9 +31,24 @@ function LocationMarker({ position, setPosition }) {
 }
 
 function Account3({ accountData, setAccountData, setStep, setLoad, hasAddress }) {
+  const [account1Data, setAccount1Data] = useState(accountData)
   const { provinces, cities } = useLookup();
   const [submit, setSubmit] = useState(false);
+  useEffect(() => {
+    setAccount1Data(accountData)
+  },[accountData])
 
+  useEffect(() => {
+    if(account1Data?.beneficiary_user_address?.province === 0){
+      setAccount1Data(pre => ({
+        ...pre,
+        beneficiary_user_address:{
+          ...pre.beneficiary_user_address,
+          province:null
+        }
+      }))
+    }
+  },[account1Data])
   const [validation, setValidation] = useState({
     neighbor: true,
     street: true,
@@ -50,26 +65,26 @@ function Account3({ accountData, setAccountData, setStep, setLoad, hasAddress })
 
   // Initialize position state with proper fallbacks
   const [position, setPosition] = useState(() => {
-    if (accountData?.beneficiary_user_address?.latitude && 
-        accountData?.beneficiary_user_address?.longitude) {
+    if (account1Data?.beneficiary_user_address?.latitude && 
+        account1Data?.beneficiary_user_address?.longitude) {
       return [
-        accountData.beneficiary_user_address.latitude,
-        accountData.beneficiary_user_address.longitude
+        account1Data.beneficiary_user_address.latitude,
+        account1Data.beneficiary_user_address.longitude
       ];
     }
     return [35.6892, 51.3890]; // Default to Tehran coordinates
   });
 
-  // Update position if accountData changes
+  // Update position if account1Data changes
   useEffect(() => {
-    if (accountData?.beneficiary_user_address?.latitude && 
-        accountData?.beneficiary_user_address?.longitude) {
+    if (account1Data?.beneficiary_user_address?.latitude && 
+        account1Data?.beneficiary_user_address?.longitude) {
       setPosition([
-        accountData.beneficiary_user_address.latitude,
-        accountData.beneficiary_user_address.longitude
+        account1Data.beneficiary_user_address.latitude,
+        account1Data.beneficiary_user_address.longitude
       ]);
     }
-  }, [accountData]);
+  }, [account1Data]);
 
   const isPersian = (text) => {
     const persianRegex = /^[\u0600-\u06FF\u0621-\u064A\s]+$/;
@@ -82,7 +97,7 @@ function Account3({ accountData, setAccountData, setStep, setLoad, hasAddress })
   };
 
   const handleMapConfirm = () => {
-    setAccountData(pre => ({
+    setAccount1Data(pre => ({
       ...pre,
       beneficiary_user_address: {
         ...pre.beneficiary_user_address,
@@ -94,7 +109,7 @@ function Account3({ accountData, setAccountData, setStep, setLoad, hasAddress })
 
   const handleNeighborChange = e => {
     setBlur(pre => ({...pre, neighbor: false}));
-    setAccountData(pre => ({
+    setAccount1Data(pre => ({
       ...pre,
       beneficiary_user_address: {
         ...pre.beneficiary_user_address,
@@ -106,7 +121,7 @@ function Account3({ accountData, setAccountData, setStep, setLoad, hasAddress })
 
   const handleStreetChange = e => {
     setBlur(pre => ({...pre, street: false}));
-    setAccountData(pre => ({
+    setAccount1Data(pre => ({
       ...pre,
       beneficiary_user_address: {
         ...pre.beneficiary_user_address,
@@ -118,7 +133,7 @@ function Account3({ accountData, setAccountData, setStep, setLoad, hasAddress })
 
   const handleAlleyChange = e => {
     setBlur(pre => ({...pre, alley: false}));
-    setAccountData(pre => ({
+    setAccount1Data(pre => ({
       ...pre,
       beneficiary_user_address: {
         ...pre.beneficiary_user_address,
@@ -130,7 +145,13 @@ function Account3({ accountData, setAccountData, setStep, setLoad, hasAddress })
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (hasAddress && validation.neighbor && validation.street && validation.alley && validation.postal_code) {
+    if (hasAddress && 
+      (validation.neighbor || account1Data?.beneficiary_user_address?.neighborhood === "" || account1Data?.beneficiary_user_address?.neighborhood === null) && 
+      (validation.street || account1Data?.beneficiary_user_address?.street === "" || account1Data?.beneficiary_user_address?.street === null) && 
+      (validation.alley || account1Data?.beneficiary_user_address?.alley === "" || account1Data?.beneficiary_user_address?.alley === null) && 
+      (validation.postal_code || account1Data?.beneficiary_user_address?.postal_code === "" || account1Data?.beneficiary_user_address?.postal_code === null) 
+    )
+      {
       try {
         const response = await fetch(`https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/update-user-address/`, {
           method: 'PATCH',
@@ -139,16 +160,16 @@ function Account3({ accountData, setAccountData, setStep, setLoad, hasAddress })
             'Authorization': `Token ${localStorage.getItem('access_token')}`,
           },
           body: JSON.stringify({
-            alley: accountData?.beneficiary_user_address?.alley || null,
-            building_number: accountData?.beneficiary_user_address?.building_number || null,
-            city: accountData?.beneficiary_user_address?.city || null,
-            latitude: accountData?.beneficiary_user_address?.latitude || null,
-            longitude: accountData?.beneficiary_user_address?.longitude || null,
-            neighborhood: accountData?.beneficiary_user_address?.neighborhood || null,
-            postal_code: accountData?.beneficiary_user_address?.postal_code || null,
-            province: accountData?.beneficiary_user_address?.province || null,
-            street: accountData?.beneficiary_user_address?.street || null,
-            unit: accountData?.beneficiary_user_address?.unit || null,
+            alley: account1Data?.beneficiary_user_address?.alley || null,
+            building_number: account1Data?.beneficiary_user_address?.building_number || null,
+            city: account1Data?.beneficiary_user_address?.city || null,
+            latitude: account1Data?.beneficiary_user_address?.latitude || null,
+            longitude: account1Data?.beneficiary_user_address?.longitude || null,
+            neighborhood: account1Data?.beneficiary_user_address?.neighborhood || null,
+            postal_code: account1Data?.beneficiary_user_address?.postal_code || null,
+            province: account1Data?.beneficiary_user_address?.province || null,
+            street: account1Data?.beneficiary_user_address?.street || null,
+            unit: account1Data?.beneficiary_user_address?.unit || null,
           }),
         });
         
@@ -165,7 +186,12 @@ function Account3({ accountData, setAccountData, setStep, setLoad, hasAddress })
       } catch (err) {
         console.error(err);
       }
-    } else if (!hasAddress && validation.neighbor && validation.street && validation.alley && validation.postal_code) {
+    } else if (!hasAddress && 
+      (validation.neighbor || account1Data?.beneficiary_user_address?.neighborhood === "" || account1Data?.beneficiary_user_address?.neighborhood === null) && 
+      (validation.street || account1Data?.beneficiary_user_address?.street === "" || account1Data?.beneficiary_user_address?.street === null) && 
+      (validation.alley || account1Data?.beneficiary_user_address?.alley === "" || account1Data?.beneficiary_user_address?.alley === null) && 
+      (validation.postal_code || account1Data?.beneficiary_user_address?.postal_code === "" || account1Data?.beneficiary_user_address?.postal_code === null) 
+    ) {
       try {
         const response = await fetch(`https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/create-user-address/`, {
           method: 'POST',
@@ -174,16 +200,16 @@ function Account3({ accountData, setAccountData, setStep, setLoad, hasAddress })
             'Authorization': `Token ${localStorage.getItem('access_token')}`,
           },
           body: JSON.stringify({
-            alley: accountData?.beneficiary_user_address?.alley || null,
-            building_number: accountData?.beneficiary_user_address?.building_number || null,
-            city: accountData?.beneficiary_user_address?.city || null,
-            latitude: accountData?.beneficiary_user_address?.latitude || null,
-            longitude: accountData?.beneficiary_user_address?.longitude || null,
-            neighborhood: accountData?.beneficiary_user_address?.neighborhood || null,
-            postal_code: accountData?.beneficiary_user_address?.postal_code || null,
-            province: accountData?.beneficiary_user_address?.province || null,
-            street: accountData?.beneficiary_user_address?.street || null,
-            unit: accountData?.beneficiary_user_address?.unit || null,
+            alley: account1Data?.beneficiary_user_address?.alley || null,
+            building_number: account1Data?.beneficiary_user_address?.building_number || null,
+            city: account1Data?.beneficiary_user_address?.city || null,
+            latitude: account1Data?.beneficiary_user_address?.latitude || null,
+            longitude: account1Data?.beneficiary_user_address?.longitude || null,
+            neighborhood: account1Data?.beneficiary_user_address?.neighborhood || null,
+            postal_code: account1Data?.beneficiary_user_address?.postal_code || null,
+            province: account1Data?.beneficiary_user_address?.province || null,
+            street: account1Data?.beneficiary_user_address?.street || null,
+            unit: account1Data?.beneficiary_user_address?.unit || null,
           }),
         });
         
@@ -214,7 +240,7 @@ function Account3({ accountData, setAccountData, setStep, setLoad, hasAddress })
   }, []);
 
   useEffect(() => {
-    console.log(accountData)
+    console.log(account1Data)
   })
 
   return (
@@ -250,19 +276,34 @@ function Account3({ accountData, setAccountData, setStep, setLoad, hasAddress })
               <label htmlFor="account-province"> استان: </label>
               <select 
                 id="account-province" 
-                value={accountData?.beneficiary_user_address?.province || ""} 
+                value={account1Data?.beneficiary_user_address?.province  || null} 
                 onChange={(e) => {
-                  setAccountData(pre => ({
+                  if(e.target.value !== null){
+                  setAccount1Data(pre => ({
                     ...pre,
                     beneficiary_user_address: {
                       ...pre.beneficiary_user_address,
-                      province: Number(e.target.value)
+                      province: Number(e.target.value),
+                      city:null
                     }
 
+
                   }));
+                }else{
+                  setAccount1Data(pre => ({
+                    ...pre,
+                    beneficiary_user_address: {
+                      ...pre.beneficiary_user_address,
+                      province: null,
+                      city:null
+                    }
+
+
+                  }));
+                }
                 }}
               >
-                <option value=""></option>
+                <option value={null}></option>
                 {provinces.map(item => (
                   <option key={item.id} value={item.id}>{item.province_name}</option>
                 ))}
@@ -271,12 +312,13 @@ function Account3({ accountData, setAccountData, setStep, setLoad, hasAddress })
 
             <div>
               <label htmlFor="account-city"> شهر: </label>
-              {accountData?.beneficiary_user_address?.province ? (
+              {account1Data?.beneficiary_user_address?.province ? (
                 <select 
                   id="account-city" 
-                  value={accountData?.beneficiary_user_address?.city || ""} 
+                  value={account1Data?.beneficiary_user_address?.city || ""} 
                   onChange={(e) => {
-                  setAccountData(pre => ({
+                  if(e.target.value !== null){
+                  setAccount1Data(pre => ({
                     ...pre,
                     beneficiary_user_address: {
                       ...pre.beneficiary_user_address,
@@ -284,17 +326,27 @@ function Account3({ accountData, setAccountData, setStep, setLoad, hasAddress })
                     }
 
                   }));
+                }else{
+                  setAccount1Data(pre => ({
+                    ...pre,
+                    beneficiary_user_address: {
+                      ...pre.beneficiary_user_address,
+                      city: null,
+                    }
+
+                  }));
+                }
                 }}
                 >
-                  <option value=""> </option>
+                  <option value={null}> </option>
                   {cities
-                    .filter(item => item.province === accountData.beneficiary_user_address.province)
+                    .filter(item => item.province === account1Data.beneficiary_user_address.province)
                     .map(item => (
                       <option key={item.id} value={item.id}>{item.city_name}</option>
                     ))}
                 </select>
               ) : (
-                <select id="account-city" value={accountData?.beneficiary_user_address?.city || ""}>
+                <select id="account-city" value={account1Data?.beneficiary_user_address?.city || ""}>
                   <option value="">لطفا ابتدا استان محل زندگی خود را انتخاب کنید</option>
                 </select>
               )}
@@ -305,7 +357,7 @@ function Account3({ accountData, setAccountData, setStep, setLoad, hasAddress })
               <input 
                 type="text" 
                 id="account-neighbor" 
-                value={accountData?.beneficiary_user_address?.neighborhood || ""}
+                value={account1Data?.beneficiary_user_address?.neighborhood || ""}
                 onChange={handleNeighborChange} 
                 onBlur={() => setBlur(pre => ({...pre, neighbor: true}))}
               />
@@ -318,11 +370,11 @@ function Account3({ accountData, setAccountData, setStep, setLoad, hasAddress })
                 id="account-postal" 
                 pattern="^[0-9۰-۹]{10}$" 
                 inputMode="numeric"
-                value={accountData?.beneficiary_user_address?.postal_code || ""} 
+                value={account1Data?.beneficiary_user_address?.postal_code || ""} 
                 onChange={(e) => {
                   setBlur(pre => ({...pre, postal_code: false}));
                   if (isDigit(e.target.value) || e.target.value === '') {
-                    setAccountData(pre => {
+                    setAccount1Data(pre => {
                       const newData = {...pre};
                       newData.beneficiary_user_address.postal_code = e.target.value;
                       return newData;
@@ -344,7 +396,7 @@ function Account3({ accountData, setAccountData, setStep, setLoad, hasAddress })
               <input 
                 type="text" 
                 id="account-street"
-                value={accountData?.beneficiary_user_address?.street || ""}
+                value={account1Data?.beneficiary_user_address?.street || ""}
                 onChange={handleStreetChange}
                 onBlur={() => setBlur(pre => ({...pre, street: true}))}
               />
@@ -355,7 +407,7 @@ function Account3({ accountData, setAccountData, setStep, setLoad, hasAddress })
               <input 
                 type="text" 
                 id="account-alley"
-                value={accountData?.beneficiary_user_address?.alley || ""}
+                value={account1Data?.beneficiary_user_address?.alley || ""}
                 onChange={handleAlleyChange} 
                 onBlur={() => setBlur(pre => ({...pre, alley: true}))}
               />
@@ -367,10 +419,10 @@ function Account3({ accountData, setAccountData, setStep, setLoad, hasAddress })
                 type="text" 
                 id="account-building-num" 
                 inputMode="numeric" 
-                value={accountData?.beneficiary_user_address?.unit || ""}
+                value={account1Data?.beneficiary_user_address?.unit || ""}
                 onChange={(e) => {
                   if (isDigit(e.target.value) || e.target.value === '') {
-                    setAccountData(pre => {
+                    setAccount1Data(pre => {
                       const newData = {...pre};
                       newData.beneficiary_user_address.unit = Number(e.target.value);
                       return newData;
@@ -386,10 +438,10 @@ function Account3({ accountData, setAccountData, setStep, setLoad, hasAddress })
                 type="text" 
                 id="account-unit" 
                 inputMode="numeric" 
-                value={accountData?.beneficiary_user_address?.building_number || ""}
+                value={account1Data?.beneficiary_user_address?.building_number || ""}
                 onChange={(e) => {
                   if (isDigit(e.target.value) || e.target.value === '') {
-                    setAccountData(pre => {
+                    setAccount1Data(pre => {
                       const newData = {...pre};
                       newData.beneficiary_user_address.building_number = Number(e.target.value);
                       return newData;
@@ -455,11 +507,13 @@ function Account3({ accountData, setAccountData, setStep, setLoad, hasAddress })
                 تغییرات با موفقیت اعمال شد
               </div>
             )}
-            {(!validation.neighbor || !validation.street || !validation.alley) && 
+            {((!validation.neighbor && account1Data?.beneficiary_user_address?.neighborhood !== "" && account1Data?.beneficiary_user_address?.neighborhood !== null) || 
+            (!validation.street && account1Data?.beneficiary_user_address?.street !== "" && account1Data?.beneficiary_user_address?.street !== null) || 
+            (!validation.alley && account1Data?.beneficiary_user_address?.alley !== "" && account1Data?.beneficiary_user_address?.alley !== null)) && 
               blur.neighbor && blur.street && blur.alley && (
               <div className="error-message">لطفا نام محله و خیابان و کوچه خود را به فارسی وارد کنید</div>
             )}
-            {!validation.postal_code && blur.postal_code && (
+            {!validation.postal_code && blur.postal_code && account1Data?.beneficiary_user_address?.postal_code !== "" && account1Data?.beneficiary_user_address?.postal_code !== null && (
               <div className="error-message">لطفا یک کدپستی ده رقمی معتبر وارد کنید</div>
             )}
             <input type="submit" value="تأیید" />
