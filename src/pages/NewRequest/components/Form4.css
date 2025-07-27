@@ -1,17 +1,16 @@
-
 :root {
-    --main-color: #185ea7;
-    --main50-color: rgba(24, 94, 160, 0.5);
-    --main10-color: rgba(24, 94, 160, 0.1);
-    --white-color: #ffffff;
-    --white-gray-color: #f5f5f5;
-    --gray-color: #f9f9f9;
-    --black-color: #000000;
-    --black50-color: rgba(0, 0, 0, 0.5);
-    --black25-color: rgba(0, 0, 0, 0.25);
-    --error-red: #ff0000;
-    --bluelinenav-color : #8BAECF;
-    --green-color: #3F9633
+  --main-color: #185EA0;
+  --main50-color: rgba(24, 94, 160, 0.5);
+  --main10-color: rgba(24, 94, 160, 0.1);
+  --white-color: #ffffff;
+  --white-gray-color: #f5f5f5;
+  --gray-color: #f9f9f9;
+  --black-color: #000000;
+  --black50-color: rgba(0, 0, 0, 0.5);
+  --black25-color: rgba(0, 0, 0, 0.25);
+  --error-red: #ff0000;
+  --bluelinenav-color: #8baecf;
+  --green-color: #3f9633;
 }
 .form4-html {
   background-color: var(--main-color);
@@ -67,8 +66,8 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  row-gap: 10px;
-  padding: 10px;
+  row-gap: 30px;
+  padding: 10px 10px 20px 10px;
 }
 .form4-container .nav-up {
   width: 100%;
@@ -86,7 +85,7 @@
   position: relative;
   flex: 1;
 }
-.form4-container .nav-item-up > div{
+.form4-container .nav-item-up > div {
   list-style: none;
   display: flex;
   flex-direction: column;
@@ -103,7 +102,6 @@
   position: relative;
   display: inline-block;
   margin-bottom: 5px;
-
 }
 .form4-container .nav-item-up:not(:last-child) .step-icon::after {
   content: '';
@@ -118,7 +116,9 @@
 }
 /* ✅ Completed lines before active step */
 .form4-container #active-nav-up ~ .nav-item-up .step-icon::after {
-  background-color: var(--main50-color); /* make sure they remain light blue (upcoming steps) */
+  background-color: var(
+    --main50-color
+  ); /* make sure they remain light blue (upcoming steps) */
 }
 
 .form4-container .nav-item-up.step-completed .step-icon::after {
@@ -127,7 +127,11 @@
 
 /* ✅ In-progress line (gradient after current step) */
 .form4-container #active-nav-up .step-icon::after {
-  background: linear-gradient(to left, var(--main-color) , var(--main50-color)); /* RTL gradient */
+  background: linear-gradient(
+    to left,
+    var(--main-color),
+    var(--main50-color)
+  ); /* RTL gradient */
 }
 .form4-container .step-icon svg {
   display: block;
@@ -137,9 +141,8 @@
   position: relative;
   z-index: 1;
   border-radius: 50%;
-
 }
-.form4-container #active-nav-up > div{
+.form4-container #active-nav-up > div {
   color: var(--main-color);
 }
 /* ------------------------------------------------------------------ */
@@ -196,7 +199,8 @@
   overflow-y: auto;
 }
 
-.form4-container #request-description-review1-id , #request-document-review1-id {
+.form4-container #request-description-review1-id,
+#request-document-review1-id {
   height: 60px;
 }
 .form4-container #label-for-file-input {
@@ -253,7 +257,7 @@
   cursor: pointer;
   border: none;
 }
-.form4-container .next-back-btn button > span{
+.form4-container .next-back-btn button > span {
   margin: 0 5px;
 }
 .form4-container .back-button-review {
@@ -266,10 +270,6 @@
   color: var(--white-color);
   padding: 0 5px;
 }
-
-
-
-
 
 .form4-container .nav {
   padding: 5px 0 5px 0;
@@ -301,14 +301,13 @@
 .form4-container .nav > .nav-list > li > #active-nav {
   color: var(--main-color);
 }
-.form4-container .nav > .nav-list > li > a > .nav-icon > img{
+.form4-container .nav > .nav-list > li > a > .nav-icon > img {
   display: block;
   margin-bottom: 5px;
   height: 7vw;
   max-height: 36px;
   width: auto;
 }
-
 
 .form4-container .file-previews {
   display: flex;
@@ -318,7 +317,6 @@
   margin: auto;
   flex: 1 1;
   padding-right: 0;
-
 }
 
 .form4-container .file-preview {
@@ -342,41 +340,49 @@
 .form4-container .file-info {
   display: flex;
   flex-direction: column; /* or 'row' depending on layout */
-  align-items: center;     /* horizontal centering */
+  align-items: center; /* horizontal centering */
   justify-content: center; /* vertical centering */
   gap: 4px;
   flex: 1;
   min-width: 0;
-  text-align: center;      /* centers text inside spans */
+  text-align: center; /* centers text inside spans */
 }
 
-
 .form4-container .file-icon {
-    font-size: 1.5rem;
-    flex-shrink: 0;
+  font-size: 1.5rem;
+  flex-shrink: 0;
 }
 
 .form4-container .file-icon.pdf {
-    color: #e74c3c;
+  color: #e74c3c;
 }
 
 .form4-container .file-icon.word {
-    color: #2b579a;
+  color: #2b579a;
 }
 
 .form4-container .file-icon.excel {
-    color: #217346;
+  color: #217346;
 }
 
 .form4-container .file-name {
-    flex: 1;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    cursor: pointer;
-    color: var(--main-color);
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  color: var(--main-color);
 }
 
 /* .form4-container .file-name:hover {
     text-decoration: underline;
 } */
+
+.form4-container .form4-forms {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  row-gap: 25px;
+
+}

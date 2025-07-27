@@ -1,16 +1,15 @@
-
 :root {
-    --main-color: #185ea7;
-    --main50-color: rgba(24, 94, 160, 0.5);
-    --main10-color: rgba(24, 94, 160, 0.1);
-    --white-color: #ffffff;
-    --white-gray-color: #f5f5f5;
-    --gray-color: #f9f9f9;
-    --black-color: #000000;
-    --black50-color: rgba(0, 0, 0, 0.5);
-    --black25-color: rgba(0, 0, 0, 0.25);
-    --error-red: #ff0000;
-    --bluelinenav-color : #8BAECF
+  --main-color: #185EA0;
+  --main50-color: rgba(24, 94, 160, 0.5);
+  --main10-color: rgba(24, 94, 160, 0.1);
+  --white-color: #ffffff;
+  --white-gray-color: #f5f5f5;
+  --gray-color: #f9f9f9;
+  --black-color: #000000;
+  --black50-color: rgba(0, 0, 0, 0.5);
+  --black25-color: rgba(0, 0, 0, 0.25);
+  --error-red: #ff0000;
+  --bluelinenav-color: #8baecf;
 }
 .form1-html {
   background-color: var(--main-color);
@@ -66,8 +65,8 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  row-gap: 10px;
-  padding: 10px;
+  row-gap: 30px;
+  padding: 10px 10px 20px 10px;
 }
 .form1-container .nav-up {
   width: 100%;
@@ -85,7 +84,7 @@
   position: relative;
   flex: 1;
 }
-.form1-container .nav-item-up > div{
+.form1-container .nav-item-up > div {
   list-style: none;
   display: flex;
   flex-direction: column;
@@ -102,7 +101,6 @@
   position: relative;
   display: inline-block;
   margin-bottom: 5px;
-
 }
 .form1-container .nav-item-up:not(:last-child) .step-icon::after {
   content: '';
@@ -117,7 +115,9 @@
 }
 /* ✅ Completed lines before active step */
 .form1-container #active-nav-up ~ .nav-item-up .step-icon::after {
-  background-color: var(--main50-color); /* make sure they remain light blue (upcoming steps) */
+  background-color: var(
+    --main50-color
+  ); /* make sure they remain light blue (upcoming steps) */
 }
 
 .form1-container .nav-item-up.step-completed .step-icon::after {
@@ -126,7 +126,11 @@
 
 /* ✅ In-progress line (gradient after current step) */
 .form1-container #active-nav-up .step-icon::after {
-  background: linear-gradient(to left, var(--main-color) , var(--main50-color)); /* RTL gradient */
+  background: linear-gradient(
+    to left,
+    var(--main-color),
+    var(--main50-color)
+  ); /* RTL gradient */
 }
 .form1-container .step-icon svg {
   display: block;
@@ -136,9 +140,8 @@
   position: relative;
   z-index: 1;
   border-radius: 50%;
-
 }
-.form1-container #active-nav-up > div{
+.form1-container #active-nav-up > div {
   color: var(--main-color);
 }
 
@@ -173,7 +176,7 @@
   max-width: 400px;
 }
 
-.form1-container .choice-group input[type="radio"] {
+.form1-container .choice-group input[type='radio'] {
   display: none;
 }
 
@@ -191,14 +194,13 @@
   font-size: 0.7rem;
 }
 
-.form1-container .choice-group input[type="radio"]:checked + label {
+.form1-container .choice-group input[type='radio']:checked + label {
   background-color: var(--main-color);
   color: var(--white-color);
 }
 .form1-container .type-layer2 {
   display: flex;
   flex-direction: column;
-
 }
 .form1-container .type-layer2 select {
   width: 80%;
@@ -208,14 +210,14 @@
   background-color: var(--white-gray-color);
   border: var(--main-color) 1px solid;
   border-radius: 6px;
-  appearance: none;            /* Remove default arrow */
+  appearance: none; /* Remove default arrow */
   -webkit-appearance: none;
   -moz-appearance: none;
   background-image: url(../../../media/icons/down_arrow_icon.svg);
   background-repeat: no-repeat;
   background-position: left 10px center; /* RTL support */
   background-size: 14px;
-  padding-left: 2rem;          /* space for arrow */
+  padding-left: 2rem; /* space for arrow */
   cursor: pointer;
   font-size: 0.7rem;
   font-weight: normal;
@@ -227,7 +229,6 @@
 .form1-container .cash-input-wrapper {
   display: flex;
   flex-direction: column;
-  
 }
 .form1-container .cash-input-box {
   display: flex;
@@ -267,14 +268,10 @@
   border: none;
   background-color: transparent;
 }
-.form1-container .next-btn button > span{
+.form1-container .next-btn button > span {
   margin-left: 5px;
   padding-bottom: 5px;
 }
-
-
-
-
 
 .form1-container .nav {
   padding: 5px 0 5px 0;
@@ -306,7 +303,7 @@
 .form1-container .nav > .nav-list > li > #active-nav {
   color: var(--main-color);
 }
-.form1-container .nav > .nav-list > li > a > .nav-icon > img{
+.form1-container .nav > .nav-list > li > a > .nav-icon > img {
   display: block;
   margin-bottom: 5px;
   height: 7vw;
@@ -329,7 +326,7 @@
   border: none;
   background-color: transparent;
 }
-.form1-container .next-lock-btn span{
+.form1-container .next-lock-btn span {
   color: var(--black-color);
   margin-left: 5px;
   padding-bottom: 5px;
@@ -347,4 +344,12 @@
 }
 .form1-container .next-lock-btn svg {
   fill: var(--black25-color);
+}
+.form1-container .form1-forms {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  row-gap: 30px;
+
 }

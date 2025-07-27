@@ -10,74 +10,73 @@ export const LookupProvider = ({ children }) => {
   const [activeEndpoint, setActiveEndpoint] = useState(null);
   const [isRequestPage, setIsRequestPage] = useState(false);
   const endpoints = [
-        'request-all-get/',
-        'request-initial-stages-get/',
-        'request-in-progress-get/',
-        'request-completed-get/',
-        'request-rejected-get/',
-      ];
+    'request-all-get/',
+    'request-initial-stages-get/',
+    'request-in-progress-get/',
+    'request-completed-get/',
+    'request-rejected-get/',
+  ];
   const [requestsData, setRequestsData] = useState([
     {
-        url: `https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary`,
-        data: null,
-        page: 1,
-        pageCount: 1,
-        loading: false,
+      url: `https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary`,
+      data: null,
+      page: 1,
+      pageCount: 1,
+      loading: false,
     },
     {
-        url: `https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary`,
-        data: null,
-        page: 1,
-        pageCount: 1,
-        loading: false,
+      url: `https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary`,
+      data: null,
+      page: 1,
+      pageCount: 1,
+      loading: false,
     },
     {
-        url: `https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary`,
-        data: null,
-        page: 1,
-        pageCount: 1,
-        loading: false,
+      url: `https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary`,
+      data: null,
+      page: 1,
+      pageCount: 1,
+      loading: false,
     },
     {
-        url: `https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary`,
-        data: null,
-        page: 1,
-        pageCount: 1,
-        loading: false,
+      url: `https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary`,
+      data: null,
+      page: 1,
+      pageCount: 1,
+      loading: false,
     },
     {
-        url: `https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary`,
-        data: null,
-        page: 1,
-        pageCount: 1,
-        loading: false,
+      url: `https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary`,
+      data: null,
+      page: 1,
+      pageCount: 1,
+      loading: false,
     },
-]);
+  ]);
   const loadInitialData = async (index) => {
-        const apiUrl = `${requestsData[index].url}/${localStorage.getItem('user_id')}/${endpoints[index]}`;
-        
+    const apiUrl = `${requestsData[index].url}/${localStorage.getItem('user_id')}/${endpoints[index]}`;
 
-        try {
-            const response = await fetch(`${apiUrl}?page=1`, {
-                headers: {
-                    'Authorization': `Token ${localStorage.getItem('access_token')}`,
-                    'Content-Type': 'application/json',
-                },
-            });
+    try {
+      const response = await fetch(`${apiUrl}?page=1`, {
+        headers: {
+          Authorization: `Token ${localStorage.getItem('access_token')}`,
+          'Content-Type': 'application/json',
+        },
+      });
 
-            const data = await response.json();
-            setRequestsData((prev) => {
-                const newState = [...prev];
-                newState[index].data = [...data.results];
-                newState[index].page = 1;
-                newState[index].pageCount = Math.max(1, Math.ceil(data.count / 10));
-                newState[index].loading = false;
-                return newState;
-            });
-        } catch (error) {
-            console.error("Fetch error:", error);
-        }
-    };
+      const data = await response.json();
+      setRequestsData((prev) => {
+        const newState = [...prev];
+        newState[index].data = [...data.results];
+        newState[index].page = 1;
+        newState[index].pageCount = Math.max(1, Math.ceil(data.count / 10));
+        newState[index].loading = false;
+        return newState;
+      });
+    } catch (error) {
+      console.error('Fetch error:', error);
+    }
+  };
   const [typeLayerOne, setTypeLayerOne] = useState([]);
   const [typeLayerTwo, setTypeLayerTwo] = useState([]);
   const [processingStage, setProcessingStage] = useState([]);
@@ -85,28 +84,52 @@ export const LookupProvider = ({ children }) => {
   const [provinces, setProvinces] = useState([]);
   const [cities, setCities] = useState([]);
 
-
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const [files, setFiles] = useState([]);
 
- // Empty dependency array
+  // Empty dependency array
 
   useEffect(() => {
     const fetchLookups = async () => {
       try {
-        const [typeLayer1Res, typeLayer2Res, processingStageRes, durationRes, provincesRes, citiesRes] = await Promise.all([
-          fetch(`https://charity-backend-staging.liara.run/beneficiary-platform/requests/type-layer1/`),
-          fetch(`https://charity-backend-staging.liara.run/beneficiary-platform/requests/type-layer2/`),
-          fetch(`https://charity-backend-staging.liara.run/beneficiary-platform/requests/processing-stage/`),
-          fetch(`https://charity-backend-staging.liara.run/beneficiary-platform/requests/duration/`),
-          fetch(`https://charity-backend-staging.liara.run/beneficiary-platform/provinces/`),
-          fetch(`https://charity-backend-staging.liara.run/beneficiary-platform/cities/`),
-
+        const [
+          typeLayer1Res,
+          typeLayer2Res,
+          processingStageRes,
+          durationRes,
+          provincesRes,
+          citiesRes,
+        ] = await Promise.all([
+          fetch(
+            `https://charity-backend-staging.liara.run/beneficiary-platform/requests/type-layer1/`
+          ),
+          fetch(
+            `https://charity-backend-staging.liara.run/beneficiary-platform/requests/type-layer2/`
+          ),
+          fetch(
+            `https://charity-backend-staging.liara.run/beneficiary-platform/requests/processing-stage/`
+          ),
+          fetch(
+            `https://charity-backend-staging.liara.run/beneficiary-platform/requests/duration/`
+          ),
+          fetch(
+            `https://charity-backend-staging.liara.run/beneficiary-platform/provinces/`
+          ),
+          fetch(
+            `https://charity-backend-staging.liara.run/beneficiary-platform/cities/`
+          ),
         ]);
 
-        if (!typeLayer1Res.ok || !typeLayer2Res.ok || !processingStageRes.ok || !durationRes.ok || !provincesRes.ok || !citiesRes.ok) {
+        if (
+          !typeLayer1Res.ok ||
+          !typeLayer2Res.ok ||
+          !processingStageRes.ok ||
+          !durationRes.ok ||
+          !provincesRes.ok ||
+          !citiesRes.ok
+        ) {
           throw new Error('One or more lookup requests failed');
         }
 
@@ -133,27 +156,26 @@ export const LookupProvider = ({ children }) => {
     fetchLookups();
   }, []);
 
-    useEffect(() => {
-  const fetchSequentially = async () => {
-    const token = localStorage.getItem('access_token');
-    const userId = localStorage.getItem('user_id');
-    
-    if (!token || !userId) return false; // Exit if no credentials
+  useEffect(() => {
+    const fetchSequentially = async () => {
+      const token = localStorage.getItem('access_token');
+      const userId = localStorage.getItem('user_id');
 
-    try {
-      for (let i = 0; i < requestsData.length; i++) {
-        if(activeEndpoint === i && !requestsData[i].data){
+      if (!token || !userId) return false; // Exit if no credentials
+
+      try {
+        for (let i = 0; i < requestsData.length; i++) {
+          if (activeEndpoint === i && !requestsData[i].data) {
             loadInitialData(i);
+          }
         }
-        
+      } catch (error) {
+        console.error('Sequential fetch error:', error);
       }
-    } catch (error) {
-      console.error('Sequential fetch error:', error);
-    }
-  };
+    };
 
-  fetchSequentially();
-}, [activeEndpoint,isRequestPage]);
+    fetchSequentially();
+  }, [activeEndpoint, isRequestPage]);
 
   return (
     <LookupContext.Provider

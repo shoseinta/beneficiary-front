@@ -1,17 +1,16 @@
-
 :root {
-    --main-color: #185ea7;
-    --main50-color: rgba(24, 94, 160, 0.5);
-    --main10-color: rgba(24, 94, 160, 0.1);
-    --white-color: #ffffff;
-    --white-gray-color: #f5f5f5;
-    --gray-color: #f9f9f9;
-    --black-color: #000000;
-    --black50-color: rgba(0, 0, 0, 0.5);
-    --black25-color: rgba(0, 0, 0, 0.25);
-    --error-red: #ff0000;
-    --bluelinenav-color : #8BAECF;
-    --green-color: #3F9633;
+  --main-color: #185EA0;
+  --main50-color: rgba(24, 94, 160, 0.5);
+  --main10-color: rgba(24, 94, 160, 0.1);
+  --white-color: #ffffff;
+  --white-gray-color: #f5f5f5;
+  --gray-color: #f9f9f9;
+  --black-color: #000000;
+  --black50-color: rgba(0, 0, 0, 0.5);
+  --black25-color: rgba(0, 0, 0, 0.25);
+  --error-red: #ff0000;
+  --bluelinenav-color: #8baecf;
+  --green-color: #3f9633;
 }
 .account-container2-html {
   background-color: var(--main-color);
@@ -79,7 +78,6 @@
   display: flex;
   flex-wrap: wrap;
   margin-bottom: 50px;
-  
 }
 .account-container2 .nav-list-up {
   display: flex;
@@ -115,7 +113,7 @@
   width: 90%;
   max-width: 500px;
 }
-.account-container2 .account-form2>div {
+.account-container2 .account-form2 > div {
   display: flex;
   justify-content: space-between;
 }
@@ -125,7 +123,8 @@
   font-size: 0.8rem;
   font-weight: normal;
 }
-.account-container2 .account-form2 input , #account-gender{
+.account-container2 .account-form2 input,
+#account-gender {
   background-color: var(--white-gray-color);
   border: 1px solid var(--main-color);
   border-radius: 6px;
@@ -137,31 +136,35 @@
   font-size: 0.8rem;
   font-weight: normal;
 }
-.account-container2 #account-name , #account-family , #account-gender , #account-bd {
+.account-container2 #account-name,
+#account-family,
+#account-gender,
+#account-bd {
   text-align: right;
 }
 .account-container2 #account-ident-num {
   background-image:
-    url(../../../media/icons/lock_icon.svg),         /* Lock icon */
-    linear-gradient(to bottom, var(--main-color), var(--main-color)); /* Vertical line */
+    url(../../../media/icons/lock_icon.svg),
+    /* Lock icon */
+      linear-gradient(to bottom, var(--main-color), var(--main-color)); /* Vertical line */
   background-repeat: no-repeat;
   background-position:
-    left 10px center,     /* Icon position */
-    left 31px center;     /* Vertical line position */
+    left 10px center,
+    /* Icon position */ left 31px center; /* Vertical line position */
   background-size:
-    11px 14px,            /* Icon size */
-    1px 100%;              /* Line width and height */
-  padding-left: 45px;      /* Space for icon + line + buffer */
+    11px 14px,
+    /* Icon size */ 1px 100%; /* Line width and height */
+  padding-left: 45px; /* Space for icon + line + buffer */
 }
 .account-container2 #account-gender {
   -webkit-appearance: none;
   -moz-appearance: none;
-  appearance: none;            /* Remove default arrow */
+  appearance: none; /* Remove default arrow */
   background-image: url(../../../media/icons/down_arrow_icon.svg);
   background-repeat: no-repeat;
   background-position: left 10px center; /* RTL support */
   background-size: 14px;
-  padding-left: 2rem;          /* space for arrow */
+  padding-left: 2rem; /* space for arrow */
 }
 .account-container2 #account-bd {
   -webkit-appearance: none;
@@ -173,7 +176,8 @@
   background-size: 14px;
   padding-left: 2rem;
 }
-.account-container2 #account-gender , #account-bd {
+.account-container2 #account-gender,
+#account-bd {
   cursor: pointer;
 }
 .account-container2 #account-submit2 {
@@ -212,23 +216,14 @@
   color: var(--black50-color);
 }
 
-
-.account-container2 .rmdp-container{
-    width:65%;
+.account-container2 .rmdp-container {
+  width: 65%;
 }
 
-.account-container2 .account-form2 .custom-datepicker-input{
-    width: 100%;
-    text-align: right;
+.account-container2 .account-form2 .custom-datepicker-input {
+  width: 100%;
+  text-align: right;
 }
-
-
-
-
-
-
-
-
 
 .account-container2 .nav {
   padding: 5px 0 5px 0;
@@ -260,7 +255,7 @@
 .account-container2 .nav > .nav-list > li > #active-nav {
   color: var(--main-color);
 }
-.account-container2 .nav > .nav-list > li > a > .nav-icon > img{
+.account-container2 .nav > .nav-list > li > a > .nav-icon > img {
   display: block;
   margin-bottom: 5px;
   height: 7vw;

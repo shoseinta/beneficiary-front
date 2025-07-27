@@ -1,16 +1,15 @@
-
 :root {
-    --main-color: #185ea7;
-    --main50-color: rgba(24, 94, 160, 0.5);
-    --main10-color: rgba(24, 94, 160, 0.1);
-    --white-color: #ffffff;
-    --white-gray-color: #f5f5f5;
-    --gray-color: #f9f9f9;
-    --black-color: #000000;
-    --black50-color: rgba(0, 0, 0, 0.5);
-    --black25-color: rgba(0, 0, 0, 0.25);
-    --error-red: #ff0000;
-    --bluelinenav-color : #8BAECF;
+  --main-color: #185EA0;
+  --main50-color: rgba(24, 94, 160, 0.5);
+  --main10-color: rgba(24, 94, 160, 0.1);
+  --white-color: #ffffff;
+  --white-gray-color: #f5f5f5;
+  --gray-color: #f9f9f9;
+  --black-color: #000000;
+  --black50-color: rgba(0, 0, 0, 0.5);
+  --black25-color: rgba(0, 0, 0, 0.25);
+  --error-red: #ff0000;
+  --bluelinenav-color: #8baecf;
 }
 .account-container3-html {
   background-color: var(--main-color);
@@ -77,7 +76,6 @@
 .account-container3 .nav-up {
   display: flex;
   margin-bottom: 30px;
-
 }
 .account-container3 .nav-list-up {
   display: flex;
@@ -120,7 +118,6 @@
   border-radius: 6px;
   height: 35px;
   padding-right: 5px;
-
 }
 .account-container3 .account-form3 label {
   display: flex;
@@ -129,7 +126,8 @@
   font-weight: normal;
   white-space: nowrap;
 }
-.account-container3 .account-form3 input , select{
+.account-container3 .account-form3 input,
+select {
   width: 100%;
   border: none;
   background-color: transparent;
@@ -143,16 +141,17 @@
   padding-left: 45px;
   -webkit-appearance: none;
   -moz-appearance: none;
-  appearance: none;            /* Remove default arrow */
+  appearance: none; /* Remove default arrow */
   background-image: url(../../../media/icons/down_arrow_icon.svg);
   background-repeat: no-repeat;
   background-position: left 10px center; /* RTL support */
   background-size: 14px;
   padding-left: 2rem;
   cursor: pointer;
-
 }
-.account-container3 #account-postal , #account-building-num , #account-unit {
+.account-container3 #account-postal,
+#account-building-num,
+#account-unit {
   text-align: left;
 }
 .account-container3 input::placeholder {
@@ -162,9 +161,9 @@
 .account-container3 .form-up {
   display: grid;
   grid-template-columns: repeat(2, 1fr); /* 2 columns */
-  grid-template-rows: repeat(4, auto);   /* 4 rows */
-  gap: 15px 10px;                         /* row gap, column gap */
-  margin: 0 ;                         /* center horizontally */
+  grid-template-rows: repeat(4, auto); /* 4 rows */
+  gap: 15px 10px; /* row gap, column gap */
+  margin: 0; /* center horizontally */
 }
 
 /* ------------------------submit button style */
@@ -214,16 +213,6 @@
   justify-content: center;
 }
 
-
-
-
-
-
-
-
-
-
-
 .nav {
   padding: 5px 0 5px 0;
   border-top: var(--bluelinenav-color) 3px solid;
@@ -254,7 +243,7 @@
 .nav > .nav-list > li > #active-nav {
   color: var(--main-color);
 }
-.nav > .nav-list > li > a > .nav-icon > img{
+.nav > .nav-list > li > a > .nav-icon > img {
   display: block;
   margin-bottom: 5px;
   height: 7vw;

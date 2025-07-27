@@ -1,16 +1,15 @@
-
 :root {
-    --main-color: #185ea7;
-    --main50-color: rgba(24, 94, 160, 0.5);
-    --main10-color: rgba(24, 94, 160, 0.1);
-    --white-color: #ffffff;
-    --white-gray-color: #f5f5f5;
-    --gray-color: #f9f9f9;
-    --black-color: #000000;
-    --black50-color: rgba(0, 0, 0, 0.5);
-    --black25-color: rgba(0, 0, 0, 0.25);
-    --error-red: #ff0000;
-    --bluelinenav-color : #8BAECF
+  --main-color: #185EA0;
+  --main50-color: rgba(24, 94, 160, 0.5);
+  --main10-color: rgba(24, 94, 160, 0.1);
+  --white-color: #ffffff;
+  --white-gray-color: #f5f5f5;
+  --gray-color: #f9f9f9;
+  --black-color: #000000;
+  --black50-color: rgba(0, 0, 0, 0.5);
+  --black25-color: rgba(0, 0, 0, 0.25);
+  --error-red: #ff0000;
+  --bluelinenav-color: #8baecf;
 }
 .form3-html {
   background-color: var(--main-color);
@@ -66,8 +65,8 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  row-gap: 10px;
-  padding: 10px;
+  row-gap: 30px;
+  padding: 10px 10px 20px 10px;
 }
 .form3-container .nav-up {
   width: 100%;
@@ -85,7 +84,7 @@
   position: relative;
   flex: 1;
 }
-.form3-container .nav-item-up > div{
+.form3-container .nav-item-up > div {
   list-style: none;
   display: flex;
   flex-direction: column;
@@ -102,7 +101,6 @@
   position: relative;
   display: inline-block;
   margin-bottom: 5px;
-
 }
 .form3-container .nav-item-up:not(:last-child) .step-icon::after {
   content: '';
@@ -117,7 +115,9 @@
 }
 /* ✅ Completed lines before active step */
 .form3-container #active-nav-up ~ .nav-item-up .step-icon::after {
-  background-color: var(--main50-color); /* make sure they remain light blue (upcoming steps) */
+  background-color: var(
+    --main50-color
+  ); /* make sure they remain light blue (upcoming steps) */
 }
 
 .form3-container .nav-item-up.step-completed .step-icon::after {
@@ -126,7 +126,11 @@
 
 /* ✅ In-progress line (gradient after current step) */
 .form3-container #active-nav-up .step-icon::after {
-  background: linear-gradient(to left, var(--main-color) , var(--main50-color)); /* RTL gradient */
+  background: linear-gradient(
+    to left,
+    var(--main-color),
+    var(--main50-color)
+  ); /* RTL gradient */
 }
 .form3-container .step-icon svg {
   display: block;
@@ -136,9 +140,8 @@
   position: relative;
   z-index: 1;
   border-radius: 50%;
-
 }
-.form3-container #active-nav-up > div{
+.form3-container #active-nav-up > div {
   color: var(--main-color);
 }
 /* ------------------------------------------------------------------ */
@@ -166,7 +169,7 @@
   display: flex;
   justify-content: right;
 }
-.form3-container form div input , 
+.form3-container form div input,
 .form3-container form div textarea {
   width: 80%;
   max-width: 400px;
@@ -180,7 +183,7 @@
   padding: 0 8px;
 }
 
-.form3-container form div:not(:first-of-type) input , 
+.form3-container form div:not(:first-of-type) input,
 .form3-container form div:not(:first-of-type) textarea {
   height: 70px;
 }
@@ -234,16 +237,12 @@
   border: none;
   background-color: transparent;
 }
-.form3-container .next-back-btn button > span{
+.form3-container .next-back-btn button > span {
   margin: 0 5px;
 }
 .form3-container .next-back-btn button:last-child span {
   padding-bottom: 5px;
 }
-
-
-
-
 
 .form3-container .nav {
   padding: 5px 0 5px 0;
@@ -275,7 +274,7 @@
 .form3-container .nav > .nav-list > li > #active-nav {
   color: var(--main-color);
 }
-.form3-container .nav > .nav-list > li > a > .nav-icon > img{
+.form3-container .nav > .nav-list > li > a > .nav-icon > img {
   display: block;
   margin-bottom: 5px;
   height: 7vw;
@@ -308,7 +307,6 @@
   border-radius: 4px;
 }
 
-
 /* Dropzone Styles */
 .form3-container .dropzone {
   height: 70px;
@@ -325,125 +323,122 @@
   /* margin-bottom: 20px; */
 }
 
-
 .form3-container .dropzone.active {
-    border-color: var(--main-color);
-    background-color: var(--main10-color);
+  border-color: var(--main-color);
+  background-color: var(--main10-color);
 }
 
 .form3-container .upload-content {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    width:100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
   height: 100%;
 }
 
 .form3-container .upload-content img {
-    width: 20px;
-    height: 20px;
+  width: 20px;
+  height: 20px;
 }
 
 .form3-container .upload-content p {
-    margin: 0;
-    font-size: 0.6rem;
+  margin: 0;
+  font-size: 0.6rem;
 }
 
 .form3-container .upload-content small {
-    color: var(--black50-color);
-    font-size: 0.75rem;
+  color: var(--black50-color);
+  font-size: 0.75rem;
 }
 
 /* File Previews */
 .form3-container .file-previews {
-    display: flex;
+  display: flex;
   overflow-x: auto;
   white-space: nowrap;
-  gap:10px;
-    width: 100%;
+  gap: 10px;
+  width: 100%;
 }
 
 .form3-container .file-preview {
-    flex-shrink: 0; /* Prevent shrinking when overflowing */
+  flex-shrink: 0; /* Prevent shrinking when overflowing */
   display: flex;
   align-items: center;
   justify-content: center;
-    padding: 10px 15px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    transition: all 0.2s;
+  padding: 10px 15px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s;
 }
 
 .form3-container .file-preview:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .form3-container .file-info {
   display: flex;
   flex-direction: column; /* or 'row' depending on layout */
-  align-items: center;     /* horizontal centering */
+  align-items: center; /* horizontal centering */
   justify-content: center; /* vertical centering */
   gap: 4px;
   flex: 1;
   min-width: 0;
-  text-align: center;      /* centers text inside spans */
+  text-align: center; /* centers text inside spans */
 }
 
-
 .form3-container .file-icon {
-    font-size: 1.5rem;
-    flex-shrink: 0;
+  font-size: 1.5rem;
+  flex-shrink: 0;
 }
 
 .form3-container .file-icon.pdf {
-    color: #e74c3c;
+  color: #e74c3c;
 }
 
 .form3-container .file-icon.word {
-    color: #2b579a;
+  color: #2b579a;
 }
 
 .form3-container .file-icon.excel {
-    color: #217346;
+  color: #217346;
 }
 
 .form3-container .file-name {
-    flex: 1;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    cursor: pointer;
-    color: var(--main-color);
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  color: var(--main-color);
 }
 
 .form3-container .file-name:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 .form3-container .file-size {
-    color: var(--black50-color);
-    font-size: 0.8rem;
-    white-space: nowrap;
+  color: var(--black50-color);
+  font-size: 0.8rem;
+  white-space: nowrap;
 }
 
 .form3-container .remove-file {
-    background: none;
-    border: none;
-    color: var(--error-red);
-    cursor: pointer;
-    font-size: 1.2rem;
-    padding: 5px;
-    margin-left: 10px;
+  background: none;
+  border: none;
+  color: var(--error-red);
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 5px;
+  margin-left: 10px;
 }
 
 .form3-container .remove-file:hover {
-    color: #c0392b;
+  color: #c0392b;
 }
-
 
 .form3-container .file-previews {
   display: flex;
@@ -471,7 +466,6 @@
   gap: 4px;
 }
 
-
 .form3-container .upload-files-wrapper {
   display: flex;
   width: 100%;
@@ -493,4 +487,12 @@
   /* min-width: 120px; */
   gap: 8px;
   cursor: pointer;
+}
+.form3-container .form3-forms {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  row-gap: 30px;
+
 }
