@@ -229,6 +229,7 @@
   font-weight: normal;
   padding: 0 8px;
 }
+
 .form3-container form div:not(:first-of-type) input , 
 .form3-container form div:not(:first-of-type) textarea {
   height: 70px;
