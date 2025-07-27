@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import './Form4.css'
 import { FiFile, FiImage, FiVideo, FiMusic, FiFileText, FiX } from "react-icons/fi";
 import { toJalaali } from 'jalaali-js';
+import FormHeader from "./FormHeader";
 
 
 function Form4({ requestData, onetimeData, recurringData, typeLayerOne, typeLayerTwo, duration, setStep, handleSubmit, files, setFiles }) {
@@ -174,34 +175,7 @@ function formatPersianNumber(number) {
         <div className="form4-container">
             <Header />
             <main className="main">
-    <nav className="nav-up">
-      <ol className="nav-list-up">
-        <li className="nav-item-up step-completed">
-          <div> 
-            <span className="step-icon"><img src={step1_completed} alt="" /></span>
-            <p> نوع درخواست </p> 
-          </div>
-        </li>
-        <li className="nav-item-up step-completed">
-          <div> 
-            <span className="step-icon"><img src={step2_completed} alt="" /></span>
-            <p> تعیین تاریخ </p> 
-          </div>
-        </li>
-        <li className="nav-item-up step-completed">
-          <div> 
-            <span className="step-icon"><img src={step3_completed} alt="" /></span>
-            <p> اطلاعات تکمیلی </p>
-          </div>
-        </li>
-        <li className="nav-item-up" id="active-nav-up">
-          <div> 
-            <span className="step-icon"><img src={step4_active} alt="" /></span>
-            <p> تأیید نهایی </p> 
-          </div>
-        </li>
-      </ol>
-    </nav>
+    <FormHeader step={4} />
 
     <form className="form">
       <div className="request-type-review input-space">

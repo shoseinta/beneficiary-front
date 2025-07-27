@@ -1,0 +1,51 @@
+@font-face {
+  font-family: vazir;
+  src: url('./media/fonts/Vazir-Regular-UI.woff2') format('woff2'),
+       url('./media/fonts/Vazir-Regular-UI.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+    font-family: vazir;
+    src: url('./media/fonts/Vazir-Bold-UI.woff2') format('woff2'),
+         url('./media/fonts/Vazir-Bold-UI.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+}
+@font-face {
+    font-family: vazir;
+    src: url('./media/fonts/Vazir-Black-UI.woff2') format('woff2'),
+         url('./media/fonts/Vazir-Black-UI.woff') format('woff');
+    font-weight: 900;
+    font-style: normal;
+}
+@font-face {
+    font-family: vazir;
+    src: url('./media/fonts/Vazir-Medium-UI.woff2') format('woff2'),
+         url('./media/fonts/Vazir-Medium-UI.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+}
+@font-face {
+    font-family: vazir;
+    src: url('./media/fonts/Vazir-Light-UI.woff2') format('woff2'),
+         url('./media/fonts/Vazir-Light-UI.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+}
+@font-face {
+    font-family: vazir;
+    src: url('./media/fonts/Vazir-Thin-UI.woff2') format('woff2'),
+         url('./media/fonts/Vazir-Thin-UI.woff') format('woff');
+    font-weight: 100;
+    font-style: normal;
+}
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "vazir", sans-serif;
+  direction: rtl;
+  unicode-bidi: embed;
+  text-align: right;
+}

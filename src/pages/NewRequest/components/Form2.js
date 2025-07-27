@@ -1,10 +1,6 @@
 import { useState,useEffect,useRef } from "react";
 import Header from "../../../components/header/Header";
 import NavigationBar from "../../../components/navigationBar/NavigationBar";
-import step1_completed from '../../../media/icons/step1_completed.svg';
-import step2_active from '../../../media/icons/step2_active.svg';
-import step3 from '../../../media/icons/step3.svg';
-import step4 from '../../../media/icons/step4.svg';
 import back_icon from '../../../media/icons/back_icon.svg'
 import next_icon from '../../../media/icons/next_icon.svg'
 import './Form2.css'
@@ -12,6 +8,7 @@ import DatePicker from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
 import DateObject from "react-date-object";
+import FormHeader from "./FormHeader";
 
 
 
@@ -238,34 +235,7 @@ useEffect(() => {
         <div className="form2-container">
             <Header />
             <main className="main">
-    <nav className="nav-up">
-      <ol className="nav-list-up">
-        <li className="nav-item-up step-completed">
-          <div> 
-            <span className="step-icon"><img src={step1_completed} alt="" /></span>
-            <p> نوع درخواست </p> 
-          </div>
-        </li>
-        <li className="nav-item-up" id="active-nav-up">
-          <div> 
-            <span className="step-icon"><img src={step2_active} alt="" /></span>
-            <p> تعیین تاریخ </p> 
-          </div>
-        </li>
-        <li className="nav-item-up">
-          <div> 
-            <span className="step-icon"><img src={step3} alt="" /></span>
-            <p> اطلاعات تکمیلی </p>
-          </div>
-        </li>
-        <li className="nav-item-up">
-          <div> 
-            <span className="step-icon"><img src={step4} alt="" /></span>
-            <p> تأیید نهایی </p> 
-          </div>
-        </li>
-      </ol>
-    </nav>
+            <FormHeader step={2} />
 
     <form className="form">
       <fieldset className="time-layer1 input-space">

@@ -1,14 +1,11 @@
 import { useState, useEffect } from "react";
 import Header from '../../../components/header/Header';
 import NavigationBar from '../../../components/navigationBar/NavigationBar';
-import step1_active from '../../../media/icons/step1_active.svg'
-import step2 from '../../../media/icons/step2.svg';
-import step3 from '../../../media/icons/step3.svg';
-import step4 from '../../../media/icons/step4.svg';
 import next_icon from '../../../media/icons/next_icon.svg';
 import './Form1.css'
+import FormHeader from "./FormHeader";
 
-function Form1({ requestData, setRequestData,nextActive,setNextActive, typeLayerOne, typeLayerTwo, setStep }) {
+function Form1({ requestData, setRequestData,nextActive,setNextActive, typeLayerOne, typeLayerTwo, setStep}) {
     // Initialize with null and only set after typeLayerOne is loaded
     const [selectedTypeLayerOne, setSelectedTypeLayerOne] = useState(requestData.beneficiary_request_type_layer1);
     
@@ -68,34 +65,7 @@ function Form1({ requestData, setRequestData,nextActive,setNextActive, typeLayer
         <div className="form1-container">
             <Header />
             <main className="main">
-                <nav className="nav-up">
-                <ol className="nav-list-up">
-                    <li className="nav-item-up" id="active-nav-up">
-                    <div> 
-                        <span className="step-icon"><img src={step1_active} alt="" /></span>
-                        <p> نوع درخواست </p> 
-                    </div>
-                    </li>
-                    <li className="nav-item-up">
-                    <div> 
-                        <span className="step-icon"><img src={step2} alt="" /></span>
-                        <p> تعیین تاریخ </p> 
-                    </div>
-                    </li>
-                    <li className="nav-item-up">
-                    <div> 
-                        <span className="step-icon"><img src={step3} alt="" /></span>
-                        <p> اطلاعات تکمیلی </p>
-                    </div>
-                    </li>
-                    <li className="nav-item-up">
-                    <div> 
-                        <span className="step-icon"><img src={step4} alt="" /></span>
-                        <p> تأیید نهایی </p> 
-                    </div>
-                    </li>
-                </ol>
-                </nav>
+                <FormHeader step={1} />
 
                 <form className="form">
                     
