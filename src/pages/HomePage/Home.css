@@ -11,6 +11,9 @@
     --error-red: #ff0000;
     --bluelinenav-color : #8BAECF
 }
+.home-html {
+  background-color: var(--main-color);
+}
 .home-body {
   background-color: var(--white-color);
   overflow-y: auto;

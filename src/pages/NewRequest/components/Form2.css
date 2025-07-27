@@ -128,7 +128,7 @@
 .form2-container #active-nav-up .step-icon::after {
   background: linear-gradient(to left, var(--main-color) , var(--main50-color)); /* RTL gradient */
 }
-.form2-container .step-icon img {
+.form2-container .step-icon svg {
   display: block;
   width: 7vw;
   max-width: 36px;

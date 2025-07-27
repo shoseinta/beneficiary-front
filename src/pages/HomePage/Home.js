@@ -134,9 +134,11 @@ function Home() {
   useEffect(() => console.log(notifications))
 
   useEffect(() => {
+    document.documentElement.classList.add('home-html')
     document.body.classList.add('home-body')
 
     return () => {
+      document.documentElement.classList.remove('home-html')
       document.body.classList.remove('home-body')
     }
   },[])
