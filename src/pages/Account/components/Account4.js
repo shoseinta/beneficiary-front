@@ -10,6 +10,56 @@ import attach_icon from '../../../media/icons/attach_icon.svg';
 import JSZip from 'jszip';
 
 function Account4({ accountData, setAccountData, setStep, setLoad }) {
+  const toPersianDigits = (num) => {
+    const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+    return num.toString().replace(/\d/g, (x) => persianDigits[x]);
+  };
+
+  const handleIdentificationChange = (event) => {
+    setFamilyBlur(pre => ({
+      ...pre,
+      beneficiary_user_family_info_identification_number: false,
+    }))
+    // Convert Persian digits to English and remove all non-digit characters
+    let englishValue = event.target.value
+      .split('')
+      .map((c) => {
+        const persianDigits = [
+          '۰',
+          '۱',
+          '۲',
+          '۳',
+          '۴',
+          '۵',
+          '۶',
+          '۷',
+          '۸',
+          '۹',
+        ];
+        const index = persianDigits.indexOf(c);
+        return index >= 0 ? index.toString() : c;
+      })
+      .join('')
+      .replace(/\D/g, '');
+
+    // Update the state with the English number (or empty string)
+    const newValue = englishValue === '' ? null : englishValue;
+    setFamilyData(pre =>({
+      ...pre,
+      beneficiary_user_family_info_identification_number: newValue,
+    }))
+
+    if (newValue.length !== 10 && newValue !== null) {
+      setFamilyValidation((pre) => ({ ...pre, beneficiary_user_family_info_identification_number: false }));
+    } else {
+      setFamilyValidation((pre) => ({ ...pre, beneficiary_user_family_info_identification_number: true }));
+    }
+
+    // Update the displayed value with Persian digits (no commas)
+    const displayValue =
+      englishValue === '' ? '' : toPersianDigits(englishValue);
+    event.target.value = displayValue;
+  };
   useEffect(() => {
     document.documentElement.classList.add('account-container4-html');
     document.body.classList.add('account-container4-body');
@@ -20,13 +70,32 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
     };
   }, []);
 
+  const isPersian = (text) => {
+    // Persian Unicode range: \u0600-\u06FF
+    // Also includes Persian numbers \u06F0-\u06F9
+    // And Arabic characters that might be used in Persian \u0621-\u064A
+    const persianRegex = /^[\u0600-\u06FF\u0621-\u064A\s]+$/;
+    return persianRegex.test(text);
+  };
+
   const [addFamily, setAddFamily] = useState(false);
   const [addAdditional, setAddAdditional] = useState(false);
   const [removeFamily, setRemoveFamily] = useState(false);
   const [removeAdditional, setRemoveAdditional] = useState(false);
   const [familyIndex, setFamilyIndex] = useState(null);
   const [additionalIndex, setAdditionalIndex] = useState(null);
-
+  const [additionalError, setAdditionalError] = useState(null);
+  const [familyValidation, setFamilyValidation] = useState({
+    beneficiary_user_family_info_identification_number:true,
+    beneficiary_user_family_info_first_name: true,
+    beneficiary_user_family_info_last_name: true,
+  });
+  const [familyBlur, setFamilyBlur] = useState({
+    beneficiary_user_family_info_identification_number:true,
+    beneficiary_user_family_info_first_name: true,
+    beneficiary_user_family_info_last_name: true,
+  })
+  const [familyError, setFamilyError] = useState(null);
   const [familyData, setFamilyData] = useState({
     beneficiary_user_family_info_family_relation: null,
     beneficiary_user_family_info_identification_number: null,
@@ -191,6 +260,29 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
 
   const handleAddFamily = async (e) => {
     e.preventDefault();
+    var flag = 0
+    if(!familyValidation.beneficiary_user_family_info_first_name || !familyValidation.beneficiary_user_family_info_identification_number || !familyValidation.beneficiary_user_family_info_last_name){
+      flag = 1
+    }
+    if(familyData.beneficiary_user_family_info_birth_date === null ||
+      familyData.beneficiary_user_family_info_birth_date === "" ||
+      familyData.beneficiary_user_family_info_family_relation === null ||
+      familyData.beneficiary_user_family_info_family_relation === "" ||
+      familyData.beneficiary_user_family_info_first_name === null ||
+      familyData.beneficiary_user_family_info_first_name === "" ||
+      familyData.beneficiary_user_family_info_gender === null ||
+      familyData.beneficiary_user_family_info_gender === "" ||
+      familyData.beneficiary_user_family_info_identification_number === null ||
+      familyData.beneficiary_user_family_info_identification_number === "" ||
+      familyData.beneficiary_user_family_info_last_name === null ||
+      familyData.beneficiary_user_family_info_last_name === ""
+    ){
+      setFamilyError("لطفا همه فیلدها را پر کنید.")
+      flag = 1
+    }
+    if(flag === 1){
+      return
+    }
     try {
       const response = await fetch(
         `https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/create-user-family/`,
@@ -217,7 +309,19 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
         beneficiary_user_family_info_birth_date: null,
         beneficiary_user_family_info_gender: null,
       });
-      setTimeout(() => setAddFamily(false), 3000);
+      setJalaliValue(null);
+      setFamilyValidation({
+        beneficiary_user_family_info_identification_number:true,
+        beneficiary_user_family_info_first_name:true,
+        beneficiary_user_family_info_last_name:true
+      })
+      setFamilyError(null)
+      setFamilyBlur({
+        beneficiary_user_family_info_identification_number:true,
+        beneficiary_user_family_info_first_name:true,
+        beneficiary_user_family_info_last_name:true
+      })
+      setTimeout(() => setAddFamily(false), 1000);
     } catch (err) {
       console.log(err);
     }
@@ -225,8 +329,16 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
 
   const handleAddAdditional = async (e) => {
     e.preventDefault();
+    if(additionalData.beneficiary_user_additional_info_title === null ||
+      additionalData.beneficiary_user_additional_info_title === '') {
+        setAdditionalError("لطفا عنوان را وارد کنید");
+        return;
+      }
     try {
-      const formData = new FormData();
+      var formData;
+      var formHeaders;
+      if(additionalData?.beneficiary_user_additional_info_document){
+      formData = new FormData();
       formData.append(
         'beneficiary_user_additional_info_title',
         additionalData.beneficiary_user_additional_info_title
@@ -239,14 +351,24 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
         'beneficiary_user_additional_info_document',
         additionalData.beneficiary_user_additional_info_document
       );
+      formHeaders = {
+        Authorization: `Token ${localStorage.getItem('access_token')}`,
+      };
+    }else {
+      formData = JSON.stringify({
+        beneficiary_user_additional_info_title:additionalData.beneficiary_user_additional_info_title,
+        beneficiary_user_additional_info_description:additionalData.beneficiary_user_additional_info_description,
+      })
+      formHeaders = {
+        'Content-Type': 'application/json',
+        Authorization: `Token ${localStorage.getItem('access_token')}`,
+      };
+    }
       const response = await fetch(
         `https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/create-user-additional-info/`,
         {
           method: 'POST',
-          headers: {
-            // 'Content-Type': 'application/json',
-            Authorization: `Token ${localStorage.getItem('access_token')}`,
-          },
+          headers: formHeaders,
           body: formData,
         }
       );
@@ -261,7 +383,9 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
         beneficiary_user_additional_info_description: null,
         beneficiary_user_additional_info_document: null,
       });
-      setTimeout(() => setAddAdditional(false), 3000);
+      setAdditionalError(null);
+      setFiles([]);
+      setTimeout(() => setAddAdditional(false), 1000);
     } catch (err) {
       console.log(err);
     }
@@ -513,60 +637,95 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
                   کد ملی:<sup>*</sup>
                 </label>
                 <input
-                  type="number"
+                  type="text"
                   id="family-ident-num"
                   inputMode="numeric"
+                  maxLength={10}
                   value={
-                    familyData.beneficiary_user_family_info_identification_number
+                    familyData?.beneficiary_user_family_info_identification_number
+                    ? toPersianDigits(
+                        familyData?.beneficiary_user_family_info_identification_number
+                      ).toString()
+                    : null
                   }
-                  onChange={(e) => {
-                    setFamilyData((pre) => {
-                      return {
-                        ...pre,
-                        beneficiary_user_family_info_identification_number:
-                          Number(e.target.value),
-                      };
-                    });
+                  onChange={handleIdentificationChange}
+                  onBlur={() => {
+                    setFamilyBlur(pre => ({
+                      ...pre,
+                      beneficiary_user_family_info_identification_number:true
+                    }))
                   }}
                 />
               </div>
 
               <div>
-                <label htmlFor="family-fn">نام:</label>
+                <label htmlFor="family-fn">نام:<sup>*</sup></label>
                 <input
                   type="text"
                   id="family-fn"
                   value={familyData.beneficiary_user_family_info_first_name}
                   onChange={(e) => {
+                    setFamilyBlur(pre => ({
+                      ...pre,
+                      beneficiary_user_family_info_first_name:false
+                    }))
                     setFamilyData((pre) => {
                       return {
                         ...pre,
                         beneficiary_user_family_info_first_name: e.target.value,
                       };
                     });
+                    const nameValidation = e.target.value === null || e.target.value === ""?true:isPersian(e.target.value);
+                    setFamilyValidation((prev) => ({
+                      ...prev,
+                      beneficiary_user_family_info_first_name: nameValidation,
+                    }));
+                  }}
+                  onBlur={() => {
+                    setFamilyBlur(pre => ({
+                      ...pre,
+                      beneficiary_user_family_info_first_name:true
+                    }))
                   }}
                 />
               </div>
 
               <div>
-                <label htmlFor="family-ln">نام خانوادگی:</label>
+                <label htmlFor="family-ln">نام خانوادگی:<sup>*</sup></label>
                 <input
                   type="text"
                   id="family-ln"
                   value={familyData.beneficiary_user_family_info_last_name}
                   onChange={(e) => {
+                    setFamilyBlur(pre => ({
+                      ...pre,
+                      beneficiary_user_family_info_last_name:false
+                    }))
                     setFamilyData((pre) => {
                       return {
                         ...pre,
                         beneficiary_user_family_info_last_name: e.target.value,
                       };
                     });
+                    const nameValidation = e.target.value === null || e.target.value === ""?true:isPersian(e.target.value);
+                    setFamilyValidation((prev) => ({
+                      ...prev,
+                      beneficiary_user_family_info_last_name: nameValidation,
+                    }));
+                  }
+                  
+                }
+                onBlur={() => {
+                    setFamilyBlur(pre => ({
+                      ...pre,
+                      beneficiary_user_family_info_last_name:true
+                    }))
                   }}
                 />
               </div>
 
               <div>
-                <label htmlFor="family-bd">تاریخ تولد:</label>
+                <label htmlFor="family-bd">تاریخ تولد:<sup>*</sup></label>
                 <DatePicker
                   value={jalaliValue}
                   onChange={(dateObj) => {
@@ -588,7 +747,7 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
               </div>
 
               <div>
-                <label htmlFor="family-gender"> جنسیت: </label>
+                <label htmlFor="family-gender"> جنسیت: <sup>*</sup></label>
                 <select
                   id="family-gender"
                   value={familyData.beneficiary_user_family_info_gender}
@@ -606,12 +765,54 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
                   <option value="male">مرد</option>
                 </select>
               </div>
+              {familyError && (
+                <div>{familyError}</div>
+              )}
 
+              {
+                (!familyValidation.beneficiary_user_family_info_first_name && familyBlur.beneficiary_user_family_info_first_name) ||
+                (!familyValidation.beneficiary_user_family_info_last_name && familyBlur.beneficiary_user_family_info_last_name) 
+                 ? (
+                  <div >
+                    لطفا نام و نام خانوادگی را به صورت فارسی وارد کنید.
+                  </div>
+                ) : null
+              }
+      
+              {
+                !familyValidation.beneficiary_user_family_info_identification_number && familyBlur.beneficiary_user_family_info_identification_number ? (
+                  <div>
+                    لطفا کد ملی را به صورت عددی و 10 رقمی وارد کنید.
+                  </div>
+                ) : null
+              }
               <div className="family-overlay-buttons">
                 <button
                   type="button"
                   class="no-button"
-                  onClick={() => setAddFamily(false)}
+                  onClick={() => {
+                    setAddFamily(false)
+                    setFamilyData({
+                      beneficiary_user_family_info_family_relation: null,
+                      beneficiary_user_family_info_identification_number: null,
+                      beneficiary_user_family_info_first_name: null,
+                      beneficiary_user_family_info_last_name: null,
+                      beneficiary_user_family_info_birth_date: null,
+                      beneficiary_user_family_info_gender: null,
+                    });
+                    setJalaliValue(null);
+                    setFamilyValidation({
+                      beneficiary_user_family_info_identification_number:true,
+                      beneficiary_user_family_info_first_name:true,
+                      beneficiary_user_family_info_last_name:true
+                    })
+                    setFamilyError(null)
+                    setFamilyBlur({
+                      beneficiary_user_family_info_identification_number:true,
+                      beneficiary_user_family_info_first_name:true,
+                      beneficiary_user_family_info_last_name:true
+                    })
+                  }}
                 >
                   لغو
                 </button>
@@ -689,11 +890,25 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
                 </label>
               </div>
             </form>
+            {additionalError && (
+              <div>
+                {additionalError}
+              </div>
+            )}
 
             <div className="additional-info-overlay-buttons">
               <button
                 className="no-button"
-                onClick={() => setAddAdditional(false)}
+                onClick={() => {
+                  setAddAdditional(false)
+                  setAdditionalData({
+                    beneficiary_user_additional_info_title: null,
+                    beneficiary_user_additional_info_description: null,
+                    beneficiary_user_additional_info_document: null,
+                  });
+                  setAdditionalError(null);
+                  setFiles([]);
+                }}
               >
                 لغو
               </button>
