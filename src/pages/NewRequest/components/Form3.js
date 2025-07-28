@@ -15,7 +15,6 @@ import attach_icon from '../../../media/icons/attach_icon.svg';
 import next_icon from '../../../media/icons/next_icon.svg';
 import back_icon from '../../../media/icons/back_icon.svg';
 import './Form3.css';
-import { useLookup } from '../../../context/LookUpContext';
 import FormHeader from './FormHeader';
 
 function Form3({ requestData, setRequestData, setStep, files, setFiles }) {

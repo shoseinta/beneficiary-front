@@ -149,7 +149,7 @@ function Account3({
         postal_code: newValue,
       },
     }));
-    if (newValue.length !== 10 && newValue !== null) {
+    if (newValue !== null && newValue.length !== 10 ) {
       setValidation((pre) => ({ ...pre, postal_code: false }));
     } else {
       setValidation((pre) => ({ ...pre, postal_code: true }));
@@ -556,7 +556,6 @@ function Account3({
               <input
                 type="text"
                 id="account-postal"
-                pattern="^[0-9۰-۹]{10}$"
                 inputMode="numeric"
                 value={
                   account1Data?.beneficiary_user_address?.postal_code

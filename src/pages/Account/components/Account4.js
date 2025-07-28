@@ -1,6 +1,6 @@
 import Header from '../../../components/header/Header';
 import NavigationBar from '../../../components/navigationBar/NavigationBar';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import './Account4.css';
 import DatePicker from 'react-multi-date-picker';
 import persian from 'react-date-object/calendars/persian';
@@ -8,8 +8,18 @@ import persian_fa from 'react-date-object/locales/persian_fa';
 import DateObject from 'react-date-object';
 import attach_icon from '../../../media/icons/attach_icon.svg';
 import JSZip from 'jszip';
+import { useDropzone } from 'react-dropzone';
+import {
+  FiFile,
+  FiImage,
+  FiVideo,
+  FiMusic,
+  FiFileText,
+  FiX,
+} from 'react-icons/fi';
 
 function Account4({ accountData, setAccountData, setStep, setLoad }) {
+  
   const toPersianDigits = (num) => {
     const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
     return num.toString().replace(/\d/g, (x) => persianDigits[x]);
@@ -49,7 +59,7 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
       beneficiary_user_family_info_identification_number: newValue,
     }))
 
-    if (newValue.length !== 10 && newValue !== null) {
+    if (newValue !== null && newValue.length !== 10) {
       setFamilyValidation((pre) => ({ ...pre, beneficiary_user_family_info_identification_number: false }));
     } else {
       setFamilyValidation((pre) => ({ ...pre, beneficiary_user_family_info_identification_number: true }));
@@ -77,7 +87,7 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
     const persianRegex = /^[\u0600-\u06FF\u0621-\u064A\s]+$/;
     return persianRegex.test(text);
   };
-
+  
   const [addFamily, setAddFamily] = useState(false);
   const [addAdditional, setAddAdditional] = useState(false);
   const [removeFamily, setRemoveFamily] = useState(false);
@@ -110,11 +120,128 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
     beneficiary_user_additional_info_description: null,
     beneficiary_user_additional_info_document: null,
   });
+  const [files, setFiles] = useState([]);
+  const [isCreatingZip, setIsCreatingZip] = useState(false);
+  
+    const onDrop = useCallback(
+      (acceptedFiles) => {
+        setFiles((prev) => [...prev, ...acceptedFiles]);
+  
+        if (acceptedFiles.length > 0) {
+          setIsCreatingZip(true);
+          const zip = new JSZip();
+  
+          // Add existing and new files to zip
+          files.forEach((file) => zip.file(file.name, file));
+          acceptedFiles.forEach((file) => zip.file(file.name, file));
+  
+          zip
+            .generateAsync({ type: 'blob' })
+            .then((zipContent) => {
+              const zipFile = new File([zipContent], 'documents.zip');
+              setAdditionalData((prev) => ({
+                ...prev,
+                beneficiary_user_additional_info_document: zipFile,
+              }));
+            })
+            .finally(() => setIsCreatingZip(false));
+        }
+      },
+      [files, setFiles, setAdditionalData]
+    );
+  
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({
+      onDrop,
+      accept: {
+        'image/*': ['.jpeg', '.jpg', '.png', '.gif', '.heic', '.heif'],
+        'application/pdf': ['.pdf'],
+        'application/msword': ['.doc'],
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+          ['.docx'],
+        'application/vnd.ms-excel': ['.xls'],
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': [
+          '.xlsx',
+        ],
+      },
+      maxSize: 10 * 1024 * 1024, // 10MB
+      multiple: true,
+    });
+  
+    const getFileIcon = (file) => {
+      const extension = file.name.split('.').pop().toLowerCase();
+      const type = file.type.split('/')[0];
+  
+      switch (type) {
+        case 'image':
+          return <FiImage className="file-icon" />;
+        case 'video':
+          return <FiVideo className="file-icon" />;
+        case 'audio':
+          return <FiMusic className="file-icon" />;
+        default:
+          switch (extension) {
+            case 'pdf':
+              return <FiFileText className="file-icon pdf" />;
+            case 'doc':
+            case 'docx':
+              return <FiFileText className="file-icon word" />;
+            case 'xls':
+            case 'xlsx':
+              return <FiFileText className="file-icon excel" />;
+            case 'txt':
+              return <FiFileText className="file-icon" />;
+            default:
+              return <FiFile className="file-icon" />;
+          }
+      }
+    };
+    const handleRemoveFile = (indexToRemove) => {
+        setFiles((prevFiles) => {
+          const updated = [...prevFiles];
+          updated.splice(indexToRemove, 1);
+    
+          if (updated.length > 0) {
+            const zip = new JSZip();
+            updated.forEach((file) => {
+              zip.file(file.name, file);
+            });
+    
+            zip.generateAsync({ type: 'blob' }).then((zipContent) => {
+              const zipFile = new File([zipContent], 'documents.zip', {
+                type: 'application/zip',
+              });
+              setAdditionalData((prev) => ({
+                ...prev,
+                beneficiary_user_additional_info_document: zipFile,
+              }));
+            });
+          } else {
+            setAdditionalData((prev) => ({
+              ...prev,
+              beneficiary_user_additional_info_document: null,
+            }));
+          }
+    
+          return updated;
+        });
+      };
+  useEffect(() => {
+    if(familyData.beneficiary_user_family_info_birth_date !==null && familyData.beneficiary_user_family_info_birth_date !== ""
+      && familyData.beneficiary_user_family_info_family_relation !== null && familyData.beneficiary_user_family_info_family_relation !== ""
+      && familyData.beneficiary_user_family_info_first_name !== null && familyData.beneficiary_user_family_info_first_name !== ""
+      && familyData.beneficiary_user_family_info_last_name !== null && familyData.beneficiary_user_family_info_last_name !== ""
+      && familyData.beneficiary_user_family_info_gender !== null && familyData.beneficiary_user_family_info_gender !== ""
+      && familyData.beneficiary_user_family_info_identification_number !== null && familyData.beneficiary_user_family_info_identification_number !== ""
+    ){
+      setFamilyError(null);
+    }
+  },[familyData])
 
   useEffect(() => {
-    console.log(additionalData);
-  });
-  const [files, setFiles] = useState([]);
+    if(additionalData.beneficiary_user_additional_info_title !== null && additionalData.beneficiary_user_additional_info_title !== ''){
+      setAdditionalError(null);
+    }
+  },[additionalData])
   const handleFileChange = async (e) => {
     const selectedFiles = Array.from(e.target.files);
     setFiles((pre) => {
@@ -874,20 +1001,73 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
 
               <div>
                 <label htmlFor="additional-info-document">مستندات:</label>
-                <input
+                {/* <input
                   type="file"
                   id="additional-info-document"
                   multiple
                   hidden
                   onChange={handleFileChange}
-                />
-                <label
+                /> */}
+                {/* <label
                   htmlFor="additional-info-document"
                   className="upload-label"
-                >
-                  <img src={attach_icon} alt="" />
-                  برای انتخاب فایل کلیک کنید{' '}
-                </label>
+                > */}
+                  <div
+                                {...getRootProps()}
+                                className={`dropzone ${isDragActive ? 'active' : ''}`}
+                              >
+                                {files.length === 0 && (
+                                  <>
+                                    <input {...getInputProps()} />
+                                    <div className="upload-content">
+                                      <img src={attach_icon} alt="" />
+                                      <p>
+                                        {isDragActive
+                                          ? 'فایل‌ها را اینجا رها کنید'
+                                          : 'برای انتخاب مستندات کلیک کنید'}
+                                      </p>
+                                    </div>
+                                  </>
+                                )}
+                                {files.length > 0 && (
+                                  <div className="upload-files-wrapper">
+                                    <input {...getInputProps()} />
+                                    <div className="upload-content-with-files">
+                                      <img src={attach_icon} alt="" />
+                                      <p>افزودن</p>
+                                    </div>
+                  
+                                    <div className="file-previews">
+                                      {files.map((file, index) => (
+                                        <div key={index} className="file-preview">
+                                          <div className="file-info">
+                                            {getFileIcon(file)}
+                                            <span
+                                              className="file-name"
+                                              onClick={() =>
+                                                window.open(URL.createObjectURL(file))
+                                              }
+                                            >
+                                              {file.name}
+                                            </span>
+                                            {/* <span className="file-size">{(file.size / 1024 / 1024).toFixed(2)}MB</span> */}
+                                          </div>
+                                          <button
+                                            className="remove-file"
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              handleRemoveFile(index);
+                                            }}
+                                          >
+                                            <FiX />
+                                          </button>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                {/* </label> */}
               </div>
             </form>
             {additionalError && (
