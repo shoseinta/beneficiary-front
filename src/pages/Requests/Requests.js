@@ -130,7 +130,7 @@ function Requests() {
                 onClick={() => setActiveEndpoint(index)}
                 key={index}
               >
-                <a href="#">{label}</a>
+                <a href="#" style={activeEndpoint === index? {color:"#ffffff"}:{color:"#000000"}}>{label}</a>
               </li>
             ))}
           </ul>

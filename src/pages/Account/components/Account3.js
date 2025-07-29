@@ -431,20 +431,20 @@ function Account3({
         <nav className="nav-up">
           <ul className="nav-list-up">
             <li onClick={() => setStep(1)} className="nav-item-up">
-              <a>اطلاعات حساب کاربری</a>
+              <a style={{color:"#000"}}>اطلاعات حساب کاربری</a>
             </li>
             <li onClick={() => setStep(2)} className="nav-item-up">
-              <a>اطلاعات شخصی کاربر</a>
+              <a style={{color:"#000"}}>اطلاعات شخصی کاربر</a>
             </li>
             <li
               onClick={() => setStep(3)}
               className="nav-item-up"
               id="active-nav-up"
             >
-              <a>اطلاعات آدرس کاربر</a>
+              <a style={{color:"#fff"}}>اطلاعات آدرس کاربر</a>
             </li>
             <li onClick={() => setStep(4)} className="nav-item-up">
-              <a>اطلاعات تکمیلی کاربر</a>
+              <a style={{color:"#000"}}>اطلاعات تکمیلی کاربر</a>
             </li>
           </ul>
         </nav>

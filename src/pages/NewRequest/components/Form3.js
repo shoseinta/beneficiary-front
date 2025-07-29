@@ -78,13 +78,13 @@ function Form3({ requestData, setRequestData, setStep, files, setFiles }) {
       default:
         switch (extension) {
           case 'pdf':
-            return <FiFileText className="file-icon pdf" />;
+            return <FiFileText className="file-icon" />;
           case 'doc':
           case 'docx':
-            return <FiFileText className="file-icon word" />;
+            return <FiFileText className="file-icon" />;
           case 'xls':
           case 'xlsx':
-            return <FiFileText className="file-icon excel" />;
+            return <FiFileText className="file-icon" />;
           case 'txt':
             return <FiFileText className="file-icon" />;
           default:
@@ -166,7 +166,6 @@ function Form3({ requestData, setRequestData, setStep, files, setFiles }) {
               id="form-title-id"
               value={requestData.beneficiary_request_title || ''}
               onChange={handleTitleChange}
-              required
             />
           </div>
 
@@ -230,6 +229,7 @@ function Form3({ requestData, setRequestData, setStep, files, setFiles }) {
                         <button
                           className="remove-file"
                           onClick={(e) => {
+                            e.preventDefault();
                             e.stopPropagation();
                             handleRemoveFile(index);
                           }}

@@ -181,13 +181,13 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
         default:
           switch (extension) {
             case 'pdf':
-              return <FiFileText className="file-icon pdf" />;
+              return <FiFileText className="file-icon" />;
             case 'doc':
             case 'docx':
-              return <FiFileText className="file-icon word" />;
+              return <FiFileText className="file-icon" />;
             case 'xls':
             case 'xlsx':
-              return <FiFileText className="file-icon excel" />;
+              return <FiFileText className="file-icon" />;
             case 'txt':
               return <FiFileText className="file-icon" />;
             default:
@@ -533,15 +533,15 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
           <nav className="nav-up">
             <ul className="nav-list-up">
               <li className="nav-item-up" onClick={() => setStep(1)}>
-                <a> اطلاعات حساب کاربری </a>
+                <a style={{color:"#000"}}> اطلاعات حساب کاربری </a>
               </li>
 
               <li className="nav-item-up" onClick={() => setStep(2)}>
-                <a> اطلاعات شخصی کاربر </a>
+                <a style={{color:"#000"}}> اطلاعات شخصی کاربر </a>
               </li>
 
               <li className="nav-item-up" onClick={() => setStep(3)}>
-                <a> اطلاعات آدرس کاربر </a>
+                <a style={{color:"#000"}}> اطلاعات آدرس کاربر </a>
               </li>
 
               <li
@@ -549,7 +549,7 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
                 id="active-nav-up"
                 onClick={() => setStep(4)}
               >
-                <a> اطلاعات تکمیلی کاربر </a>
+                <a style={{color:"#fff"}}> اطلاعات تکمیلی کاربر </a>
               </li>
             </ul>
           </nav>

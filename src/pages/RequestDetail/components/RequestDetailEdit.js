@@ -95,13 +95,13 @@ function RequestDetailEdit({
       default:
         switch (extension) {
           case 'pdf':
-            return <FiFileText className="file-icon pdf" />;
+            return <FiFileText className="file-icon" />;
           case 'doc':
           case 'docx':
-            return <FiFileText className="file-icon word" />;
+            return <FiFileText className="file-icon" />;
           case 'xls':
           case 'xlsx':
-            return <FiFileText className="file-icon excel" />;
+            return <FiFileText className="file-icon" />;
           case 'txt':
             return <FiFileText className="file-icon" />;
           default:

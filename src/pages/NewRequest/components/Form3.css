@@ -60,7 +60,7 @@
   height: auto;
   border-radius: 50%;
 }
-.form3-container .main {
+.form3-container  .main{
   flex-grow: 1;
   display: flex;
   flex-direction: column;
@@ -314,7 +314,6 @@
   max-width: 400px;
   border: 1px solid var(--main-color);
   border-radius: 8px;
-  padding: 8px;
   text-align: center;
   cursor: pointer;
   transition: all 0.3s;
@@ -391,21 +390,12 @@
 }
 
 .form3-container .file-icon {
+  color: var(--main-color);
   font-size: 1.5rem;
   flex-shrink: 0;
 }
 
-.form3-container .file-icon.pdf {
-  color: #e74c3c;
-}
 
-.form3-container .file-icon.word {
-  color: #2b579a;
-}
-
-.form3-container .file-icon.excel {
-  color: #217346;
-}
 
 .form3-container .file-name {
   flex: 1;
@@ -427,13 +417,13 @@
 }
 
 .form3-container .remove-file {
+  display: flex;
+  align-items: center;
   background: none;
   border: none;
   color: var(--error-red);
   cursor: pointer;
   font-size: 1.2rem;
-  padding: 5px;
-  margin-left: 10px;
 }
 
 .form3-container .remove-file:hover {
@@ -444,7 +434,7 @@
   display: flex;
   overflow-x: auto;
   gap: 12px; /* optional: spacing between file previews */
-  padding: 8px;
+  padding: 0 8px;
   margin: auto;
 }
 
@@ -454,7 +444,7 @@
   align-items: center;
   gap: 8px;
   border: 1px solid #ccc;
-  padding: 8px;
+  padding: 5px;
   border-radius: 6px;
   background-color: #f9f9f9;
   height: fit-content;

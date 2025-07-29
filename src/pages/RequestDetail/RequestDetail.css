@@ -136,7 +136,8 @@
   border-radius: 6px;
   color: var(--black50-color);
 }
-.request-detail-container textarea {
+.request-detail-container textarea,
+.request-detail-container .document-label {
   width: 60%;
   padding: 0 10px 0 30px;
   background-color: var(--white-color);
@@ -152,7 +153,12 @@
   vertical-align: top;
   overflow-y: auto;
 }
-
+.request-detail-container .document-label {
+  display: flex;
+  align-items: center;
+  overflow-y: hidden;
+  padding: 0 10px 0 10px;
+}
 .request-detail-container ::placeholder {
   color: var(--black50-color);
 }
@@ -164,7 +170,7 @@
 }
 .request-detail-container button {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   gap: 5px;
   padding: 5px;
@@ -638,7 +644,6 @@ select {
 }
 
 .request-detail-edit-container .file-preview:hover {
-  transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
@@ -658,17 +663,6 @@ select {
   flex-shrink: 0;
 }
 
-.request-detail-edit-container .file-icon.pdf {
-  color: #e74c3c;
-}
-
-.request-detail-edit-container .file-icon.word {
-  color: #2b579a;
-}
-
-.request-detail-edit-container .file-icon.excel {
-  color: #217346;
-}
 
 .request-detail-edit-container .file-name {
   flex: 1;
@@ -690,13 +684,13 @@ select {
 }
 
 .request-detail-edit-container .remove-file {
+  display: flex;
+  align-items: center;
   background: none;
   border: none;
   color: var(--error-red);
   cursor: pointer;
   font-size: 1.2rem;
-  padding: 5px;
-  margin-left: 10px;
 }
 
 .request-detail-edit-container .remove-file:hover {
@@ -707,7 +701,7 @@ select {
   display: flex;
   overflow-x: auto;
   gap: 12px; /* optional: spacing between file previews */
-  padding: 0 8px;
+  padding: 0;
   margin: auto;
 }
 
@@ -761,22 +755,19 @@ select {
 .request-detail-container .file-previews {
   display: flex;
   overflow-x: auto;
-  gap: 12px; /* optional: spacing between file previews */
+  gap: 20px; /* optional: spacing between file previews */
   /* padding: 8px;
   margin: auto;
   flex: 1 1;
   padding-right: 0; */
-  width: 60%;
 }
 
 .request-detail-container .file-preview {
-  box-shadow: 0px 1px 4px var(--black25-color);
   /* flex-shrink: 0; */
   /* display: flex;
   align-items: center; */
   gap: 8px;
   /* border: 1px solid; */
-  padding: 8px;
   border-radius: 6px;
   background-color: var(--white-color);
   height: fit-content;
@@ -799,21 +790,11 @@ select {
 }
 
 .request-detail-container .file-icon {
-  font-size: 1.5rem;
+  color: var(--main-color);
+  font-size: 1.1rem;
   flex-shrink: 0;
 }
 
-.request-detail-container .file-icon.pdf {
-  color: #e74c3c;
-}
-
-.request-detail-container .file-icon.word {
-  color: #2b579a;
-}
-
-.request-detail-container .file-icon.excel {
-  color: #217346;
-}
 
 .request-detail-container .file-name {
   flex: 1;
@@ -851,6 +832,7 @@ select {
   right: 0;
   /* bottom: 0; */
   top: 50%;
+  transform: translateY(-50%);
   margin: auto;
   z-index: 100;
 }
@@ -1168,13 +1150,13 @@ select {
 }
 
 .child-creation-overlay-container .remove-file {
+  display: flex;
+  align-items: center;
   background: none;
   border: none;
   color: var(--error-red);
   cursor: pointer;
   font-size: 1.2rem;
-  padding: 5px;
-  margin-left: 10px;
 }
 
 .child-creation-overlay-container .remove-file:hover {

@@ -50,13 +50,13 @@ function Form4({
       default:
         switch (extension) {
           case 'pdf':
-            return <FiFileText className="file-icon pdf" />;
+            return <FiFileText className="file-icon" />;
           case 'doc':
           case 'docx':
-            return <FiFileText className="file-icon word" />;
+            return <FiFileText className="file-icon" />;
           case 'xls':
           case 'xlsx':
-            return <FiFileText className="file-icon excel" />;
+            return <FiFileText className="file-icon" />;
           case 'txt':
             return <FiFileText className="file-icon" />;
           default:
@@ -209,7 +209,7 @@ function Form4({
   };
 
   return (
-    <div className="form4-container">
+    <div className="form4-container disabled">
       <Header />
       <main className="main">
         <FormHeader step={4} />
@@ -290,7 +290,8 @@ function Form4({
             </div>
           )}
 
-          <div className="request-cash-review input-space">
+          {durationValue !== "به صورت دائمی" &&
+            <div className="request-cash-review input-space">
             <label className="label-space" htmlFor="request-cash-review1-id">
               {' '}
               مبلغ درخواست:{' '}
@@ -301,7 +302,7 @@ function Form4({
               readOnly
               value={amountValue}
             />
-          </div>
+          </div>}
         </form>
 
         <form className="form">
@@ -315,7 +316,7 @@ function Form4({
                 type="text"
                 id="request-title-review1-id"
                 readOnly
-                value="اطلاعاتی وجود ندارد"
+                placeholder="اطلاعاتی وجود ندارد"
               />
             ) : (
               <input
@@ -358,11 +359,20 @@ function Form4({
             <label
               htmlFor="request-document-review1-id"
               className="label-space"
+              readOnly
             >
               {' '}
               مستندات درخواست:{' '}
             </label>
             {files.length > 0 && (
+              <label
+                  htmlFor="request-document-review1-id"
+                  className="upload-label"
+                  id="label-for-file-input"
+                  readOnly
+                >
+                
+                
               <div className="file-previews">
                 {files.map((file, index) => (
                   <div key={index} className="file-preview">
@@ -379,6 +389,7 @@ function Form4({
                   </div>
                 ))}
               </div>
+              </label>
             )}
             {files.length === 0 && (
               <>
@@ -388,11 +399,13 @@ function Form4({
                   multiple
                   hidden
                   readOnly
+                  disabled
                 />
                 <label
                   htmlFor="request-document-review1-id"
                   className="upload-label"
                   id="label-for-file-input"
+                  readOnly
                 >
                   اطلاعاتی وجود ندارد{' '}
                 </label>

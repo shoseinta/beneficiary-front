@@ -21,10 +21,27 @@ import { useDropzone } from 'react-dropzone';
 import { toJalaali } from 'jalaali-js';
 
 function RequestDetail() {
+  const getMimeType = (filename) => {
+  const ext = filename.split('.').pop().toLowerCase();
+  const mimeTypes = {
+    pdf: 'application/pdf',
+    doc: 'application/msword',
+    docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    xls: 'application/vnd.ms-excel',
+    xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    jpg: 'image/jpeg',
+    jpeg: 'image/jpeg',
+    png: 'image/png',
+    gif: 'image/gif',
+    txt: 'text/plain',
+  };
+  return mimeTypes[ext] || 'application/octet-stream';
+};
   useEffect(() => {
     document.title = 'صفحه سوابق درخواست خیریه';
   }, []);
   const { id } = useParams();
+  const [loadingFiles, setLoadingFiles] = useState(true)
   const { duration, processingStage } = useLookup();
   const [isEdit, setIsEdit] = useState(false);
   const [requestData, setRequestData] = useState(null);
@@ -103,13 +120,13 @@ function RequestDetail() {
       default:
         switch (extension) {
           case 'pdf':
-            return <FiFileText className="file-icon pdf" />;
+            return <FiFileText className="file-icon" />;
           case 'doc':
           case 'docx':
-            return <FiFileText className="file-icon word" />;
+            return <FiFileText className="file-icon" />;
           case 'xls':
           case 'xlsx':
-            return <FiFileText className="file-icon excel" />;
+            return <FiFileText className="file-icon" />;
           case 'txt':
             return <FiFileText className="file-icon" />;
           default:
@@ -119,6 +136,7 @@ function RequestDetail() {
   };
 
   const downloadAndExtractZip = async (url) => {
+    setLoadingFiles(true);
     const filename = url.split('/').pop();
     try {
       const response = await fetch(
@@ -140,26 +158,28 @@ function RequestDetail() {
       const filePromises = [];
 
       zipContent.forEach((relativePath, file) => {
-        if (!file.dir) {
-          filePromises.push(
-            file.async('blob').then((blob) => {
-              // Create a proper File object that matches dropzone format
-              const fileObj = new File([blob], file.name, {
-                type: blob.type || 'application/octet-stream',
-                lastModified: Date.now(),
-              });
+  if (!file.dir) {
+    filePromises.push(
+      file.async('blob').then((blob) => {
+        const fileName = relativePath.split('/').pop();
+        const mimeType = getMimeType(fileName);
 
-              // Add properties to match dropzone file objects
-              fileObj.preview = URL.createObjectURL(blob);
-              fileObj.path = file.name;
+        const fileObj = new File([blob], fileName, {
+          type: mimeType,
+          lastModified: Date.now(),
+        });
 
-              extractedFiles.push(fileObj);
-            })
-          );
-        }
-      });
+        fileObj.preview = URL.createObjectURL(fileObj);
+        fileObj.path = relativePath;
+
+        extractedFiles.push(fileObj);
+      })
+    );
+  }
+});
 
       await Promise.all(filePromises);
+      setLoadingFiles(false);
       return extractedFiles;
     } catch (error) {
       console.error('ZIP download/extraction failed:', error);
@@ -168,6 +188,7 @@ function RequestDetail() {
   };
 
   const downloadAndExtractZipChild = async (url) => {
+    setLoadingFiles(true);
     const filename = url.split('/').pop();
     try {
       const response = await fetch(
@@ -189,26 +210,28 @@ function RequestDetail() {
       const filePromises = [];
 
       zipContent.forEach((relativePath, file) => {
-        if (!file.dir) {
-          filePromises.push(
-            file.async('blob').then((blob) => {
-              // Create a proper File object that matches dropzone format
-              const fileObj = new File([blob], file.name, {
-                type: blob.type || 'application/octet-stream',
-                lastModified: Date.now(),
-              });
+  if (!file.dir) {
+    filePromises.push(
+      file.async('blob').then((blob) => {
+        const fileName = relativePath.split('/').pop();
+        const mimeType = getMimeType(fileName);
 
-              // Add properties to match dropzone file objects
-              fileObj.preview = URL.createObjectURL(blob);
-              fileObj.path = file.name;
+        const fileObj = new File([blob], fileName, {
+          type: mimeType,
+          lastModified: Date.now(),
+        });
 
-              extractedFiles.push(fileObj);
-            })
-          );
-        }
-      });
+        fileObj.preview = URL.createObjectURL(fileObj);
+        fileObj.path = relativePath;
+
+        extractedFiles.push(fileObj);
+      })
+    );
+  }
+});
 
       await Promise.all(filePromises);
+      setLoadingFiles(false);
       return extractedFiles;
     } catch (error) {
       console.error('ZIP download/extraction failed:', error);
@@ -711,6 +734,8 @@ function RequestDetail() {
         for (var i = 0; i < filePreview.length; i++) {
           filePreview[i].classList.add('file-preview-transparent');
         }
+        const documentLabel = document.getElementsByClassName('document-label')[0]
+        documentLabel.classList.add('file-previews-transparent');
       }
 
       if (files.length === 0) {
@@ -766,10 +791,17 @@ function RequestDetail() {
       if (uploadContent?.classList?.contains('file-previews-transparent')) {
         uploadContent.classList.remove('file-previews-transparent');
       }
+      const documentLabels = document.getElementsByClassName('document-label')
+      if(documentLabels && documentLabels?.length !== 0) {
+        const documentLabel = documentLabels[0]
+        if(documentLabel.classList.contains('file-previews-transparent')){
+          documentLabel.classList.remove('file-previews-transparent')
+        }
+      }
     }
   }, [isDelete, isChildCreate, isChildSee]);
 
-  if (!requestData) {
+  if ((!isDelete && !isEdit && !isChildCreate && !isChildSee) && (!requestData || (requestData?.beneficiary_request_document && loadingFiles) || (childSeeData?.beneficiary_request_child_document && loadingFiles))) {
     return <p>loading...</p>;
   }
 
@@ -982,7 +1014,9 @@ function RequestDetail() {
                     </>
                   )}
                   {files.length > 0 && (
+                    <label className='document-label'>
                     <div className="file-previews">
+                      
                       {files.map((file, index) => (
                         <div key={index} className="file-preview">
                           <div className="file-info">
@@ -999,9 +1033,12 @@ function RequestDetail() {
                           </div>
                         </div>
                       ))}
+                      
                     </div>
+                    </label>
                   )}
                 </div>
+                
               </form>
 
               <form id="form2">

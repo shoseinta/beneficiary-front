@@ -22,7 +22,7 @@
 .requests-container {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100vh;
   row-gap: 10px;
 }
 .requests-container .header {
@@ -67,6 +67,7 @@
   flex-direction: column;
   align-items: center;
   row-gap: 10px;
+  overflow-y: hidden;
 }
 /* ---------------------------------up navigation style */
 .requests-container .nav-up {
@@ -106,13 +107,14 @@
 }
 /* -----------------------------------------requests table style */
 .requests-container .request-table-container {
+  flex: 1;
   display: flex;
   justify-content: center;
-  max-height: 50vh; /* 5 rows + 1 header row, each approx 35px */
-  overflow-y: scroll;
+  overflow-y: auto;
   width: 97%;
   max-width: 610px;
   box-shadow: 0 4px 4px var(--black25-color);
+  margin-bottom: 50px;
 }
 .requests-container .request-table {
   border-collapse: collapse;
@@ -138,7 +140,6 @@
 .requests-container .request-table td {
   padding: 3vh 1px;
   text-align: center;
-  border: 1px solid var(--main-color); /* blue border */
   font-size: 0.7rem;
   font-weight: normal;
 }
@@ -157,9 +158,10 @@
 .requests-container .request-table tbody tr:nth-child(even) {
   background-color: var(--white-gray-color); /* light gray */
 }
-.requests-container .request-table img {
+.requests-container .request-table svg {
   width: 10px;
   height: auto;
+  margin-right: 3px;
 }
 
 .requests-container p {

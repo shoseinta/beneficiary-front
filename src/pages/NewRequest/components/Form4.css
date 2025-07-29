@@ -25,6 +25,12 @@
   min-height: 100vh;
   row-gap: 10px;
 }
+
+.form4-container.disabled input,
+.form4-container.disabled textarea {
+  pointer-events: none;
+  cursor: default; /* Prevents "text" cursor */
+}
 .form4-container .header {
   display: flex;
   align-items: center;
@@ -165,7 +171,7 @@
 .form4-container sup {
   color: var(--error-red);
 }
-.form4-container form div {
+.form4-container form div:not(.file-previews) {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -209,7 +215,7 @@
   background-color: var(--white-color);
   border: none;
   border-radius: 6px;
-  padding-right: 10px;
+  padding: 0 1px;
   box-shadow: 0px 1px 4px var(--black25-color);
   font-size: 0.7rem;
   font-weight: normal;
@@ -228,7 +234,6 @@
   border-radius: 6px;
   font-size: 0.7rem;
   font-weight: normal;
-  cursor: pointer;
   color: var(--black50-color);
 }
 .form4-container .upload-label img {
@@ -313,14 +318,12 @@
   display: flex;
   overflow-x: auto;
   gap: 12px; /* optional: spacing between file previews */
-  padding: 8px;
   margin: auto;
   flex: 1 1;
   padding-right: 0;
 }
 
 .form4-container .file-preview {
-  box-shadow: 0px 1px 4px var(--black25-color);
   flex-shrink: 0; /* Don't shrink */
   display: flex;
   align-items: center;
@@ -349,21 +352,11 @@
 }
 
 .form4-container .file-icon {
+  color: var(--main-color);
   font-size: 1.5rem;
   flex-shrink: 0;
 }
 
-.form4-container .file-icon.pdf {
-  color: #e74c3c;
-}
-
-.form4-container .file-icon.word {
-  color: #2b579a;
-}
-
-.form4-container .file-icon.excel {
-  color: #217346;
-}
 
 .form4-container .file-name {
   flex: 1;
