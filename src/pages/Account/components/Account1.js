@@ -76,23 +76,51 @@ function Account1({ accountData, setAccountData, setStep, setLoad }) {
       email: isValidEmail,
     }));
   };
-
-  const handlePhoneChange = (e) => {
+  const toPersianDigits = (num) => {
+    const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+    return num.toString().replace(/\d/g, (d) => persianDigits[d]);
+  };
+  const handlePhoneChange = (event) => {
+    // Convert Persian digits to English and remove all non-digit characters
     setBlur((pre) => ({ ...pre, phone_number: false }));
-    const value = e.target.value;
-    if (!value) {
-      setAccount1Data((prev) => ({ ...prev, phone_number: null }));
-    } else {
-      setAccount1Data((prev) => ({ ...prev, phone_number: value }));
-    }
-
     const phoneRegex = /^(۰۹|09)[0-9۰-۹]{9}$/;
-    const isValidPhone = value === '' || phoneRegex.test(value);
+    const isValidPhone = event.target.value === '' || phoneRegex.test(event.target.value);
 
     setValidation((prev) => ({
       ...prev,
       phone_number: isValidPhone,
     }));
+    let englishValue = event.target.value
+      .split('')
+      .map((c) => {
+        const persianDigits = [
+          '۰',
+          '۱',
+          '۲',
+          '۳',
+          '۴',
+          '۵',
+          '۶',
+          '۷',
+          '۸',
+          '۹',
+        ];
+        const index = persianDigits.indexOf(c);
+        return index >= 0 ? index.toString() : c;
+      })
+      .join('')
+      .replace(/\D/g, '');
+
+    // Update the state with the English number (or empty string)
+    const newValue = englishValue === '' ? null : englishValue;
+    setAccount1Data((pre) => ({
+      ...pre,
+      phone_number: newValue
+    }));
+    // Update the displayed value with Persian digits (no commas)
+    const displayValue =
+      englishValue === '' ? '' : toPersianDigits(englishValue);
+    event.target.value = displayValue;
   };
 
   useEffect(() => {
@@ -181,7 +209,7 @@ function Account1({ accountData, setAccountData, setStep, setLoad }) {
               maxLength="11"
               inputMode="numeric"
               placeholder="مثال: ۰۹۱۲۰۱۲۳۴۵۶"
-              value={account1Data?.phone_number || ''}
+              value={account1Data?.phone_number ? toPersianDigits(account1Data?.phone_number) : null}
               onChange={handlePhoneChange}
               onBlur={() => setBlur((pre) => ({ ...pre, phone_number: true }))}
               className={
