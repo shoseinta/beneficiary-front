@@ -188,11 +188,13 @@
 
 .family-delete-overlay-body {
   background-color: var(--black25-color);
+  transition:  none !important;
 }
 
 .family-delete-overlay-body .additional-info-box,
 .family-delete-overlay-body .additional-info-value {
   background-color: transparent !important;
+  transition:  none !important;
 }
 
 .family-delete-overlay-container {
@@ -411,6 +413,7 @@
 }
 .additional-info-overlay-container input,
 .additional-info-overlay-container textarea {
+  padding: 0 8px;
   height: 35px;
   width: 70%;
   background-color: var(--white-gray-color);
@@ -453,7 +456,7 @@
   justify-content: flex-end;
   gap: 15px;
 }
-.additional-info-overlay-container button {
+.additional-info-overlay-container button:not(.remove-file) {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -531,16 +534,14 @@
 /* Dropzone Styles */
 .additional-info-overlay-container .dropzone {
   height: 70px;
-  width: 80%;
+  width: 70%;
   max-width: 400px;
   border: 1px solid var(--main-color);
-  border-radius: 8px;
-  padding: 8px;
+  border-radius: 6px;
   text-align: center;
   cursor: pointer;
   transition: all 0.3s;
   background-color: var(--white-gray-color);
-  margin: 0 auto; /* ✅ Centers horizontally */
   /* margin-bottom: 20px; */
 }
 
@@ -593,10 +594,10 @@
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: all 0.2s;
+  font-size: 0.7rem;
 }
 
 .additional-info-overlay-container .file-preview:hover {
-  transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
@@ -655,8 +656,8 @@
 .additional-info-overlay-container .file-previews {
   display: flex;
   overflow-x: auto;
+  padding-left: 5px;
   gap: 12px; /* optional: spacing between file previews */
-  padding: 8px;
   margin: auto;
 }
 
@@ -699,4 +700,5 @@
   /* min-width: 120px; */
   gap: 8px;
   cursor: pointer;
+  font-size: 0.7rem;
 }

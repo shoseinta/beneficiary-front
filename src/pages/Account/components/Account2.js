@@ -320,6 +320,7 @@ function Account2({
               inputClass="custom-datepicker-input"
               id="account-bd"
               maxDate={todayJalali}
+              onOpenPickNewDate={false}
             />
             {/* <input 
                     type="text" 
@@ -364,7 +365,7 @@ function Account2({
                 >
                   <path d="M14.7373 0L4.94741 11.1961L1.22585 6.93997L0 8.34191L4.94741 14L15.9631 1.40194L14.7373 0Z" />
                 </svg>
-                تغییرات با موفقیت اعمال شد
+                اطلاعات با موفقیت ثبت گردید
               </div>
             ) : (
               <div style={{ visibility: 'hidden' }}>
@@ -377,7 +378,7 @@ function Account2({
                 >
                   <path d="M14.7373 0L4.94741 11.1961L1.22585 6.93997L0 8.34191L4.94741 14L15.9631 1.40194L14.7373 0Z" />
                 </svg>
-                تغییرات با موفقیت اعمال شد
+                اطلاعات با موفقیت ثبت گردید
               </div>
             )}
             {((!validation.first_name &&

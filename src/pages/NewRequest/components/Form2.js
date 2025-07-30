@@ -231,24 +231,49 @@ function Form2({
     setNextActive(isFormComplete);
   }, [requestData, onetimeData, recurringData]);
 
-  const handleAmountChange = (e) => {
-    const inputValue = e.target.value;
+  const handleAmountChange = (event) => {
+    // Convert Persian digits to English and remove all non-digit characters
+    let englishValue = event.target.value
+      .split('')
+      .map((c) => {
+        const persianDigits = [
+          '۰',
+          '۱',
+          '۲',
+          '۳',
+          '۴',
+          '۵',
+          '۶',
+          '۷',
+          '۸',
+          '۹',
+        ];
+        const index = persianDigits.indexOf(c);
+        return index >= 0 ? index.toString() : c;
+      })
+      .join('')
+      .replace(/\D/g, '');
 
-    // Convert Persian to English and remove commas for storage
-    const englishValue = toEnglishDigits(inputValue);
-    if (!englishValue) {
+    // Update the state with the English number (or empty string)
+    const inputValue = englishValue === '' ? null : englishValue;
+    if (!inputValue) {
       setRequestData((pre) => {
         return { ...pre, beneficiary_request_amount: '' };
       });
     } else {
       setRequestData((pre) => {
-        return { ...pre, beneficiary_request_amount: englishValue };
+        return { ...pre, beneficiary_request_amount: inputValue};
       });
     }
     const formattedValue =
-      englishValue === '' ? '' : toPersianDigits(addCommas(englishValue));
+      inputValue === '' ? '' : toPersianDigits(addCommas(englishValue));
     setDisplayValue(formattedValue);
+    // Update the displayed value with Persian digits (no commas)
+    const displayValue =
+      englishValue === '' ? '' : toPersianDigits(englishValue);
+    event.target.value = displayValue;
   };
+
 
   useEffect(() => {
     document.documentElement.classList.add('form2-html');
@@ -351,6 +376,7 @@ function Form2({
                 placeholder="تاریخ را انتخاب کنید"
                 inputClass="custom-datepicker-input"
                 minDate={todayJalali}
+                onOpenPickNewDate={false}
               />
             </div>
           ) : null}
@@ -375,6 +401,7 @@ function Form2({
                 }
                 onChange={handleLimitChange}
                 inputMode="numeric"
+                style={{direction:"ltr"}}
               />
             </div>
           ) : null}
@@ -422,6 +449,7 @@ function Form2({
                     placeholder="برای مثال: ۱٫۰۰۰٫۰۰۰"
                     value={dispalyValue}
                     onChange={handleAmountChange}
+                    style={{direction:"ltr"}}
                   />
                 </div>
                 <div id="cash-in-words" className="amount-preview"></div>

@@ -448,7 +448,7 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
         beneficiary_user_family_info_first_name:true,
         beneficiary_user_family_info_last_name:true
       })
-      setTimeout(() => setAddFamily(false), 1000);
+      setAddFamily(false)
     } catch (err) {
       console.log(err);
     }
@@ -512,7 +512,7 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
       });
       setAdditionalError(null);
       setFiles([]);
-      setTimeout(() => setAddAdditional(false), 1000);
+      setAddAdditional(false);
     } catch (err) {
       console.log(err);
     }
@@ -561,7 +561,9 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
                 آنها درخواست ایجاد کنید:
               </p>
 
-              <div className="additional-info-box">
+              {accountData?.beneficiary_user_family_info &&
+                accountData?.beneficiary_user_family_info.length !== 0 &&
+                <div className="additional-info-box">
                 {accountData?.beneficiary_user_family_info &&
                 accountData?.beneficiary_user_family_info.length !== 0
                   ? accountData.beneficiary_user_family_info.map(
@@ -596,7 +598,7 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
                       }
                     )
                   : null}
-              </div>
+              </div>}
 
               <div className="additional-info-button-container">
                 <button
@@ -624,7 +626,9 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
                 می‌توانید به ما در جهت خدمت‌رسانی بهتر کمک کنید:
               </p>
 
-              <div className="additional-info-box">
+              {accountData?.beneficiary_user_additional_info &&
+                accountData?.beneficiary_user_additional_info.length !== 0 &&
+                <div className="additional-info-box">
                 {accountData?.beneficiary_user_additional_info &&
                 accountData?.beneficiary_user_additional_info.length !== 0
                   ? accountData.beneficiary_user_additional_info.map(
@@ -658,7 +662,7 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
                       }
                     )
                   : null}
-              </div>
+              </div>}
               <div className="additional-info-button-container">
                 <button
                   type="button"
@@ -782,6 +786,7 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
                       beneficiary_user_family_info_identification_number:true
                     }))
                   }}
+                  style={{direction:"ltr"}}
                 />
               </div>
 

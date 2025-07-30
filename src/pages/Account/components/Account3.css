@@ -185,7 +185,32 @@ select {
   font-size: 0.7rem;
   font-weight: normal;
 }
+.account-container3 .button-container-success {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  padding: 10px;
+  background-color: var(--green-color);
+  color: var(--white-color);
+  border-radius: 6px;
+  box-shadow: 0px 4px 4px var(--black25-color);
+  font-size: 0.7rem;
+  font-weight: normal;
+}
+.account-container3 .map-button-success-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: fit-content;
+}
+
 .account-container3 #account-submit3 > div > svg {
+  width: 10px;
+  height: auto;
+  color: var(--white-color);
+}
+.account-container3 .map-button-success-container svg {
   width: 10px;
   height: auto;
   color: var(--white-color);
@@ -193,6 +218,24 @@ select {
 .account-container3 #account-submit3 input {
   width: 75px;
   padding: 0;
+  text-align: center;
+  background-color: var(--main-color);
+  border: none;
+  color: var(--white-color);
+  cursor: pointer;
+  border-radius: 6px;
+  height: 35px;
+}
+.account-container3 .button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.account-container3 .button-container button {
+  font-size: 0.7rem;
+}
+.account-container3 button {
+  padding: 0 10px;
   text-align: center;
   background-color: var(--main-color);
   border: none;
@@ -249,4 +292,19 @@ select {
   height: 7vw;
   max-height: 36px;
   width: auto;
+}
+
+.account-container3 .input-browser-border:has(input:focus),
+.account-container3 .input-browser-border:has(select:focus)
+{
+   border: 2px solid var(--black-color);
+}
+
+/* Remove input's own focus outline/border */
+.account-container3 .input-browser-border input,
+.account-container3 .input-browser-border select
+ {
+  border: none;
+  outline: none;
+  width: 100%;
 }

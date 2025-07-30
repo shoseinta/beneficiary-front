@@ -140,9 +140,33 @@ function RequestDetailEdit({
       return updated;
     });
   };
-  const todayJalali = new DateObject({ calendar: persian, locale: persian_fa });
-  const [jalaliValue, setJalaliValue] = useState(null);
+  const gregorianToJalali = (dateString) => {
+    if (!dateString) return null;
 
+    try {
+      const [year, month, day] = dateString
+        .split('T')[0]
+        .split('-')
+        .map(Number);
+      const { jy, jm, jd } = toJalaali(year, month, day);
+      return `${toPersianDigits(jy)}/${toPersianDigits(jm)}/${toPersianDigits(jd)}`;
+    } catch (error) {
+      console.error('Date conversion error:', error);
+      return 'تاریخ نامشخص';
+    }
+  };
+  const todayJalali = new DateObject({ calendar: persian, locale: persian_fa });
+  const [jalaliValue, setJalaliValue] = useState(() => {
+  const dateStr =
+    updateData?.beneficiary_request_duration_onetime
+      ?.beneficiary_request_duration_onetime_deadline;
+
+  return dateStr
+    ? new DateObject({ date: dateStr, calendar: 'gregorian' })
+        .convert(persian)
+        .setLocale(persian_fa)
+    : null;
+});
   const [editApplied, setEditApplied] = useState(false);
 
   const [validation, setValidation] = useState({
@@ -217,52 +241,26 @@ function RequestDetailEdit({
   };
 
   // Function to convert Gregorian to Jalali date
-  const gregorianToJalali = (dateString) => {
-    if (!dateString) return 'تاریخ نامشخص';
-
-    try {
-      const [year, month, day] = dateString
-        .split('T')[0]
-        .split('-')
-        .map(Number);
-      const { jy, jm, jd } = toJalaali(year, month, day);
-      return `${toPersianDigits(jy)}/${toPersianDigits(jm)}/${toPersianDigits(jd)}`;
-    } catch (error) {
-      console.error('Date conversion error:', error);
-      return 'تاریخ نامشخص';
-    }
-  };
+  
   useEffect(() => {
     console.log(updateData);
   });
 
-  useEffect(() => {
-    if (
-      updateData?.beneficiary_request_duration_onetime
-        ?.beneficiary_request_duration_onetime_deadline
-    ) {
-      const newDate = new DateObject({
-        date: updateData.beneficiary_request_duration_onetime
-          .beneficiary_request_duration_onetime_deadline,
-        calendar: 'gregorian',
-      })
-        .convert(persian)
-        .setLocale(persian_fa);
+//   useEffect(() => {
+//      if (updateData?.beneficiary_request_duration_onetime?.beneficiary_request_duration_onetime_deadline && updateData?.beneficiary_request_duration_onetime?.beneficiary_request_duration_onetime_deadline !== "") {
+//   const newDate = new DateObject({
+//     date: updateData.beneficiary_request_duration_onetime.beneficiary_request_duration_onetime_deadline,
+//     calendar: 'gregorian',
+//   }).convert(persian).setLocale(persian_fa);
 
-      // Avoid unnecessary update that causes flicker
-      if (
-        !jalaliValue ||
-        jalaliValue.year !== newDate.year ||
-        jalaliValue.month.number !== newDate.month.number ||
-        jalaliValue.day !== newDate.day
-      ) {
-        setJalaliValue(newDate);
-      }
-    }
-  }, [
-    updateData?.beneficiary_request_duration_onetime
-      ?.beneficiary_request_duration_onetime_deadline,
-  ]);
+//   setJalaliValue(newDate);
+// } else {
+//   setJalaliValue(null); // don't default to today
+// }
+//   }, [
+//     updateData?.beneficiary_request_duration_onetime
+//       ?.beneficiary_request_duration_onetime_deadline,
+//   ]);
 
   const handleFinishEdit = async () => {
     if (
@@ -808,22 +806,24 @@ function RequestDetailEdit({
                           onChange={(dateObj) => {
                             setJalaliValue(dateObj);
                             const gregorianDate = dateObj.toDate();
-                            const isoDate = gregorianDate
-                              .toISOString()
-                              .split('T')[0];
+                            const isoDate = gregorianDate.toISOString().split('T')[0];
                             setUpdateData((pre) => {
                               const newData = { ...pre };
-                              const onetime =
-                                newData.beneficiary_request_duration_onetime;
-                              if (onetime) {
+
+                              // Ensure duration is set to "once" if user picks a date
+                              if (newData.beneficiary_request_duration !== 1) {
+                                newData.beneficiary_request_duration = 1;
+                              }
+
+                              if (newData.beneficiary_request_duration_onetime) {
                                 newData.beneficiary_request_duration_onetime.beneficiary_request_duration_onetime_deadline =
                                   isoDate;
                               } else {
                                 newData.beneficiary_request_duration_onetime = {
-                                  beneficiary_request_duration_onetime_deadline:
-                                    isoDate,
+                                  beneficiary_request_duration_onetime_deadline: isoDate,
                                 };
                               }
+
                               return newData;
                             });
                           }}
@@ -833,6 +833,7 @@ function RequestDetailEdit({
                           placeholder="تاریخ را انتخاب کنید"
                           inputClass="custom-datepicker-input"
                           minDate={todayJalali}
+                          onOpenPickNewDate={false}
                         />
                       </>
                     )}
@@ -857,6 +858,7 @@ function RequestDetailEdit({
                             setBlur((pre) => ({ ...pre, limit: true }))
                           }
                           inputMode="numeric"
+                          style={{direction:"ltr"}}
                         />
                       </>
                     )}
@@ -880,7 +882,8 @@ function RequestDetailEdit({
                       onBlur={() => {
                         setBlur((pre) => ({ ...pre, amount: true }));
                       }}
-                      inputMode="numeric"
+                      {...(!editApplied ? { inputMode: 'numeric' } : {})}
+                      style={{direction:"ltr"}}
                     />
                   </div>
                 )}
@@ -900,7 +903,6 @@ function RequestDetailEdit({
                   <textarea
                     id="observe-description"
                     value={updateData.beneficiary_request_description}
-                    placeholder="اطلاعاتی وجود ندارد"
                     onChange={handleDescriptionChange}
                   />
                 </div>

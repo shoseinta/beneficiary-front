@@ -50,6 +50,7 @@ function Account3({
   const [account1Data, setAccount1Data] = useState(accountData);
   const { provinces, cities } = useLookup();
   const [submit, setSubmit] = useState(false);
+  const [submitMap, setSubmitMap] = useState(false);
   useEffect(() => {
     setAccount1Data(accountData);
   }, [accountData]);
@@ -95,17 +96,9 @@ function Account3({
 
   // Update position if account1Data changes
   useEffect(() => {
-    if (
-      account1Data?.beneficiary_user_address?.latitude &&
-      account1Data?.beneficiary_user_address?.longitude
-    ) {
-      setPosition([
-        account1Data.beneficiary_user_address.latitude,
-        account1Data.beneficiary_user_address.longitude,
-      ]);
-    }
-  }, [account1Data]);
-
+console.log(account1Data);
+  }
+  )
   const isPersian = (text) => {
     const persianRegex = /^[\u0600-\u06FF\u0621-\u064A\s]+$/;
     return persianRegex.test(text);
@@ -235,7 +228,7 @@ function Account3({
       englishValue === '' ? '' : toPersianDigits(englishValue);
     event.target.value = displayValue;
   };
-  const handleMapConfirm = () => {
+  const handleMapConfirm = async() => {
     setAccount1Data((pre) => ({
       ...pre,
       beneficiary_user_address: {
@@ -244,6 +237,76 @@ function Account3({
         longitude: position[1],
       },
     }));
+
+    if (
+      hasAddress 
+    ) {
+      try {
+        const response = await fetch(
+          `https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/update-user-address/`,
+          {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Token ${localStorage.getItem('access_token')}`,
+            },
+            body: JSON.stringify({
+              longitude:
+                position[1] || null,
+              latitude:
+                position[0] || null,
+            }),
+          }
+        );
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.detail || 'Update failed');
+        }
+
+        const result = await response.json();
+        console.log(result);
+        setSubmitMap(true);
+        setLoad(true);
+        setTimeout(() => setSubmitMap(false), 5000);
+      } catch (err) {
+        console.error(err);
+      }
+    } else if (
+      !hasAddress
+    ) {
+      try {
+        const response = await fetch(
+          `https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/create-user-address/`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Token ${localStorage.getItem('access_token')}`,
+            },
+            body: JSON.stringify({
+              latitude:
+                position[0] || null,
+              longitude:
+                position[1] || null,
+            }),
+          }
+        );
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.detail || 'Creation failed');
+        }
+
+        const result = await response.json();
+        console.log(result);
+        setSubmitMap(true);
+        setLoad(true);
+        setTimeout(() => setSubmitMap(false), 5000);
+      } catch (err) {
+        console.error(err);
+      }
+    }
   };
 
   const handleNeighborChange = (e) => {
@@ -313,10 +376,6 @@ function Account3({
               building_number:
                 account1Data?.beneficiary_user_address?.building_number || null,
               city: account1Data?.beneficiary_user_address?.city || null,
-              latitude:
-                account1Data?.beneficiary_user_address?.latitude || null,
-              longitude:
-                account1Data?.beneficiary_user_address?.longitude || null,
               neighborhood:
                 account1Data?.beneficiary_user_address?.neighborhood || null,
               postal_code:
@@ -371,10 +430,6 @@ function Account3({
               building_number:
                 account1Data?.beneficiary_user_address?.building_number || null,
               city: account1Data?.beneficiary_user_address?.city || null,
-              latitude:
-                account1Data?.beneficiary_user_address?.latitude || null,
-              longitude:
-                account1Data?.beneficiary_user_address?.longitude || null,
               neighborhood:
                 account1Data?.beneficiary_user_address?.neighborhood || null,
               postal_code:
@@ -451,7 +506,7 @@ function Account3({
 
         <form className="account-form3" onSubmit={handleSubmit}>
           <div className="form-up">
-            <div>
+            <div className='input-browser-border'>
               <label htmlFor="account-province"> استان: </label>
               <select
                 id="account-province"
@@ -487,7 +542,7 @@ function Account3({
               </select>
             </div>
 
-            <div>
+            <div className='input-browser-border'>
               <label htmlFor="account-city"> شهر: </label>
               {account1Data?.beneficiary_user_address?.province ? (
                 <select
@@ -538,7 +593,7 @@ function Account3({
               )}
             </div>
 
-            <div>
+            <div className='input-browser-border'>
               <label htmlFor="account-neighbor"> محله: </label>
               <input
                 type="text"
@@ -551,7 +606,7 @@ function Account3({
               />
             </div>
 
-            <div>
+            <div className='input-browser-border'>
               <label htmlFor="account-postal"> کد پستی:</label>
               <input
                 type="text"
@@ -567,10 +622,11 @@ function Account3({
                 onChange={handlePostalCodeChange}
                 onBlur={() => setBlur((pre) => ({ ...pre, postal_code: true }))}
                 maxLength={10}
+                style={{direction:"ltr"}}
               />
             </div>
 
-            <div>
+            <div className='input-browser-border'>
               <label htmlFor="account-street"> خیابان: </label>
               <input
                 type="text"
@@ -581,7 +637,7 @@ function Account3({
               />
             </div>
 
-            <div>
+            <div className='input-browser-border'>
               <label htmlFor="account-alley"> کوچه: </label>
               <input
                 type="text"
@@ -592,7 +648,7 @@ function Account3({
               />
             </div>
 
-            <div>
+            <div className='input-browser-border'>
               <label htmlFor="account-building-num"> پلاک: </label>
               <input
                 type="text"
@@ -606,10 +662,11 @@ function Account3({
                     : null
                 }
                 onChange={handleBuildingNumberChange}
+                style={{direction:"ltr"}}
               />
             </div>
 
-            <div>
+            <div className='input-browser-border'>
               <label htmlFor="account-unit"> واحد: </label>
               <input
                 type="text"
@@ -623,38 +680,10 @@ function Account3({
                     : null
                 }
                 onChange={handleUnitChange}
+                style={{direction:"ltr"}}
               />
             </div>
           </div>
-
-          <section>
-            <p>آدرس خود را برروی نقشه زیر تعیین کنید:</p>
-            <div id="map" style={{ height: '400px', width: '100%' }}>
-              <MapContainer
-                center={position}
-                zoom={13}
-                style={{ height: '100%', width: '100%' }}
-              >
-                <TileLayer
-                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
-                <LocationMarker
-                  position={position}
-                  setPosition={(latlng) =>
-                    setPosition([latlng.lat, latlng.lng])
-                  }
-                />
-              </MapContainer>
-            </div>
-            <button
-              type="button"
-              onClick={handleMapConfirm}
-              style={{ marginTop: '10px' }}
-            >
-              ثبت موقعیت
-            </button>
-          </section>
 
           <div id="account-submit3">
             {submit ? (
@@ -668,7 +697,7 @@ function Account3({
                 >
                   <path d="M14.7373 0L4.94741 11.1961L1.22585 6.93997L0 8.34191L4.94741 14L15.9631 1.40194L14.7373 0Z" />
                 </svg>
-                تغییرات با موفقیت اعمال شد
+                اطلاعات با موفقیت ثبت گردید
               </div>
             ) : (
               <div style={{ visibility: 'hidden' }}>
@@ -681,7 +710,7 @@ function Account3({
                 >
                   <path d="M14.7373 0L4.94741 11.1961L1.22585 6.93997L0 8.34191L4.94741 14L15.9631 1.40194L14.7373 0Z" />
                 </svg>
-                تغییرات با موفقیت اعمال شد
+                اطلاعات با موفقیت ثبت گردید
               </div>
             )}
             {((!validation.neighbor &&
@@ -710,6 +739,68 @@ function Account3({
               )}
             <input type="submit" value="تأیید" />
           </div>
+
+          <section>
+            <p>آدرس خود را برروی نقشه زیر تعیین کنید:</p>
+            <div id="map" style={{ height: '400px', width: '100%' }}>
+              <MapContainer
+                center={position}
+                zoom={13}
+                style={{ height: '100%', width: '100%' }}
+              >
+                <TileLayer
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
+                <LocationMarker
+                  position={position}
+                  setPosition={(latlng) =>
+                    setPosition([latlng.lat, latlng.lng])
+                  }
+                />
+              </MapContainer>
+            </div>
+            <div className='map-button-success-container'>
+              {submitMap ? (
+              <div className='button-container-success'>
+                <svg
+                  width="16"
+                  height="14"
+                  viewBox="0 0 16 14"
+                  fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M14.7373 0L4.94741 11.1961L1.22585 6.93997L0 8.34191L4.94741 14L15.9631 1.40194L14.7373 0Z" />
+                </svg>
+                موقعیت با موفقیت ثبت گردید
+              </div> ):
+              <div style={{ visibility: 'hidden' }}>
+                <svg
+                  width="16"
+                  height="14"
+                  viewBox="0 0 16 14"
+                  fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M14.7373 0L4.94741 11.1961L1.22585 6.93997L0 8.34191L4.94741 14L15.9631 1.40194L14.7373 0Z" />
+                </svg>
+                موقعیت با موفقیت ثبت گردید
+              </div>
+            }
+
+            <div className='button-container'>
+              <button
+                type="button"
+                onClick={handleMapConfirm}
+                style={{ marginTop: '10px' }}
+              >
+                ثبت موقعیت
+              </button>
+            </div>
+
+            </div>
+          </section>
+
         </form>
       </main>
       <NavigationBar selected={4} />

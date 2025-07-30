@@ -1314,12 +1314,22 @@ function RequestDetail() {
                 </svg>
               </button>
             </div>
-            {childSeeData.length === 0 && <p>موردی وجود ندارد.</p>}
+            {childSeeData.length === 0 && <div style={{textAlign:"center", fontSize:"0.8rem"}}>موردی وجود ندارد.</div>}
             {/* Repeatable request section */}
             {childSeeData.length > 0 &&
-              childSeeData.map((item, index) => (
+              childSeeData.slice().reverse().map((item, reversedIndex) => {
+                const index = childSeeData.length - 1 - reversedIndex;
+                return(
                 <section key={item.beneficiary_request_child_id}>
-                  <h2>درخواست جزئی شماره {index + 1}</h2>
+                  <div className='title-div'>
+                    <h2>{`درخواست جزئی شماره ${toPersianDigits(index + 1)}`}</h2>
+                    <span>
+                        {gregorianToJalali(
+                          item.beneficiary_request_child_created_at
+                        )}
+                      </span>
+                  </div>
+
 
                   <div className="textarea-div">
                     <label htmlFor={`request-description-${index}`}>
@@ -1335,21 +1345,7 @@ function RequestDetail() {
                   </div>
 
                   <div className="file-input-div">
-                    {childFiles[index].length === 0 && (
-                      <>
-                        <label htmlFor={`request-document-${index}`}>
-                          مستندات
-                          <br />
-                          درخواست:
-                        </label>
-                        <input
-                          type="text"
-                          id={`request-document-${index}`}
-                          placeholder="اطلاعاتی وجود ندارد"
-                          readOnly
-                        />
-                      </>
-                    )}
+                    
 
                     {childFiles[index].length > 0 && (
                       <>
@@ -1358,6 +1354,12 @@ function RequestDetail() {
                           <br />
                           درخواست:
                         </label>
+                        <label
+                          htmlFor="request-document-review1-id"
+                          className="upload-label"
+                          id="label-for-file-input"
+                          readOnly
+                        >
                         <div className="file-previews">
                           {childFiles[index].map((file, idx) => (
                             <div key={idx} className="file-preview">
@@ -1376,6 +1378,7 @@ function RequestDetail() {
                             </div>
                           ))}
                         </div>
+                        </label>
                       </>
                     )}
                   </div>
@@ -1396,14 +1399,6 @@ function RequestDetail() {
                       <span>
                         {convertStageChild(
                           item.beneficiary_request_child_processing_stage
-                        )}
-                      </span>
-                    </div>
-                    <div className="text-input-div">
-                      <p>تاریخ ثبت:</p>
-                      <span>
-                        {gregorianToJalali(
-                          item.beneficiary_request_child_created_at
                         )}
                       </span>
                     </div>
@@ -1431,7 +1426,7 @@ function RequestDetail() {
                     </button>
                   </div>
                 </section>
-              ))}
+)})}
           </div>
         </>
       )}

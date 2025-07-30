@@ -174,7 +174,8 @@
   background-repeat: no-repeat;
   background-position: left 10px center; /* RTL support */
   background-size: 14px;
-  padding-left: 2rem;
+  padding-left: 45px;
+  text-align: left;
 }
 .account-container2 #account-gender,
 #account-bd {

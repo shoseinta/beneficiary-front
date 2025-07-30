@@ -187,6 +187,7 @@ function Account1({ accountData, setAccountData, setStep, setLoad }) {
               id="account-id"
               readOnly
               value={account1Data?.beneficiary_id || ''}
+              style={{direction:"ltr"}}
             />
           </div>
 
@@ -197,6 +198,7 @@ function Account1({ accountData, setAccountData, setStep, setLoad }) {
               id="account-password"
               readOnly
               value={account1Data?.password || ''}
+              style={{direction:"ltr"}}
             />
           </div>
 
@@ -217,6 +219,7 @@ function Account1({ accountData, setAccountData, setStep, setLoad }) {
                   ? 'invalid-input'
                   : ''
               }
+              style={{direction:"ltr"}}
             />
             {!validation.phone_number && blur.phone_number && (
               <div className="error-message">
@@ -235,6 +238,7 @@ function Account1({ accountData, setAccountData, setStep, setLoad }) {
               onChange={handleEmailChange}
               onBlur={() => setBlur((pre) => ({ ...pre, email: true }))}
               className={!validation.email && blur.email ? 'invalid-input' : ''}
+              style={{direction:"ltr"}}
             />
             {!validation.email && blur.email && (
               <div className="error-message">فرمت ایمیل وارد شده صحیح نیست</div>
@@ -253,7 +257,7 @@ function Account1({ accountData, setAccountData, setStep, setLoad }) {
                 >
                   <path d="M14.7373 0L4.94741 11.1961L1.22585 6.93997L0 8.34191L4.94741 14L15.9631 1.40194L14.7373 0Z" />
                 </svg>
-                تغییرات با موفقیت اعمال شد
+                اطلاعات با موفقیت ثبت گردید
               </div>
             ) : (
               <div style={{ visibility: 'hidden' }}>
@@ -266,7 +270,7 @@ function Account1({ accountData, setAccountData, setStep, setLoad }) {
                 >
                   <path d="M14.7373 0L4.94741 11.1961L1.22585 6.93997L0 8.34191L4.94741 14L15.9631 1.40194L14.7373 0Z" />
                 </svg>
-                تغییرات با موفقیت اعمال شد
+                اطلاعات با موفقیت ثبت گردید
               </div>
             )}
 
