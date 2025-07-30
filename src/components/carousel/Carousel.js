@@ -184,7 +184,7 @@ function Carousel({
       >
         <div className="carousel">
           <article className="notification" id="notif1">
-            {notification.items.length !== 0 ? (
+            {notification.moreItems.length !== 0 ? (
               <>
                 <section className="h1">
                   <img src={bell_icon} alt="" />

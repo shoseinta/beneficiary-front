@@ -763,6 +763,7 @@ function RequestDetailEdit({
                     value={convertTypeLayer1(
                       requestData.beneficiary_request_type_layer1
                     )}
+                    style={{ pointerEvents: 'none' }}
                   />
                 </div>
 
@@ -773,6 +774,7 @@ function RequestDetailEdit({
                     id="observe-type2"
                     readOnly
                     value={requestData.beneficiary_request_type_layer2}
+                    style={{ pointerEvents: 'none' }}
                   />
                 </div>
 
@@ -978,6 +980,7 @@ function RequestDetailEdit({
                     id="observe-created-at"
                     readOnly
                     value={gregorianToJalali(requestData.effective_date)}
+                    style={{ pointerEvents: 'none' }}
                   />
                 </div>
 
@@ -992,6 +995,7 @@ function RequestDetailEdit({
                         ? 'مدیر سامانه'
                         : 'شخص کاربر'
                     }
+                    style={{ pointerEvents: 'none' }}
                   />
                 </div>
 
@@ -1008,6 +1012,7 @@ function RequestDetailEdit({
                         requestData?.beneficiary_request_processing_stage
                       ) || null
                     }
+                    style={{ pointerEvents: 'none' }}
                   />
                 </div>
               </form>

@@ -774,7 +774,24 @@ function RequestDetail() {
           inputs[i].classList.remove('delete-overlay-container-form');
         }
       }
-
+      const selects = document.getElementsByTagName('select');
+      if (
+        selects.length > 0 &&
+        selects[0].classList.contains('delete-overlay-container-form')
+      ) {
+        for (let i = 0; i < selects.length; i++) {
+          selects[i].classList.remove('delete-overlay-container-form');
+        }
+      }
+      const textareas = document.getElementsByTagName('textarea');
+      if (
+        textareas.length > 0 &&
+        textareas[0].classList.contains('delete-overlay-container-form')
+      ) {
+        for (let i = 0; i < textareas.length; i++) {
+          textareas[i].classList.remove('delete-overlay-container-form');
+        }
+      }
       const filePreviews = document.getElementsByClassName('file-previews')[0];
       if (filePreviews?.classList?.contains('file-previews-transparent')) {
         filePreviews.classList.remove('file-previews-transparent');
@@ -801,7 +818,7 @@ function RequestDetail() {
     }
   }, [isDelete, isChildCreate, isChildSee]);
 
-  if ((!isDelete && !isEdit && !isChildCreate && !isChildSee) && (!requestData || (requestData?.beneficiary_request_document && loadingFiles) || (childSeeData?.beneficiary_request_child_document && loadingFiles))) {
+  if ((!isDelete && !isEdit && !isChildCreate && !isChildSee && !isChildCreateFinish && !isDeleteFinished) && (!requestData || (requestData?.beneficiary_request_document && loadingFiles) || (childSeeData?.beneficiary_request_child_document && loadingFiles))) {
     return <p>loading...</p>;
   }
 
@@ -995,7 +1012,7 @@ function RequestDetail() {
                 </div>
 
                 <div>
-                  <label htmlFor="observe-document">مستندات درخواست:</label>
+                  <label htmlFor="observe-document" readOnly>مستندات درخواست:</label>
                   {files.length === 0 && (
                     <>
                       <input
@@ -1004,17 +1021,19 @@ function RequestDetail() {
                         multiple
                         hidden
                         readOnly
+                        disabled
                       />
                       <label
                         htmlFor="observe-document"
                         className="upload-label"
+                        readOnly
                       >
                         اطلاعاتی وجود ندارد
                       </label>
                     </>
                   )}
                   {files.length > 0 && (
-                    <label className='document-label'>
+                    <label className='document-label' readOnly>
                     <div className="file-previews">
                       
                       {files.map((file, index) => (

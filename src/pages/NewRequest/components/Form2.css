@@ -287,7 +287,6 @@
 }
 .form2-container .next-back-btn button > span {
   margin: 0 5px;
-  color: var(--main-color);
 }
 .form2-container .next-back-btn button:last-child span {
   padding-bottom: 5px;

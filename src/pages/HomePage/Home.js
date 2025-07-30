@@ -7,6 +7,10 @@ import bell_icon from '../../media/icons/bell_icon.svg';
 import more_icon from '../../media/icons/more_icon.svg';
 import tutorial from '../../media/images/tutorial.mp4';
 import thumbnail from '../../media/images/thumbnail.png';
+import phone_icon from '../../media/icons/phone_icon.svg';
+import whatsapp_icon from '../../media/icons/whatsapp_icon.svg';
+import instagram_icon from '../../media/icons/instagram_icon.svg';
+import email_icon from '../../media/icons/email_icon.svg';
 import './Home.css';
 
 function Home() {
@@ -198,7 +202,7 @@ function Home() {
             <section id="value">
               <a href={`tel:${contactInfo.phone}`}>
                 {contactInfo.phone}{' '}
-                <img src="media/icons/phone_icon.svg" alt="" />
+                <img src={phone_icon} alt="" />
               </a>{' '}
               <br />
               <a
@@ -207,7 +211,7 @@ function Home() {
                 rel="noopener noreferrer"
               >
                 {contactInfo.whatsapp}{' '}
-                <img src="media/icons/whatsapp_icon.svg" alt="" />
+                <img src={whatsapp_icon} alt="" />
               </a>{' '}
               <br />
               <a
@@ -216,12 +220,12 @@ function Home() {
                 rel="noopener noreferrer"
               >
                 {contactInfo.instagram}{' '}
-                <img src="media/icons/instagram_icon.svg" alt="" />
+                <img src={instagram_icon} alt="" />
               </a>{' '}
               <br />
               <a href={`mailto:${contactInfo.email}`}>
                 {contactInfo.email}{' '}
-                <img src="media/icons/email_icon.svg" alt="" />
+                <img src={email_icon} alt="" />
               </a>{' '}
               <br />
               <span>{contactInfo.hours}</span>

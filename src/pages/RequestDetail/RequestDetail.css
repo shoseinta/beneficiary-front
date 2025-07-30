@@ -112,6 +112,7 @@
 }
 .request-detail-container input,
 .request-detail-container select {
+  pointer-events: none;
   width: 60%;
   padding: 0 10px 0 30px;
   height: 4vh;
@@ -138,6 +139,7 @@
 }
 .request-detail-container textarea,
 .request-detail-container .document-label {
+  pointer-events: none;
   width: 60%;
   padding: 0 10px 0 30px;
   background-color: var(--white-color);
@@ -629,7 +631,6 @@ select {
   padding: 10px 15px;
   background-color: white;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: all 0.2s;
 }
 
@@ -821,7 +822,6 @@ select {
 
 .delete-overlay-container {
   background-color: var(--white-color);
-  border: 1px solid var(--main-color);
   border-radius: 11px;
   box-shadow: 0px 4px 4px var(--black25-color);
   padding: 10px;
@@ -1011,7 +1011,6 @@ select {
   font-size: 0.8rem;
   font-weight: normal;
   cursor: pointer;
-  box-shadow: 0 4px 4px var(--black25-color);
 }
 .child-creation-overlay-container .no-button {
   background-color: var(--error-red);
