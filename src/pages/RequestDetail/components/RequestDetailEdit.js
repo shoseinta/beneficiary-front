@@ -1074,7 +1074,7 @@ function RequestDetailEdit({
 
       {editApplied && (
         <>
-          <div className="block-overlay-container"></div>
+          <div className="block-overlay-container" onClick={() => setEditApplied(false)}></div>
           <div className="delete-overlay-container">
             <p>آیا از اعمال ویرایش اطمینان دارید؟</p>
             <div className="delete-overlay-buttons">

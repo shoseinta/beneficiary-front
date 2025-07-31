@@ -1203,7 +1203,7 @@ function RequestDetail() {
 
       {isDelete && (
         <>
-          <div className="block-overlay-container"></div>
+          <div className="block-overlay-container" onClick={() => setIsDelete(false)}></div>
           <div className="delete-overlay-container">
             <p>آیا از حذف این درخواست اطمینان دارید؟</p>
             <div className="delete-overlay-buttons">
@@ -1219,7 +1219,7 @@ function RequestDetail() {
       )}
       {isChildCreate && (
         <>
-          <div className="block-overlay-container"></div>
+          <div className="block-overlay-container" onClick={() => setIsChildCreate(false)}></div>
           <div className="child-creation-overlay-container">
             <form>
               <div>
@@ -1317,7 +1317,7 @@ function RequestDetail() {
 
       {isChildSee && (
         <>
-          <div className="block-overlay-container"></div>
+          <div className="block-overlay-container" onClick={() => setIsChildSee(false)}></div>
           <div className="child-request-list-overlay">
             <div className="button-container" id="close-button-sticky">
               <button onClick={() => setIsChildSee(false)}>
