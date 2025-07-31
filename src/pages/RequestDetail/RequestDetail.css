@@ -137,9 +137,25 @@
   border-radius: 6px;
   color: var(--black50-color);
 }
-.request-detail-container textarea,
-.request-detail-container .document-label {
+.request-detail-container textarea
+ {
   pointer-events: none;
+  width: 60%;
+  padding: 0 10px 0 30px;
+  background-color: var(--white-color);
+  box-shadow: 0 1px 4px var(--black25-color);
+  font-size: 0.7rem;
+  font-weight: normal;
+  height: 7.5vh;
+  border: none;
+  border-radius: 6px;
+  resize: none;
+  line-height: 2;
+  text-align: justify;
+  vertical-align: top;
+  overflow-y: auto;
+}
+.request-detail-container .document-label{
   width: 60%;
   padding: 0 10px 0 30px;
   background-color: var(--white-color);
@@ -838,7 +854,7 @@ select {
 }
 .block-overlay-container {
   z-index: 99;
-  background-color: transparent;
+  background-color: var(--black25-color);
   cursor: not-allowed;
   position: fixed;
   top: 0;

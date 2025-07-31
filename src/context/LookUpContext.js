@@ -7,6 +7,7 @@ const LookupContext = createContext();
 export const useLookup = () => useContext(LookupContext);
 
 export const LookupProvider = ({ children }) => {
+  const [hamburger,setHamburger] = useState(false)
   const [activeEndpoint, setActiveEndpoint] = useState(null);
   const [isRequestPage, setIsRequestPage] = useState(false);
   const endpoints = [
@@ -180,6 +181,8 @@ export const LookupProvider = ({ children }) => {
   return (
     <LookupContext.Provider
       value={{
+        hamburger,
+        setHamburger,
         loading,
         error,
         typeLayerOne,

@@ -201,9 +201,6 @@ function RequestDetailEdit({
     setValidation(newValidation);
   }, [updateData]);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
   const persian_fa_custom = {
     months: [
       ['فروردین', 'فروردین'],
@@ -529,11 +526,19 @@ function RequestDetailEdit({
 
   const handleDurationUpdate = (event) => {
     setUpdateData((pre) => {
+      if(Number(event.target.value) === 3){
+        return {
+          ...pre,
+          beneficiary_request_duration: Number(event.target.value),
+          beneficiary_request_amount: null,
+        }
+      }
       return {
         ...pre,
         beneficiary_request_duration: Number(event.target.value),
       };
     });
+    
   };
 
   const handleTitleChange = (event) => {
@@ -601,125 +606,125 @@ function RequestDetailEdit({
     event.target.value = displayValue;
   };
 
-  useEffect(() => {
-    if (editApplied) {
-      document.documentElement.classList.add('delete-overlay-container-html');
-      document.body.classList.add('delete-overlay-container-html');
-      document
-        .getElementById('form1')
-        .classList.add('delete-overlay-container-form');
-      document
-        .getElementById('form2')
-        .classList.add('delete-overlay-container-form');
-      document
-        .getElementById('dropzone-div')
-        .classList.add('delete-overlay-container-form');
-      const inputs = document.getElementsByTagName('input');
-      const selects = document.getElementsByTagName('select');
-      const textareas = document.getElementsByTagName('textarea');
-      if (files1.length > 0) {
-        const filePreviews =
-          document.getElementsByClassName('file-previews')[0];
-        filePreviews.classList.add('file-previews-transparent');
-        const filePreview = document.getElementsByClassName('file-preview');
+  // useEffect(() => {
+  //   if (editApplied) {
+  //     document.documentElement.classList.add('delete-overlay-container-html');
+  //     document.body.classList.add('delete-overlay-container-html');
+  //     document
+  //       .getElementById('form1')
+  //       .classList.add('delete-overlay-container-form');
+  //     document
+  //       .getElementById('form2')
+  //       .classList.add('delete-overlay-container-form');
+  //     document
+  //       .getElementById('dropzone-div')
+  //       .classList.add('delete-overlay-container-form');
+  //     const inputs = document.getElementsByTagName('input');
+  //     const selects = document.getElementsByTagName('select');
+  //     const textareas = document.getElementsByTagName('textarea');
+  //     if (files1.length > 0) {
+  //       const filePreviews =
+  //         document.getElementsByClassName('file-previews')[0];
+  //       filePreviews.classList.add('file-previews-transparent');
+  //       const filePreview = document.getElementsByClassName('file-preview');
 
-        for (var i = 0; i < filePreview.length; i++) {
-          filePreview[i].classList.add('file-preview-transparent');
-        }
-      }
+  //       for (var i = 0; i < filePreview.length; i++) {
+  //         filePreview[i].classList.add('file-preview-transparent');
+  //       }
+  //     }
 
-      if (files1.length === 0) {
-        const uploadContent =
-          document.getElementsByClassName('upload-content')[0];
-        uploadContent.classList.add('file-previews-transparent');
-      }
+  //     if (files1.length === 0) {
+  //       const uploadContent =
+  //         document.getElementsByClassName('upload-content')[0];
+  //       uploadContent.classList.add('file-previews-transparent');
+  //     }
 
-      for (var i = 0; i < inputs.length; i++) {
-        inputs[i].classList.add('delete-overlay-container-form');
-      }
-      for (var i = 0; i < selects.length; i++) {
-        selects[i].classList.add('delete-overlay-container-form');
-      }
-      for (var i = 0; i < textareas.length; i++) {
-        textareas[i].classList.add('delete-overlay-container-form');
-      }
-    } else {
-      if (
-        document.documentElement?.classList?.contains(
-          'delete-overlay-container-html'
-        )
-      ) {
-        document.documentElement.classList.remove(
-          'delete-overlay-container-html'
-        );
-        document.body.classList.remove('delete-overlay-container-html');
-      }
-      if (
-        document
-          .getElementById('form1')
-          ?.classList?.contains('delete-overlay-container-form')
-      ) {
-        document
-          .getElementById('form1')
-          .classList.remove('delete-overlay-container-form');
-      }
-      if (
-        document
-          .getElementById('form2')
-          ?.classList?.contains('delete-overlay-container-form')
-      ) {
-        document
-          .getElementById('form2')
-          .classList.remove('delete-overlay-container-form');
-      }
-      if (
-        document
-          .getElementById('dropzone-div')
-          ?.classList?.contains('delete-overlay-container-form')
-      ) {
-        document
-          .getElementById('dropzone-div')
-          .classList.remove('delete-overlay-container-form');
-      }
-      const inputs = document.getElementsByTagName('input');
-      const selects = document.getElementsByTagName('select');
-      const textareas = document.getElementsByTagName('textarea');
-      if (inputs[0]?.classList?.contains('delete-overlay-container-form')) {
-        for (var i = 0; i < inputs.length; i++) {
-          inputs[i].classList.remove('delete-overlay-container-form');
-        }
-      }
+  //     for (var i = 0; i < inputs.length; i++) {
+  //       inputs[i].classList.add('delete-overlay-container-form');
+  //     }
+  //     for (var i = 0; i < selects.length; i++) {
+  //       selects[i].classList.add('delete-overlay-container-form');
+  //     }
+  //     for (var i = 0; i < textareas.length; i++) {
+  //       textareas[i].classList.add('delete-overlay-container-form');
+  //     }
+  //   } else {
+  //     if (
+  //       document.documentElement?.classList?.contains(
+  //         'delete-overlay-container-html'
+  //       )
+  //     ) {
+  //       document.documentElement.classList.remove(
+  //         'delete-overlay-container-html'
+  //       );
+  //       document.body.classList.remove('delete-overlay-container-html');
+  //     }
+  //     if (
+  //       document
+  //         .getElementById('form1')
+  //         ?.classList?.contains('delete-overlay-container-form')
+  //     ) {
+  //       document
+  //         .getElementById('form1')
+  //         .classList.remove('delete-overlay-container-form');
+  //     }
+  //     if (
+  //       document
+  //         .getElementById('form2')
+  //         ?.classList?.contains('delete-overlay-container-form')
+  //     ) {
+  //       document
+  //         .getElementById('form2')
+  //         .classList.remove('delete-overlay-container-form');
+  //     }
+  //     if (
+  //       document
+  //         .getElementById('dropzone-div')
+  //         ?.classList?.contains('delete-overlay-container-form')
+  //     ) {
+  //       document
+  //         .getElementById('dropzone-div')
+  //         .classList.remove('delete-overlay-container-form');
+  //     }
+  //     const inputs = document.getElementsByTagName('input');
+  //     const selects = document.getElementsByTagName('select');
+  //     const textareas = document.getElementsByTagName('textarea');
+  //     if (inputs[0]?.classList?.contains('delete-overlay-container-form')) {
+  //       for (var i = 0; i < inputs.length; i++) {
+  //         inputs[i].classList.remove('delete-overlay-container-form');
+  //       }
+  //     }
 
-      if (selects[0]?.classList?.contains('delete-overlay-container-form')) {
-        for (var i = 0; i < selects.length; i++) {
-          selects[i].classList.remove('delete-overlay-container-form');
-        }
-      }
+  //     if (selects[0]?.classList?.contains('delete-overlay-container-form')) {
+  //       for (var i = 0; i < selects.length; i++) {
+  //         selects[i].classList.remove('delete-overlay-container-form');
+  //       }
+  //     }
 
-      if (textareas[0]?.classList?.contains('delete-overlay-container-form')) {
-        for (var i = 0; i < textareas.length; i++) {
-          textareas[i].classList.remove('delete-overlay-container-form');
-        }
-      }
-      const filePreviews = document.getElementsByClassName('file-previews')[0];
-      if (filePreviews?.classList?.contains('file-previews-transparent')) {
-        filePreviews.classList.remove('file-previews-transparent');
-      }
+  //     if (textareas[0]?.classList?.contains('delete-overlay-container-form')) {
+  //       for (var i = 0; i < textareas.length; i++) {
+  //         textareas[i].classList.remove('delete-overlay-container-form');
+  //       }
+  //     }
+  //     const filePreviews = document.getElementsByClassName('file-previews')[0];
+  //     if (filePreviews?.classList?.contains('file-previews-transparent')) {
+  //       filePreviews.classList.remove('file-previews-transparent');
+  //     }
 
-      const filePreview = document.getElementsByClassName('file-preview');
-      if (filePreview[0]?.classList?.contains('file-preview-transparent')) {
-        for (var i = 0; i < filePreview.length; i++) {
-          filePreview[i].classList.remove('file-preview-transparent');
-        }
-      }
+  //     const filePreview = document.getElementsByClassName('file-preview');
+  //     if (filePreview[0]?.classList?.contains('file-preview-transparent')) {
+  //       for (var i = 0; i < filePreview.length; i++) {
+  //         filePreview[i].classList.remove('file-preview-transparent');
+  //       }
+  //     }
 
-      const uploadContent =
-        document.getElementsByClassName('upload-content')[0];
-      if (uploadContent?.classList?.contains('file-previews-transparent')) {
-        uploadContent.classList.remove('file-previews-transparent');
-      }
-    }
-  }, [editApplied]);
+  //     const uploadContent =
+  //       document.getElementsByClassName('upload-content')[0];
+  //     if (uploadContent?.classList?.contains('file-previews-transparent')) {
+  //       uploadContent.classList.remove('file-previews-transparent');
+  //     }
+  //   }
+  // }, [editApplied]);
 
   useEffect(() => {
     if (finishEdit) {

@@ -5,6 +5,7 @@ import NewRequest from './pages/NewRequest/NewRequest';
 import Requests from './pages/Requests/Requests';
 import Account from './pages/Account/Account';
 import RequestDetail from './pages/RequestDetail/RequestDetail';
+import withHamburger from './components/hamburger/withHamburger';
 
 // Auth wrapper component
 const ProtectedRoute = ({ children }) => {
@@ -13,6 +14,11 @@ const ProtectedRoute = ({ children }) => {
 };
 
 function App() {
+  const HomeWithHam = withHamburger(Home)
+  const NewRequestWithHam = withHamburger(NewRequest)
+  const RequestsWithHam = withHamburger(Requests)
+  const AccountWithHam = withHamburger(Account)
+  const RequestDetailWithHam = withHamburger(RequestDetail)
   return (
     <Routes>
       <Route path="/" element={<Login />} />
@@ -20,7 +26,7 @@ function App() {
         path="/home"
         element={
           <ProtectedRoute>
-            <Home />
+            <HomeWithHam />
           </ProtectedRoute>
         }
       />
@@ -28,7 +34,7 @@ function App() {
         path="/request-create"
         element={
           <ProtectedRoute>
-            <NewRequest />
+            <NewRequestWithHam />
           </ProtectedRoute>
         }
       />
@@ -36,7 +42,7 @@ function App() {
         path="/requests"
         element={
           <ProtectedRoute>
-            <Requests />
+            <RequestsWithHam />
           </ProtectedRoute>
         }
       />
@@ -44,7 +50,7 @@ function App() {
         path="/account"
         element={
           <ProtectedRoute>
-            <Account />
+            <AccountWithHam />
           </ProtectedRoute>
         }
       />
@@ -52,7 +58,7 @@ function App() {
         path=":id/request-detail"
         element={
           <ProtectedRoute>
-            <RequestDetail />
+            <RequestDetailWithHam />
           </ProtectedRoute>
         }
       />
