@@ -33,7 +33,7 @@ function RequestDetailEdit({
   convertStage,
   formatPersianNumber,
   files,
-  setfiles,
+  setFiles,
 }) {
   const [isCreatingZip, setIsCreatingZip] = useState(false);
   const [files1, setFiles1] = useState(files);
@@ -443,6 +443,7 @@ function RequestDetailEdit({
       setTimeout(async () => {
         setFinishEdit(false);
         setRequestData(null);
+        setFiles([])
         // setEditApplied(false);
         setIsEdit(false);
         // if (document.documentElement.classList.contains('delete-overlay-container-html')){
