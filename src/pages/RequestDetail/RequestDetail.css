@@ -855,7 +855,6 @@ select {
 .block-overlay-container {
   z-index: 99;
   background-color: var(--black25-color);
-  cursor: not-allowed;
   position: fixed;
   top: 0;
   bottom: 0;
