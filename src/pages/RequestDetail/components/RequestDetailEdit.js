@@ -293,7 +293,7 @@ function RequestDetailEdit({
             updateData.beneficiary_request_amount
           );
         } else {
-          requestDataToSend.append('beneficiary_request_amount', null);
+          requestDataToSend.append('beneficiary_request_amount', "null");
         }
         requestDataToSend.append(
           'beneficiary_request_duration',
@@ -305,7 +305,7 @@ function RequestDetailEdit({
             updateData.beneficiary_request_document
           );
         } else {
-          requestDataToSend.append('beneficiary_request_document', null);
+          requestDataToSend.append('beneficiary_request_document', "null");
         }
         sendData = requestDataToSend;
         requestHeaders = {
