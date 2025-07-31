@@ -26,7 +26,7 @@
     left: 0;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.4s ease;
 }
 
 .hamburger-block-overlay.active {
@@ -37,7 +37,6 @@
 .hamburger-overlay {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     position: fixed;
     top: 0;
     right: -100%;
@@ -52,11 +51,23 @@
     border-right: none;
     overflow-y: auto;
     z-index: 1000;
-    transition: right 0.3s ease-out;
+    transition: right 0.4s ease-out;
 }
 
 .hamburger-overlay.active {
     right: 0;
+}
+
+.hamburger-overlay.closing {
+    right: -100%;
+}
+
+.hamburger-overlay-content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: space-between;
+    min-height: calc(100% - 40px); /* Account for padding */
 }
 
 .hamburger-overlay .hamburger-overlay-header {
@@ -66,6 +77,7 @@
     font-size: 1rem;
     font-weight: bold;
     color: var(--main-color);
+    margin-bottom: 20px;
 }
 
 .hamburger-overlay .close-btn {
@@ -95,6 +107,7 @@
     flex-direction: column;
     align-items: center;
     row-gap: 80px;
+    flex-grow: 1;
 }
 
 .hamburger-overlay .setting-content {
@@ -135,7 +148,8 @@
     align-items: center;
     justify-content: right;
     gap: 10px;
-    margin: 10px 0 10px 0;
+    margin-top: auto; /* Pushes to bottom */
+    padding-top: 20px; /* Space from content above */
     color: var(--error-red);
     font-size: 0.9rem;
     font-weight: bold;
