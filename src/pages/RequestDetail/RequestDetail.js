@@ -42,7 +42,7 @@ function RequestDetail() {
   }, []);
   const { id } = useParams();
   const [loadingFiles, setLoadingFiles] = useState(true)
-  const { duration, processingStage } = useLookup();
+  const { duration, processingStage,isDeleteFinished,setIsDeleteFinished } = useLookup();
   const [isEdit, setIsEdit] = useState(false);
   const [requestData, setRequestData] = useState(null);
   const [updateData, setUpdateData] = useState(null);
@@ -56,7 +56,6 @@ function RequestDetail() {
     beneficiary_request_child_document: [],
   });
   const [isChildSee, setIsChildSee] = useState(false);
-  const [isDeleteFinished, setIsDeleteFinished] = useState(false);
   const navigate = useNavigate();
 
   const [files, setFiles] = useState([]);
@@ -380,14 +379,8 @@ function RequestDetail() {
         beneficiary_request_child_description: null,
         beneficiary_request_child_document: [],
       });
-      fetchData();
-      setTimeout(() => {
-        setIsChildCreateFinish(false);
-        if (document.documentElement.classList.contains('edit-finish-body')) {
-          document.documentElement.classList.remove('edit-finish-body');
-          document.body.classList.remove('edit-finish-body');
-        }
-      }, 5000);
+      await fetchData();
+      setIsChildCreateFinish(false);
       // fetchData();
     } catch (err) {
       console.error('Error creating child request:', err);
@@ -673,32 +666,20 @@ function RequestDetail() {
       //       throw new Error(errorData.detail || 'recurring delete failed');
       //     }
       // }
-
+      setIsDelete(false)
       setIsDeleteFinished(true);
-      setIsDelete(false);
       setTimeout(() => {
         setIsDeleteFinished(false);
-        if (document.documentElement.classList.contains('edit-finish-body')) {
-          document.documentElement.classList.remove('edit-finish-body');
-          document.body.classList.remove('edit-finish-body');
-        }
-        // if (document.documentElement.classList.contains('delete-overlay-container-html')){
-        //   document.documentElement.classList.remove('delete-overlay-container-html')
-        //   document.body.classList.remove('delete-overlay-container-html')
-        //   }
         navigate('/requests');
-      }, 5000);
+      },1000)
+      
+      
+      
     } catch (err) {
       console.log(err);
     }
   };
 
-  useEffect(() => {
-    if (isDeleteFinished || isChildCreateFinish) {
-      document.documentElement.classList.add('edit-finish-body');
-      document.body.classList.add('edit-finish-body');
-    }
-  }, [isDeleteFinished, isChildCreateFinish]);
 
   // useEffect(() => {
   //   if (isDelete || isChildCreate || isChildSee) {
@@ -842,45 +823,7 @@ function RequestDetail() {
     );
   }
 
-  if (isDeleteFinished) {
-    return (
-      <div className="edit-finish-container">
-        <svg
-          width="59"
-          height="59"
-          viewBox="0 0 59 59"
-          fill="currentColor"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path d="M26.25 42L12.5417 28.2917L16.625 24.2083L26.25 33.8333L50.75 9.33333C45.2083 3.79167 37.625 0 29.1667 0C13.125 0 0 13.125 0 29.1667C0 45.2083 13.125 58.3333 29.1667 58.3333C45.2083 58.3333 58.3333 45.2083 58.3333 29.1667C58.3333 23.625 56.875 18.6667 54.25 14.2917L26.25 42Z" />
-        </svg>
 
-        <h1>درخواست شما با موفقیت حذف گردید.</h1>
-
-        <p>تا لحظاتی دیگر به صفحه سوابق درخواست منتقل می‌شوید.</p>
-      </div>
-    );
-  }
-
-  if (isChildCreateFinish) {
-    return (
-      <div className="edit-finish-container">
-        <svg
-          width="59"
-          height="59"
-          viewBox="0 0 59 59"
-          fill="currentColor"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path d="M26.25 42L12.5417 28.2917L16.625 24.2083L26.25 33.8333L50.75 9.33333C45.2083 3.79167 37.625 0 29.1667 0C13.125 0 0 13.125 0 29.1667C0 45.2083 13.125 58.3333 29.1667 58.3333C45.2083 58.3333 58.3333 45.2083 58.3333 29.1667C58.3333 23.625 56.875 18.6667 54.25 14.2917L26.25 42Z" />
-        </svg>
-
-        <h1>درخواست جزئی شما با موفقیت ایجاد گردید.</h1>
-
-        <p>تا لحظاتی دیگر به صفحه اصلی همین درخواست منتقل می‌شوید.</p>
-      </div>
-    );
-  }
 
   return (
     <>
@@ -1314,7 +1257,50 @@ function RequestDetail() {
           </div>
         </>
       )}
+      {
+        isDeleteFinished && (
+          <>
+          <div className="block-overlay-container"></div>
+          <div className="edit-finish-container">
+        <svg
+          width="59"
+          height="59"
+          viewBox="0 0 59 59"
+          fill="currentColor"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path d="M26.25 42L12.5417 28.2917L16.625 24.2083L26.25 33.8333L50.75 9.33333C45.2083 3.79167 37.625 0 29.1667 0C13.125 0 0 13.125 0 29.1667C0 45.2083 13.125 58.3333 29.1667 58.3333C45.2083 58.3333 58.3333 45.2083 58.3333 29.1667C58.3333 23.625 56.875 18.6667 54.25 14.2917L26.25 42Z" />
+        </svg>
 
+        <h1>درخواست شما با موفقیت حذف گردید.</h1>
+
+        <p>تا لحظاتی دیگر به صفحه سوابق درخواست منتقل می‌شوید.</p>
+      </div>
+          </>
+        )
+      }
+      {
+        isChildCreateFinish && (
+          <>
+          <div className="block-overlay-container"></div>
+          <div className="edit-finish-container">
+        <svg
+          width="59"
+          height="59"
+          viewBox="0 0 59 59"
+          fill="currentColor"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path d="M26.25 42L12.5417 28.2917L16.625 24.2083L26.25 33.8333L50.75 9.33333C45.2083 3.79167 37.625 0 29.1667 0C13.125 0 0 13.125 0 29.1667C0 45.2083 13.125 58.3333 29.1667 58.3333C45.2083 58.3333 58.3333 45.2083 58.3333 29.1667C58.3333 23.625 56.875 18.6667 54.25 14.2917L26.25 42Z" />
+        </svg>
+
+        <h1>درخواست جزئی شما با موفقیت ایجاد گردید.</h1>
+
+        <p>تا لحظاتی دیگر به صفحه اصلی همین درخواست منتقل می‌شوید.</p>
+      </div>
+          </>
+        )
+      }
       {isChildSee && (
         <>
           <div className="block-overlay-container" onClick={() => setIsChildSee(false)}></div>

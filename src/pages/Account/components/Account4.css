@@ -124,7 +124,7 @@
   grid-auto-flow: column; /* Add items by column */
   grid-template-rows: auto auto; /* Two rows per column */
   gap: 10px;
-  overflow-x: scroll;
+  overflow-x: auto;
   padding: 10px;
   background-color: var(--white-gray-color);
   border: 1px solid var(--main-color);
@@ -186,10 +186,6 @@
   color: var(--black50-color);
 }
 
-.family-delete-overlay-body {
-  background-color: var(--black25-color);
-  transition:  none !important;
-}
 
 .family-delete-overlay-body .additional-info-box,
 .family-delete-overlay-body .additional-info-value {

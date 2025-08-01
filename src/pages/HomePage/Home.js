@@ -14,6 +14,7 @@ import email_icon from '../../media/icons/email_icon.svg';
 import './Home.css';
 
 function Home() {
+  const [moreItems, setMoreItems] = useState(false);
   const [endpointStates, setEndpointStates] = useState({
     'request-announcement-get': {
       id: 'notif1',
@@ -156,7 +157,16 @@ function Home() {
     };
   }, []);
 
+  useEffect(() => {
+    if(moreItems) {
+      document.querySelector('.home-body').style.overflow = 'hidden';
+    }else {
+      document.querySelector('.home-body').style.overflow = 'auto';
+    }
+  },[moreItems])
+
   return (
+    <>
     <div className="home-container">
       <Header />
       {/* <Carousel notifications={notifications} endpointStates={endpointStates}/> */}
@@ -168,6 +178,8 @@ function Home() {
           endpointStates={endpointStates}
           setEndpointStates={setEndpointStates}
           setWhichNotif={setWhichNotif}
+          moreItems={moreItems}
+          setMoreItems={setMoreItems}
         />
       )}
       {whichNotif === 1 && (
@@ -177,6 +189,8 @@ function Home() {
           endpointStates={endpointStates}
           setEndpointStates={setEndpointStates}
           setWhichNotif={setWhichNotif}
+          moreItems={moreItems}
+          setMoreItems={setMoreItems}
         />
       )}
       <section className="video">
@@ -235,6 +249,12 @@ function Home() {
         <NavigationBar selected={1} />
       </div>
     </div>
+    {
+      moreItems && (
+        <div className='block-overlay-container' style={{overflow:"hidden"}}></div>
+      )
+    }
+    </>
   );
 }
 

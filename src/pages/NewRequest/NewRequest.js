@@ -5,7 +5,6 @@ import Form2 from './components/Form2';
 import Form3 from './components/Form3';
 import Form4 from './components/Form4';
 import { useLookup } from '../../context/LookUpContext';
-import FinalForm from './components/FinalForm';
 
 function NewRequest() {
   const navigate = useNavigate();
@@ -127,7 +126,9 @@ function NewRequest() {
 
       setSubmitSuccess(true);
       setActiveEndpoint(0);
-      setTimeout(() => navigate('/requests'), 5000);
+      setTimeout(() => {
+        setSubmitSuccess(false);
+        navigate('/requests')}, 1000);
     } catch (err) {
       console.error('Submission error:', err);
       alert(`Submission failed: ${err.message}`);
@@ -141,9 +142,7 @@ function NewRequest() {
   });
   if (loading) return <p>Loading lookups...</p>;
   if (error) return <p>Error loading lookups: {error}</p>;
-  if (submitSuccess) {
-    return <FinalForm />;
-  }
+  
 
   return (
     <>
@@ -193,6 +192,7 @@ function NewRequest() {
           handleSubmit={handleSubmit}
           files={files}
           setFiles={setFiles}
+          submitSuccess={submitSuccess}
         />
       )}
     </>

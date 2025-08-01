@@ -9,7 +9,7 @@ import './Hamburger.css';
 
 function Hamburger() {
     const navigate = useNavigate();
-    const { setHamburger } = useLookup();
+    const { hamburger, setHamburger } = useLookup();
     const [isActive, setIsActive] = useState(false);
     const [isClosing, setIsClosing] = useState(false);
 
@@ -37,6 +37,14 @@ function Hamburger() {
             document.body.classList.remove('hamburger-body');
         };
     }, []);
+
+    useEffect(() => {
+        if (hamburger) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'auto';
+        }
+    })
 
     return (
         <>

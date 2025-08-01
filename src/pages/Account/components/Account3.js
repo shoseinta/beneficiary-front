@@ -476,7 +476,7 @@ console.log(account1Data);
     <div className="account-container3">
       <Header />
       <main className="main">
-        <section>
+        <section style={{padding:"0 10px"}}>
           <h1>
             با انتخاب هر یک از موارد زیر، می‌توانید با تکمیل بخش‌های خالی اقدام
             به اشتراک اطلاعات خود با خیریه کنید.
@@ -534,11 +534,14 @@ console.log(account1Data);
                 }}
               >
                 <option value={null}></option>
-                {provinces.map((item) => (
-                  <option key={item.id} value={item.id}>
-                    {item.province_name}
-                  </option>
-                ))}
+                {provinces
+                  .slice()
+                  .sort((a, b) => a.province_name.localeCompare(b.province_name, 'fa'))
+                  .map((item) => (
+                    <option key={item.id} value={item.id}>
+                      {item.province_name}
+                    </option>
+                  ))}
               </select>
             </div>
 
@@ -575,6 +578,8 @@ console.log(account1Data);
                         item.province ===
                         account1Data.beneficiary_user_address.province
                     )
+                    .slice()
+                    .sort((a, b) => a.city_name.localeCompare(b.city_name, 'fa'))
                     .map((item) => (
                       <option key={item.id} value={item.id}>
                         {item.city_name}

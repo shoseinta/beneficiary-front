@@ -309,16 +309,6 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
     digits: ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'],
   };
 
-  useEffect(() => {
-    if (removeFamily || removeAdditional || addFamily || addAdditional) {
-      document.documentElement.classList.add('family-delete-overlay-body');
-      document.body.classList.add('family-delete-overlay-body');
-    } else {
-      document.documentElement.classList.remove('family-delete-overlay-body');
-      document.body.classList.remove('family-delete-overlay-body');
-    }
-  }, [removeFamily, removeAdditional, addFamily, addAdditional]);
-
   const handleFamilyDelete = async (index) => {
     try {
       const response = await fetch(
@@ -689,7 +679,7 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
       </div>
       {removeFamily && (
         <>
-          <div className="family-block-overlay-container"></div>
+          <div className="block-overlay-container" onClick={() => setRemoveFamily(false)}></div>
           <div className="family-delete-overlay-container">
             <p>آیا از حذف این مورد اطمینان دارید؟</p>
             <div className="family-delete-overlay-buttons">
@@ -712,7 +702,7 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
 
       {removeAdditional && (
         <>
-          <div className="family-block-overlay-container"></div>
+          <div className="block-overlay-container" onClick={() => setRemoveAdditional(false)}></div>
           <div className="family-delete-overlay-container">
             <p>آیا از حذف این مورد اطمینان دارید؟</p>
             <div className="family-delete-overlay-buttons">
@@ -735,7 +725,7 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
 
       {addFamily && (
         <>
-          <div className="family-block-overlay-container"></div>
+          <div className="block-overlay-container" onClick={() => setAddFamily(false)}></div>
           <div class="family-overlay-container">
             <form action="">
               <div>
@@ -963,7 +953,7 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
 
       {addAdditional && (
         <>
-          <div className="family-block-overlay-container"></div>
+          <div className="block-overlay-container" onClick={() => setAddAdditional(false)}></div>
           <div className="additional-info-overlay-container">
             <form>
               <div>

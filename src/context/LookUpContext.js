@@ -7,6 +7,7 @@ const LookupContext = createContext();
 export const useLookup = () => useContext(LookupContext);
 
 export const LookupProvider = ({ children }) => {
+  const [isDeleteFinished, setIsDeleteFinished] = useState(false);
   const [hamburger,setHamburger] = useState(false)
   const [activeEndpoint, setActiveEndpoint] = useState(null);
   const [isRequestPage, setIsRequestPage] = useState(false);
@@ -198,6 +199,8 @@ export const LookupProvider = ({ children }) => {
         setIsRequestPage,
         files,
         setFiles,
+        isDeleteFinished,
+        setIsDeleteFinished,
       }}
     >
       {children}

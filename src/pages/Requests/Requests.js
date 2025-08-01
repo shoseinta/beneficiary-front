@@ -9,6 +9,8 @@ function Requests() {
   useEffect(() => {
     document.title = 'صفحه سوابق درخواست خیریه';
   }, []);
+
+
   const {
     requestsData,
     setRequestsData,
@@ -107,7 +109,9 @@ function Requests() {
       document.body.classList.remove('requests-container-body');
     };
   }, []);
+    
   return (
+    <>
     <div className="requests-container">
       {/* Tabs */}
       <Header />
@@ -157,6 +161,7 @@ function Requests() {
 
       <NavigationBar selected={3} />
     </div>
+    </>
   );
 }
 

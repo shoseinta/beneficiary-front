@@ -9,8 +9,10 @@ function Carousel({
   endpointStates,
   setEndpointStates,
   setWhichNotif,
+  moreItems,
+  setMoreItems,
 }) {
-  const [moreItems, setMoreItems] = useState(false);
+  
   const mainRef = useRef(null);
   const videoRef = useRef(null);
 

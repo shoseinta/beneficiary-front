@@ -345,10 +345,6 @@
   background-color: #185EA0;
 }
 
-body.more-active {
-  background-color: var(--black50-color);
-  overflow-y: auto;
-}
 .home-container .notif-overlay-container {
   display: flex;
   flex-direction: column;
@@ -357,25 +353,28 @@ body.more-active {
   left: 50%;
   transform: translateX(-50%);
   height: 50vh;
-  width: 90vw;
-  max-width: 400px;
+  width: 90%;
+  max-width: 500px;
   background-color: var(--white-color);
   border-radius: 8px;
   border: var(--main-color) 1px solid;
   box-shadow: 0px 4px 4px var(--black25-color);
   padding: 12px 8px;
   overflow-y: auto;
-  z-index: 20;
+  z-index: 1000;
 
   /* new */
   top: var(--notif-top, 0);
-  height: var(--notif-height, auto);
+  height: fit-content;
+  max-height: var(--notif-height, auto);
 }
 .home-container .notif-overlay-up {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding-bottom: 5px;
   margin-bottom: 10px;
+  border-bottom: var(--main-color) 1px solid;
 }
 .home-container .notif-overlay-up button,
 .home-container .notif-overlay-up section {
@@ -386,7 +385,7 @@ body.more-active {
   align-items: center;
   justify-content: center;
   gap: 10px;
-  border-bottom: var(--main-color) 1px solid;
+  
 }
 .home-container .notif-overlay-up h1 {
   font-size: 1rem;

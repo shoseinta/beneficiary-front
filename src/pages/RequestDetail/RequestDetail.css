@@ -826,15 +826,7 @@ select {
     text-decoration: underline;
 } */
 
-.delete-overlay-container-html {
-  background-color: var(--black25-color) !important ;
-  /* overflow-y: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  width: 100%; */
-}
+
 
 .delete-overlay-container {
   background-color: var(--white-color);
@@ -854,7 +846,7 @@ select {
 }
 .block-overlay-container {
   z-index: 99;
-  background-color: var(--black25-color);
+  background-color: rgba(0,0,0,0.55);
   position: fixed;
   top: 0;
   bottom: 0;
@@ -891,15 +883,6 @@ select {
   background-color: var(--main-color);
 }
 
-.edit-finish-body {
-  background-color: var(--black25-color);
-  overflow-y: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  width: 100%;
-}
 .edit-finish-container {
   display: flex;
   flex-direction: column;
@@ -916,6 +899,10 @@ select {
   width: 400px;
   max-width: 90%;
   margin: auto auto;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 100;
 }
 .edit-finish-container svg {
   color: var(--green-color);

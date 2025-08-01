@@ -136,7 +136,7 @@ function Account1({ accountData, setAccountData, setStep, setLoad }) {
     <div className="account-container1">
       <Header />
       <main className="main">
-        <section>
+        <section style={{padding:"0 10px"}}>
           <h1>
             با انتخاب هر یک از موارد زیر، می‌توانید با تکمیل بخش‌های خالی اقدام
             به اشتراک اطلاعات خود با خیریه کنید.

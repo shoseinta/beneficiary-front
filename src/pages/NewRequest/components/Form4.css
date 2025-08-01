@@ -215,7 +215,7 @@
   background-color: var(--white-color);
   border: none;
   border-radius: 6px;
-  padding: 0 1px;
+  padding: 0 10px;
   box-shadow: 0px 1px 4px var(--black25-color);
   font-size: 0.7rem;
   font-weight: normal;
@@ -379,3 +379,36 @@
   row-gap: 25px;
 
 }
+
+.final-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  align-self: center;
+  justify-self: center;
+  background-color: var(--white-color);
+  border: 1px solid var(--main-color);
+  border-radius: 10px;
+  box-shadow: 0px 4px 4px var(--black25-color);
+  padding: 10px 40px 20px 40px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1000;
+}
+.final-form svg {
+  color: var(--green-color);
+  margin-bottom: 10px;
+}
+.final-form h1 {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+.final-form p {
+  font-size: 0.8rem;
+  font-weight: normal;
+}
+
