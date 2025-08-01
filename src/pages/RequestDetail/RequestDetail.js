@@ -1360,6 +1360,7 @@ function RequestDetail() {
                       id={`request-description-${index}`}
                       readOnly
                       value={item.beneficiary_request_child_description}
+                      style={{pointerEvents:"none"}}
                     />
                   </div>
 
