@@ -18,7 +18,7 @@
 
 .hamburger-block-overlay {
     z-index: 999;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.55);
     position: fixed;
     top: 0;
     bottom: 0;
@@ -32,6 +32,10 @@
 .hamburger-block-overlay.active {
     opacity: 1;
     pointer-events: auto;
+}
+.hamburger-block-overlay.closing {
+    opacity: 0;
+    pointer-events: none;
 }
 
 .hamburger-overlay {
@@ -79,7 +83,14 @@
     color: var(--main-color);
     margin-bottom: 20px;
 }
-
+.hamburger-overlay .hamburger-overlay-header h4 {
+    color: var(--main-color);
+}
+.hamburger-overlay-header-setting {
+    display: flex;
+    flex-direction: column;
+    row-gap: 100px;
+}
 .hamburger-overlay .close-btn {
     display: flex;
     align-items: center;
@@ -150,6 +161,7 @@
     gap: 10px;
     margin-top: auto; /* Pushes to bottom */
     padding-top: 20px; /* Space from content above */
+    padding-bottom: 50px;
     color: var(--error-red);
     font-size: 0.9rem;
     font-weight: bold;

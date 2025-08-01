@@ -26,7 +26,7 @@ function Hamburger() {
         setTimeout(() => {
             setHamburger(false);
             setIsClosing(false);
-        }, 300); // Match the transition duration
+        }, 400); // Match the transition duration
     };
 
     useEffect(() => {
@@ -41,12 +41,12 @@ function Hamburger() {
     return (
         <>
             <div 
-                className={`hamburger-block-overlay ${isActive ? 'active' : ''}`}
+                className={`hamburger-block-overlay ${isActive ? 'active' : ''}${isClosing ? ' closing' : ''}`}
                 onClick={handleClose}
             ></div>
-            <div className={`hamburger-overlay ${isActive ? 'active' : ''} ${isClosing ? 'closing' : ''}`}>
+            <div className={`hamburger-overlay ${isActive ? 'active' : ''}${isClosing ? ' closing' : ''}`}>
                 <div className="hamburger-overlay-content">
-                    <div>
+                    <div className='hamburger-overlay-header-setting'>
                         <div className="hamburger-overlay-header"> 
                             <h4>تنظیمات سامانه</h4>
                             <button className="close-btn" onClick={handleClose}>
