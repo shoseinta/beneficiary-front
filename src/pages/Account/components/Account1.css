@@ -174,12 +174,17 @@
   height: auto;
   color: var(--white-color);
 }
-.account-container1 #account-submit1 input {
+.account-container1 #account-submit1 input, 
+.account-container1 #account-submit1 button {
   width: 75px;
   padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   text-align: center;
   background-color: var(--main-color);
   border: none;
+  border-radius: 6px;
   color: var(--white-color);
   cursor: pointer;
 }

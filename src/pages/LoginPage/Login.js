@@ -7,11 +7,13 @@ import alert_icon from '../../media/icons/alert_icon.svg';
 import hide_icon from '../../media/icons/hide_icon.svg';
 
 import { useLookup } from '../../context/LookUpContext';
+import LoadingButton from '../../components/loadingButton/LoadingButton';
 function Login() {
   useEffect(() => {
     document.title = 'صفحه ورود خیریه';
   }, []);
   const navigate = useNavigate();
+  const [isLoadingButton, setIsLoadingButton] = useState(false);
   const [formData, setFormData] = useState({ username: '', password: '' });
   const [loginError, setLoginError] = useState(false);
   const [userIncomplete, setUserIncomplete] = useState(false);
@@ -38,6 +40,7 @@ function Login() {
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setIsLoadingButton(true)
     let flag = 0;
     if (!formData.username) {
       setUserIncomplete(true);
@@ -71,8 +74,10 @@ function Login() {
       localStorage.setItem('access_token', result.token);
       localStorage.setItem('user_id', result.user_id);
       localStorage.setItem('username', result.username);
+      setIsLoadingButton(false);
       navigate('/home');
     } catch (err) {
+      setIsLoadingButton(false)
       setLoginError(true);
     }
   };
@@ -83,6 +88,11 @@ function Login() {
       document.body.classList.remove('login-body');
     };
   }, []);
+  useEffect(() => {
+    if (userIncomplete || passIncomplete) {
+      setIsLoadingButton(false);
+    }
+  })
   return (
     <div className="login-container">
       <div className="logo-typo">
@@ -169,7 +179,8 @@ function Login() {
             رمز عبور خود را فراموش کرده‌اید؟
           </a>
           <button type="submit" id="submit" onClick={handleSubmit}>
-            ورود
+           
+            {isLoadingButton?<LoadingButton dimension={10} stroke={2} color={'#ffffff'} />: "ورود"}
           </button>
         </div>
       </div>

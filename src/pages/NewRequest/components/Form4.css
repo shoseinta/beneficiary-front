@@ -180,7 +180,6 @@
 .form4-container form div label {
   display: flex;
   justify-content: right;
-  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -271,6 +270,7 @@
 .form4-container .submit-button-review {
   background-color: var(--green-color);
   border-radius: 6px;
+  border: 1px solid var(--green-color);
   box-shadow: 0px 4px 4px var(--black25-color);
   color: var(--white-color);
   padding: 0 5px;

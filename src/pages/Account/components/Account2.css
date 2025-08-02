@@ -204,12 +204,14 @@
   height: auto;
   color: var(--white-color);
 }
-.account-container2 #account-submit2 input {
+.account-container2 #account-submit2 input,
+.account-container2 #account-submit2 button {
   width: 75px;
   padding: 0;
   text-align: center;
   background-color: var(--main-color);
   border: none;
+  border-radius: 6px;
   color: var(--white-color);
   cursor: pointer;
 }

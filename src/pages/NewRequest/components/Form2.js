@@ -21,6 +21,7 @@ function Form2({
   nextActive,
   setNextActive,
   setStep,
+  typeLayerOne,
 }) {
   const [selectedDuration, setSelectedDuration] = useState(
     requestData.beneficiary_request_duration
@@ -209,6 +210,7 @@ function Form2({
 
   useEffect(() => {
     let isFormComplete = false;
+    if (requestData.beneficiary_request_type_layer1 === typeLayerOne[1].beneficiary_request_type_layer1_id){
     if (
       requestData.beneficiary_request_duration &&
       selectedDuration === 1 &&
@@ -225,9 +227,28 @@ function Form2({
     ) {
       isFormComplete = true;
     }
-    if (requestData.beneficiary_request_duration && selectedDuration === 3) {
+    if (requestData.beneficiary_request_duration && selectedDuration === 3 && requestData.beneficiary_request_type_layer1 === typeLayerOne[2].beneficiary_request_type_layer1_id) {
       isFormComplete = true;
     }
+  } else {
+    if (
+      requestData.beneficiary_request_duration &&
+      selectedDuration === 1 &&
+      onetimeData?.beneficiary_request_duration_onetime_deadline
+    ) {
+      isFormComplete = true;
+    }
+    if (
+      requestData.beneficiary_request_duration &&
+      selectedDuration === 2 &&
+      recurringData?.beneficiary_request_duration_recurring_limit
+    ) {
+      isFormComplete = true;
+    }
+    if (requestData.beneficiary_request_duration && selectedDuration === 3 && requestData.beneficiary_request_type_layer1 === typeLayerOne[2].beneficiary_request_type_layer1_id) {
+      isFormComplete = true;
+    }
+  }
     setNextActive(isFormComplete);
   }, [requestData, onetimeData, recurringData]);
 
@@ -334,7 +355,9 @@ function Form2({
               />
               <label htmlFor="recurring"> به‌صورت ماهانه </label>
 
-              <input
+              {requestData.beneficiary_request_type_layer1 === typeLayerOne[2].beneficiary_request_type_layer1_id ?
+                <>
+                <input
                 type="radio"
                 id="permanent"
                 name="request_time"
@@ -346,6 +369,19 @@ function Form2({
                 }
               />
               <label htmlFor="permanent"> به‌صورت دائمی </label>
+              </>:
+              <>
+                <input
+                type="radio"
+                id="permanent"
+                name="request_time"
+                value={null}
+                checked={false}
+                onClick={() => {alert('برای درخواست از نوع کالا و وجه نقد، نمی‌توان درخواست دائمی ثبت کرد.')}}
+              />
+              <label htmlFor="permanent" style={{color:"rgba(0, 0, 0, 0.5)", borderColor:"rgba(0, 0, 0, 0.5)"}}> به‌صورت دائمی </label>
+              </>
+              }
             </div>
           </fieldset>
 
@@ -406,7 +442,8 @@ function Form2({
             </div>
           ) : null}
 
-          <div className="cash-input-wrapper input-space">
+          { requestData.beneficiary_request_type_layer1 === typeLayerOne[1].beneficiary_request_type_layer1_id &&
+            <div className="cash-input-wrapper input-space">
             {duration.find(
               (item) => item.beneficiary_request_duration_name === 'one_time'
             ).beneficiary_request_duration_id === selectedDuration ? (
@@ -455,7 +492,7 @@ function Form2({
                 <div id="cash-in-words" className="amount-preview"></div>
               </>
             ) : null}
-          </div>
+          </div>}
 
           <div></div>
         </form>

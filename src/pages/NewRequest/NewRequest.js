@@ -21,7 +21,7 @@ function NewRequest() {
     setActiveEndpoint,
   } = useLookup();
   const [files, setFiles] = useState([]);
-
+  const [isLoadingButton, setIsLoadingButton] = useState(false);
   const [requestData, setRequestData] = useState({
     beneficiary_request_title: '',
     beneficiary_request_description: '',
@@ -47,6 +47,7 @@ function NewRequest() {
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
+    setIsLoadingButton(true);
     try {
       const formData = new FormData();
       Object.entries(requestData).forEach(([key, value]) => {
@@ -126,10 +127,12 @@ function NewRequest() {
 
       setSubmitSuccess(true);
       setActiveEndpoint(0);
+      setIsLoadingButton(false);
       setTimeout(() => {
         setSubmitSuccess(false);
         navigate('/requests')}, 1000);
     } catch (err) {
+      setIsLoadingButton(false);
       console.error('Submission error:', err);
       alert(`Submission failed: ${err.message}`);
     } finally {
@@ -169,6 +172,7 @@ function NewRequest() {
           nextActive={nextActive}
           setNextActive={setNextActive}
           setStep={setStep}
+          typeLayerOne={typeLayerOne}
         />
       )}
       {step === 3 && (
@@ -193,6 +197,7 @@ function NewRequest() {
           files={files}
           setFiles={setFiles}
           submitSuccess={submitSuccess}
+          isLoadingButton={isLoadingButton}
         />
       )}
     </>

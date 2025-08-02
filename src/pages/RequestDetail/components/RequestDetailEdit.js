@@ -19,6 +19,7 @@ import {
 } from 'react-icons/fi';
 import JSZip from 'jszip';
 import { toJalaali } from 'jalaali-js';
+import LoadingButton from '../../../components/loadingButton/LoadingButton';
 
 function RequestDetailEdit({
   isEdit,
@@ -37,7 +38,20 @@ function RequestDetailEdit({
 }) {
   const [isCreatingZip, setIsCreatingZip] = useState(false);
   const [files1, setFiles1] = useState(files);
-
+  const [editApplied, setEditApplied] = useState(false);
+  const [isLoadingButtonDelete, setIsLoadingButtonDelete] = useState(false)
+  const [childCreateBorderDiff, setChildCreateBorderDiff] = useState(0)
+  useEffect(() => {
+    const button = document.querySelector('.delete-overlay-buttons .yes-button');
+    console.log(button)
+    if (button && !isLoadingButtonDelete && editApplied) {
+      const rect = button.getBoundingClientRect();
+      const leftX = rect.left;
+      const rightX = rect.right;
+      setChildCreateBorderDiff(rightX - leftX);
+      console.log(rightX - leftX)
+    }
+  }, [isLoadingButtonDelete, editApplied]);
   const onDrop = useCallback((acceptedfiles1) => {
     setFiles1((prev) => {
       const newFiles = [...prev, ...acceptedfiles1];
@@ -80,6 +94,10 @@ function RequestDetailEdit({
     maxSize: 10 * 1024 * 1024, // 10MB
     multiple: true,
   });
+
+  useEffect(() => {
+    console.log(requestData)
+  })
 
   const getFileIcon = (file) => {
     const extension = file.name.split('.').pop().toLowerCase();
@@ -167,7 +185,7 @@ function RequestDetailEdit({
         .setLocale(persian_fa)
     : null;
 });
-  const [editApplied, setEditApplied] = useState(false);
+  
 
   const [validation, setValidation] = useState({
     deadline: true,
@@ -196,7 +214,8 @@ function RequestDetailEdit({
       amount:
         updateData?.beneficiary_request_duration === 3 ||
         (updateData?.beneficiary_request_duration !== 3 &&
-          updateData?.beneficiary_request_amount),
+          updateData?.beneficiary_request_amount) || 
+          (requestData?.beneficiary_request_type_layer1 !== "Cash")
     };
     setValidation(newValidation);
   }, [updateData]);
@@ -268,7 +287,7 @@ function RequestDetailEdit({
     ) {
       return;
     }
-
+    setIsLoadingButtonDelete(true)
     try {
       var sendData;
       var requestHeaders;
@@ -286,7 +305,8 @@ function RequestDetailEdit({
         );
         if (
           updateData.beneficiary_request_amount &&
-          updateData.beneficiary_request_duration !== 3
+          updateData.beneficiary_request_duration !== 3 &&
+          requestData.beneficiary_request_type_layer1 === "Cash"
         ) {
           requestDataToSend.append(
             'beneficiary_request_amount',
@@ -444,10 +464,12 @@ function RequestDetailEdit({
       setFiles([])
       setEditApplied(false);
       await fetchData();
+      setIsLoadingButtonDelete(false)
       setIsEdit(false);
       setFinishEdit(false);
     } catch (err) {
       console.error('Error during update:', err);
+      setIsLoadingButtonDelete(false)
     }
     //  else {
     //   // User canceled - reset to original data
@@ -743,7 +765,8 @@ function RequestDetailEdit({
                   >
                     <option value={1}>به صورت یکبار</option>
                     <option value={2}>به صورت ماهانه</option>
-                    <option value={3}>به طور دائمی</option>
+                    {requestData.beneficiary_request_type_layer1 === "Service" &&
+                    <option value={3}>به طور دائمی</option>}
                   </select>
                   {/* <input type="text" id="observe-time1" value="به صورت ماهانه" /> */}
                 </div>
@@ -757,7 +780,7 @@ function RequestDetailEdit({
                     {updateData.beneficiary_request_duration === 1 && (
                       <>
                         <label htmlFor="observe-time2">
-                          آخرین زمان دریافت کمک
+                          آخرین تاریخ درخواست:
                         </label>
                         <DatePicker
                           value={jalaliValue}
@@ -823,9 +846,9 @@ function RequestDetailEdit({
                   </div>
                 )}
 
-                {updateData.beneficiary_request_duration !== 3 && (
+                {updateData.beneficiary_request_duration !== 3 && requestData.beneficiary_request_type_layer1 === "Cash" && (
                   <div>
-                    <label htmlFor="observe-cash">مبلغ درخواست:</label>
+                    {updateData.beneficiary_request_duration === 1 ?<label htmlFor="observe-cash">مبلغ درخواست:</label>:<label htmlFor="observe-cash">مبلغ ماهانه درخواست:</label>}
                     <input
                       type="text"
                       id="observe-cash"
@@ -1057,8 +1080,8 @@ function RequestDetailEdit({
               >
                 خیر
               </button>
-              <button className="yes-button" onClick={handleFinishEdit}>
-                بلی
+              <button style={isLoadingButtonDelete?{width:childCreateBorderDiff}:null} className="yes-button" onClick={handleFinishEdit}>
+               {isLoadingButtonDelete ? <LoadingButton dimension={10} stroke={2} color={'#ffffff'} /> : "بلی"}
               </button>
             </div>
           </div>

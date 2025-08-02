@@ -1019,6 +1019,7 @@ select {
   padding: 0 20px;
 }
 .child-creation-overlay-container .yes-button {
+  border: 1px solid var(--main-color);
   background-color: var(--main-color);
   padding: 0 10px;
 }

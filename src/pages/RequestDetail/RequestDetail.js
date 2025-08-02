@@ -8,6 +8,7 @@ import back_icon from '../../media/icons/back_icon.svg';
 import confirm_icon from '../../media/icons/confirm_icon.svg';
 import attach_icon from '../../media/icons/attach_icon.svg';
 import RequestDetailEdit from './components/RequestDetailEdit';
+import LoadingButton from '../../components/loadingButton/LoadingButton';
 import JSZip from 'jszip';
 import {
   FiFile,
@@ -40,6 +41,33 @@ function RequestDetail() {
   useEffect(() => {
     document.title = 'صفحه سوابق درخواست خیریه';
   }, []);
+  const [isLoadingButtonChildCreation, setIsLoadingButtonChildCreation] = useState(false)
+  const [childCreateBorderDiff, setChildCreateBorderDiff] = useState(0);
+  const [isChildCreate, setIsChildCreate] = useState(false);
+useEffect(() => {
+  const button = document.querySelector('.child-creation-overlay-buttons .yes-button');
+  console.log(button)
+  if (button && !isLoadingButtonChildCreation && isChildCreate) {
+    const rect = button.getBoundingClientRect();
+    const leftX = rect.left;
+    const rightX = rect.right;
+    setChildCreateBorderDiff(rightX - leftX);
+    console.log(rightX - leftX)
+  }
+}, [isLoadingButtonChildCreation, isChildCreate]);
+  const [isDelete, setIsDelete] = useState(false);
+  const [isLoadingButtonDelete, setIsLoadingButtonDelete] = useState(false)
+  useEffect(() => {
+  const button = document.querySelector('.delete-overlay-buttons .yes-button');
+  console.log(button)
+  if (button && !isLoadingButtonDelete && isDelete) {
+    const rect = button.getBoundingClientRect();
+    const leftX = rect.left;
+    const rightX = rect.right;
+    setChildCreateBorderDiff(rightX - leftX);
+    console.log(rightX - leftX)
+  }
+}, [isLoadingButtonDelete, isDelete]);
   const { id } = useParams();
   const [loadingFiles, setLoadingFiles] = useState(true)
   const { duration, processingStage,isDeleteFinished,setIsDeleteFinished } = useLookup();
@@ -47,8 +75,6 @@ function RequestDetail() {
   const [requestData, setRequestData] = useState(null);
   const [updateData, setUpdateData] = useState(null);
   const [childSeeData, setChildSeeData] = useState(null);
-  const [isDelete, setIsDelete] = useState(false);
-  const [isChildCreate, setIsChildCreate] = useState(false);
   const [isChildCreateFinish, setIsChildCreateFinish] = useState(false);
   const [childCreationValidation, setChildCreationValidation] = useState(true);
   const [childData, setChildData] = useState({
@@ -321,7 +347,7 @@ function RequestDetail() {
       setChildCreationValidation(false);
       return;
     }
-
+    setIsLoadingButtonChildCreation(true)
     try {
       // Create FormData instead of JSON
       const formData = new FormData();
@@ -375,6 +401,7 @@ function RequestDetail() {
 
       // Handle success
       setIsChildCreate(false);
+      setIsLoadingButtonChildCreation(false)
       setChildData({
         beneficiary_request_child_description: null,
         beneficiary_request_child_document: [],
@@ -384,6 +411,7 @@ function RequestDetail() {
       // fetchData();
     } catch (err) {
       console.error('Error creating child request:', err);
+      setIsLoadingButtonChildCreation(false)
       // Add error handling UI here
     }
   };
@@ -620,6 +648,7 @@ function RequestDetail() {
     ) {
       return;
     }
+    setIsLoadingButtonDelete(true)
     try {
       const response = await fetch(
         `https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-single-update/${id}/`,
@@ -636,38 +665,9 @@ function RequestDetail() {
         const errorData = await response.json();
         throw new Error(errorData.detail || 'request delete failed');
       }
-
-      // if(requestData.beneficiary_request_duration === 'One Time' && requestData.beneficiary_request_duration_onetime){
-      //   const onetimeId = requestData.beneficiary_request_duration_onetime.beneficiary_request_duration_onetime_id
-      //   const onetimeResponse = await fetch(`https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-single-update-onetime/${onetimeId}/`, {
-      //       method: 'DELETE',
-      //       headers: {
-      //         'Content-Type': 'application/json',
-      //         'Authorization': `Token ${localStorage.getItem('access_token')}`,
-      //       },
-      //     });
-      //     if (!onetimeResponse.ok) {
-      //       const errorData = await onetimeResponse.json();
-      //       throw new Error(errorData.detail || 'onetime delete failed');
-      //     }
-      // }
-
-      // if(requestData.beneficiary_request_duration === 'Recurring' && requestData.beneficiary_request_duration_recurring){
-      //   const recurringId = requestData.beneficiary_request_duration_recurring.beneficiary_request_duration_recurring_id
-      //   const recurringResponse = await fetch(`https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/request-single-update-recurring/${recurringId}/`, {
-      //       method: 'DELETE',
-      //       headers: {
-      //         'Content-Type': 'application/json',
-      //         'Authorization': `Token ${localStorage.getItem('access_token')}`,
-      //       },
-      //     });
-      //     if (!recurringResponse.ok) {
-      //       const errorData = await recurringResponse.json();
-      //       throw new Error(errorData.detail || 'recurring delete failed');
-      //     }
-      // }
       setIsDelete(false)
       setIsDeleteFinished(true);
+      setIsLoadingButtonDelete(false)
       setTimeout(() => {
         setIsDeleteFinished(false);
         navigate('/requests');
@@ -677,127 +677,9 @@ function RequestDetail() {
       
     } catch (err) {
       console.log(err);
+      setIsLoadingButtonDelete(false)
     }
   };
-
-
-  // useEffect(() => {
-  //   if (isDelete || isChildCreate || isChildSee) {
-  //     document.documentElement.classList.add('delete-overlay-container-html');
-  //     document.body.classList.add('delete-overlay-container-html');
-
-  //     const form1 = document.getElementById('form1');
-  //     const form2 = document.getElementById('form2');
-
-  //     if (form1) form1.classList.add('delete-overlay-container-form');
-  //     if (form2) form2.classList.add('delete-overlay-container-form');
-
-  //     const inputs = document.getElementsByTagName('input');
-  //     const selects = document.getElementsByTagName('select');
-  //     const textareas = document.getElementsByTagName('textarea');
-
-  //     for (let i = 0; i < inputs.length; i++) {
-  //       inputs[i].classList.add('delete-overlay-container-form');
-  //     }
-  //     for (let i = 0; i < selects.length; i++) {
-  //       selects[i].classList.add('delete-overlay-container-form');
-  //     }
-  //     for (let i = 0; i < textareas.length; i++) {
-  //       textareas[i].classList.add('delete-overlay-container-form');
-  //     }
-
-  //     if (files.length > 0) {
-  //       const filePreviews =
-  //         document.getElementsByClassName('file-previews')[0];
-  //       filePreviews.classList.add('file-previews-transparent');
-  //       const filePreview = document.getElementsByClassName('file-preview');
-
-  //       for (var i = 0; i < filePreview.length; i++) {
-  //         filePreview[i].classList.add('file-preview-transparent');
-  //       }
-  //       const documentLabel = document.getElementsByClassName('document-label')[0]
-  //       documentLabel.classList.add('file-previews-transparent');
-  //     }
-
-  //     if (files.length === 0) {
-  //       const uploadContent =
-  //         document.getElementsByClassName('upload-label')[0];
-  //       uploadContent.classList.add('file-previews-transparent');
-  //     }
-  //   } else {
-  //     if (
-  //       document.documentElement.classList.contains(
-  //         'delete-overlay-container-html'
-  //       )
-  //     ) {
-  //       document.documentElement.classList.remove(
-  //         'delete-overlay-container-html'
-  //       );
-  //       document.body.classList.remove('delete-overlay-container-html');
-  //     }
-
-  //     const form1 = document.getElementById('form1');
-  //     const form2 = document.getElementById('form2');
-
-  //     if (form1 && form1.classList.contains('delete-overlay-container-form')) {
-  //       form1.classList.remove('delete-overlay-container-form');
-  //     }
-  //     if (form2 && form2.classList.contains('delete-overlay-container-form')) {
-  //       form2.classList.remove('delete-overlay-container-form');
-  //     }
-
-  //     const inputs = document.getElementsByTagName('input');
-  //     if (
-  //       inputs.length > 0 &&
-  //       inputs[0].classList.contains('delete-overlay-container-form')
-  //     ) {
-  //       for (let i = 0; i < inputs.length; i++) {
-  //         inputs[i].classList.remove('delete-overlay-container-form');
-  //       }
-  //     }
-  //     const selects = document.getElementsByTagName('select');
-  //     if (
-  //       selects.length > 0 &&
-  //       selects[0].classList.contains('delete-overlay-container-form')
-  //     ) {
-  //       for (let i = 0; i < selects.length; i++) {
-  //         selects[i].classList.remove('delete-overlay-container-form');
-  //       }
-  //     }
-  //     const textareas = document.getElementsByTagName('textarea');
-  //     if (
-  //       textareas.length > 0 &&
-  //       textareas[0].classList.contains('delete-overlay-container-form')
-  //     ) {
-  //       for (let i = 0; i < textareas.length; i++) {
-  //         textareas[i].classList.remove('delete-overlay-container-form');
-  //       }
-  //     }
-  //     const filePreviews = document.getElementsByClassName('file-previews')[0];
-  //     if (filePreviews?.classList?.contains('file-previews-transparent')) {
-  //       filePreviews.classList.remove('file-previews-transparent');
-  //     }
-
-  //     const filePreview = document.getElementsByClassName('file-preview');
-  //     if (filePreview[0]?.classList?.contains('file-preview-transparent')) {
-  //       for (var i = 0; i < filePreview.length; i++) {
-  //         filePreview[i].classList.remove('file-preview-transparent');
-  //       }
-  //     }
-
-  //     const uploadContent = document.getElementsByClassName('upload-label')[0];
-  //     if (uploadContent?.classList?.contains('file-previews-transparent')) {
-  //       uploadContent.classList.remove('file-previews-transparent');
-  //     }
-  //     const documentLabels = document.getElementsByClassName('document-label')
-  //     if(documentLabels && documentLabels?.length !== 0) {
-  //       const documentLabel = documentLabels[0]
-  //       if(documentLabel.classList.contains('file-previews-transparent')){
-  //         documentLabel.classList.remove('file-previews-transparent')
-  //       }
-  //     }
-  //   }
-  // }, [isDelete, isChildCreate, isChildSee]);
 
   if ((!isDelete && !isEdit && !isChildCreate && !isChildSee && !isChildCreateFinish && !isDeleteFinished) && (!requestData || (requestData?.beneficiary_request_document && loadingFiles) || (childSeeData?.beneficiary_request_child_document && loadingFiles))) {
     return <p>loading...</p>;
@@ -913,7 +795,7 @@ function RequestDetail() {
                   </div>
                 )}
 
-                {requestData?.beneficiary_request_duration !== 'Permanent' && (
+                {requestData?.beneficiary_request_duration !== 'Permanent' && requestData?.beneficiary_request_type_layer1 === 'Cash' && (
                   <div>
                     <label htmlFor="observe-cash">مبلغ درخواست:</label>
                     <input
@@ -1154,7 +1036,7 @@ function RequestDetail() {
                 خیر
               </button>
               <button className="yes-button" onClick={handleDelete}>
-                بلی
+                 {isLoadingButtonDelete?<LoadingButton dimension={10} stroke={2} color={'#fffff'} />:" بلی "}
               </button>
             </div>
           </div>
@@ -1250,9 +1132,9 @@ function RequestDetail() {
               >
                 لغو
               </button>
-              <button className="yes-button" onClick={handleChildCreation}>
-                ایجاد درخواست جزئی
-              </button>
+              <button style={isLoadingButtonChildCreation?{width:`${childCreateBorderDiff}px`}:null} className="yes-button" onClick={handleChildCreation}>
+{   isLoadingButtonChildCreation?<LoadingButton dimension={10} stroke={2} color={'#ffffff'} />:            " ایجاد درخواست جزئی"
+}              </button>
             </div>
           </div>
         </>

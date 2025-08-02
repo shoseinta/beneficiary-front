@@ -17,6 +17,7 @@ import {
 } from 'react-icons/fi';
 import { toJalaali } from 'jalaali-js';
 import FormHeader from './FormHeader';
+import LoadingButton from '../../../components/loadingButton/LoadingButton';
 
 function Form4({
   requestData,
@@ -29,13 +30,27 @@ function Form4({
   handleSubmit,
   files,
   setFiles,
-  submitSuccess
+  submitSuccess,
+  isLoadingButton
 }) {
   const [typeLayerOneValue, setTypeLayerOneValue] = useState(null);
   const [typeLayerTwoValue, setTypeLayerTwoValue] = useState(null);
   const [durationValue, setDurationValue] = useState(null);
   const [durationTwoValue, setDurationTwoValue] = useState(null);
   const [amountValue, setAmountValue] = useState(null);
+
+  const [borderDiff, setBorderDiff] = useState(0);
+
+useEffect(() => {
+  const button = document.querySelector('.submit-button-review');
+  if (button && !isLoadingButton) {
+    const rect = button.getBoundingClientRect();
+    const leftX = rect.left;
+    const rightX = rect.right;
+    setBorderDiff(rightX - leftX);
+    console.log(rightX - leftX);
+  }
+}, [isLoadingButton]);
 
   const getFileIcon = (file) => {
     const extension = file.name.split('.').pop().toLowerCase();
@@ -292,7 +307,7 @@ function Form4({
             </div>
           )}
 
-          {durationValue !== "به صورت دائمی" &&
+          {durationValue !== "به صورت دائمی" && typeLayerOneValue === 'وجه نقد' &&
             <div className="request-cash-review input-space">
             <label className="label-space" htmlFor="request-cash-review1-id">
               {' '}
@@ -426,8 +441,8 @@ function Form4({
             <span> قبلی</span>
           </button>
 
-          <button onClick={handleSubmit} className="submit-button-review">
-            <span> تأیید نهایی و ارسال</span>
+          <button style={isLoadingButton? {width:borderDiff}:null} onClick={handleSubmit} className="submit-button-review">
+            <span> {isLoadingButton? <LoadingButton dimension={10} stroke={2} color={'#ffffff'} />:"تأیید نهایی و ارسال"} </span>
           </button>
         </div>
 

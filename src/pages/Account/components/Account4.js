@@ -17,8 +17,10 @@ import {
   FiFileText,
   FiX,
 } from 'react-icons/fi';
+import LoadingButton from '../../../components/loadingButton/LoadingButton';
 
 function Account4({ accountData, setAccountData, setStep, setLoad }) {
+  const [isLoadingButton, setIsLoadingButton] = useState(false)
   
   const toPersianDigits = (num) => {
     const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
@@ -310,6 +312,7 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
   };
 
   const handleFamilyDelete = async (index) => {
+    setIsLoadingButton(true)
     try {
       const response = await fetch(
         `https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/delete-user-family/${accountData.beneficiary_user_family_info[index].beneficiary_user_family_info_id}/`,
@@ -336,13 +339,16 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
         data.beneficiary_user_family_info = newFamily;
         return data;
       });
+      setIsLoadingButton(false)
       setRemoveFamily(false);
     } catch (err) {
       console.log(err);
+      setIsLoadingButton(false)
     }
   };
 
   const handleAdditionalDelete = async (index) => {
+    setIsLoadingButton(true)
     try {
       const response = await fetch(
         `https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/update-user-additional-info/${accountData.beneficiary_user_additional_info[index].beneficiary_user_additional_info_id}/`,
@@ -369,9 +375,11 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
         data.beneficiary_user_additional_info = newFamily;
         return data;
       });
+      setIsLoadingButton(false)
       setRemoveAdditional(false);
     } catch (err) {
       console.log(err);
+      setIsLoadingButton(false)
     }
   };
 
@@ -400,6 +408,7 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
     if(flag === 1){
       return
     }
+    setIsLoadingButton(true)
     try {
       const response = await fetch(
         `https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/create-user-family/`,
@@ -438,9 +447,11 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
         beneficiary_user_family_info_first_name:true,
         beneficiary_user_family_info_last_name:true
       })
+      setIsLoadingButton(false)
       setAddFamily(false)
     } catch (err) {
       console.log(err);
+      setIsLoadingButton(false)
     }
   };
 
@@ -451,6 +462,7 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
         setAdditionalError("لطفا عنوان را وارد کنید");
         return;
       }
+    setIsLoadingButton(true)
     try {
       var formData;
       var formHeaders;
@@ -502,9 +514,11 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
       });
       setAdditionalError(null);
       setFiles([]);
+      setIsLoadingButton(false)
       setAddAdditional(false);
     } catch (err) {
       console.log(err);
+      setIsLoadingButton(false)
     }
   };
   return (
@@ -693,7 +707,7 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
                 className="family-yes-button"
                 onClick={() => handleFamilyDelete(familyIndex)}
               >
-                بلی
+      {isLoadingButton? <LoadingButton dimension={10} stroke={2} color={'#fff'} />: "بلی"}
               </button>
             </div>
           </div>
@@ -716,7 +730,7 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
                 className="family-yes-button"
                 onClick={() => handleAdditionalDelete(additionalIndex)}
               >
-                بلی
+        {isLoadingButton? <LoadingButton dimension={10} stroke={2} color={'#fff'} />: "بلی"}
               </button>
             </div>
           </div>
@@ -943,7 +957,7 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
                   class="yes-button"
                   onClick={handleAddFamily}
                 >
-                  تأیید
+                  {isLoadingButton?<LoadingButton dimension={10} stroke={2} color={'#fff'} />:"تأیید"}
                 </button>
               </div>
             </form>
@@ -1088,7 +1102,7 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
                 لغو
               </button>
               <button className="yes-button" onClick={handleAddAdditional}>
-                تأیید
+                {isLoadingButton?<LoadingButton dimension={10} stroke={2} color={'#fff'} />:"تأیید"}
               </button>
             </div>
           </div>

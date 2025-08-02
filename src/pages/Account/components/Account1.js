@@ -2,10 +2,12 @@ import { useState, useEffect } from 'react';
 import Header from '../../../components/header/Header';
 import NavigationBar from '../../../components/navigationBar/NavigationBar';
 import './Account1.css';
+import LoadingButton from '../../../components/loadingButton/LoadingButton';
 
 function Account1({ accountData, setAccountData, setStep, setLoad }) {
   const [account1Data, setAccount1Data] = useState(accountData);
   const [submit, setSubmit] = useState(false);
+  const [isLoadingButton, setIsLoadingButton] = useState(false)
   const [validation, setValidation] = useState({
     phone_number: true,
     email: true,
@@ -17,6 +19,7 @@ function Account1({ accountData, setAccountData, setStep, setLoad }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validation.phone_number && validation.email) {
+      setIsLoadingButton(true)
       try {
         const response = await fetch(
           `https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/update-user-register/`,
@@ -39,7 +42,7 @@ function Account1({ accountData, setAccountData, setStep, setLoad }) {
         }
         const result = await response.json();
         console.log(result);
-
+        setIsLoadingButton(false)
         setSubmit(true);
 
         // Reset after 5 seconds
@@ -47,6 +50,7 @@ function Account1({ accountData, setAccountData, setStep, setLoad }) {
         setTimeout(() => setSubmit(false), 5000);
       } catch (err) {
         console.log(err);
+        setIsLoadingButton(false)
       }
     } else {
       return;
@@ -173,9 +177,9 @@ function Account1({ accountData, setAccountData, setStep, setLoad }) {
               readOnly
               value={
                 account1Data?.beneficiary_user_information
-                  ?.under_charity_support
+                  ?.under_charity_support === true
                   ? 'هستید'
-                  : 'نیستید' || ''
+                  : account1Data?.beneficiary_user_information?.under_charity_support === null || account1Data?.beneficiary_user_information?.under_charity_support === undefined? "":'نیستید'
               }
             />
           </div>
@@ -274,7 +278,8 @@ function Account1({ accountData, setAccountData, setStep, setLoad }) {
               </div>
             )}
 
-            <input type="submit" value="تأیید" onClick={handleSubmit} />
+            {isLoadingButton? <button><LoadingButton dimension={10} stroke={2} color={'#fff'} /></button>
+              :<input type="submit" value="تأیید" onClick={handleSubmit} />}
           </div>
         </form>
       </main>

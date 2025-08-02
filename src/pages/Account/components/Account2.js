@@ -6,6 +6,7 @@ import DatePicker from 'react-multi-date-picker';
 import persian from 'react-date-object/calendars/persian';
 import persian_fa from 'react-date-object/locales/persian_fa';
 import DateObject from 'react-date-object';
+import LoadingButton from '../../../components/loadingButton/LoadingButton';
 
 function Account2({
   accountData,
@@ -18,7 +19,7 @@ function Account2({
   const [submit, setSubmit] = useState(false);
   const todayJalali = new DateObject({ calendar: persian, locale: persian_fa });
   const [jalaliValue, setJalaliValue] = useState(null);
-
+  const [isLoadingButton, setIsLoadingButton] = useState(false)
   useEffect(() => {
     setAccount1Data(accountData);
   }, [accountData]);
@@ -109,6 +110,7 @@ function Account2({
       (validation.last_name ||
         account1Data?.beneficiary_user_information?.last_name === '')
     ) {
+      setIsLoadingButton(true)
       try {
         const response = await fetch(
           `https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/update-user-information/`,
@@ -137,7 +139,7 @@ function Account2({
         }
         const result = await response.json();
         console.log(result);
-
+        setIsLoadingButton(false)
         setSubmit(true);
 
         // Reset after 5 seconds
@@ -145,6 +147,7 @@ function Account2({
         setTimeout(() => setSubmit(false), 5000);
       } catch (err) {
         console.log(err);
+        setIsLoadingButton(false)
       }
     } else if (
       !hasInformation &&
@@ -153,6 +156,7 @@ function Account2({
       (validation.last_name ||
         account1Data?.beneficiary_user_information?.last_name === '')
     ) {
+      setIsLoadingButton(true)
       try {
         const response = await fetch(
           `https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/create-user-information/`,
@@ -181,7 +185,7 @@ function Account2({
         }
         const result = await response.json();
         console.log(result);
-
+        setIsLoadingButton(false)
         setSubmit(true);
 
         // Reset after 5 seconds
@@ -189,6 +193,7 @@ function Account2({
         setTimeout(() => setSubmit(false), 5000);
       } catch (err) {
         console.log(err);
+        setIsLoadingButton(false)
       }
     } else {
       return;
@@ -393,7 +398,8 @@ function Account2({
                   null)) && (
               <div> لطفا نام و نام خانوادگی خود را به فارسی وارد کنید</div>
             )}
-            <input type="submit" value="تأیید" onClick={handleSubmit} />
+            {isLoadingButton? <button><LoadingButton dimension={10} stroke={2} color={'#fff'} /></button>
+              :<input type="submit" value="تأیید" onClick={handleSubmit} />}
           </div>
         </form>
       </main>
