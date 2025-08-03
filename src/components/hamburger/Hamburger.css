@@ -18,7 +18,9 @@
 
 .hamburger-block-overlay {
     z-index: 999;
-    background-color: rgba(0, 0, 0, 0.55);
+    background-color: rgba(0,0,0,0.35);
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
     position: fixed;
     top: 0;
     bottom: 0;
@@ -102,7 +104,7 @@
     height: auto;
 }
 
-.hamburger-overlay .close-btn img {
+.hamburger-overlay .close-btn svg {
     width: 100%;
     height: auto;
 }
@@ -137,19 +139,19 @@
     width: auto;
 }
 
-.hamburger-overlay .setting-image img:first-child {
+.hamburger-overlay .setting-image svg:first-child {
     display: block;
     width: 100%;
 }
 
-.hamburger-overlay .setting-image img:last-child {
+.hamburger-overlay .setting-image svg:last-child {
     position: absolute;
     top: 0;
     right: 0;
     transition: 0.4s ease-in-out;
 }
 
-.hamburger-overlay .setting-image img:last-child.move-left {
+.hamburger-overlay .setting-image svg:last-child.move-left {
     right: auto;
     left: 0;
 }
@@ -170,7 +172,7 @@
     background-color: transparent;
 }
 
-.hamburger-overlay .sign-out-btn img {
+.hamburger-overlay .sign-out-btn svg {
     width: 15px;
     height: auto;
 }

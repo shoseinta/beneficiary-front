@@ -43,7 +43,7 @@
   display: inline-block;
   cursor: pointer;
 }
-.form3-container .header > #hamburger > img {
+.form3-container .header > #hamburger > svg {
   display: block;
   width: 9vw;
   max-width: 60px;
@@ -203,7 +203,7 @@
   cursor: pointer;
   color: var(--black50-color);
 }
-.form3-container .upload-label img {
+.form3-container .upload-label svg {
   width: 6px;
   height: auto;
   margin-left: 10px; /* Space between text and icon */
@@ -274,7 +274,7 @@
 .form3-container .nav > .nav-list > li > #active-nav {
   color: var(--main-color);
 }
-.form3-container .nav > .nav-list > li > a > .nav-icon > img {
+.form3-container .nav > .nav-list > li > a > .nav-icon > svg {
   display: block;
   margin-bottom: 5px;
   height: 7vw;
@@ -337,7 +337,7 @@
   height: 100%;
 }
 
-.form3-container .upload-content img {
+.form3-container .upload-content svg {
   width: 20px;
   height: 20px;
 }

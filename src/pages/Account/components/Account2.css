@@ -44,7 +44,7 @@
   display: inline-block;
   cursor: pointer;
 }
-.account-container2 .header > #hamburger > img {
+.account-container2 .header > #hamburger > svg {
   display: block;
   width: 9vw;
   max-width: 60px;
@@ -142,20 +142,26 @@
 #account-bd {
   text-align: right;
 }
-.account-container2 #account-ident-num {
-  background-image:
-    url(../../../media/icons/lock_icon.svg),
-    /* Lock icon */
-      linear-gradient(to bottom, var(--main-color), var(--main-color)); /* Vertical line */
-  background-repeat: no-repeat;
-  background-position:
-    left 10px center,
-    /* Icon position */ left 31px center; /* Vertical line position */
-  background-size:
-    11px 14px,
-    /* Icon size */ 1px 100%; /* Line width and height */
-  padding-left: 45px; /* Space for icon + line + buffer */
+
+.input-icon-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 65%;
 }
+.input-icon-wrapper svg {
+  position: absolute;
+  left: 11px;
+}
+#account-ident-num {
+  width: 100%;
+  background-image: linear-gradient(to bottom, var(--main-color), var(--main-color));
+  background-repeat: no-repeat;
+  background-position: left 31px center;
+  background-size: 1px 100%;
+  padding-left: 45px;
+}
+
 .account-container2 #account-gender {
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -166,6 +172,7 @@
   background-size: 14px;
   padding-left: 2rem; /* space for arrow */
 }
+
 .account-container2 #account-bd {
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -258,7 +265,7 @@
 .account-container2 .nav > .nav-list > li > #active-nav {
   color: var(--main-color);
 }
-.account-container2 .nav > .nav-list > li > a > .nav-icon > img {
+.account-container2 .nav > .nav-list > li > a > .nav-icon > svg {
   display: block;
   margin-bottom: 5px;
   height: 7vw;

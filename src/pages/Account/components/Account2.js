@@ -235,12 +235,17 @@ function Account2({
         <form action="" className="account-form2">
           <div>
             <label htmlFor="account-ident-num">کد ملی:</label>
-            <input
-              type="text"
-              id="account-ident-num"
-              readOnly
-              value={toPersianDigits(account1Data?.identification_number || '')}
-            />
+            <div className="input-icon-wrapper">
+              <svg width="11" height="15" viewBox="0 0 11 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9.625 5.16667H8.9375V3.83333C8.9375 1.99333 7.3975 0.5 5.5 0.5C3.6025 0.5 2.0625 1.99333 2.0625 3.83333V5.16667H1.375C0.61875 5.16667 0 5.76667 0 6.5V13.1667C0 13.9 0.61875 14.5 1.375 14.5H9.625C10.3813 14.5 11 13.9 11 13.1667V6.5C11 5.76667 10.3813 5.16667 9.625 5.16667ZM3.4375 3.83333C3.4375 2.72667 4.35875 1.83333 5.5 1.83333C6.64125 1.83333 7.5625 2.72667 7.5625 3.83333V5.16667H3.4375V3.83333ZM9.625 13.1667H1.375V6.5H9.625V13.1667ZM5.5 11.1667C6.25625 11.1667 6.875 10.5667 6.875 9.83333C6.875 9.1 6.25625 8.5 5.5 8.5C4.74375 8.5 4.125 9.1 4.125 9.83333C4.125 10.5667 4.74375 11.1667 5.5 11.1667Z" fill="black"/>
+              </svg>
+              <input
+                type="text"
+                id="account-ident-num"
+                readOnly
+                value={toPersianDigits(account1Data?.identification_number || '')}
+              />
+            </div>
           </div>
 
           <div>

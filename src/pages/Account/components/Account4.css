@@ -43,7 +43,7 @@
   display: inline-block;
   cursor: pointer;
 }
-.account-container4 .header > #hamburger > img {
+.account-container4 .header > #hamburger > svg {
   display: block;
   width: 9vw;
   max-width: 60px;
@@ -442,7 +442,7 @@
   cursor: pointer;
   color: var(--black50-color);
 }
-.additional-info-overlay-container .upload-label img {
+.additional-info-overlay-container .upload-label svg {
   margin-left: 5px;
 }
 
@@ -502,7 +502,7 @@
 .nav > .nav-list > li > #active-nav {
   color: var(--main-color);
 }
-.nav > .nav-list > li > a > .nav-icon > img {
+.nav > .nav-list > li > a > .nav-icon > svg {
   display: block;
   margin-bottom: 5px;
   height: 7vw;
@@ -556,7 +556,7 @@
   height: 100%;
 }
 
-.additional-info-overlay-container .upload-content img {
+.additional-info-overlay-container .upload-content svg {
   width: 20px;
   height: 20px;
 }
