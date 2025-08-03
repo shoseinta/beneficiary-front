@@ -1,3 +1,5 @@
+import './LoadingButton.css';
+
 function LoadingButton ({dimension,stroke, color}) {
   return (
     <svg
@@ -19,7 +21,7 @@ function LoadingButton ({dimension,stroke, color}) {
     </linearGradient>
   </defs>
 
-  <g stroke-width={2 * stroke}>
+  <g className="spinner" stroke-width={2 * stroke}>
     <path stroke="url(#spinner-secondHalf)" d={`M ${stroke} ${dimension} A ${dimension-stroke} ${dimension-stroke} 0 0 1 ${2*dimension - stroke} ${dimension}`} />
     <path stroke="url(#spinner-firstHalf)" d={`M ${2*dimension-stroke} ${dimension} A ${dimension-stroke} ${dimension-stroke} 0 0 1 ${stroke} ${dimension}`} />
 
@@ -29,15 +31,6 @@ function LoadingButton ({dimension,stroke, color}) {
       d={`M ${stroke} ${dimension} A ${dimension-stroke} ${dimension-stroke} 0 0 1 ${stroke} ${dimension}`}
     />
   </g>
-
-  <animateTransform
-    from="0 0 0"
-    to="360 0 0"
-    attributeName="transform"
-    type="rotate"
-    repeatCount="indefinite"
-    dur="1300ms"
-  />
 </svg>
   )
 }
