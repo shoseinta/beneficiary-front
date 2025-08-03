@@ -459,3 +459,26 @@
   margin-bottom: 5px;
 }
 /* THIS  IS  HOME  PAGE */
+.carousel-container {
+  overflow: hidden;
+  position: relative;
+  touch-action: pan-y; /* Prevent vertical scroll on touch devices */
+}
+
+.carousel {
+  display: flex;
+  will-change: transform;
+}
+
+.notification {
+  flex: 0 0 100%;
+  min-width: 100%;
+  user-select: none; /* Prevent text selection during drag */
+}
+
+/* For better touch experience */
+@media (hover: none) {
+  .carousel-container {
+    -webkit-overflow-scrolling: touch;
+  }
+}

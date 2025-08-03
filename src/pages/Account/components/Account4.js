@@ -21,7 +21,20 @@ import LoadingButton from '../../../components/loadingButton/LoadingButton';
 
 function Account4({ accountData, setAccountData, setStep, setLoad }) {
   const [isLoadingButton, setIsLoadingButton] = useState(false)
-  
+    const [dateSelected, setDateSelected] = useState(false);
+  useEffect(() => {
+  if (!dateSelected) return;
+  const timeout = setTimeout(() => {
+    const leftArrow = document.querySelector('.rmdp-left i');
+    const rightArrow = document.querySelector('.rmdp-right i');
+    console.log(leftArrow, rightArrow);
+
+    if (leftArrow) leftArrow.style.webkitTransform = 'rotate(-45deg)';
+    if (rightArrow) rightArrow.style.webkitTransform = 'rotate(135deg)';
+  }, 50); // wait a bit for DOM
+
+  return () => clearTimeout(timeout);
+}, [dateSelected]);
   const toPersianDigits = (num) => {
     const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
     return num.toString().replace(/\d/g, (x) => persianDigits[x]);
@@ -282,6 +295,9 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
   };
 
   const [jalaliValue, setJalaliValue] = useState(null);
+  useEffect(() => {
+    setDateSelected(false);
+  },[jalaliValue])
   const todayJalali = new DateObject({ calendar: persian, locale: persian_fa });
 
   const persian_fa_custom = {
@@ -879,6 +895,9 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
                   placeholder="تاریخ را انتخاب کنید"
                   inputClass="custom-datepicker-input"
                   maxDate={todayJalali}
+                  onOpen={() => setDateSelected(true)}
+                          onClose={() => setDateSelected(false)}
+                          onFocusedDateChange={() => setDateSelected(true)}
                 />
               </div>
 

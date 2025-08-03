@@ -12,9 +12,11 @@ import whatsapp_icon from '../../media/icons/whatsapp_icon.svg';
 import instagram_icon from '../../media/icons/instagram_icon.svg';
 import email_icon from '../../media/icons/email_icon.svg';
 import './Home.css';
+import useEmblaCarousel from 'embla-carousel-react';
 
 function Home() {
   const [moreItems, setMoreItems] = useState(false);
+  const [embelaRef] = useEmblaCarousel({ loop: true });
   const [endpointStates, setEndpointStates] = useState({
     'request-announcement-get': {
       id: 'notif1',

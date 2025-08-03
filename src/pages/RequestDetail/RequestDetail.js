@@ -57,6 +57,8 @@ useEffect(() => {
 }, [isLoadingButtonChildCreation, isChildCreate]);
   const [isDelete, setIsDelete] = useState(false);
   const [isLoadingButtonDelete, setIsLoadingButtonDelete] = useState(false)
+  const [childIndex, setChildIndex] = useState(null);
+  const [childId, setChildId] = useState(null);
   useEffect(() => {
   const button = document.querySelector('.delete-overlay-buttons .yes-button');
   console.log(button)
@@ -83,6 +85,7 @@ useEffect(() => {
   });
   const [isChildSee, setIsChildSee] = useState(false);
   const navigate = useNavigate();
+  const [isChildRemove, setIsChildRemove] = useState(false);
 
   const [files, setFiles] = useState([]);
   const [childFiles, setChildFiles] = useState([]);
@@ -1294,12 +1297,12 @@ useEffect(() => {
 
                   <div className="button-container">
                     <button
-                      onClick={() =>
-                        handleChildRemove(
-                          index,
-                          item.beneficiary_request_child_id
-                        )
-                      }
+                    onClick={() => {
+                            setIsChildRemove(true);
+                          setChildIndex(index);
+                          setChildId(item.beneficiary_request_child_id);
+                        
+                        }}
                     >
                       حذف
                       <svg
@@ -1316,6 +1319,31 @@ useEffect(() => {
                 </section>
 )})}
           </div>
+          {
+            isChildRemove && (
+              <>
+              <div className="block-overlay-container"  style={{zIndex:"9999"}} onClick={() => setIsChildRemove(false)}></div>
+          <div className="delete-overlay-container" style={{zIndex:"10000"}}>
+            <p>آیا از حذف این درخواست اطمینان دارید؟</p>
+            <div className="delete-overlay-buttons">
+              <button className="no-button" onClick={() => setIsChildRemove(false)}>
+                خیر
+              </button>
+              <button className="yes-button" onClick={() =>{
+                        handleChildRemove(
+                          childIndex,
+                          childId,
+                        )
+                        setIsChildRemove(false)
+                      }
+                      }>
+                 بلی
+              </button>
+            </div>
+          </div>
+              </>
+            )
+          }
         </>
       )}
     </>

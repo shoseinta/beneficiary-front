@@ -3,6 +3,7 @@ import more_icon from '../../media/icons/more_icon.svg';
 import bell_icon from '../../media/icons/bell_icon.svg';
 import { toJalaali } from 'jalaali-js';
 
+
 function Carousel({
   notification,
   notifIndex,
@@ -12,9 +13,100 @@ function Carousel({
   moreItems,
   setMoreItems,
 }) {
-  
   const mainRef = useRef(null);
   const videoRef = useRef(null);
+  const carouselRef = useRef(null);
+  const [startX, setStartX] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+
+
+  // Touch and mouse event handlers for swipe detection
+  const handleTouchStart = (e) => {
+    setStartX(e.touches[0].clientX);
+    setIsDragging(true);
+  };
+
+  const handleMouseDown = (e) => {
+    setStartX(e.clientX);
+    setIsDragging(true);
+  };
+
+  const handleTouchMove = (e) => {
+    if (!isDragging) return;
+    const currentX = e.touches[0].clientX;
+    const diff = startX - currentX;
+    
+    // Only prevent default if we're actually swiping
+    if (Math.abs(diff) > 5) {
+      e.preventDefault();
+    }
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging) return;
+    const currentX = e.clientX;
+    const diff = startX - currentX;
+    
+    // Only prevent default if we're actually dragging
+    if (Math.abs(diff) > 5) {
+      e.preventDefault();
+    }
+  };
+
+  const handleTouchEnd = (e) => {
+    if (!isDragging) return;
+    const endX = e.changedTouches[0].clientX;
+    handleSwipe(endX);
+    setIsDragging(false);
+  };
+
+  const handleMouseUp = (e) => {
+    if (!isDragging) return;
+    const endX = e.clientX;
+    handleSwipe(endX);
+    setIsDragging(false);
+  };
+
+  const handleSwipe = (endX) => {
+    const threshold = 50; // Minimum swipe distance to trigger slide change
+    const diff = startX - endX;
+
+    if (diff > threshold) {
+      // Swipe left - go to next slide
+      setWhichNotif(notifIndex === 0 ? 1 : 0);
+    } else if (diff < -threshold) {
+      // Swipe right - go to previous slide
+      setWhichNotif(notifIndex === 0 ? 1 : 0);
+    }
+  };
+
+  // Add and remove event listeners
+  useEffect(() => {
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+
+    // Touch events
+    carousel.addEventListener('touchstart', handleTouchStart, { passive: false });
+    carousel.addEventListener('touchmove', handleTouchMove, { passive: false });
+    carousel.addEventListener('touchend', handleTouchEnd);
+
+    // Mouse events
+    carousel.addEventListener('mousedown', handleMouseDown);
+    carousel.addEventListener('mousemove', handleMouseMove);
+    carousel.addEventListener('mouseup', handleMouseUp);
+    carousel.addEventListener('mouseleave', () => setIsDragging(false));
+
+    return () => {
+      carousel.removeEventListener('touchstart', handleTouchStart);
+      carousel.removeEventListener('touchmove', handleTouchMove);
+      carousel.removeEventListener('touchend', handleTouchEnd);
+      carousel.removeEventListener('mousedown', handleMouseDown);
+      carousel.removeEventListener('mousemove', handleMouseMove);
+      carousel.removeEventListener('mouseup', handleMouseUp);
+      carousel.removeEventListener('mouseleave', () => setIsDragging(false));
+    };
+  }, [isDragging, startX]);
+
 
   useEffect(() => {
     console.log(moreItems);
@@ -184,77 +276,80 @@ function Carousel({
         className="main"
         style={{ visibility: moreItems ? 'hidden' : 'visible' }}
       >
-        <div className="carousel">
-          <article className="notification" id="notif1">
-            {notification.moreItems.length !== 0 ? (
-              <>
-                <section className="h1">
-                  <img src={bell_icon} alt="" />
-                  <h1>
-                    {notifIndex === 0 ? ' اطلاعیه‌های شما' : ' اعلانات سامانه'}
-                  </h1>
-                </section>
-                <section className="h3">
-                  <h3>{notification.items[0]?.heading || 'عنوان اطلاعیه'}</h3>
-                  <time dateTime={notification.items[0]?.date || ''}>
-                    {gregorianToJalali(notification.items[0]?.date) || 'تاریخ'}
-                  </time>
-                </section>
-                <div>
-                  <p className="paragraph" id="para1">
-                    {notification.items[0]?.content || 'توضیحات اطلاعیه'}
-                  </p>
-                </div>
-              </>
-            ) : (
-              <>
-                <section className="h1" style={{ marginBottom: '0' }}>
-                  <img src={bell_icon} alt="" />
-                  <h1>
-                    {notifIndex === 0 ? ' اطلاعیه‌های شما' : ' اعلانات سامانه'}
-                  </h1>
-                </section>
-                <div style={{ height: '100%' }}>
-                  <section
-                    className="h3"
-                    style={{
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      height: '50%',
-                      position: 'relative',
-                      top: '50%',
-                      transform: 'translateY(-50%)',
-                    }}
-                  >
-                    <h3>{'موردی وجود ندارد.'}</h3>
-                    {/* <time dateTime={notification.items[0]?.date || ""}>
-              
-            </time> */}
+        <div className="carousel-container" ref={carouselRef}
+          style={{ cursor: isDragging ? 'grabbing' : 'grab' }}>
+          <div className="carousel">
+            <article className="notification" id="notif1">
+              {notification.moreItems.length !== 0 ? (
+                <>
+                  <section className="h1">
+                    <img src={bell_icon} alt="" />
+                    <h1>
+                      {notifIndex === 0 ? ' اطلاعیه‌های شما' : ' اعلانات سامانه'}
+                    </h1>
                   </section>
-
+                  <section className="h3">
+                    <h3>{notification.items[0]?.heading || 'عنوان اطلاعیه'}</h3>
+                    <time dateTime={notification.items[0]?.date || ''}>
+                      {gregorianToJalali(notification.items[0]?.date) || 'تاریخ'}
+                    </time>
+                  </section>
                   <div>
-                    <p className="paragraph" id="para1"></p>
+                    <p className="paragraph" id="para1">
+                      {notification.items[0]?.content || 'توضیحات اطلاعیه'}
+                    </p>
                   </div>
+                </>
+              ) : (
+                <>
+                  <section className="h1" style={{ marginBottom: '0' }}>
+                    <img src={bell_icon} alt="" />
+                    <h1>
+                      {notifIndex === 0 ? ' اطلاعیه‌های شما' : ' اعلانات سامانه'}
+                    </h1>
+                  </section>
+                  <div style={{ height: '100%' }}>
+                    <section
+                      className="h3"
+                      style={{
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        height: '50%',
+                        position: 'relative',
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                      }}
+                    >
+                      <h3>{'موردی وجود ندارد.'}</h3>
+                      {/* <time dateTime={notification.items[0]?.date || ""}>
+                
+                </time> */}
+                    </section>
+
+                    <div>
+                      <p className="paragraph" id="para1"></p>
+                    </div>
+                  </div>
+                </>
+              )}
+              {notification.items.length !== 0 && (
+                <div
+                  className="details"
+                  onClick={() => {
+                    setMoreItems(true);
+                    document.body.classList.add('more-active');
+                  }}
+                >
+                  <details>
+                    <summary className="summary">
+                      {' '}
+                      موارد بیشتر <img src={more_icon} alt="" />{' '}
+                    </summary>
+                  </details>
                 </div>
-              </>
-            )}
-            {notification.items.length !== 0 && (
-              <div
-                className="details"
-                onClick={() => {
-                  setMoreItems(true);
-                  document.body.classList.add('more-active');
-                }}
-              >
-                <details>
-                  <summary className="summary">
-                    {' '}
-                    موارد بیشتر <img src={more_icon} alt="" />{' '}
-                  </summary>
-                </details>
-              </div>
-            )}
-          </article>
+              )}
+            </article>
+          </div>
         </div>
         <div className="carousel-dots">
           {notifIndex === 0 ? (

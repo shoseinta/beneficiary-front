@@ -15,10 +15,27 @@ function Account2({
   setLoad,
   hasInformation,
 }) {
+  const [dateSelected, setDateSelected] = useState(false);
+  useEffect(() => {
+  if (!dateSelected) return;
+  const timeout = setTimeout(() => {
+    const leftArrow = document.querySelector('.rmdp-left i');
+    const rightArrow = document.querySelector('.rmdp-right i');
+    console.log(leftArrow, rightArrow);
+
+    if (leftArrow) leftArrow.style.webkitTransform = 'rotate(-45deg)';
+    if (rightArrow) rightArrow.style.webkitTransform = 'rotate(135deg)';
+  }, 50); // wait a bit for DOM
+
+  return () => clearTimeout(timeout);
+}, [dateSelected]);
   const [account1Data, setAccount1Data] = useState(accountData);
   const [submit, setSubmit] = useState(false);
   const todayJalali = new DateObject({ calendar: persian, locale: persian_fa });
   const [jalaliValue, setJalaliValue] = useState(null);
+  useEffect(() => {
+    setDateSelected(false);
+  },[jalaliValue])
   const [isLoadingButton, setIsLoadingButton] = useState(false)
   useEffect(() => {
     setAccount1Data(accountData);
@@ -326,6 +343,9 @@ function Account2({
               id="account-bd"
               maxDate={todayJalali}
               onOpenPickNewDate={false}
+              onOpen={() => setDateSelected(true)}
+                          onClose={() => setDateSelected(false)}
+                          onFocusedDateChange={() => setDateSelected(true)}
             />
             {/* <input 
                     type="text" 

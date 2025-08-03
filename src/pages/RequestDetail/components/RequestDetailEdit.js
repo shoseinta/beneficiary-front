@@ -36,6 +36,20 @@ function RequestDetailEdit({
   files,
   setFiles,
 }) {
+  const [dateSelected, setDateSelected] = useState(false);
+  useEffect(() => {
+  if (!dateSelected) return;
+  const timeout = setTimeout(() => {
+    const leftArrow = document.querySelector('.rmdp-left i');
+    const rightArrow = document.querySelector('.rmdp-right i');
+    console.log(leftArrow, rightArrow);
+
+    if (leftArrow) leftArrow.style.webkitTransform = 'rotate(-45deg)';
+    if (rightArrow) rightArrow.style.webkitTransform = 'rotate(135deg)';
+  }, 50); // wait a bit for DOM
+
+  return () => clearTimeout(timeout);
+}, [dateSelected]);
   const [isCreatingZip, setIsCreatingZip] = useState(false);
   const [files1, setFiles1] = useState(files);
   const [editApplied, setEditApplied] = useState(false);
@@ -185,6 +199,10 @@ function RequestDetailEdit({
         .setLocale(persian_fa)
     : null;
 });
+
+useEffect(() => {
+    setDateSelected(false);
+  },[jalaliValue])
   
 
   const [validation, setValidation] = useState({
@@ -815,6 +833,9 @@ function RequestDetailEdit({
                           inputClass="custom-datepicker-input"
                           minDate={todayJalali}
                           onOpenPickNewDate={false}
+                          onOpen={() => setDateSelected(true)}
+                          onClose={() => setDateSelected(false)}
+                          onFocusedDateChange={() => setDateSelected(true)}
                         />
                       </>
                     )}

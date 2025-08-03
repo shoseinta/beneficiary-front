@@ -23,14 +23,32 @@ function Form2({
   setStep,
   typeLayerOne,
 }) {
+  
   const [selectedDuration, setSelectedDuration] = useState(
     requestData.beneficiary_request_duration
   );
+  const [jalaliValue, setJalaliValue] = useState(null);
   const toPersianDigits = (num) => {
     const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
     return num.toString().replace(/\d/g, (x) => persianDigits[x]);
   };
+  const [dateSelected, setDateSelected] = useState(false);
+  useEffect(() => {
+    console.log(dateSelected);
+  }, [dateSelected]);
+  useEffect(() => {
+  if (!dateSelected) return;
+  const timeout = setTimeout(() => {
+    const leftArrow = document.querySelector('.rmdp-left i');
+    const rightArrow = document.querySelector('.rmdp-right i');
+    console.log(leftArrow, rightArrow);
 
+    if (leftArrow) leftArrow.style.webkitTransform = 'rotate(-45deg)';
+    if (rightArrow) rightArrow.style.webkitTransform = 'rotate(135deg)';
+  }, 50); // wait a bit for DOM
+
+  return () => clearTimeout(timeout);
+}, [dateSelected]);
   // Add commas as thousand separators
   const addCommas = (num) => {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -40,7 +58,7 @@ function Form2({
       ? ''
       : toPersianDigits(addCommas(requestData.beneficiary_request_amount));
   const [dispalyValue, setDisplayValue] = useState(formattedValue);
-  const [jalaliValue, setJalaliValue] = useState(null);
+  
   const todayJalali = new DateObject({ calendar: persian, locale: persian_fa });
 
   const datepickerRef = useRef();
@@ -295,7 +313,9 @@ function Form2({
     event.target.value = displayValue;
   };
 
-
+useEffect(() => {
+    setDateSelected(false);
+  },[jalaliValue])
   useEffect(() => {
     document.documentElement.classList.add('form2-html');
     document.body.classList.add('form2-body');
@@ -309,9 +329,7 @@ function Form2({
     return <p>Loading options...</p>;
   }
 
-  // if (!selectedDuration) {
-  //     return <p>Loading selection...</p>;
-  // }
+  
   return (
     <div className="form2-container">
       <Header />
@@ -408,11 +426,16 @@ function Form2({
                 }}
                 calendar={persian}
                 locale={persian_fa_custom}
+                arrow={false}
                 calendarPosition="bottom-center"
                 placeholder="تاریخ را انتخاب کنید"
                 inputClass="custom-datepicker-input"
                 minDate={todayJalali}
                 onOpenPickNewDate={false}
+                onOpen={() => setDateSelected(true)}
+                onClose={() => setDateSelected(false)}
+                onFocusedDateChange={() => setDateSelected(true)}
+                
               />
             </div>
           ) : null}

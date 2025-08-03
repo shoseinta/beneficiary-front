@@ -1,6 +1,6 @@
 import Header from '../../../components/header/Header';
 import NavigationBar from '../../../components/navigationBar/NavigationBar';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './Account3.css';
 import { useLookup } from '../../../context/LookUpContext';
 import {
@@ -96,9 +96,26 @@ function Account3({
 
   // Update position if account1Data changes
   useEffect(() => {
-console.log(account1Data);
-  }
-  )
+    console.log(account1Data);
+  });
+
+  // Ref for map div and useEffect to set height = width
+  const mapRef = useRef();
+  useEffect(() => {
+    const resizeMap = () => {
+      if (mapRef.current) {
+        const width = mapRef.current.offsetWidth;
+        mapRef.current.style.height = `${width}px`;
+      }
+    };
+
+    resizeMap();
+    window.addEventListener('resize', resizeMap);
+
+    return () => {
+      window.removeEventListener('resize', resizeMap);
+    };
+  }, []);
   const isPersian = (text) => {
     const persianRegex = /^[\u0600-\u06FF\u0621-\u064A\s]+$/;
     return persianRegex.test(text);
@@ -748,7 +765,11 @@ console.log(account1Data);
           <section style={{position:"relative", zIndex: 1}}>
             <p>آدرس خود را برروی نقشه زیر تعیین کنید:</p>
             <div style={{ position: 'relative' }}>
-              <div id="map" style={{ height: '400px', width: '100%', position: 'relative', zIndex: 0 }}>
+              <div
+                id="map"
+                ref={mapRef}
+                style={{ width: '100%', position: 'relative', zIndex: 0 }}
+              >
                 <MapContainer
                   center={position}
                   zoom={5}
@@ -816,4 +837,3 @@ console.log(account1Data);
 }
 
 export default Account3;
-//

@@ -32,7 +32,7 @@
   padding: 5px;
   position: sticky;
   top: 0;
-  z-index: 999; /* updated from 10 to 999 */
+  z-index: 98; /* updated from 10 to 999 */
 }
 .account-container3 .header > #hamburger {
   width: auto;
@@ -264,7 +264,7 @@ select {
   position: sticky;
   bottom: 0;
   background-color: var(--white-color);
-  z-index: 999; /* added */
+  z-index: 98; /* added */
 }
 .nav > .nav-list {
   display: flex;
