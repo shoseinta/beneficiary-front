@@ -195,7 +195,7 @@ function Home() {
       )}
       <section className="video">
         <div className="poster-overlay"></div>
-        <video controls poster={thumbnail}>
+        <video controls poster={'../../media/images/nothing.png'}>
           <source src={tutorial} type="video/mp4" />
           ویدئو آموزش استفاده از سامانه
         </video>

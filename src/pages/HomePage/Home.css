@@ -67,10 +67,9 @@
   row-gap: 10px;
   width: 90vw;
   max-width: 400px;
-  min-height: 171px;
   max-height: 250px;
   border: 1px var(--main-color) solid;
-  border-radius: 6px;
+  border-radius: 8px;
   margin: 0 auto;
   padding: 10px;
   overflow-y: auto; /* Changed from scroll to auto */
@@ -86,6 +85,7 @@
   display: flex;
   flex-direction: column;
   row-gap: 10px;
+  padding-top: 20px;
 }
 
 .home-container .h1 {
@@ -118,7 +118,7 @@
   font-size: 0.9rem;
   font-weight: normal;
   text-align: justify;
-  line-height: 1.5;
+  line-height: 2;
 }
 .home-container #para1,
 #para2 {
@@ -190,7 +190,8 @@
   position: relative; /* Makes positioning inside possible */
   display: inline-block;
   align-self: center;
-  border-radius: 6px;
+  border-radius: 8px;
+  overflow: hidden;
   box-shadow: 0px 4px 4px var(--black25-color);
 }
 .home-container .video > .poster-overlay {
@@ -210,8 +211,8 @@
   width: 90vw;
   max-width: 400px;
   height: auto;
-  max-height: 250px;
   z-index: 2;
+  background-color: var(--main-color);
 }
 .home-container .video > .title {
   position: absolute;
@@ -358,8 +359,8 @@
   background-color: var(--white-color);
   border-radius: 8px;
   border: var(--main-color) 1px solid;
-  box-shadow: 0px 4px 4px var(--black25-color);
-  padding: 12px 8px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  padding: 0 10px 10px 10px;
   overflow-y: auto;
   z-index: 1000;
 
@@ -368,12 +369,18 @@
   height: fit-content;
   max-height: var(--notif-height, auto);
 }
+
 .home-container .notif-overlay-up {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background-color: var(--white-color);
+
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-bottom: 5px;
   margin-bottom: 10px;
+  padding-top: 10px;
   border-bottom: var(--main-color) 1px solid;
 }
 .home-container .notif-overlay-up button,
@@ -418,7 +425,8 @@
 .home-container .notif-overlay-body {
   display: flex;
   flex-direction: column;
-  margin-bottom: 10px;
+  margin-bottom: 50px;
+  row-gap: 10px;
 }
 .home-container .notif-overlay-title {
   display: flex;
@@ -431,8 +439,9 @@
   font-weight: bold;
 }
 .home-container .notif-overlay-title time {
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   font-weight: normal;
+  color: var(--black50-color);
 }
 .home-container .notif-overlay-content {
   display: flex;
@@ -440,7 +449,7 @@
 }
 .home-container .notif-overlay-content p {
   max-width: 80%;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   line-height: 2;
   font-weight: normal;
   text-align: justify;
