@@ -9,6 +9,13 @@ export const useLookup = () => useContext(LookupContext);
 export const LookupProvider = ({ children }) => {
   const [isDeleteFinished, setIsDeleteFinished] = useState(false);
   const [hamburger,setHamburger] = useState(false)
+      useEffect(() => {
+        if (hamburger) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'auto';
+        }
+    },[hamburger])
   const [activeEndpoint, setActiveEndpoint] = useState(null);
   const [isRequestPage, setIsRequestPage] = useState(false);
   const endpoints = [

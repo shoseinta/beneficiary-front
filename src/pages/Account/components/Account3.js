@@ -40,7 +40,7 @@ function Account3({
   accountData,
   setAccountData,
   setStep,
-  setLoad,
+  //setLoad,
   hasAddress,
 }) {
   const toPersianDigits = (num) => {
@@ -267,7 +267,7 @@ console.log(account1Data);
         const result = await response.json();
         console.log(result);
         setSubmitMap(true);
-        setLoad(true);
+        //setLoad(true);
         setTimeout(() => setSubmitMap(false), 5000);
       } catch (err) {
         console.error(err);
@@ -301,7 +301,7 @@ console.log(account1Data);
         const result = await response.json();
         console.log(result);
         setSubmitMap(true);
-        setLoad(true);
+        //setLoad(true);
         setTimeout(() => setSubmitMap(false), 5000);
       } catch (err) {
         console.error(err);
@@ -396,7 +396,7 @@ console.log(account1Data);
         const result = await response.json();
         console.log(result);
         setSubmit(true);
-        setLoad(true);
+        //setLoad(true);
         setTimeout(() => setSubmit(false), 5000);
       } catch (err) {
         console.error(err);
@@ -450,7 +450,7 @@ console.log(account1Data);
         const result = await response.json();
         console.log(result);
         setSubmit(true);
-        setLoad(true);
+        //setLoad(true);
         setTimeout(() => setSubmit(false), 5000);
       } catch (err) {
         console.error(err);
@@ -745,25 +745,27 @@ console.log(account1Data);
             <input type="submit" value="تأیید" />
           </div>
 
-          <section>
+          <section style={{position:"relative", zIndex: 1}}>
             <p>آدرس خود را برروی نقشه زیر تعیین کنید:</p>
-            <div id="map" style={{ height: '400px', width: '100%' }}>
-              <MapContainer
-                center={position}
-                zoom={13}
-                style={{ height: '100%', width: '100%' }}
-              >
-                <TileLayer
-                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
-                <LocationMarker
-                  position={position}
-                  setPosition={(latlng) =>
-                    setPosition([latlng.lat, latlng.lng])
-                  }
-                />
-              </MapContainer>
+            <div style={{ position: 'relative' }}>
+              <div id="map" style={{ height: '400px', width: '100%', position: 'relative', zIndex: 0 }}>
+                <MapContainer
+                  center={position}
+                  zoom={5}
+                  style={{ height: '100%', width: '100%' }}
+                >
+                  <TileLayer
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  />
+                  <LocationMarker
+                    position={position}
+                    setPosition={(latlng) =>
+                      setPosition([latlng.lat, latlng.lng])
+                    }
+                  />
+                </MapContainer>
+              </div>
             </div>
             <div className='map-button-success-container'>
               {submitMap ? (
