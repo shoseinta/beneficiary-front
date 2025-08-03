@@ -43,7 +43,7 @@
   display: inline-block;
   cursor: pointer;
 }
-.form1-container .header > #hamburger > img {
+.form1-container .header > #hamburger > svg {
   display: block;
   width: 9vw;
   max-width: 60px;
@@ -303,7 +303,7 @@
 .form1-container .nav > .nav-list > li > #active-nav {
   color: var(--main-color);
 }
-.form1-container .nav > .nav-list > li > a > .nav-icon > img {
+.form1-container .nav > .nav-list > li > a > .nav-icon > svg {
   display: block;
   margin-bottom: 5px;
   height: 7vw;

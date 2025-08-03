@@ -44,7 +44,7 @@
   display: inline-block;
   cursor: pointer;
 }
-.home-container .header > #hamburger > img {
+.home-container .header > #hamburger > svg {
   display: block;
   width: 9vw;
   max-width: 60px;
@@ -261,7 +261,7 @@
   text-align: left;
   line-height: 2;
 }
-.home-container #value > a > img {
+.home-container #value > a > svg {
   margin-right: 5px;
 }
 .home-container #value > a {
@@ -298,7 +298,7 @@
 .home-container .active-nav {
   color: var(--main-color);
 }
-.home-container .nav > .nav-list > li > a > .nav-icon > img {
+.home-container .nav > .nav-list > li > a > .nav-icon > svg {
   display: block;
   margin-bottom: 5px;
   height: 7vw;

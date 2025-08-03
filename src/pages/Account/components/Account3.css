@@ -43,7 +43,7 @@
   display: inline-block;
   cursor: pointer;
 }
-.account-container3 .header > #hamburger > img {
+.account-container3 .header > #hamburger > svg {
   display: block;
   width: 9vw;
   max-width: 60px;
@@ -289,7 +289,7 @@ select {
 .nav > .nav-list > li > #active-nav {
   color: var(--main-color);
 }
-.nav > .nav-list > li > a > .nav-icon > img {
+.nav > .nav-list > li > a > .nav-icon > svg {
   display: block;
   margin-bottom: 5px;
   height: 7vw;

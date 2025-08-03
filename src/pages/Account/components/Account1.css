@@ -44,7 +44,7 @@
   display: inline-block;
   cursor: pointer;
 }
-.account-container1 .header > #hamburger > img {
+.account-container1 .header > #hamburger > svg {
   display: block;
   width: 9vw;
   max-width: 60px;
@@ -136,21 +136,26 @@
 .account-container1 #account-support {
   text-align: right;
 }
-.account-container1 #account-support,
-#account-id {
-  background-image:
-    url(../../../media/icons/lock_icon.svg),
-    /* Lock icon */
-      linear-gradient(to bottom, var(--main-color), var(--main-color)); /* Vertical line */
-  background-repeat: no-repeat;
-  background-position:
-    left 10px center,
-    /* Icon position */ left 31px center; /* Vertical line position */
-  background-size:
-    11px 14px,
-    /* Icon size */ 1px 100%; /* Line width and height */
-  padding-left: 45px; /* Space for icon + line + buffer */
+
+.input-icon-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 65%;
 }
+.input-icon-wrapper svg {
+  position: absolute;
+  left: 11px;
+}
+#account-support, #account-id {
+  width: 100%;
+  background-image: linear-gradient(to bottom, var(--main-color), var(--main-color));
+  background-repeat: no-repeat;
+  background-position: left 31px center;
+  background-size: 1px 100%;
+  padding-left: 45px;
+}
+
 .account-container1 #account-submit1 {
   margin-top: 45px;
   display: flex;
@@ -224,7 +229,7 @@
 .account-container1 .nav > .nav-list > li > #active-nav {
   color: var(--main-color);
 }
-.account-container1 .nav > .nav-list > li > a > .nav-icon > img {
+.account-container1 .nav > .nav-list > li > a > .nav-icon > svg {
   display: block;
   margin-bottom: 5px;
   height: 7vw;

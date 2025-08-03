@@ -50,7 +50,7 @@
   display: inline-block;
   cursor: pointer;
 }
-.form4-container .header > #hamburger > img {
+.form4-container .header > #hamburger > svg {
   display: block;
   width: 9vw;
   max-width: 60px;
@@ -235,7 +235,7 @@
   font-weight: normal;
   color: var(--black50-color);
 }
-.form4-container .upload-label img {
+.form4-container .upload-label svg {
   width: 6px;
   height: auto;
   margin-left: 10px; /* Space between text and icon */
@@ -306,7 +306,7 @@
 .form4-container .nav > .nav-list > li > #active-nav {
   color: var(--main-color);
 }
-.form4-container .nav > .nav-list > li > a > .nav-icon > img {
+.form4-container .nav > .nav-list > li > a > .nav-icon > svg {
   display: block;
   margin-bottom: 5px;
   height: 7vw;
@@ -385,17 +385,17 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  position: fixed;
-  align-self: center;
-  justify-self: center;
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
   background-color: var(--white-color);
   border: 1px solid var(--main-color);
   border-radius: 10px;
   box-shadow: 0px 4px 4px var(--black25-color);
   padding: 10px 40px 20px 40px;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
   z-index: 1000;
 }
 .final-form svg {

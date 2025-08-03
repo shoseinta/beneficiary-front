@@ -7,7 +7,10 @@ function Header() {
   return (
     <header className="header">
       <button type="menu" id="hamburger" onClick={() => setHamburger(true)}>
-        <img src={hamburger_icon} alt="منوی تنظیمات" />
+        <svg width="42" height="30" viewBox="0 0 42 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M40 26C41.1046 26 42 26.8954 42 28C42 29.1046 41.1046 30 40 30H2C0.895431 30 0 29.1046 0 28C0 26.8954 0.895431 26 2 26H40ZM40 13C41.1046 13 42 13.8954 42 15C42 16.1046 41.1046 17 40 17H2C0.895431 17 0 16.1046 0 15C0 13.8954 0.895431 13 2 13H40ZM40 0C41.1046 1.59453e-06 42 0.895432 42 2C42 3.10457 41.1046 4 40 4H2C0.895431 4 0 3.10457 0 2C0 0.895431 0.895431 0 2 0H40Z" fill="white"/>
+        </svg>
+
       </button>
       <img src={charity_typo_white} id="typo" alt="تایپوگرافی نام خیریه" />
       <img src={charity_logo} id="logo" alt="لوگوی خیریه" />

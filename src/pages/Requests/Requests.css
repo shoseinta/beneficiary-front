@@ -44,7 +44,7 @@
   display: inline-block;
   cursor: pointer;
 }
-.requests-container .header > #hamburger > img {
+.requests-container .header > #hamburger > svg {
   display: block;
   width: 9vw;
   max-width: 60px;
@@ -201,7 +201,7 @@
 .requests-container .nav > .nav-list > li > #active-nav {
   color: var(--main-color);
 }
-.requests-container .nav > .nav-list > li > a > .nav-icon > img {
+.requests-container .nav > .nav-list > li > a > .nav-icon > svg {
   display: block;
   margin-bottom: 5px;
   height: 7vw;

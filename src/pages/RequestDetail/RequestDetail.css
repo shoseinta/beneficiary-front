@@ -44,7 +44,7 @@
   display: inline-block;
   cursor: pointer;
 }
-.request-detail-container .header > #hamburger > img {
+.request-detail-container .header > #hamburger > svg {
   display: block;
   width: 9vw;
   max-width: 60px;
@@ -237,7 +237,7 @@
   height: auto;
   fill: var(--main-color);
 }
-.request-detail-container .observe-back img {
+.request-detail-container .observe-back svg {
   width: 12px;
   height: auto;
 }
@@ -288,7 +288,7 @@
 .request-detail-container .nav > .nav-list > li > #active-nav {
   color: var(--main-color);
 }
-.request-detail-container .nav > .nav-list > li > a > .nav-icon > img {
+.request-detail-container .nav > .nav-list > li > a > .nav-icon > svg {
   display: block;
   margin-bottom: 5px;
   height: 7vw;
@@ -330,7 +330,7 @@
   display: inline-block;
   cursor: pointer;
 }
-.request-detail-edit-container .header > #hamburger > img {
+.request-detail-edit-container .header > #hamburger > svg {
   display: block;
   width: 9vw;
   max-width: 60px;
@@ -512,7 +512,7 @@
   border: 1px solid var(--green-color);
   border-radius: 6px;
 }
-.request-detail-edit-container .observe-confirm-edit img {
+.request-detail-edit-container .observe-confirm-edit svg {
   width: 14px;
   height: auto;
 }
@@ -525,7 +525,7 @@
   font-size: 0.7rem;
   font-weight: normal;
 }
-.request-detail-edit-container .observe-back img {
+.request-detail-edit-container .observe-back svg {
   width: 12px;
   height: auto;
 }
@@ -568,7 +568,7 @@ select {
 .request-detail-edit-container .nav > .nav-list > li > #active-nav {
   color: var(--main-color);
 }
-.request-detail-edit-container .nav > .nav-list > li > a > .nav-icon > img {
+.request-detail-edit-container .nav > .nav-list > li > a > .nav-icon > svg {
   display: block;
   margin-bottom: 5px;
   height: 7vw;
@@ -615,7 +615,7 @@ select {
   height: 100%;
 }
 
-.request-detail-edit-container .upload-content img {
+.request-detail-edit-container .upload-content svg {
   width: 10px;
   height: 10px;
 }
@@ -994,7 +994,7 @@ select {
   color: var(--black50-color);
   box-shadow: 0 1px 4px var(--black25-color);
 }
-.child-creation-overlay-container .upload-label img {
+.child-creation-overlay-container .upload-label svg {
   margin-left: 5px;
 }
 
@@ -1055,7 +1055,7 @@ select {
   height: 100%;
 }
 
-.child-creation-overlay-container .upload-content img {
+.child-creation-overlay-container .upload-content svg {
   width: 10px;
   height: 10px;
 }
