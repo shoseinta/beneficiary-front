@@ -683,6 +683,72 @@ useEffect(() => {
       setIsLoadingButtonDelete(false)
     }
   };
+  useEffect(() => {
+    const input = document.getElementById('observe-cash');
+    if (!input) return;
+    let span = document.getElementById('amount-unit-span');
+    // if (span) {
+    //   span.parentElement.removeChild(span); // Remove the existing span if it exists
+    // }
+    if (!span) {
+      span = document.createElement('span');
+      span.id = 'amount-unit-span';
+      span.innerText = "تومان";
+      span.style.position = 'absolute';
+      span.style.whiteSpace = 'nowrap';
+      span.style.pointerEvents = 'none';
+      span.style.fontSize = '14px';
+      span.style.color = 'black';
+      document.body.appendChild(span);
+    }
+
+    const updatePositionAmount = () => {
+      const rect = input.getBoundingClientRect();
+      const computedStyle = getComputedStyle(input);
+      const paddingLeft = parseFloat(computedStyle.paddingLeft) || 0;
+      const paddingRight = parseFloat(computedStyle.paddingRight) || 0;
+      const inputWidth = rect.width
+      // Create a canvas to measure the rendered width of the input value
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      // Use the computed font properties for accurate measurement
+      ctx.font = computedStyle.font || `${computedStyle.fontSize} ${computedStyle.fontFamily}`;
+      // If the value is empty, use placeholder for width estimation; otherwise, use value
+      const valueToMeasure = input.value || input.placeholder || '';
+      const textWidth = ctx.measureText(valueToMeasure).width;
+      // Calculate left position: input's left + left padding + text width + small padding (e.g., 4px)
+      const left =
+        rect.right -
+        paddingRight -
+        textWidth -
+        40  +
+        window.scrollX;
+      // Vertically center the span to the input field
+      const top =
+        rect.top +
+        rect.height / 2 -
+        span.offsetHeight / 2 +
+        window.scrollY;
+      span.style.top = `${top}px`;
+      span.style.left = `${left}px`;
+    };
+
+    updatePositionAmount();
+    if (span.getBoundingClientRect().left < input.getBoundingClientRect().left) {
+      span.innerText = "";
+    }
+
+    window.addEventListener('resize', updatePositionAmount);
+    input.addEventListener('input', updatePositionAmount);
+
+    return () => {
+      window.removeEventListener('resize', updatePositionAmount);
+      input.removeEventListener('input', updatePositionAmount);
+      if (span) {
+        span.remove();
+      }
+    };
+  }, [requestData]);
 
   if ((!isDelete && !isEdit && !isChildCreate && !isChildSee && !isChildCreateFinish && !isDeleteFinished) && (!requestData || (requestData?.beneficiary_request_document && loadingFiles) || (childSeeData?.beneficiary_request_child_document && loadingFiles))) {
     return <p>loading...</p>;

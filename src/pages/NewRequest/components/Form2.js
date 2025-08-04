@@ -170,10 +170,7 @@ function Form2({
 
       // Avoid unnecessary update that causes flicker
       if (
-        !jalaliValue ||
-        jalaliValue.year !== newDate.year ||
-        jalaliValue.month.number !== newDate.month.number ||
-        jalaliValue.day !== newDate.day
+        !jalaliValue 
       ) {
         setJalaliValue(newDate);
       }
