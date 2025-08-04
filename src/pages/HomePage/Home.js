@@ -15,8 +15,20 @@ import './Home.css';
 import useEmblaCarousel from 'embla-carousel-react';
 
 function Home() {
+  const [carousel1Display, setCarousel1Display] = useState(true)
+  const [carousel2Display, setCarousel2Display] = useState(false)
+  const [whichNotif, setWhichNotif] = useState(0);
+  useEffect(() => {
+    if(whichNotif === 0) {
+      setCarousel1Display(true)
+      setCarousel2Display(false)
+    } else {
+      setCarousel1Display(false)
+      setCarousel2Display(true)
+    }
+  },[whichNotif])
   const [moreItems, setMoreItems] = useState(false);
-  const [embelaRef] = useEmblaCarousel({ loop: true });
+  const [emblaRef] = useEmblaCarousel();
   const [endpointStates, setEndpointStates] = useState({
     'request-announcement-get': {
       id: 'notif1',
@@ -44,7 +56,7 @@ function Home() {
     document.title = 'صفحه خانه خیریه';
   }, []);
 
-  const [whichNotif, setWhichNotif] = useState(0);
+  
 
   // Contact information
   const contactInfo = {
@@ -173,7 +185,7 @@ function Home() {
       <Header />
       {/* <Carousel notifications={notifications} endpointStates={endpointStates}/> */}
 
-      {whichNotif === 0 && (
+      {/* {whichNotif === 0 && (
         <Carousel
           notification={notifications[0]}
           notifIndex={0}
@@ -194,7 +206,31 @@ function Home() {
           moreItems={moreItems}
           setMoreItems={setMoreItems}
         />
-      )}
+      )} */}
+      <div style={{display:"flex",justifyContent:"center",alignItems:"center"}}>
+        {carousel1Display && <Carousel
+          notification={notifications[0]}
+          notifIndex={0}
+          endpointStates={endpointStates}
+          setEndpointStates={setEndpointStates}
+          whichNotif={whichNotif}
+          setWhichNotif={setWhichNotif}
+          moreItems={moreItems}
+          setMoreItems={setMoreItems}
+          display={carousel1Display}
+        />}
+        {carousel2Display && <Carousel
+          notification={notifications[1]}
+          notifIndex={1}
+          endpointStates={endpointStates}
+          setEndpointStates={setEndpointStates}
+          whichNotif={whichNotif}
+          setWhichNotif={setWhichNotif}
+          moreItems={moreItems}
+          setMoreItems={setMoreItems}
+          display={carousel2Display}
+        />}
+      </div>
       <section className="video">
         <div className="poster-overlay"></div>
         <video controls poster={'../../media/images/nothing.png'}>

@@ -13,9 +13,11 @@
 }
 .home-html {
   background-color: var(--main-color);
+  transform: none !important;
 }
 .home-body {
   background-color: var(--white-color);
+  transform: none !important;
   overflow-y: auto;
 }
 .home-container {
@@ -24,6 +26,7 @@
   justify-content: space-between;
   min-height: 100vh;
   row-gap: 10px;
+  transform: none !important;
 }
 .home-container .header {
   display: flex;
@@ -62,6 +65,7 @@
   border-radius: 50%;
 }
 .home-container .notification {
+  transform: none !important;
   display: flex;
   flex-direction: column;
   row-gap: 10px;
@@ -145,13 +149,14 @@
   overflow: hidden;
   position: relative;
   max-width: 500px;
+  z-index: 5;
 }
 
 .home-container .carousel {
   display: flex;
   gap: 20px;
   transition: transform 0.3s ease-in-out;
-  will-change: transform;
+  /* will-change: transform; */
 }
 
 .home-container .notification {
@@ -467,7 +472,7 @@
 
 .carousel {
   display: flex;
-  will-change: transform;
+  /* will-change: transform; */
 }
 
 .notification {
@@ -482,3 +487,64 @@
     -webkit-overflow-scrolling: touch;
   }
 }
+
+@keyframes slideInFromRight {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutToLeft {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+}
+
+@keyframes slideInFromLeft {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutToRight {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+.main.slide-in-div-1 {
+  animation: slideInFromRight 0.5s cubic-bezier(0.075, 0.82, 0.165, 1) forwards;
+}
+
+/* .main.slide-out-div-1 {
+  animation: slideOutToLeft 0.5s  cubic-bezier(0.075, 0.82, 0.165, 1) forwards;
+} */
+
+.main.slide-in-div {
+  animation: slideInFromLeft 0.5s cubic-bezier(0.075, 0.82, 0.165, 1) forwards;
+}
+
+/* .main.slide-out-div {
+  animation: slideOutToRight 0.5s cubic-bezier(0.075, 0.82, 0.165, 1) forwards;
+} */

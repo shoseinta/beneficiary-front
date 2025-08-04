@@ -9,6 +9,7 @@ function Carousel({
   notifIndex,
   endpointStates,
   setEndpointStates,
+  whichNotif,
   setWhichNotif,
   moreItems,
   setMoreItems,
@@ -18,6 +19,13 @@ function Carousel({
   const carouselRef = useRef(null);
   const [startX, setStartX] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      document.querySelector('.main').classList.remove('.slide-in-div')
+      document.querySelector('.main').classList.remove('.slide-in-div-1')
+    },500)
+  },[])
 
 
   // Touch and mouse event handlers for swipe detection
@@ -73,10 +81,20 @@ function Carousel({
 
     if (diff > threshold) {
       // Swipe left - go to next slide
-      setWhichNotif(notifIndex === 0 ? 1 : 0);
+      if(whichNotif === 0){
+        document.querySelector('.main').classList.add('slide-out-div')
+      }else{
+        document.querySelector('.main').classList.add('slide-out-div-1')
+      }
+      setTimeout(() => setWhichNotif(notifIndex === 0 ? 1 : 0),250)
     } else if (diff < -threshold) {
       // Swipe right - go to previous slide
-      setWhichNotif(notifIndex === 0 ? 1 : 0);
+      if(whichNotif === 0){
+        document.querySelector('.main').classList.add('slide-out-div')
+      }else{
+        document.querySelector('.main').classList.add('slide-out-div-1')
+      }
+      setTimeout(() => setWhichNotif(notifIndex === 0 ? 1 : 0),250)
     }
   };
 
@@ -273,7 +291,7 @@ function Carousel({
   return (
     <>
       <main
-        className="main"
+        className={whichNotif === 0?"main slide-in-div-1" : "main slide-in-div"}
         style={{ visibility: moreItems ? 'hidden' : 'visible' }}
       >
         <div className="carousel-container" ref={carouselRef}
@@ -371,12 +389,26 @@ function Carousel({
           {notifIndex === 0 ? (
             <span className="dot active"></span>
           ) : (
-            <span className="dot" onClick={() => setWhichNotif(0)}></span>
+            <span className="dot" onClick={() => {
+              if(whichNotif === 0){
+              setWhichNotif(0)
+              } else {
+                document.querySelector('.main').classList.add('slide-out-div-1')
+                setTimeout(() => setWhichNotif(0),250)
+              }
+            }}></span>
           )}
           {notifIndex === 1 ? (
             <span className="dot active"></span>
           ) : (
-            <span className="dot" onClick={() => setWhichNotif(1)}></span>
+            <span className="dot" onClick={() => {
+              if (whichNotif === 1){
+              setWhichNotif(1)
+              } else {
+                document.querySelector('.main').classList.add('slide-out-div')
+                setTimeout(() => setWhichNotif(1),250)
+              }
+            }}></span>
           )}
         </div>
       </main>

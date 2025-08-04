@@ -40,7 +40,7 @@ function Account3({
   accountData,
   setAccountData,
   setStep,
-  //setLoad,
+  setLoad,
   hasAddress,
 }) {
   const toPersianDigits = (num) => {
@@ -284,7 +284,7 @@ function Account3({
         const result = await response.json();
         console.log(result);
         setSubmitMap(true);
-        //setLoad(true);
+        setLoad(true);
         setTimeout(() => setSubmitMap(false), 5000);
       } catch (err) {
         console.error(err);
@@ -318,7 +318,7 @@ function Account3({
         const result = await response.json();
         console.log(result);
         setSubmitMap(true);
-        //setLoad(true);
+        setLoad(true);
         setTimeout(() => setSubmitMap(false), 5000);
       } catch (err) {
         console.error(err);
@@ -413,7 +413,7 @@ function Account3({
         const result = await response.json();
         console.log(result);
         setSubmit(true);
-        //setLoad(true);
+        setLoad(true);
         setTimeout(() => setSubmit(false), 5000);
       } catch (err) {
         console.error(err);
@@ -467,7 +467,7 @@ function Account3({
         const result = await response.json();
         console.log(result);
         setSubmit(true);
-        //setLoad(true);
+        setLoad(true);
         setTimeout(() => setSubmit(false), 5000);
       } catch (err) {
         console.error(err);

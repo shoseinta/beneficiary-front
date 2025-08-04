@@ -58,3 +58,10 @@
 h1, h2, h3, h4, h5, h6, p, a, button, label, input, textarea, select, th, td, ul, ol, li {
   color: #000;
 }
+
+html, body {
+  transform: none !important;
+  backface-visibility: hidden;
+  will-change: auto;
+  contain: paint layout style; /* Optional but adds more isolation */
+}
