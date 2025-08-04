@@ -16,8 +16,6 @@ export const LookupProvider = ({ children }) => {
             document.body.style.overflow = 'auto';
         }
     },[hamburger])
-  const [activeEndpoint, setActiveEndpoint] = useState(null);
-  const [isRequestPage, setIsRequestPage] = useState(false);
   const endpoints = [
     'request-all-get/',
     'request-initial-stages-get/',
@@ -25,67 +23,7 @@ export const LookupProvider = ({ children }) => {
     'request-completed-get/',
     'request-rejected-get/',
   ];
-  const [requestsData, setRequestsData] = useState([
-    {
-      url: `https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary`,
-      data: null,
-      page: 1,
-      pageCount: 1,
-      loading: false,
-    },
-    {
-      url: `https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary`,
-      data: null,
-      page: 1,
-      pageCount: 1,
-      loading: false,
-    },
-    {
-      url: `https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary`,
-      data: null,
-      page: 1,
-      pageCount: 1,
-      loading: false,
-    },
-    {
-      url: `https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary`,
-      data: null,
-      page: 1,
-      pageCount: 1,
-      loading: false,
-    },
-    {
-      url: `https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary`,
-      data: null,
-      page: 1,
-      pageCount: 1,
-      loading: false,
-    },
-  ]);
-  const loadInitialData = async (index) => {
-    const apiUrl = `${requestsData[index].url}/${localStorage.getItem('user_id')}/${endpoints[index]}`;
-
-    try {
-      const response = await fetch(`${apiUrl}?page=1`, {
-        headers: {
-          Authorization: `Token ${localStorage.getItem('access_token')}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      const data = await response.json();
-      setRequestsData((prev) => {
-        const newState = [...prev];
-        newState[index].data = [...data.results];
-        newState[index].page = 1;
-        newState[index].pageCount = Math.max(1, Math.ceil(data.count / 10));
-        newState[index].loading = false;
-        return newState;
-      });
-    } catch (error) {
-      console.error('Fetch error:', error);
-    }
-  };
+  
   const [typeLayerOne, setTypeLayerOne] = useState([]);
   const [typeLayerTwo, setTypeLayerTwo] = useState([]);
   const [processingStage, setProcessingStage] = useState([]);
@@ -165,26 +103,7 @@ export const LookupProvider = ({ children }) => {
     fetchLookups();
   }, []);
 
-  useEffect(() => {
-    const fetchSequentially = async () => {
-      const token = localStorage.getItem('access_token');
-      const userId = localStorage.getItem('user_id');
-
-      if (!token || !userId) return false; // Exit if no credentials
-
-      try {
-        for (let i = 0; i < requestsData.length; i++) {
-          if (activeEndpoint === i && !requestsData[i].data) {
-            loadInitialData(i);
-          }
-        }
-      } catch (error) {
-        console.error('Sequential fetch error:', error);
-      }
-    };
-
-    fetchSequentially();
-  }, [activeEndpoint, isRequestPage]);
+  
 
   return (
     <LookupContext.Provider
@@ -199,11 +118,6 @@ export const LookupProvider = ({ children }) => {
         duration,
         provinces,
         cities,
-        requestsData,
-        setRequestsData,
-        activeEndpoint,
-        setActiveEndpoint,
-        setIsRequestPage,
         files,
         setFiles,
         isDeleteFinished,

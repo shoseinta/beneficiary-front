@@ -16,15 +16,77 @@ function Account2({
   hasInformation,
 }) {
   const [dateSelected, setDateSelected] = useState(false);
-  useEffect(() => {
+ useEffect(() => {
   if (!dateSelected) return;
   const timeout = setTimeout(() => {
     const leftArrow = document.querySelector('.rmdp-left i');
     const rightArrow = document.querySelector('.rmdp-right i');
-    console.log(leftArrow, rightArrow);
-
+    // const disables = document.querySelectorAll('.rmdp-day.rmdp-disabled');
+    // if(disables.length > 0) {
+    //   disables.forEach((item) => {
+    //     item.parentElement.removeChild(item);
+    //   });
+    // }
+    const week = document.querySelector('.rmdp-week')
+    if (week) {
+      week.querySelectorAll('.rmdp-week-day').forEach((item) => {
+        item.style.textAlign = 'center';
+      })
+    }
+    const spans = document.querySelectorAll('.rmdp-day span');
+    if (spans.length > 0) {
+      spans.forEach((item) => {
+        item.style.position = 'relative';
+        item.style.top = '0';
+        item.style.left = '0';
+        item.style.right = '0';
+      });
+    }
+    // const arrows = document.querySelectorAll('.rmdp-arrow');
+    // if (arrows.length > 0) {
+    //   arrows.forEach((item) => {
+    //     item.style.margin = '0';
+    //   });
+    // }
+    // const leftArrowI = document.querySelector('.rmdp-left i');
+    // const rightArrowI = document.querySelector('.rmdp-right i');
+    // if (leftArrowI) leftArrowI.style.margin = '0';
     if (leftArrow) leftArrow.style.webkitTransform = 'rotate(-45deg)';
+    // if (rightArrowI) rightArrowI.style.margin = '0';
     if (rightArrow) rightArrow.style.webkitTransform = 'rotate(135deg)';
+
+    const header = document.querySelector('.rmdp-header-values');
+    if (header) {
+      const spanMonth = document.querySelectorAll('.rmdp-header-values span')[0];
+      const spanYear = document.querySelectorAll('.rmdp-header-values span')[1];
+      if (spanMonth) {
+        spanMonth.style.paddingLeft = '15px';
+        spanMonth.addEventListener('click', () => {
+          setTimeout(() => {
+            const months = document.querySelectorAll('.rmdp-ym .rmdp-day span')
+            months.forEach((month) => {
+              month.style.width = '60px';
+            month.style.height = 'auto';
+            month.style.borderRadius = '12px';
+            })
+            
+          },50)
+        })
+      }
+      if (spanYear) {
+        spanYear.style.paddingRight = '15px';
+        spanYear.addEventListener('click', () => {
+          setTimeout(() => {
+            const months = document.querySelectorAll('.rmdp-ym .rmdp-day span')
+            months.forEach((month) => {
+              month.style.width = '60px';
+            month.style.height = 'auto';
+            month.style.borderRadius = '12px';
+            })
+          },50)
+        })
+      }
+    }
   }, 50); // wait a bit for DOM
 
   return () => clearTimeout(timeout);

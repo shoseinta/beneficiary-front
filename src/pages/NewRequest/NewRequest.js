@@ -18,7 +18,6 @@ function NewRequest() {
     duration,
     typeLayerOne,
     typeLayerTwo,
-    setActiveEndpoint,
   } = useLookup();
   const [files, setFiles] = useState([]);
   const [isLoadingButton, setIsLoadingButton] = useState(false);
@@ -126,7 +125,6 @@ function NewRequest() {
       }
 
       setSubmitSuccess(true);
-      setActiveEndpoint(0);
       setIsLoadingButton(false);
       setTimeout(() => {
         setSubmitSuccess(false);

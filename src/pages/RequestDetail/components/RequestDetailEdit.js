@@ -36,7 +36,94 @@ function RequestDetailEdit({
   files,
   setFiles,
 }) {
+  const [inputSelected, setInputSelected] = useState(false);
   const [dateSelected, setDateSelected] = useState(false);
+  useEffect(() => {
+    const clickedInput = () => {
+      setInputSelected(true);
+    setTimeout(() => setInputSelected(false), 10);
+    }
+    document.body.addEventListener('click', clickedInput);
+
+    return () => {
+      document.body.removeEventListener('click', clickedInput);
+    }
+  })
+ useEffect(() => {
+  if (!dateSelected) return;
+  const timeout = setTimeout(() => {
+    const leftArrow = document.querySelector('.rmdp-left i');
+    const rightArrow = document.querySelector('.rmdp-right i');
+    // const disables = document.querySelectorAll('.rmdp-day.rmdp-disabled');
+    // if(disables.length > 0) {
+    //   disables.forEach((item) => {
+    //     item.parentElement.removeChild(item);
+    //   });
+    // }
+    const week = document.querySelector('.rmdp-week')
+    if (week) {
+      week.querySelectorAll('.rmdp-week-day').forEach((item) => {
+        item.style.textAlign = 'center';
+      })
+    }
+    const spans = document.querySelectorAll('.rmdp-day span');
+    if (spans.length > 0) {
+      spans.forEach((item) => {
+        item.style.position = 'relative';
+        item.style.top = '0';
+        item.style.left = '0';
+        item.style.right = '0';
+      });
+    }
+    // const arrows = document.querySelectorAll('.rmdp-arrow');
+    // if (arrows.length > 0) {
+    //   arrows.forEach((item) => {
+    //     item.style.margin = '0';
+    //   });
+    // }
+    // const leftArrowI = document.querySelector('.rmdp-left i');
+    // const rightArrowI = document.querySelector('.rmdp-right i');
+    // if (leftArrowI) leftArrowI.style.margin = '0';
+    if (leftArrow) leftArrow.style.webkitTransform = 'rotate(-45deg)';
+    // if (rightArrowI) rightArrowI.style.margin = '0';
+    if (rightArrow) rightArrow.style.webkitTransform = 'rotate(135deg)';
+
+    const header = document.querySelector('.rmdp-header-values');
+    if (header) {
+      const spanMonth = document.querySelectorAll('.rmdp-header-values span')[0];
+      const spanYear = document.querySelectorAll('.rmdp-header-values span')[1];
+      if (spanMonth) {
+        spanMonth.style.paddingLeft = '15px';
+        spanMonth.addEventListener('click', () => {
+          setTimeout(() => {
+            const months = document.querySelectorAll('.rmdp-ym .rmdp-day span')
+            months.forEach((month) => {
+              month.style.width = '60px';
+            month.style.height = 'auto';
+            month.style.borderRadius = '12px';
+            })
+            
+          },50)
+        })
+      }
+      if (spanYear) {
+        spanYear.style.paddingRight = '15px';
+        spanYear.addEventListener('click', () => {
+          setTimeout(() => {
+            const months = document.querySelectorAll('.rmdp-ym .rmdp-day span')
+            months.forEach((month) => {
+              month.style.width = '60px';
+            month.style.height = 'auto';
+            month.style.borderRadius = '12px';
+            })
+          },50)
+        })
+      }
+    }
+  }, 50); // wait a bit for DOM
+
+  return () => clearTimeout(timeout);
+}, [dateSelected]);
   useEffect(() => {
   if (!dateSelected) return;
   const timeout = setTimeout(() => {
@@ -143,6 +230,8 @@ function RequestDetailEdit({
   };
 
   const handleRemoveFile = (indexToRemove) => {
+    setInputSelected(true);
+    setTimeout(() => setInputSelected(false), 10);
     setFiles1((prevfiles1) => {
       const updated = [...prevfiles1];
       updated.splice(indexToRemove, 1);
@@ -523,6 +612,8 @@ useEffect(() => {
   // },[finishEdit])
 
   const handleAmountUpdate = (event) => {
+    setInputSelected(true);
+    setTimeout(() => setInputSelected(false), 10);
     setBlur((pre) => ({ ...pre, amount: false }));
     // Remove Persian digits and commas from the input value
     const englishValue = event.target.value
@@ -541,6 +632,8 @@ useEffect(() => {
   };
 
   const handleDurationUpdate = (event) => {
+     setInputSelected(true);
+    setTimeout(() => setInputSelected(false), 10);
     setUpdateData((pre) => {
       if(Number(event.target.value) === 3){
         return {
@@ -558,18 +651,24 @@ useEffect(() => {
   };
 
   const handleTitleChange = (event) => {
+    setInputSelected(true);
+    setTimeout(() => setInputSelected(false), 10);
     setUpdateData((pre) => {
       return { ...pre, beneficiary_request_title: event.target.value };
     });
   };
 
   const handleDescriptionChange = (event) => {
+    setInputSelected(true);
+    setTimeout(() => setInputSelected(false), 10);
     setUpdateData((pre) => {
       return { ...pre, beneficiary_request_description: event.target.value };
     });
   };
 
   const handleLimitChange = (event) => {
+    setInputSelected(true);
+    setTimeout(() => setInputSelected(false), 10);
     setBlur((pre) => ({ ...pre, limit: false }));
     let englishValue = event.target.value
       .split('')
@@ -622,126 +721,138 @@ useEffect(() => {
     event.target.value = displayValue;
   };
 
-  // useEffect(() => {
-  //   if (editApplied) {
-  //     document.documentElement.classList.add('delete-overlay-container-html');
-  //     document.body.classList.add('delete-overlay-container-html');
-  //     document
-  //       .getElementById('form1')
-  //       .classList.add('delete-overlay-container-form');
-  //     document
-  //       .getElementById('form2')
-  //       .classList.add('delete-overlay-container-form');
-  //     document
-  //       .getElementById('dropzone-div')
-  //       .classList.add('delete-overlay-container-form');
-  //     const inputs = document.getElementsByTagName('input');
-  //     const selects = document.getElementsByTagName('select');
-  //     const textareas = document.getElementsByTagName('textarea');
-  //     if (files1.length > 0) {
-  //       const filePreviews =
-  //         document.getElementsByClassName('file-previews')[0];
-  //       filePreviews.classList.add('file-previews-transparent');
-  //       const filePreview = document.getElementsByClassName('file-preview');
+  useEffect(() => {
+    const input = document.getElementById('observe-time2');
+    if (!input) return;
+    if(!updateData?.beneficiary_request_duration_recurring?.beneficiary_request_duration_recurring_limit) return;
+    let span = document.getElementById('duration-unit-span');
+    if(span) {
+      span.parentElement.removeChild(span); // Remove the existing span if it exists
+    }
+    if (!span) {
+      span = document.createElement('span');
+      span.id = 'duration-unit-span';
+      span.innerText = 'دوره ماهانه';
+      span.style.position = 'absolute';
+      span.style.whiteSpace = 'nowrap';
+      span.style.pointerEvents = 'none';
+      span.style.fontSize = '14px';
+      span.style.color = 'black';
+      document.body.appendChild(span);
+    }
 
-  //       for (var i = 0; i < filePreview.length; i++) {
-  //         filePreview[i].classList.add('file-preview-transparent');
-  //       }
-  //     }
+    const updatePosition = () => {
+      const rect = input.getBoundingClientRect();
+      const computedStyle = getComputedStyle(input);
+      const paddingLeft = parseFloat(computedStyle.paddingLeft) || 0;
+      const paddingRight = parseFloat(computedStyle.paddingRight) || 0;
+      const inputWidth = rect.width
+      // Create a canvas to measure the rendered width of the input value
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      // Use the computed font properties for accurate measurement
+      ctx.font = computedStyle.font || `${computedStyle.fontSize} ${computedStyle.fontFamily}`;
+      // If the value is empty, use placeholder for width estimation; otherwise, use value
+      const valueToMeasure = input.value || input.placeholder || '';
+      const textWidth = ctx.measureText(valueToMeasure).width;
+      // Calculate left position: input's left + left padding + text width + small padding (e.g., 4px)
+      const left =
+        rect.right -
+        paddingRight -
+        textWidth -
+        70  +
+        window.scrollX;
+      // Vertically center the span to the input field
+      const top =
+        rect.top +
+        rect.height / 2 -
+        span.offsetHeight / 2 +
+        window.scrollY;
+      span.style.top = `${top}px`;
+      span.style.left = `${left}px`;
+    };
 
-  //     if (files1.length === 0) {
-  //       const uploadContent =
-  //         document.getElementsByClassName('upload-content')[0];
-  //       uploadContent.classList.add('file-previews-transparent');
-  //     }
+    updatePosition();
 
-  //     for (var i = 0; i < inputs.length; i++) {
-  //       inputs[i].classList.add('delete-overlay-container-form');
-  //     }
-  //     for (var i = 0; i < selects.length; i++) {
-  //       selects[i].classList.add('delete-overlay-container-form');
-  //     }
-  //     for (var i = 0; i < textareas.length; i++) {
-  //       textareas[i].classList.add('delete-overlay-container-form');
-  //     }
-  //   } else {
-  //     if (
-  //       document.documentElement?.classList?.contains(
-  //         'delete-overlay-container-html'
-  //       )
-  //     ) {
-  //       document.documentElement.classList.remove(
-  //         'delete-overlay-container-html'
-  //       );
-  //       document.body.classList.remove('delete-overlay-container-html');
-  //     }
-  //     if (
-  //       document
-  //         .getElementById('form1')
-  //         ?.classList?.contains('delete-overlay-container-form')
-  //     ) {
-  //       document
-  //         .getElementById('form1')
-  //         .classList.remove('delete-overlay-container-form');
-  //     }
-  //     if (
-  //       document
-  //         .getElementById('form2')
-  //         ?.classList?.contains('delete-overlay-container-form')
-  //     ) {
-  //       document
-  //         .getElementById('form2')
-  //         .classList.remove('delete-overlay-container-form');
-  //     }
-  //     if (
-  //       document
-  //         .getElementById('dropzone-div')
-  //         ?.classList?.contains('delete-overlay-container-form')
-  //     ) {
-  //       document
-  //         .getElementById('dropzone-div')
-  //         .classList.remove('delete-overlay-container-form');
-  //     }
-  //     const inputs = document.getElementsByTagName('input');
-  //     const selects = document.getElementsByTagName('select');
-  //     const textareas = document.getElementsByTagName('textarea');
-  //     if (inputs[0]?.classList?.contains('delete-overlay-container-form')) {
-  //       for (var i = 0; i < inputs.length; i++) {
-  //         inputs[i].classList.remove('delete-overlay-container-form');
-  //       }
-  //     }
+    window.addEventListener('resize', updatePosition);
+    input.addEventListener('input', updatePosition);
 
-  //     if (selects[0]?.classList?.contains('delete-overlay-container-form')) {
-  //       for (var i = 0; i < selects.length; i++) {
-  //         selects[i].classList.remove('delete-overlay-container-form');
-  //       }
-  //     }
+    return () => {
+      window.removeEventListener('resize', updatePosition);
+      input.removeEventListener('input', updatePosition);
+      if (span) {
+        span.remove();
+      }
+    };
+  }, [updateData,inputSelected]);
 
-  //     if (textareas[0]?.classList?.contains('delete-overlay-container-form')) {
-  //       for (var i = 0; i < textareas.length; i++) {
-  //         textareas[i].classList.remove('delete-overlay-container-form');
-  //       }
-  //     }
-  //     const filePreviews = document.getElementsByClassName('file-previews')[0];
-  //     if (filePreviews?.classList?.contains('file-previews-transparent')) {
-  //       filePreviews.classList.remove('file-previews-transparent');
-  //     }
+  useEffect(() => {
+    const input = document.getElementById('observe-cash');
+    if (!input) return;
+    if(!updateData.beneficiary_request_amount) return;
+    let span = document.getElementById('amount-unit-span');
+    if (span) {
+      span.parentElement.removeChild(span); // Remove the existing span if it exists
+    }
+    if (!span) {
+      span = document.createElement('span');
+      span.id = 'amount-unit-span';
+      span.innerText = "تومان";
+      span.style.position = 'absolute';
+      span.style.whiteSpace = 'nowrap';
+      span.style.pointerEvents = 'none';
+      span.style.fontSize = '14px';
+      span.style.color = 'black';
+      document.body.appendChild(span);
+    }
 
-  //     const filePreview = document.getElementsByClassName('file-preview');
-  //     if (filePreview[0]?.classList?.contains('file-preview-transparent')) {
-  //       for (var i = 0; i < filePreview.length; i++) {
-  //         filePreview[i].classList.remove('file-preview-transparent');
-  //       }
-  //     }
+    const updatePositionAmount = () => {
+      const rect = input.getBoundingClientRect();
+      const computedStyle = getComputedStyle(input);
+      const paddingLeft = parseFloat(computedStyle.paddingLeft) || 0;
+      const paddingRight = parseFloat(computedStyle.paddingRight) || 0;
+      const inputWidth = rect.width
+      // Create a canvas to measure the rendered width of the input value
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      // Use the computed font properties for accurate measurement
+      ctx.font = computedStyle.font || `${computedStyle.fontSize} ${computedStyle.fontFamily}`;
+      // If the value is empty, use placeholder for width estimation; otherwise, use value
+      const valueToMeasure = input.value || input.placeholder || '';
+      const textWidth = ctx.measureText(valueToMeasure).width;
+      // Calculate left position: input's left + left padding + text width + small padding (e.g., 4px)
+      const left =
+        rect.right -
+        paddingRight -
+        textWidth -
+        40  +
+        window.scrollX;
+      // Vertically center the span to the input field
+      const top =
+        rect.top +
+        rect.height / 2 -
+        span.offsetHeight / 2 +
+        window.scrollY;
+      span.style.top = `${top}px`;
+      span.style.left = `${left}px`;
+    };
 
-  //     const uploadContent =
-  //       document.getElementsByClassName('upload-content')[0];
-  //     if (uploadContent?.classList?.contains('file-previews-transparent')) {
-  //       uploadContent.classList.remove('file-previews-transparent');
-  //     }
-  //   }
-  // }, [editApplied]);
+    updatePositionAmount();
+    if (span.getBoundingClientRect().left < input.getBoundingClientRect().left) {
+      span.innerText = "";
+    }
 
+    window.addEventListener('resize', updatePositionAmount);
+    input.addEventListener('input', updatePositionAmount);
+
+    return () => {
+      window.removeEventListener('resize', updatePositionAmount);
+      input.removeEventListener('input', updatePositionAmount);
+      if (span) {
+        span.remove();
+      }
+    };
+  }, [updateData, inputSelected]);
   return (
     <>
       <div className="request-detail-edit-container">
@@ -779,10 +890,13 @@ useEffect(() => {
                   <select
                     id="observe-time1"
                     value={updateData.beneficiary_request_duration}
-                    onChange={handleDurationUpdate}
+                    onChange={
+                      handleDurationUpdate
+                     
+                    }
                   >
-                    <option value={1}>به صورت یکبار</option>
-                    <option value={2}>به صورت ماهانه</option>
+                    <option value={1} >به صورت یکبار</option>
+                    <option value={2} >به صورت ماهانه</option>
                     {requestData.beneficiary_request_type_layer1 === "Service" &&
                     <option value={3}>به طور دائمی</option>}
                   </select>
@@ -845,6 +959,7 @@ useEffect(() => {
                           تعداد دوره‌های درخواست:
                         </label>
                         <input
+                          onClick={() => setInputSelected(true)}
                           type="text"
                           id="observe-time2"
                           value={

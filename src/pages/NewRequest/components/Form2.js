@@ -9,6 +9,7 @@ import persian from 'react-date-object/calendars/persian';
 import persian_fa from 'react-date-object/locales/persian_fa';
 import DateObject from 'react-date-object';
 import FormHeader from './FormHeader';
+import { doc } from 'prettier';
 
 function Form2({
   setOneTimeData,
@@ -33,18 +34,78 @@ function Form2({
     return num.toString().replace(/\d/g, (x) => persianDigits[x]);
   };
   const [dateSelected, setDateSelected] = useState(false);
-  useEffect(() => {
-    console.log(dateSelected);
-  }, [dateSelected]);
+
   useEffect(() => {
   if (!dateSelected) return;
   const timeout = setTimeout(() => {
     const leftArrow = document.querySelector('.rmdp-left i');
     const rightArrow = document.querySelector('.rmdp-right i');
-    console.log(leftArrow, rightArrow);
-
+    // const disables = document.querySelectorAll('.rmdp-day.rmdp-disabled');
+    // if(disables.length > 0) {
+    //   disables.forEach((item) => {
+    //     item.parentElement.removeChild(item);
+    //   });
+    // }
+    const week = document.querySelector('.rmdp-week')
+    if (week) {
+      week.querySelectorAll('.rmdp-week-day').forEach((item) => {
+        item.style.textAlign = 'center';
+      })
+    }
+    const spans = document.querySelectorAll('.rmdp-day span');
+    if (spans.length > 0) {
+      spans.forEach((item) => {
+        item.style.position = 'relative';
+        item.style.top = '0';
+        item.style.left = '0';
+        item.style.right = '0';
+      });
+    }
+    // const arrows = document.querySelectorAll('.rmdp-arrow');
+    // if (arrows.length > 0) {
+    //   arrows.forEach((item) => {
+    //     item.style.margin = '0';
+    //   });
+    // }
+    // const leftArrowI = document.querySelector('.rmdp-left i');
+    // const rightArrowI = document.querySelector('.rmdp-right i');
+    // if (leftArrowI) leftArrowI.style.margin = '0';
     if (leftArrow) leftArrow.style.webkitTransform = 'rotate(-45deg)';
+    // if (rightArrowI) rightArrowI.style.margin = '0';
     if (rightArrow) rightArrow.style.webkitTransform = 'rotate(135deg)';
+
+    const header = document.querySelector('.rmdp-header-values');
+    if (header) {
+      const spanMonth = document.querySelectorAll('.rmdp-header-values span')[0];
+      const spanYear = document.querySelectorAll('.rmdp-header-values span')[1];
+      if (spanMonth) {
+        spanMonth.style.paddingLeft = '15px';
+        spanMonth.addEventListener('click', () => {
+          setTimeout(() => {
+            const months = document.querySelectorAll('.rmdp-ym .rmdp-day span')
+            months.forEach((month) => {
+              month.style.width = '60px';
+            month.style.height = 'auto';
+            month.style.borderRadius = '12px';
+            })
+            
+          },50)
+        })
+      }
+      if (spanYear) {
+        spanYear.style.paddingRight = '15px';
+        spanYear.addEventListener('click', () => {
+          setTimeout(() => {
+            const months = document.querySelectorAll('.rmdp-ym .rmdp-day span')
+            months.forEach((month) => {
+              month.style.width = '60px';
+            month.style.height = 'auto';
+            month.style.borderRadius = '12px';
+            })
+          },50)
+        })
+      }
+    }
   }, 50); // wait a bit for DOM
 
   return () => clearTimeout(timeout);
@@ -316,6 +377,133 @@ function Form2({
 useEffect(() => {
     setDateSelected(false);
   },[jalaliValue])
+
+  useEffect(() => {
+    const input = document.getElementById('time-layer2-recurring-id');
+    if (!input) return;
+    if(!recurringData.beneficiary_request_duration_recurring_limit) return;
+    let span = document.getElementById('duration-unit-span');
+    if (!span) {
+      span = document.createElement('span');
+      span.id = 'duration-unit-span';
+      span.innerText = 'دوره ماهانه';
+      span.style.position = 'absolute';
+      span.style.whiteSpace = 'nowrap';
+      span.style.pointerEvents = 'none';
+      span.style.fontSize = '14px';
+      span.style.color = 'black';
+      document.body.appendChild(span);
+    }
+
+    const updatePosition = () => {
+      const rect = input.getBoundingClientRect();
+      const computedStyle = getComputedStyle(input);
+      const paddingLeft = parseFloat(computedStyle.paddingLeft) || 0;
+      const paddingRight = parseFloat(computedStyle.paddingRight) || 0;
+      const inputWidth = rect.width
+      // Create a canvas to measure the rendered width of the input value
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      // Use the computed font properties for accurate measurement
+      ctx.font = computedStyle.font || `${computedStyle.fontSize} ${computedStyle.fontFamily}`;
+      // If the value is empty, use placeholder for width estimation; otherwise, use value
+      const valueToMeasure = input.value || input.placeholder || '';
+      const textWidth = ctx.measureText(valueToMeasure).width;
+      // Calculate left position: input's left + left padding + text width + small padding (e.g., 4px)
+      const left =
+        rect.left +
+        inputWidth/2 -
+        textWidth -
+        70  +
+        window.scrollX;
+      // Vertically center the span to the input field
+      const top =
+        rect.top +
+        rect.height / 2 -
+        span.offsetHeight / 2 +
+        window.scrollY;
+      span.style.top = `${top}px`;
+      span.style.left = `${left}px`;
+    };
+
+    updatePosition();
+
+    window.addEventListener('resize', updatePosition);
+    input.addEventListener('input', updatePosition);
+
+    return () => {
+      window.removeEventListener('resize', updatePosition);
+      input.removeEventListener('input', updatePosition);
+      if (span) {
+        span.remove();
+      }
+    };
+  }, [recurringData]);
+
+  useEffect(() => {
+    const input = document.getElementById('cash-amount');
+    if (!input) return;
+    if(!requestData.beneficiary_request_amount) return;
+    let span = document.getElementById('amount-unit-span');
+    if (!span) {
+      span = document.createElement('span');
+      span.id = 'amount-span';
+      span.innerText = "تومان";
+      span.style.position = 'absolute';
+      span.style.whiteSpace = 'nowrap';
+      span.style.pointerEvents = 'none';
+      span.style.fontSize = '14px';
+      span.style.color = 'black';
+      document.body.appendChild(span);
+    }
+
+    const updatePositionAmount = () => {
+      const rect = input.getBoundingClientRect();
+      const computedStyle = getComputedStyle(input);
+      const paddingLeft = parseFloat(computedStyle.paddingLeft) || 0;
+      const paddingRight = parseFloat(computedStyle.paddingRight) || 0;
+      const inputWidth = rect.width
+      // Create a canvas to measure the rendered width of the input value
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      // Use the computed font properties for accurate measurement
+      ctx.font = computedStyle.font || `${computedStyle.fontSize} ${computedStyle.fontFamily}`;
+      // If the value is empty, use placeholder for width estimation; otherwise, use value
+      const valueToMeasure = input.value || input.placeholder || '';
+      const textWidth = ctx.measureText(valueToMeasure).width;
+      // Calculate left position: input's left + left padding + text width + small padding (e.g., 4px)
+      const left =
+        rect.left +
+        inputWidth/2 -
+        textWidth/2 -
+        40  +
+        window.scrollX;
+      // Vertically center the span to the input field
+      const top =
+        rect.top +
+        rect.height / 2 -
+        span.offsetHeight / 2 +
+        window.scrollY;
+      span.style.top = `${top}px`;
+      span.style.left = `${left}px`;
+    };
+
+    updatePositionAmount();
+    if (span.getBoundingClientRect().left < input.getBoundingClientRect().left) {
+      span.innerText = "";
+    }
+
+    window.addEventListener('resize', updatePositionAmount);
+    input.addEventListener('input', updatePositionAmount);
+
+    return () => {
+      window.removeEventListener('resize', updatePositionAmount);
+      input.removeEventListener('input', updatePositionAmount);
+      if (span) {
+        span.remove();
+      }
+    };
+  }, [requestData.beneficiary_request_amount]);
   useEffect(() => {
     document.documentElement.classList.add('form2-html');
     document.body.classList.add('form2-body');
@@ -425,7 +613,7 @@ useEffect(() => {
                   }));
                 }}
                 calendar={persian}
-                locale={persian_fa_custom}
+                locale={persian_fa}
                 arrow={false}
                 calendarPosition="bottom-center"
                 placeholder="تاریخ را انتخاب کنید"

@@ -335,7 +335,7 @@
   justify-content: flex-end;
   gap: 15px;
 }
-.family-overlay-container button {
+.family-overlay-container button:not(.rmdp-arrow-container) {
   display: flex;
   justify-content: center;
   align-items: center;
