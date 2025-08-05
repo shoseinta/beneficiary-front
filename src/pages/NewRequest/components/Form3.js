@@ -22,7 +22,20 @@ function Form3({ requestData, setRequestData, setStep, files, setFiles }) {
 
   const onDrop = useCallback(
     (acceptedFiles) => {
-      setFiles((prev) => [...prev, ...acceptedFiles]);
+      setFiles((prev) => {
+        const combined = [...prev];
+        acceptedFiles.forEach((newFile) => {
+          const isDuplicate = combined.some(
+            (existingFile) =>
+              existingFile.name === newFile.name &&
+              existingFile.lastModified === newFile.lastModified
+          );
+          if (!isDuplicate) {
+            combined.push(newFile);
+          }
+        });
+        return combined;
+      });
 
       if (acceptedFiles.length > 0) {
         setIsCreatingZip(true);

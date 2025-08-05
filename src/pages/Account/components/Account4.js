@@ -202,29 +202,38 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
   
     const onDrop = useCallback(
       (acceptedFiles) => {
-        setFiles((prev) => [...prev, ...acceptedFiles]);
-  
-        if (acceptedFiles.length > 0) {
-          setIsCreatingZip(true);
-          const zip = new JSZip();
-  
-          // Add existing and new files to zip
-          files.forEach((file) => zip.file(file.name, file));
-          acceptedFiles.forEach((file) => zip.file(file.name, file));
-  
-          zip
-            .generateAsync({ type: 'blob' })
-            .then((zipContent) => {
-              const zipFile = new File([zipContent], 'documents.zip');
-              setAdditionalData((prev) => ({
-                ...prev,
-                beneficiary_user_additional_info_document: zipFile,
-              }));
-            })
-            .finally(() => setIsCreatingZip(false));
-        }
+        setFiles((prev) => {
+          const newFiles = [...prev];
+          acceptedFiles.forEach((file) => {
+            const isDuplicate = newFiles.some(
+              (f) => f.name === file.name && f.lastModified === file.lastModified
+            );
+            if (!isDuplicate) {
+              newFiles.push(file);
+            }
+          });
+
+          if (newFiles.length > 0) {
+            setIsCreatingZip(true);
+            const zip = new JSZip();
+            newFiles.forEach((file) => zip.file(file.name, file));
+
+            zip
+              .generateAsync({ type: 'blob' })
+              .then((zipContent) => {
+                const zipFile = new File([zipContent], 'documents.zip');
+                setAdditionalData((prev) => ({
+                  ...prev,
+                  beneficiary_user_additional_info_document: zipFile,
+                }));
+              })
+              .finally(() => setIsCreatingZip(false));
+          }
+
+          return newFiles;
+        });
       },
-      [files, setFiles, setAdditionalData]
+      [setFiles, setAdditionalData]
     );
   
     const { getRootProps, getInputProps, isDragActive } = useDropzone({

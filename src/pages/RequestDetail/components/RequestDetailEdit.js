@@ -155,14 +155,22 @@ function RequestDetailEdit({
   }, [isLoadingButtonDelete, editApplied]);
   const onDrop = useCallback((acceptedfiles1) => {
     setFiles1((prev) => {
-      const newFiles = [...prev, ...acceptedfiles1];
+      // Filter out duplicates by name and lastModified
+      const newFiles = [...prev];
+      acceptedfiles1.forEach((file) => {
+        const isDuplicate = newFiles.some(
+          (f) => f.name === file.name && f.lastModified === file.lastModified
+        );
+        if (!isDuplicate) {
+          newFiles.push(file);
+        }
+      });
       if (acceptedfiles1.length > 0) {
         setIsCreatingZip(true);
         const zip = new JSZip();
 
-        // Add existing and new files1 to zip
-        files1.forEach((file) => zip.file(file.name, file));
-        acceptedfiles1.forEach((file) => zip.file(file.name, file));
+        // Only add the updated newFiles list (without duplicates)
+        newFiles.forEach((file) => zip.file(file.name, file));
 
         zip
           .generateAsync({ type: 'blob' })

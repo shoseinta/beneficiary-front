@@ -89,14 +89,25 @@ useEffect(() => {
 
   const [files, setFiles] = useState([]);
   const [childFiles, setChildFiles] = useState([]);
+        
   const onDrop = useCallback(
     (acceptedFiles) => {
       if (acceptedFiles.length > 0) {
         setChildData((pre) => {
-          const document = pre.beneficiary_request_child_document;
+          const combined = pre.beneficiary_request_child_document;
+          acceptedFiles.forEach((newFile) => {
+          const isDuplicate = combined.some(
+            (existingFile) =>
+              existingFile.name === newFile.name &&
+              existingFile.lastModified === newFile.lastModified
+          );
+          if (!isDuplicate) {
+            combined.push(newFile);
+          }
+        });
           return {
             ...pre,
-            beneficiary_request_child_document: [...document, ...acceptedFiles],
+            beneficiary_request_child_document: [...combined],
           };
         });
       }
