@@ -94,6 +94,13 @@ function Account2({
   const [account1Data, setAccount1Data] = useState(accountData);
   const [submit, setSubmit] = useState(false);
   const todayJalali = new DateObject({ calendar: persian, locale: persian_fa });
+  const minDate = new DateObject({
+  calendar: persian,
+  locale: persian_fa,
+  year: todayJalali.year - 130,
+  month: 1, // Month 1 (Farvardin)
+  day: 1,   // Day 1
+});
   const [jalaliValue, setJalaliValue] = useState(null);
   useEffect(() => {
     setDateSelected(false);
@@ -409,6 +416,7 @@ function Account2({
               inputClass="custom-datepicker-input"
               id="account-bd"
               maxDate={todayJalali}
+              minDate={minDate}
               onOpenPickNewDate={false}
               onOpen={() => setDateSelected(true)}
                           onClose={() => setDateSelected(false)}

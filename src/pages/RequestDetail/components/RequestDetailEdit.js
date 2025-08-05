@@ -625,11 +625,14 @@ useEffect(() => {
     setTimeout(() => setInputSelected(false), 10);
     setBlur((pre) => ({ ...pre, amount: false }));
     // Remove Persian digits and commas from the input value
-    const englishValue = event.target.value
+    var englishValue = event.target.value
       .replace(/[۰-۹]/g, (d) =>
         ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'].indexOf(d)
       )
       .replace(/٬/g, '');
+    if (englishValue !== '' && Number(englishValue) > 1000000000) {
+      englishValue = '1000000000'; // Enforce max limit of 1 billion
+    }
 
     setUpdateData((pre) => {
       if (englishValue !== '') {

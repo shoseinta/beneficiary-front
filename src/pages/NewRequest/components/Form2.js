@@ -352,7 +352,10 @@ function Form2({
       .replace(/\D/g, '');
 
     // Update the state with the English number (or empty string)
-    const inputValue = englishValue === '' ? null : englishValue;
+    var inputValue = englishValue === '' ? null : englishValue;
+    if (inputValue && Number(inputValue) > 1000000000) {
+     inputValue = '1000000000' // Enforce max limit of 1 billion
+    }
     if (!inputValue) {
       setRequestData((pre) => {
         return { ...pre, beneficiary_request_amount: '' };
@@ -363,7 +366,7 @@ function Form2({
       });
     }
     const formattedValue =
-      inputValue === '' ? '' : toPersianDigits(addCommas(englishValue));
+      inputValue === '' ? '' : toPersianDigits(addCommas(inputValue));
     setDisplayValue(formattedValue);
     // Update the displayed value with Persian digits (no commas)
     const displayValue =

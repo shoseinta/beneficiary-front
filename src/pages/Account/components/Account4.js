@@ -371,6 +371,13 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
     setDateSelected(false);
   },[jalaliValue])
   const todayJalali = new DateObject({ calendar: persian, locale: persian_fa });
+  const minDate = new DateObject({
+  calendar: persian,
+  locale: persian_fa,
+  year: todayJalali.year - 130,
+  month: 1, // Month 1 (Farvardin)
+  day: 1,   // Day 1
+});
 
   const persian_fa_custom = {
     months: [
@@ -967,6 +974,7 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
                   placeholder="تاریخ را انتخاب کنید"
                   inputClass="custom-datepicker-input"
                   maxDate={todayJalali}
+                  minDate={minDate}
                   onOpen={() => setDateSelected(true)}
                           onClose={() => setDateSelected(false)}
                           onFocusedDateChange={() => setDateSelected(true)}
