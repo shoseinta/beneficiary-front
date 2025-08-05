@@ -1,6 +1,6 @@
 import Header from '../../../components/header/Header';
 import NavigationBar from '../../../components/navigationBar/NavigationBar';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import './Account4.css';
 import DatePicker from 'react-multi-date-picker';
 import persian from 'react-date-object/calendars/persian';
@@ -20,6 +20,7 @@ import {
 import LoadingButton from '../../../components/loadingButton/LoadingButton';
 
 function Account4({ accountData, setAccountData, setStep, setLoad }) {
+  const inputRef = useRef();
   const [isLoadingButton, setIsLoadingButton] = useState(false)
     const [dateSelected, setDateSelected] = useState(false);
   useEffect(() => {
@@ -1114,10 +1115,34 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
                   <div
                                 {...getRootProps()}
                                 className={`dropzone ${isDragActive ? 'active' : ''}`}
+                                onClick={(e) => {
+                const uploadArea = document.querySelector('.upload-content-with-files')
+                if(uploadArea){
+                  const rect = uploadArea.getBoundingClientRect();
+                  const isInUploadArea = (
+                    e.clientX >= rect.left &&
+                    e.clientX <= rect.right &&
+                    e.clientY >= rect.top &&
+                    e.clientY <= rect.bottom
+                  );
+                  if(!isInUploadArea){
+                    return;
+                  }
+                  else {
+                    if (inputRef.current) {
+            inputRef.current.click();
+          }
+                  }
+                }else {
+                  if (inputRef.current) {
+                    inputRef.current.click();
+                  }
+                }
+              }}
                               >
                                 {files.length === 0 && (
                                   <>
-                                    <input {...getInputProps()} />
+                                    <input {...getInputProps()} ref={inputRef} width={'100%'} height={'100%'}/>
                                     <div className="upload-content">
                                       <svg width="7" height="14" viewBox="0 0 7 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                       <path d="M6.04545 3.18182V10.5C6.04545 11.9064 4.90636 13.0455 3.5 13.0455C2.09364 13.0455 0.954545 11.9064 0.954545 10.5V2.54545C0.954545 1.66727 1.66727 0.954545 2.54545 0.954545C3.42364 0.954545 4.13636 1.66727 4.13636 2.54545V9.22727C4.13636 9.57727 3.85 9.86364 3.5 9.86364C3.15 9.86364 2.86364 9.57727 2.86364 9.22727V3.18182H1.90909V9.22727C1.90909 10.1055 2.62182 10.8182 3.5 10.8182C4.37818 10.8182 5.09091 10.1055 5.09091 9.22727V2.54545C5.09091 1.13909 3.95182 0 2.54545 0C1.13909 0 0 1.13909 0 2.54545V10.5C0 12.4345 1.56545 14 3.5 14C5.43455 14 7 12.4345 7 10.5V3.18182H6.04545Z" fill="black"/>
@@ -1133,8 +1158,9 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
                                 )}
                                 {files.length > 0 && (
                                   <div className="upload-files-wrapper">
-                                    <input {...getInputProps()} />
+                                    
                                     <div className="upload-content-with-files">
+                                      <input {...getInputProps()} width={'100%'} height={'100%'} ref={inputRef}/>
                                       <svg width="7" height="14" viewBox="0 0 7 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                       <path d="M6.04545 3.18182V10.5C6.04545 11.9064 4.90636 13.0455 3.5 13.0455C2.09364 13.0455 0.954545 11.9064 0.954545 10.5V2.54545C0.954545 1.66727 1.66727 0.954545 2.54545 0.954545C3.42364 0.954545 4.13636 1.66727 4.13636 2.54545V9.22727C4.13636 9.57727 3.85 9.86364 3.5 9.86364C3.15 9.86364 2.86364 9.57727 2.86364 9.22727V3.18182H1.90909V9.22727C1.90909 10.1055 2.62182 10.8182 3.5 10.8182C4.37818 10.8182 5.09091 10.1055 5.09091 9.22727V2.54545C5.09091 1.13909 3.95182 0 2.54545 0C1.13909 0 0 1.13909 0 2.54545V10.5C0 12.4345 1.56545 14 3.5 14C5.43455 14 7 12.4345 7 10.5V3.18182H6.04545Z" fill="black"/>
                                       </svg>
@@ -1142,7 +1168,7 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
                                       <p>افزودن</p>
                                     </div>
                   
-                                    <div className="file-previews">
+                                    <div className="file-previews" style={{cursor:"default"}}>
                                       {files.map((file, index) => (
                                         <div key={index} className="file-preview">
                                           <div className="file-info">
