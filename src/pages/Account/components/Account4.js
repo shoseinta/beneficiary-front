@@ -23,6 +23,9 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
   const inputRef = useRef();
   const [isLoadingButton, setIsLoadingButton] = useState(false)
     const [dateSelected, setDateSelected] = useState(false);
+    useEffect(() => {
+      console.log(dateSelected)
+    })
   useEffect(() => {
   if (!dateSelected) return;
   const timeout = setTimeout(() => {
@@ -36,8 +39,12 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
     // }
     const week = document.querySelector('.rmdp-week')
     if (week) {
-      week.querySelectorAll('.rmdp-week-day').forEach((item) => {
+      week.querySelectorAll('.rmdp-week-day').forEach((item,index) => {
         item.style.textAlign = 'center';
+        item.style.fontSize = '8px';
+        if(index === 5){
+          item.style.paddingRight = '2px';
+        }
       })
     }
     const spans = document.querySelectorAll('.rmdp-day span');
@@ -396,11 +403,11 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
     ],
     weekDays: [
       ['شنبه', 'شنبه'],
-      ['یک‌شنبه', 'یک'],
-      ['دوشنبه', 'دو'],
-      ['سه‌شنبه', 'سه'],
-      ['چهارشنبه', 'چهار'],
-      ['پنج‌شنبه', 'پنج'],
+      ['یکشنبه',"یکشنبه"],
+      ['دوشنبه', 'دوشنبه'],
+      ['سه‌شنبه', 'سه‌شنبه'],
+      ['چهارشنبه', 'چهارشنبه'],
+      ['پنجشنبه', 'پنجشنبه'],
       ['جمعه', 'جمعه'],
     ],
     digits: ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'],

@@ -107,7 +107,6 @@
 }
 /* -----------------------------------------requests table style */
 .requests-container .request-table-container {
-  flex: 1;
   display: flex;
   justify-content: center;
   overflow-y: auto;

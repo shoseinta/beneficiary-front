@@ -207,6 +207,7 @@ function Home() {
           setMoreItems={setMoreItems}
         />
       )} */}
+      <div className='main'>
       <div style={{display:"flex",justifyContent:"center",alignItems:"center"}}>
         {carousel1Display && <Carousel
           notification={notifications[0]}
@@ -240,8 +241,7 @@ function Home() {
         <section className="title">ویدئو آموزش استفاده از سامانه</section>
       </section>
 
-      <div className="footer-nav">
-        <div className="footer-container">
+              <div className="footer-container">
           <footer className="footer">
             <h2 id="title">ارتباط با خیریه</h2>
             <section id="key">
@@ -296,6 +296,8 @@ function Home() {
             </section>
           </footer>
         </div>
+</div>
+      <div className="footer-nav">
         <NavigationBar selected={1} />
       </div>
     </div>

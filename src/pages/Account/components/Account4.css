@@ -22,6 +22,7 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  height: 100vh;
   row-gap: 10px;
 }
 .account-container4 .header {
@@ -66,6 +67,7 @@
   flex-direction: column;
   align-items: center;
   row-gap: 10px;
+  overflow-y: auto;
 }
 .account-container4 .main h1 {
   text-align: center;

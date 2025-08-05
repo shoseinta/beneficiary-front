@@ -4,6 +4,7 @@ import RequestsList from './components/RequestsList';
 import { useLookup } from '../../context/LookUpContext';
 import './Requests.css'; // Assuming you have a CSS file for styling
 import Header from '../../components/header/Header';
+import LoadingPage from '../../components/loadingPage/LoadingPage';
 
 function Requests() {
   useEffect(() => {

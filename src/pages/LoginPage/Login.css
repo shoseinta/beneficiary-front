@@ -153,6 +153,10 @@
   color: var(--error-red);
   font-weight: normal;
 }
+.login-container .error1 svg,
+.login-container .error2 svg {
+  margin-left: 5px;
+}
 
 /* Hide default password toggle icon in all browsers */
 input[type='password']::-ms-reveal,

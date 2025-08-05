@@ -20,6 +20,7 @@ import {
 } from 'react-icons/fi';
 import { useDropzone } from 'react-dropzone';
 import { toJalaali } from 'jalaali-js';
+import LoadingPage from '../../components/loadingPage/LoadingPage';
 
 function RequestDetail() {
   const inputRef = useRef();
@@ -763,7 +764,330 @@ useEffect(() => {
   }, [requestData]);
 
   if ((!isDelete && !isEdit && !isChildCreate && !isChildSee && !isChildCreateFinish && !isDeleteFinished) && (!requestData || (requestData?.beneficiary_request_document && loadingFiles) || (childSeeData?.beneficiary_request_child_document && loadingFiles))) {
-    return <p>loading...</p>;
+    return (
+      <>
+      <div className="request-detail-container">
+        <Header />
+        <main className="main">
+          <div className="main-container">
+            <div className="observe-forms">
+              <form id="form1">
+                <div>
+                  <label htmlFor="observe-type1">نوع درخواست:</label>
+                  <input
+                    type="text"
+                    id="observe-type1"
+                    readOnly
+                    value={
+                      requestData?.beneficiary_request_type_layer1
+                        ? convertTypeLayer1(
+                            requestData.beneficiary_request_type_layer1
+                          )
+                        : null
+                    }
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="observe-type2">دسته درخواست:</label>
+                  <input
+                    type="text"
+                    id="observe-type2"
+                    readOnly
+                    value={requestData?.beneficiary_request_type_layer2 || null}
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="observe-time1">نوع زمانی درخواست:</label>
+                  <input
+                    type="text"
+                    id="observe-time1"
+                    readOnly
+                    value={
+                      requestData?.beneficiary_request_duration
+                        ? requestData.beneficiary_request_duration ===
+                          'Permanent'
+                          ? 'به طور دائمی'
+                          : requestData.beneficiary_request_duration ===
+                              'One Time'
+                            ? 'فقط یکبار'
+                            : 'به صورت ماهانه'
+                        : null
+                    }
+                  />
+                </div>
+
+                {requestData?.beneficiary_request_duration !== 'Permanent' && (
+                  <div>
+                    {requestData?.beneficiary_request_duration_onetime && (
+                      <>
+                        <label htmlFor="observe-time2">
+                          تاریخ دریافت درخواست:
+                        </label>
+                        <input
+                          type="text"
+                          id="observe-time2"
+                          readOnly
+                          value={gregorianToJalali(
+                            requestData.beneficiary_request_duration_onetime
+                              .beneficiary_request_duration_onetime_deadline
+                          )}
+                        />
+                      </>
+                    )}
+                    {requestData?.beneficiary_request_duration_recurring && (
+                      <>
+                        <label htmlFor="observe-time2">
+                          تعداد دوره‌های درخواست:
+                        </label>
+                        <input
+                          type="text"
+                          id="observe-time2"
+                          readOnly
+                          value={`${toPersianDigits(requestData.beneficiary_request_duration_recurring.beneficiary_request_duration_recurring_limit)} دوره ماهانه`}
+                        />
+                      </>
+                    )}
+                  </div>
+                )}
+
+                {requestData?.beneficiary_request_duration !== 'Permanent' && requestData?.beneficiary_request_type_layer1 === 'Cash' && (
+                  <div>
+                    <label htmlFor="observe-cash">مبلغ درخواست:</label>
+                    <input
+                      type="text"
+                      id="observe-cash"
+                      readOnly
+                      value={formatPersianNumber(
+                        requestData.beneficiary_request_amount
+                      )}
+                    />
+                  </div>
+                )}
+
+                <div>
+                  <label htmlFor="observe-title">عنوان درخواست:</label>
+                  <input
+                    type="text"
+                    id="observe-title"
+                    readOnly
+                    value={requestData?.beneficiary_request_title}
+                    placeholder={
+                      !requestData?.beneficiary_request_title &&
+                      'اطلاعاتی وجود ندارد'
+                    }
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="observe-description">توضیحات درخواست:</label>
+                  <textarea
+                    id="observe-description"
+                    readOnly
+                    value={requestData?.beneficiary_request_description}
+                    placeholder={
+                      !requestData?.beneficiary_request_description &&
+                      'اطلاعاتی وجود ندارد'
+                    }
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="observe-document" readOnly>مستندات درخواست:</label>
+                  {files.length === 0 && (
+                    <>
+                      <input
+                        type="file"
+                        id="observe-document"
+                        multiple
+                        hidden
+                        readOnly
+                        disabled
+                      />
+                      <label
+                        htmlFor="observe-document"
+                        className="upload-label"
+                        readOnly
+                      >
+                        اطلاعاتی وجود ندارد
+                      </label>
+                    </>
+                  )}
+                  {files.length > 0 && (
+                    <label className='document-label' readOnly>
+                    <div className="file-previews">
+                      
+                      {files.map((file, index) => (
+                        <div key={index} className="file-preview">
+                          <div className="file-info">
+                            {getFileIcon(file)}
+                            <span
+                              className="file-name"
+                              onClick={() =>
+                                window.open(URL.createObjectURL(file))
+                              }
+                            >
+                              {file.name}
+                            </span>
+                            {/* <span className="file-size">{(file.size / 1024 / 1024).toFixed(2)}MB</span> */}
+                          </div>
+                        </div>
+                      ))}
+                      
+                    </div>
+                    </label>
+                  )}
+                </div>
+                
+              </form>
+
+              <form id="form2">
+                <div>
+                  <label htmlFor="observe-created-at">تاریخ ثبت:</label>
+                  <input
+                    type="text"
+                    id="observe-created-at"
+                    readOnly
+                    value={
+                      gregorianToJalali(requestData?.effective_date) || null
+                    }
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="observe-created-by">ایجاد شده توسط:</label>
+                  <input
+                    type="text"
+                    id="observe-created-by"
+                    readOnly
+                    value={
+                      requestData?.beneficiary_request_is_created_by_charity === true
+                        ? 'مدیر سامانه'
+                        : requestData?.beneficiary_request_is_created_by_charity === false ?'شخص کاربر':null
+                    }
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="observe-proccesing-stage">
+                    وضعیت درخواست:
+                  </label>
+                  <input
+                    type="text"
+                    id="observe-proccesing-stage"
+                    readOnly
+                    value={
+                      convertStage(
+                        requestData?.beneficiary_request_processing_stage
+                      ) || null
+                    }
+                  />
+                </div>
+              </form>
+            </div>
+
+            {
+              <div className="buttons-container" style={{visibility:"hidden"}}>
+              <div className="observe-line-button">
+                <div className="observe-child-creation-container">
+                  <button
+                    className="observe-chid-creation"
+                    onClick={() => setIsChildCreate(true)}
+                  >
+                    ایجاد درخواست جزئی
+                    <svg
+                      width="13"
+                      height="14"
+                      viewBox="0 0 13 14"
+                      fill="currentColor"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        clipRule="evenodd"
+                        d="M5.8653 0C6.14368 0.000245073 6.41058 0.111031 6.6073 0.308L9.4927 3.192C9.59027 3.28963 9.66763 3.40554 9.72036 3.5331C9.77309 3.66067 9.80015 3.79737 9.8 3.9354V7C8.68609 7 7.6178 7.4425 6.83015 8.23015C6.0425 9.0178 5.6 10.0861 5.6 11.2V14H1.05C0.771523 14 0.504451 13.8894 0.307538 13.6925C0.110625 13.4955 0 13.2285 0 12.95V1.05C0 0.771523 0.110625 0.504451 0.307538 0.307538C0.504451 0.110625 0.771523 0 1.05 0L5.8653 0ZM2.1 3.5H7.7V4.9H2.1V3.5ZM5.6 6.3H2.1V7.7H5.6V6.3ZM2.1 9.1H4.2V10.5H2.1V9.1ZM12.3949 10.7051C12.2637 10.5738 12.0856 10.5 11.9 10.5H10.5V9.1C10.5 8.91435 10.4263 8.7363 10.295 8.60502C10.1637 8.47375 9.98565 8.4 9.8 8.4C9.61435 8.4 9.4363 8.47375 9.30503 8.60502C9.17375 8.7363 9.1 8.91435 9.1 9.1V10.5H7.7C7.51435 10.5 7.3363 10.5737 7.20503 10.705C7.07375 10.8363 7 11.0143 7 11.2C7 11.3857 7.07375 11.5637 7.20503 11.695C7.3363 11.8262 7.51435 11.9 7.7 11.9H9.1V13.3C9.1 13.4857 9.17375 13.6637 9.30503 13.795C9.4363 13.9262 9.61435 14 9.8 14C9.98565 14 10.1637 13.9262 10.295 13.795C10.4263 13.6637 10.5 13.4857 10.5 13.3V11.9H11.9C12.0384 11.9 12.1737 11.8589 12.2888 11.782C12.4039 11.7051 12.4936 11.5957 12.5466 11.4679C12.5995 11.34 12.6134 11.1992 12.5864 11.0635C12.5594 10.9277 12.4928 10.803 12.3949 10.7051Z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <div className="observe-edit-container">
+                  <button className="observe-edit" onClick={handleEditClick}>
+                    ویرایش درخواست
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 14 14"
+                      fill="currentColor"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M8.60103 4.68222L9.31648 5.39778L2.2708 12.4444H1.55534V11.7289L8.60103 4.68222ZM11.4006 0C11.2062 0 11.004 0.0777778 10.8563 0.225556L9.43314 1.64889L12.3494 4.56556L13.7725 3.14222C14.0758 2.83889 14.0758 2.34889 13.7725 2.04556L11.9528 0.225556C11.7973 0.07 11.6028 0 11.4006 0ZM8.60103 2.48111L0 11.0833V14H2.91626L11.5173 5.39778L8.60103 2.48111Z" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div className="observe-line-button">
+                <div className="observe-child-list-container">
+                  <button
+                    className="observe-child-list"
+                    onClick={() => setIsChildSee(true)}
+                  >
+                    مشاهده درخواست‌های جزئی
+                    <svg
+                      width="14"
+                      height="9"
+                      viewBox="0 0 14 9"
+                      fill="currentColor"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M7 1.2C9.41182 1.2 11.5627 2.478 12.6127 4.5C11.5627 6.522 9.41818 7.8 7 7.8C4.58182 7.8 2.43727 6.522 1.38727 4.5C2.43727 2.478 4.58818 1.2 7 1.2ZM7 0C3.81818 0 1.10091 1.866 0 4.5C1.10091 7.134 3.81818 9 7 9C10.1818 9 12.8991 7.134 14 4.5C12.8991 1.866 10.1818 0 7 0ZM7 3C7.87818 3 8.59091 3.672 8.59091 4.5C8.59091 5.328 7.87818 6 7 6C6.12182 6 5.40909 5.328 5.40909 4.5C5.40909 3.672 6.12182 3 7 3ZM7 1.8C5.42182 1.8 4.13636 3.012 4.13636 4.5C4.13636 5.988 5.42182 7.2 7 7.2C8.57818 7.2 9.86364 5.988 9.86364 4.5C9.86364 3.012 8.57818 1.8 7 1.8Z" />
+                    </svg>
+                  </button>
+                </div>
+                <div className="observe-delete-container">
+                  <button
+                    className="observe-delete"
+                    onClick={() => setIsDelete(true)}
+                  >
+                    حذف درخواست
+                    <svg
+                      width="11"
+                      height="14"
+                      viewBox="0 0 11 14"
+                      fill="currentColor"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M8.64286 4.66667V12.4444H2.35714V4.66667H8.64286ZM7.46429 0H3.53571L2.75 0.777778H0V2.33333H11V0.777778H8.25L7.46429 0ZM10.2143 3.11111H0.785714V12.4444C0.785714 13.3 1.49286 14 2.35714 14H8.64286C9.50714 14 10.2143 13.3 10.2143 12.4444V3.11111Z" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div className="observe-line-button">
+                <div className="observe-back-container">
+                  <button
+                    className="observe-back"
+                    onClick={() => {
+                      navigate('/requests');
+                    }}
+                  >
+                    <svg width="21" height="32" viewBox="0 0 21 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3.68164 1.22266C4.26572 0.75704 5.11602 0.790223 5.66211 1.32227L19.6143 14.9258L19.7207 15.041C20.1828 15.5952 20.1828 16.4048 19.7207 16.959L19.6143 17.0742L5.66211 30.6777C5.11602 31.2098 4.26572 31.243 3.68164 30.7773L3.56836 30.6777L1.38477 28.5479C0.781478 27.9596 0.781108 26.9903 1.38379 26.4014L11.6621 16.3574L11.7285 16.2783C11.8411 16.1106 11.8411 15.8894 11.7285 15.7217L11.6621 15.6426L1.38379 5.59863C0.781108 5.00974 0.781477 4.04041 1.38477 3.45215L3.56836 1.32227L3.68164 1.22266Z" fill="#FF0000" stroke="black"/>
+                    </svg>
+
+                    بازگشت
+                  </button>
+                </div>
+              </div>
+            </div>}
+          </div>
+        </main>
+
+        <NavigationBar selected={3} />
+      </div>
+    </>
+    )
   }
 
   if (isEdit) {
@@ -986,9 +1310,9 @@ useEffect(() => {
                     id="observe-created-by"
                     readOnly
                     value={
-                      requestData?.beneficiary_request_is_created_by_charity
+                      requestData?.beneficiary_request_is_created_by_charity === true
                         ? 'مدیر سامانه'
-                        : 'شخص کاربر'
+                        : requestData?.beneficiary_request_is_created_by_charity === false ?'شخص کاربر':null
                     }
                   />
                 </div>
@@ -1011,7 +1335,8 @@ useEffect(() => {
               </form>
             </div>
 
-            <div className="buttons-container">
+            {
+              <div className="buttons-container">
               <div className="observe-line-button">
                 <div className="observe-child-creation-container">
                   <button
@@ -1103,7 +1428,7 @@ useEffect(() => {
                   </button>
                 </div>
               </div>
-            </div>
+            </div>}
           </div>
         </main>
 
@@ -1316,18 +1641,18 @@ useEffect(() => {
                 </svg>
               </button>
             </div>
-            {childSeeData.length === 0 && <div style={{textAlign:"center", fontSize:"0.8rem"}}>موردی وجود ندارد.</div>}
+            {childSeeData && childSeeData.length === 0 && <div style={{textAlign:"center", fontSize:"0.8rem"}}>موردی وجود ندارد.</div>}
             {/* Repeatable request section */}
-            {childSeeData.length > 0 &&
+            {childSeeData && childSeeData.length > 0 &&
               childSeeData.slice().reverse().map((item, reversedIndex) => {
                 const index = childSeeData.length - 1 - reversedIndex;
                 return(
-                <section key={item.beneficiary_request_child_id}>
+                <section key={item?.beneficiary_request_child_id || index}>
                   <div className='title-div'>
                     <h2>{`درخواست جزئی شماره ${toPersianDigits(index + 1)}`}</h2>
                     <span>
                         {gregorianToJalali(
-                          item.beneficiary_request_child_created_at
+                          item?.beneficiary_request_child_created_at || null
                         )}
                       </span>
                   </div>
@@ -1342,7 +1667,7 @@ useEffect(() => {
                     <textarea
                       id={`request-description-${index}`}
                       readOnly
-                      value={item.beneficiary_request_child_description}
+                      value={item?.beneficiary_request_child_description || null}
                       style={{pointerEvents:"none"}}
                     />
                   </div>
@@ -1350,7 +1675,7 @@ useEffect(() => {
                   <div className="file-input-div">
                     
 
-                    {childFiles[index].length > 0 && (
+                    {childFiles && childFiles[index].length > 0 && (
                       <>
                         <label htmlFor={`request-document-${index}`}>
                           مستندات
@@ -1392,9 +1717,9 @@ useEffect(() => {
                     <div className="text-input-div">
                       <p>ایجاد شده توسط:</p>
                       <span>
-                        {item.beneficiary_request_child_is_created_by_charity
+                        {item?.beneficiary_request_child_is_created_by_charity === true
                           ? 'اپراتور خیریه'
-                          : 'شخص کاربر'}
+                          : item?.beneficiary_request_child_is_created_by_charity === false ?'شخص کاربر': null}
                       </span>
                     </div>
                     <div className="text-input-div">

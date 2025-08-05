@@ -456,7 +456,7 @@ useEffect(() => {
       submitSuccess && (
         <>
         <div className='block-overlay-container'></div>
-        <div className="edit-finish-container">
+        <div className="edit-finish-container final-form">
           <svg
             width="59"
             height="59"

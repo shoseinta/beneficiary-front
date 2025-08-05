@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import observe_icon from '../../../media/icons/observe_icon.svg';
 import { toJalaali } from 'jalaali-js';
+import LoadingPage from '../../../components/loadingPage/LoadingPage';
 
 function RequestsList({ data, index }) {
   useEffect(() => {
@@ -35,7 +36,20 @@ function RequestsList({ data, index }) {
     }
   };
   if (!data) {
-    return <div>Loading...</div>;
+    return (
+    <>
+    <table className="request-table">
+      <thead>
+        <tr>
+          <th>تاریخ ثبت</th>
+          <th>نوع درخواست</th>
+          <th>وضعیت درخواست</th>
+          <th>عملیات</th>
+        </tr>
+      </thead>
+    </table>
+    </>
+    )
   }
 
   // Function to convert Gregorian date to Persian digits
@@ -72,7 +86,7 @@ function RequestsList({ data, index }) {
         </tr>
       </thead>
       <tbody>
-        {data.map((request, idx) => (
+        {data.length > 0 && data.map((request, idx) => (
           <tr key={idx}>
             <td>{gregorianToJalali(request.effective_date)}</td>
             <td>{`${convertTypeLayer1(request.beneficiary_request_type_layer1)} - ${request.beneficiary_request_type_layer2}`}</td>
@@ -89,7 +103,15 @@ function RequestsList({ data, index }) {
             </td>
           </tr>
         ))}
+        {data.length === 0 && (
+          <tr>
+            <td colSpan="4" style={{ textAlign: 'center' }}>
+              هیچ موردی وجود ندارد
+            </td>
+          </tr>
+        )}
       </tbody>
+
     </table>
   );
 }

@@ -12,6 +12,7 @@ import {
 } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+import LoadingButton from '../../../components/loadingButton/LoadingButton';
 
 // Fix for default marker icons in Leaflet
 delete L.Icon.Default.prototype._getIconUrl;
@@ -43,6 +44,41 @@ function Account3({
   setLoad,
   hasAddress,
 }) {
+  useEffect(() => {
+    const topLeft = document.querySelector('.leaflet-top.leaflet-left')
+    if (topLeft){
+      topLeft.parentElement.removeChild(topLeft)
+    }
+    const bottomRight = document.querySelector('.leaflet-bottom.leaflet-right')
+    if(bottomRight){
+      bottomRight.parentElement.removeChild(bottomRight)
+    }
+  })
+  const [addressWidth, setAddressWidth] = useState(0);
+  const [mapWidth, setMapWidth] = useState(0);
+  useEffect(() => {
+    console.log(addressWidth)
+  })
+  const [isLoadingButtonAddress, setIsLoadingButtonAddress] = useState(false)
+  const [isLoadingButtonMap, setIsLoadingButtonMap] = useState(false)
+  useEffect(() => {
+    const inputElement = document.querySelector('.address-submit');
+    if(!inputElement) return;
+    else {
+      const rect = inputElement.getBoundingClientRect();
+      const rightX = rect.right;
+      const leftX = rect.left;
+      setAddressWidth(rightX - leftX);
+    }
+  },[isLoadingButtonAddress]);
+    useEffect(() => {
+    const inputElement = document.querySelector('.map-submit');
+    if(!inputElement) return;
+    else {
+      const rect = inputElement.getBoundingClientRect();
+      setMapWidth(rect.width);
+    }
+  },[isLoadingButtonMap]);
   const toPersianDigits = (num) => {
     const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
     return num.toString().replace(/\d/g, (x) => persianDigits[x]);
@@ -246,6 +282,7 @@ function Account3({
     event.target.value = displayValue;
   };
   const handleMapConfirm = async() => {
+    setIsLoadingButtonMap(true)
     setAccount1Data((pre) => ({
       ...pre,
       beneficiary_user_address: {
@@ -283,11 +320,13 @@ function Account3({
 
         const result = await response.json();
         console.log(result);
+        setIsLoadingButtonMap(false)
         setSubmitMap(true);
         setLoad(true);
         setTimeout(() => setSubmitMap(false), 5000);
       } catch (err) {
         console.error(err);
+        setIsLoadingButtonMap(false)
       }
     } else if (
       !hasAddress
@@ -317,10 +356,12 @@ function Account3({
 
         const result = await response.json();
         console.log(result);
+        setIsLoadingButtonMap(false)
         setSubmitMap(true);
         setLoad(true);
         setTimeout(() => setSubmitMap(false), 5000);
       } catch (err) {
+        setIsLoadingButtonMap(false)
         console.error(err);
       }
     }
@@ -364,6 +405,7 @@ function Account3({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoadingButtonAddress(true)
     if (
       hasAddress &&
       (validation.neighbor ||
@@ -412,11 +454,13 @@ function Account3({
 
         const result = await response.json();
         console.log(result);
+        setIsLoadingButtonAddress(false)
         setSubmit(true);
         setLoad(true);
         setTimeout(() => setSubmit(false), 5000);
       } catch (err) {
         console.error(err);
+        setIsLoadingButtonAddress(false)
       }
     } else if (
       !hasAddress &&
@@ -466,11 +510,13 @@ function Account3({
 
         const result = await response.json();
         console.log(result);
+        setIsLoadingButtonAddress(false)
         setSubmit(true);
         setLoad(true);
         setTimeout(() => setSubmit(false), 5000);
       } catch (err) {
         console.error(err);
+        setIsLoadingButtonAddress(false)
       }
     }
   };
@@ -759,12 +805,12 @@ function Account3({
                   لطفا یک کدپستی ده رقمی معتبر وارد کنید
                 </div>
               )}
-            <input type="submit" value="تأیید" />
+            {isLoadingButtonAddress?<button style={{width:"75px"}}><LoadingButton dimension={10} stroke={2} color={'#fff'} /></button>:<input type="submit" value="تأیید" className='address-submit'/>}
           </div>
 
           <section style={{position:"relative", zIndex: 1}}>
             <p>آدرس خود را برروی نقشه زیر تعیین کنید:</p>
-            <div style={{ position: 'relative' }}>
+            <div className='map-style' style={{ position: 'relative' }}>
               <div
                 id="map"
                 ref={mapRef}
@@ -820,9 +866,11 @@ function Account3({
               <button
                 type="button"
                 onClick={handleMapConfirm}
-                style={{ marginTop: '10px' }}
+                style={isLoadingButtonMap?{marginTop: "10px",width:`${mapWidth}px`}:{ marginTop: '10px' }}
+                className='map-submit'
+
               >
-                ثبت موقعیت
+                {isLoadingButtonMap?<LoadingButton dimension={10} stroke={2} color={'#fff'} />:"ثبت موقعیت"}
               </button>
             </div>
 

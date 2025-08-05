@@ -62,7 +62,7 @@ function App() {
           </ProtectedRoute>
         }
       />
-
+      
       {/* Catch-all route for unauthenticated access */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

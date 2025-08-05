@@ -22,6 +22,7 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  height: 100vh;
   row-gap: 10px;
 }
 .account-container3 .header {
@@ -68,6 +69,7 @@
   row-gap: 10px;
   z-index: 1; /* added */
   position: relative; /* ensure z-index works */
+  overflow-y: auto;
 }
 .account-container3 .main h1 {
   text-align: center;
@@ -212,7 +214,7 @@ select {
   height: auto;
   color: var(--white-color);
 }
-.account-container3 .map-button-success-container svg {
+.account-container3 .map-button-success-container svg:not(.map-submit svg) {
   width: 10px;
   height: auto;
   color: var(--white-color);
@@ -233,9 +235,9 @@ select {
   justify-content: center;
   align-items: center;
 }
-.account-container3 .button-container button {
+/* .account-container3 .button-container button {
   font-size: 0.7rem;
-}
+} */
 .account-container3 button {
   padding: 0 10px;
   text-align: center;
@@ -310,4 +312,9 @@ select {
   border: none;
   outline: none;
   width: 100%;
+}
+.account-container3 .map-style {
+  border: 1px solid var(--main-color);
+  border-radius: 6px;
+  overflow: hidden;
 }

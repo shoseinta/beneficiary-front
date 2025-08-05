@@ -5,6 +5,10 @@ import Form2 from './components/Form2';
 import Form3 from './components/Form3';
 import Form4 from './components/Form4';
 import { useLookup } from '../../context/LookUpContext';
+import LoadingPage from '../../components/loadingPage/LoadingPage';
+import Header from '../../components/header/Header';
+import NavigationBar from '../../components/navigationBar/NavigationBar';
+import LoadingButton from '../../components/loadingButton/LoadingButton';
 
 function NewRequest() {
   const navigate = useNavigate();
@@ -141,7 +145,9 @@ function NewRequest() {
   useEffect(() => {
     console.log(onetimeData);
   });
-  if (loading) return <p>Loading lookups...</p>;
+  if (loading) return(
+    <LoadingPage />
+  )
   if (error) return <p>Error loading lookups: {error}</p>;
   
 

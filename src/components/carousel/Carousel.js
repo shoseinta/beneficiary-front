@@ -346,7 +346,7 @@ function Carousel({
                         transform: 'translateY(-50%)',
                       }}
                     >
-                      <h3>{'موردی وجود ندارد.'}</h3>
+                      <h3>{'موردی وجود ندارد'}</h3>
                       {/* <time dateTime={notification.items[0]?.date || ""}>
                 
                 </time> */}
