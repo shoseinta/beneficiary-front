@@ -208,7 +208,7 @@ function Home() {
         />
       )} */}
       <div className='main'>
-      <div style={{display:"flex",justifyContent:"center",alignItems:"center"}}>
+      <div className='notif-container'>
         {carousel1Display && <Carousel
           notification={notifications[0]}
           notifIndex={0}

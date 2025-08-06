@@ -153,12 +153,22 @@
   position: absolute;
   left: 11px;
 }
+.account-container2 .input-icon-wrapper::after {
+  content: '';
+  position: absolute;
+  left: 32px; /* adjust based on SVG width + padding */
+  top: 15%;    /* to make it cover 80% height */
+  height: 70%;
+  width: 1px;
+  background-color: var(--main-color); /* or any color you want */
+  z-index: 1;
+}
 #account-ident-num {
   width: 100%;
-  background-image: linear-gradient(to bottom, var(--main-color), var(--main-color));
+  /* background-image: linear-gradient(to bottom, var(--main-color), var(--main-color));
   background-repeat: no-repeat;
   background-position: left 31px center;
-  background-size: 1px 100%;
+  background-size: 1px 100%; */
   padding-left: 45px;
 }
 

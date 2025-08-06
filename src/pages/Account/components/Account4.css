@@ -139,7 +139,7 @@
 }
 .account-container4 .additional-info-value {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   gap: 10px;
   height: 40px;

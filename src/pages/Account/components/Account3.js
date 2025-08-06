@@ -3,9 +3,6 @@ import NavigationBar from '../../../components/navigationBar/NavigationBar';
 import { useState, useEffect, useRef, use } from 'react';
 import './Account3.css';
 import { useLookup } from '../../../context/LookUpContext';
-import 'leaflet.locatecontrol/dist/L.Control.Locate.min.css';
-import 'leaflet.locatecontrol';
-import LocateControl from '../../../components/locateControl/LocateControl';
 import {
   MapContainer,
   TileLayer,
@@ -62,21 +59,7 @@ function Account3({
   const [useUserLocation, setUseUserLocation] = useState(false);
   const [addressWidth, setAddressWidth] = useState(0);
   const [mapWidth, setMapWidth] = useState(0);
-useEffect(() => {
-  if ("geolocation" in navigator) {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setUserLocation([position.coords.latitude, position.coords.longitude]);
-      },
-      (error) => {
-        console.warn("Geolocation error:", error.message);
-        // Optional: set a fallback state or show a message
-      }
-    );
-  } else {
-    console.warn("Geolocation not supported");
-  }
-}, []);
+
 useEffect(() => {
 console.log(userLocation)
 })
@@ -525,87 +508,64 @@ console.log(userLocation)
       }
     }
   };
-  const handleMyLocation = async() => {
-    setPosition(userLocation)
-    setAccount1Data((pre) => ({
-      ...pre,
-      beneficiary_user_address: {
-        ...pre.beneficiary_user_address,
-        latitude: userLocation[0],
-        longitude: userLocation[1],
-      },
-    }));
+  const handleMyLocation = async () => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        async (positionData) => {
+          const lat = positionData.coords.latitude;
+          const lng = positionData.coords.longitude;
+          const newLocation = [lat, lng];
 
-    if (
-      hasAddress 
-    ) {
-      try {
-        const response = await fetch(
-          `https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/update-user-address/`,
-          {
-            method: 'PATCH',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Token ${localStorage.getItem('access_token')}`,
+          setUserLocation(newLocation);
+          setPosition(newLocation);
+          setAccount1Data((pre) => ({
+            ...pre,
+            beneficiary_user_address: {
+              ...pre.beneficiary_user_address,
+              latitude: lat,
+              longitude: lng,
             },
-            body: JSON.stringify({
-              longitude:
-                userLocation[1] || null,
-              latitude:
-                userLocation[0] || null,
-            }),
+          }));
+
+          const apiURL = hasAddress
+            ? `https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/update-user-address/`
+            : `https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/create-user-address/`;
+
+          const method = hasAddress ? 'PATCH' : 'POST';
+          const body = JSON.stringify({ latitude: lat, longitude: lng });
+
+          try {
+            const response = await fetch(apiURL, {
+              method,
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Token ${localStorage.getItem('access_token')}`,
+              },
+              body,
+            });
+
+            if (!response.ok) {
+              const errorData = await response.json();
+              throw new Error(errorData.detail || 'Location save failed');
+            }
+
+            const result = await response.json();
+            console.log(result);
+            setSubmitMap(true);
+            setLoad(true);
+            setTimeout(() => setSubmitMap(false), 5000);
+          } catch (err) {
+            console.error(err);
           }
-        );
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.detail || 'Update failed');
+        },
+        (error) => {
+          console.warn("Geolocation error:", error.message);
         }
-
-        const result = await response.json();
-        console.log(result);
-        setSubmitMap(true);
-        setLoad(true);
-        setTimeout(() => setSubmitMap(false), 5000);
-      } catch (err) {
-        console.error(err);
-      }
-    } else if (
-      !hasAddress
-    ) {
-      try {
-        const response = await fetch(
-          `https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/create-user-address/`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Token ${localStorage.getItem('access_token')}`,
-            },
-            body: JSON.stringify({
-              latitude:
-                position[0] || null,
-              longitude:
-                position[1] || null,
-            }),
-          }
-        );
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.detail || 'Creation failed');
-        }
-
-        const result = await response.json();
-        console.log(result);
-        setSubmitMap(true);
-        setLoad(true);
-        setTimeout(() => setSubmitMap(false), 5000);
-      } catch (err) {
-        console.error(err);
-      }
+      );
+    } else {
+      console.warn("Geolocation not supported");
     }
-  }
+  };
   useEffect(() => {
     document.documentElement.classList.add('account-container3-html');
     document.body.classList.add('account-container3-body');
@@ -905,18 +865,7 @@ console.log(userLocation)
                   setTimeout(() => {
                     map.invalidateSize();
                   }, 300);
-                  if(useUserLocation || !useUserLocation){
-                  L.control
-                    .locate({
-                      position: 'topright',
-                      strings: {
-                        title: 'نمایش موقعیت من',
-                      },
-                      setView: true,
-                      flyTo: true,
-                    })
-                    .addTo(map);
-                  }
+                  
                 }}
                 >
                   <TileLayer
@@ -930,6 +879,18 @@ console.log(userLocation)
                     }
                   />
                 </MapContainer>
+                <div style={{position:"absolute", bottom:"10px", right:"10px", zIndex:500}}>
+              <button
+                type="button"
+                onClick={handleMyLocation}
+                className='map-location'
+              >
+                <svg width="23" height="30" viewBox="0 0 23 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M11.25 0C5.03719 0 0 5.03719 0 11.25C0 13.6964 0.802031 15.9413 2.13516 17.7797C2.15906 17.8238 2.16281 17.873 2.19 17.9152L9.69 29.1652C10.0378 29.6869 10.6238 30 11.25 30C11.8762 30 12.4622 29.6869 12.81 29.1652L20.31 17.9152C20.3377 17.873 20.3409 17.8238 20.3648 17.7797C21.698 15.9413 22.5 13.6964 22.5 11.25C22.5 5.03719 17.4628 0 11.25 0ZM11.25 15C9.17906 15 7.5 13.3209 7.5 11.25C7.5 9.17906 9.17906 7.5 11.25 7.5C13.3209 7.5 15 9.17906 15 11.25C15 13.3209 13.3209 15 11.25 15Z" fill="#185EA0"/>
+                </svg>
+                مکان‌یابی
+              </button>
+            </div>
               </div>
             </div>
             <div className='map-button-success-container'>
@@ -971,18 +932,7 @@ console.log(userLocation)
                 {isLoadingButtonMap?<LoadingButton dimension={10} stroke={2} color={'#fff'} />:"ثبت موقعیت"}
               </button>
             </div>
-            {userLocation && 
-            <div className='button-container'>
-              <button
-                type="button"
-                onClick={handleMyLocation}
-                style={isLoadingButtonMap?{marginTop: "10px",width:`${mapWidth}px`}:{ marginTop: '10px' }}
-                className='map-submit'
 
-              >
-                موقعیت مکانی من
-              </button>
-            </div>}
             </div>
           </section>
 
