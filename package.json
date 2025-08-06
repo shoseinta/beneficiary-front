@@ -16,6 +16,7 @@
     "jalaali-js": "^1.2.8",
     "jszip": "^3.10.1",
     "leaflet": "^1.9.4",
+    "leaflet.locatecontrol": "^0.84.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-dropzone": "^14.3.8",

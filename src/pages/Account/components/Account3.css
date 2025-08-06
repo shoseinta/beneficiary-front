@@ -255,6 +255,9 @@ select {
   margin: 10px 0;
 }
 .account-container3 #map {
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  height: auto;
   direction: ltr !important;
   display: flex;
   justify-content: center;

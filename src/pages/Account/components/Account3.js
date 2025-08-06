@@ -1,8 +1,11 @@
 import Header from '../../../components/header/Header';
 import NavigationBar from '../../../components/navigationBar/NavigationBar';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, use } from 'react';
 import './Account3.css';
 import { useLookup } from '../../../context/LookUpContext';
+import 'leaflet.locatecontrol/dist/L.Control.Locate.min.css';
+import 'leaflet.locatecontrol';
+import LocateControl from '../../../components/locateControl/LocateControl';
 import {
   MapContainer,
   TileLayer,
@@ -54,11 +57,30 @@ function Account3({
       bottomRight.parentElement.removeChild(bottomRight)
     }
   })
+  
+  const [userLocation, setUserLocation] = useState(null);
+  const [useUserLocation, setUseUserLocation] = useState(false);
   const [addressWidth, setAddressWidth] = useState(0);
   const [mapWidth, setMapWidth] = useState(0);
-  useEffect(() => {
-    console.log(addressWidth)
-  })
+useEffect(() => {
+  if ("geolocation" in navigator) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setUserLocation([position.coords.latitude, position.coords.longitude]);
+      },
+      (error) => {
+        console.warn("Geolocation error:", error.message);
+        // Optional: set a fallback state or show a message
+      }
+    );
+  } else {
+    console.warn("Geolocation not supported");
+  }
+}, []);
+useEffect(() => {
+console.log(userLocation)
+})
+  
   const [isLoadingButtonAddress, setIsLoadingButtonAddress] = useState(false)
   const [isLoadingButtonMap, setIsLoadingButtonMap] = useState(false)
   useEffect(() => {
@@ -117,41 +139,24 @@ function Account3({
   });
 
   // Initialize position state with proper fallbacks
-  const [position, setPosition] = useState(() => {
-    if (
-      account1Data?.beneficiary_user_address?.latitude &&
-      account1Data?.beneficiary_user_address?.longitude
-    ) {
-      return [
-        account1Data.beneficiary_user_address.latitude,
-        account1Data.beneficiary_user_address.longitude,
-      ];
-    }
-    return [35.6892, 51.389]; // Default to Tehran coordinates
-  });
+  const [position, setPosition] = useState([35.6892, 51.389])
 
-  // Update position if account1Data changes
   useEffect(() => {
-    console.log(account1Data);
-  });
+  const backendLat = account1Data?.beneficiary_user_address?.latitude;
+  const backendLng = account1Data?.beneficiary_user_address?.longitude;
+
+  if (backendLat && backendLng) {
+    setPosition([backendLat, backendLng]);
+  } else if (userLocation) {
+    setPosition(userLocation);
+  }
+}, [userLocation, account1Data]);
+
+
 
   // Ref for map div and useEffect to set height = width
   const mapRef = useRef();
-  useEffect(() => {
-    const resizeMap = () => {
-      if (mapRef.current) {
-        const width = mapRef.current.offsetWidth;
-        mapRef.current.style.height = `${width}px`;
-      }
-    };
-
-    resizeMap();
-    window.addEventListener('resize', resizeMap);
-
-    return () => {
-      window.removeEventListener('resize', resizeMap);
-    };
-  }, []);
+ 
   const isPersian = (text) => {
     const persianRegex = /^[\u0600-\u06FF\u0621-\u064A\s]+$/;
     return persianRegex.test(text);
@@ -520,7 +525,87 @@ function Account3({
       }
     }
   };
+  const handleMyLocation = async() => {
+    setPosition(userLocation)
+    setAccount1Data((pre) => ({
+      ...pre,
+      beneficiary_user_address: {
+        ...pre.beneficiary_user_address,
+        latitude: userLocation[0],
+        longitude: userLocation[1],
+      },
+    }));
 
+    if (
+      hasAddress 
+    ) {
+      try {
+        const response = await fetch(
+          `https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/update-user-address/`,
+          {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Token ${localStorage.getItem('access_token')}`,
+            },
+            body: JSON.stringify({
+              longitude:
+                userLocation[1] || null,
+              latitude:
+                userLocation[0] || null,
+            }),
+          }
+        );
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.detail || 'Update failed');
+        }
+
+        const result = await response.json();
+        console.log(result);
+        setSubmitMap(true);
+        setLoad(true);
+        setTimeout(() => setSubmitMap(false), 5000);
+      } catch (err) {
+        console.error(err);
+      }
+    } else if (
+      !hasAddress
+    ) {
+      try {
+        const response = await fetch(
+          `https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/create-user-address/`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Token ${localStorage.getItem('access_token')}`,
+            },
+            body: JSON.stringify({
+              latitude:
+                position[0] || null,
+              longitude:
+                position[1] || null,
+            }),
+          }
+        );
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.detail || 'Creation failed');
+        }
+
+        const result = await response.json();
+        console.log(result);
+        setSubmitMap(true);
+        setLoad(true);
+        setTimeout(() => setSubmitMap(false), 5000);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  }
   useEffect(() => {
     document.documentElement.classList.add('account-container3-html');
     document.body.classList.add('account-container3-body');
@@ -530,10 +615,6 @@ function Account3({
       document.body.classList.remove('account-container3-body');
     };
   }, []);
-
-  useEffect(() => {
-    console.log(account1Data);
-  });
 
   return (
     <div className="account-container3">
@@ -820,6 +901,23 @@ function Account3({
                   center={position}
                   zoom={5}
                   style={{ height: '100%', width: '100%' }}
+                  whenCreated={(map) => {
+                  setTimeout(() => {
+                    map.invalidateSize();
+                  }, 300);
+                  if(useUserLocation || !useUserLocation){
+                  L.control
+                    .locate({
+                      position: 'topright',
+                      strings: {
+                        title: 'نمایش موقعیت من',
+                      },
+                      setView: true,
+                      flyTo: true,
+                    })
+                    .addTo(map);
+                  }
+                }}
                 >
                   <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -873,7 +971,18 @@ function Account3({
                 {isLoadingButtonMap?<LoadingButton dimension={10} stroke={2} color={'#fff'} />:"ثبت موقعیت"}
               </button>
             </div>
+            {userLocation && 
+            <div className='button-container'>
+              <button
+                type="button"
+                onClick={handleMyLocation}
+                style={isLoadingButtonMap?{marginTop: "10px",width:`${mapWidth}px`}:{ marginTop: '10px' }}
+                className='map-submit'
 
+              >
+                موقعیت مکانی من
+              </button>
+            </div>}
             </div>
           </section>
 
