@@ -24,8 +24,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 100vh;
-  row-gap: 10px;
+  height: 100vh;
   transform: none !important;
 }
 .home-container .header {
@@ -37,6 +36,7 @@
   position: sticky;
   top: 0;
   z-index: 10;
+  margin-bottom: 20px;
 }
 .home-container .header > #hamburger {
   width: auto;
@@ -85,11 +85,15 @@
 .home-container .notification::-webkit-scrollbar {
   display: none;
 }
+.home-container .notif-box-content {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+}
 .home-container .details {
   display: flex;
   flex-direction: column;
   row-gap: 10px;
-  padding-top: 20px;
 }
 
 .home-container .h1 {
@@ -144,14 +148,41 @@
   cursor: pointer;
 }
 .home-container .main {
-  width: 90%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
   align-self: center;
-  overflow: hidden;
   position: relative;
-  max-width: 500px;
-  z-index: 5;
+  /* z-index: 5; */
+  row-gap: 20px;
+  overflow-y: auto;
 }
-
+.home-container .notif-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 90%;
+  max-width: 400px;
+  height: 221.09px;
+  /* change 500px with max value between first and second carousel height */
+}
+.home-container .notif-box {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* align-items: center; */
+  width: 100%;
+  height: 100%;
+  /* align-self: center; */
+  position: relative;
+  /* z-index: 5; */
+  row-gap: 20px;
+  overflow-y: auto;
+}
 .home-container .carousel {
   display: flex;
   gap: 20px;
@@ -162,10 +193,6 @@
 .home-container .notification {
   min-width: 90%;
   max-width: 90%;
-}
-.home-container .carousel-dots {
-  text-align: center;
-  margin-top: 10px;
 }
 
 .home-container .dot {
@@ -197,6 +224,10 @@
   align-self: center;
   border-radius: 8px;
   overflow: hidden;
+  width: 90%;
+  max-width: 400px;
+  min-height: 150px;
+  max-height: 200px;
   box-shadow: 0px 4px 4px var(--black25-color);
 }
 .home-container .video > .poster-overlay {
@@ -213,9 +244,8 @@
 .home-container .video > video {
   position: relative;
   align-self: center;
-  width: 90vw;
-  max-width: 400px;
-  height: auto;
+  width: 100%;
+  height: 100%;
   z-index: 2;
   background-color: var(--main-color);
 }
@@ -313,6 +343,7 @@
 
 .home-container .carousel-container {
   width: 100%;
+  height: 100%;
   overflow: hidden;
   position: relative;
   touch-action: pan-y;
@@ -322,6 +353,7 @@
   display: flex;
   transition: transform 0.3s ease-out;
   width: 100%;
+  height: 100%;
 }
 
 .home-container .notification {
@@ -329,12 +361,15 @@
   min-width: 100%;
   max-width: 100%;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .home-container .carousel-dots {
   display: flex;
   justify-content: center;
-  margin-top: 15px;
+  margin-top: 10px;
   gap: 8px;
 }
 
@@ -367,10 +402,10 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
   padding: 0 10px 10px 10px;
   overflow-y: auto;
-  z-index: 1000;
+  z-index: 100;
 
   /* new */
-  top: var(--notif-top, 0);
+  /* top: var(--notif-top, 0); */
   height: fit-content;
   max-height: var(--notif-height, auto);
 }
@@ -457,7 +492,7 @@
   font-size: 0.9rem;
   line-height: 2;
   font-weight: normal;
-  text-align: justify;
+  /* text-align: justify; */
 }
 .home-container .notif-overlay-content button {
   align-self: flex-end;

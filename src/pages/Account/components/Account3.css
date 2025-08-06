@@ -247,6 +247,7 @@ select {
   cursor: pointer;
   border-radius: 6px;
   height: 35px;
+  font-size: 0.7rem;
 }
 /* ------------------------------------ map style */
 .account-container3 p {
@@ -320,4 +321,24 @@ select {
   border: 1px solid var(--main-color);
   border-radius: 6px;
   overflow: hidden;
+}
+/* --------------------------------------------- map location button style */
+.account-container3 .map-location {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 10px;
+  height: 35px;
+  border-radius: 6px;
+  padding: 0 10px;
+  border: 1px solid var(--main-color);
+  background-color: var(--white-color);
+  color: var(--main-color);
+  cursor: pointer;
+  font-size: 0.7rem;
+}
+.account-container3 .map-location svg {
+  width: 10px;
+  height: auto;
+  color: var(--main-color);
 }

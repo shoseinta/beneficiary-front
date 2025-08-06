@@ -406,7 +406,7 @@
   box-shadow: 0 1px 4px var(--black25-color);
   font-size: 0.7rem;
   font-weight: normal;
-  color: var(--black50-color);
+  color: var(--black-color);
 }
 .request-detail-edit-container .upload-label {
   width: 60%;
@@ -438,55 +438,8 @@
   vertical-align: top;
   overflow-y: auto;
 }
-.request-detail-edit-container
-  .observe-forms
-  form:first-of-type
-  div:not(:nth-of-type(1)):not(:nth-of-type(2))
-  input,
-.request-detail-edit-container
-  .observe-forms
-  form:first-of-type
-  div:not(:nth-of-type(1)):not(:nth-of-type(2))
-  select,
-.request-detail-edit-container
-  .observe-forms
-  form:first-of-type
-  div:not(:nth-of-type(1)):not(:nth-of-type(2))
-  .upload-label,
-.request-detail-edit-container
-  .observe-forms
-  form:first-of-type
-  div:not(:nth-of-type(1)):not(:nth-of-type(2))
-  textarea {
-  background-image: url(../../media/icons/edit_gray_icon.svg);
-  background-repeat: no-repeat;
-  background-position: left 10px center; /* RTL support */
-  background-size: 10px;
-  color: var(--black-color);
-}
-/* When input is focused: green icon */
-.request-detail-edit-container
-  .observe-forms
-  form:first-of-type
-  div:not(:nth-of-type(1)):not(:nth-of-type(2))
-  input:focus,
-.request-detail-edit-container
-  .observe-forms
-  form:first-of-type
-  div:not(:nth-of-type(1)):not(:nth-of-type(2))
-  select:focus,
-.request-detail-edit-container
-  .observe-forms
-  form:first-of-type
-  div:not(:nth-of-type(1)):not(:nth-of-type(2))
-  .upload-label:focus,
-.request-detail-edit-container
-  .observe-forms
-  form:first-of-type
-  div:not(:nth-of-type(1)):not(:nth-of-type(2))
-  textarea:focus {
-  background-image: url(../../media/icons/edit_green_icon.svg);
-}
+
+
 .request-detail-edit-container ::placeholder {
   color: var(--error-red);
 }
@@ -1462,6 +1415,37 @@ select {
 }
 .child-request-list-overlay .title-div * {
   font-size: 0.7rem;
+}
+/* ----------------------------------------- lock inputs style */
+.request-detail-edit-container .input-icon-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 60%;
+}
+.request-detail-edit-container .input-icon-wrapper svg {
+  position: absolute;
+  left: 11px;
+  z-index: 2;
+}
+.request-detail-edit-container #observe-type1, 
+.request-detail-edit-container #observe-type2,
+.request-detail-edit-container #observe-created-at,
+.request-detail-edit-container #observe-created-by,
+.request-detail-edit-container #observe-proccesing-stage {
+  width: 100%;
+  padding-left: 45px;
+}
+
+.request-detail-edit-container .input-icon-wrapper::after {
+  content: '';
+  position: absolute;
+  left: 32px; /* adjust based on SVG width + padding */
+  top: 15%;    /* to make it cover 80% height */
+  height: 70%;
+  width: 1px;
+  background-color: var(--black25-color); /* or any color you want */
+  z-index: 1;
 }
 
 

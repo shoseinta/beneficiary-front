@@ -159,16 +159,18 @@ function Carousel({
     }
     return () => bodyOverlay.removeEventListener('click', handleClick);
   }, [moreItems]);
-
+  const [carouselWidth,setCarouselWidth] = useState(0)
   useEffect(() => {
-    if (moreItems) {
-      const mainEl = document.querySelector('.main');
+    if (!moreItems) {
+      const mainEl = document.querySelector('.notif-box');
       const videoEl = document.querySelector('.video');
 
       if (mainEl && videoEl) {
         const top = mainEl.getBoundingClientRect().top + window.scrollY;
         const bottom = videoEl.getBoundingClientRect().bottom + window.scrollY;
         const height = bottom - top;
+        const width = mainEl.getBoundingClientRect().width
+        setCarouselWidth(width)
 
         document.documentElement.style.setProperty('--notif-top', `${top}px`);
         document.documentElement.style.setProperty(
@@ -291,15 +293,15 @@ function Carousel({
   return (
     <>
       <main
-        className={whichNotif === 0?"main slide-in-div-1" : "main slide-in-div"}
-        style={{ visibility: moreItems ? 'hidden' : 'visible' }}
+        className={whichNotif === 0?" notif-box slide-in-div-1" : " notif-box slide-in-div"}
+        style={{ visibility: moreItems ? 'hidden' : 'visible' , rowGap:0}}
       >
         <div className="carousel-container" ref={carouselRef}
           style={{ cursor: isDragging ? 'grabbing' : 'grab' }}>
           <div className="carousel">
             <article className="notification" id="notif1">
               {notification.moreItems.length !== 0 ? (
-                <>
+                <div className='notif-box-content'>
                   <section className="h1">
                     <svg width="12" height="15" viewBox="0 0 12 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path opacity="0.25" d="M5.84132 3.54157C4.05881 3.54157 2.97784 4.97491 2.97784 6.73465V10.9921H8.70479V6.73465C8.70479 4.97491 7.62383 3.54157 5.84132 3.54157Z" fill="#185EA0"/>
@@ -321,7 +323,7 @@ function Carousel({
                       {notification.items[0]?.content || 'توضیحات اطلاعیه'}
                     </p>
                   </div>
-                </>
+                </div>
               ) : (
                 <>
                   <section className="h1" style={{ marginBottom: '0' }}>
@@ -414,7 +416,7 @@ function Carousel({
       </main>
 
       {moreItems && (
-        <div className="notif-overlay-container">
+        <div className="notif-overlay-container" style={{width:carouselWidth}}>
           <div className="notif-overlay-up">
             <section className="notif-overlay-header">
               <svg width="12" height="15" viewBox="0 0 12 15" fill="none" xmlns="http://www.w3.org/2000/svg">
