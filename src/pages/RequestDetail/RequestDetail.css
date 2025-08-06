@@ -488,7 +488,7 @@
   background-image: url(../../media/icons/edit_green_icon.svg);
 }
 .request-detail-edit-container ::placeholder {
-  color: var(--black50-color);
+  color: var(--error-red);
 }
 
 /* -----------------------------------------confirm edit button style */
@@ -1462,4 +1462,27 @@ select {
 }
 .child-request-list-overlay .title-div * {
   font-size: 0.7rem;
+}
+
+
+.input-error-tooltip {
+  position: absolute;
+  background-color: var(--white-gray-color);
+  color: black;
+  font-size: 0.7rem;
+  padding: 6px 10px;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px var(--black25-color);
+  margin-top: 4px;
+  z-index: 1000;
+}
+
+.input-error-tooltip::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: 20px;
+  border-width: 6px;
+  border-style: solid;
+  border-color: transparent transparent var(--white-gray-color) transparent;
 }

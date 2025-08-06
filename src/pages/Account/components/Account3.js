@@ -63,21 +63,6 @@ function Account3({
   const [addressWidth, setAddressWidth] = useState(0);
   const [mapWidth, setMapWidth] = useState(0);
 useEffect(() => {
-  if ("geolocation" in navigator) {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setUserLocation([position.coords.latitude, position.coords.longitude]);
-      },
-      (error) => {
-        console.warn("Geolocation error:", error.message);
-        // Optional: set a fallback state or show a message
-      }
-    );
-  } else {
-    console.warn("Geolocation not supported");
-  }
-}, []);
-useEffect(() => {
 console.log(userLocation)
 })
   
@@ -526,6 +511,20 @@ console.log(userLocation)
     }
   };
   const handleMyLocation = async() => {
+    if ("geolocation" in navigator) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setUserLocation([position.coords.latitude, position.coords.longitude]);
+      },
+      (error) => {
+        console.warn("Geolocation error:", error.message);
+        // Optional: set a fallback state or show a message
+      }
+    );
+  } else {
+    console.warn("Geolocation not supported");
+  }
+    if(!userLocation) return;
     setPosition(userLocation)
     setAccount1Data((pre) => ({
       ...pre,

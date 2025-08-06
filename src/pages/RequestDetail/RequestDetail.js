@@ -48,13 +48,12 @@ function RequestDetail() {
   const [isChildCreate, setIsChildCreate] = useState(false);
 useEffect(() => {
   const button = document.querySelector('.child-creation-overlay-buttons .yes-button');
-  console.log(button)
   if (button && !isLoadingButtonChildCreation && isChildCreate) {
     const rect = button.getBoundingClientRect();
     const leftX = rect.left;
     const rightX = rect.right;
     setChildCreateBorderDiff(rightX - leftX);
-    console.log(rightX - leftX)
+    //console.log(rightX - leftX)
   }
 }, [isLoadingButtonChildCreation, isChildCreate]);
   const [isDelete, setIsDelete] = useState(false);
@@ -63,13 +62,13 @@ useEffect(() => {
   const [childId, setChildId] = useState(null);
   useEffect(() => {
   const button = document.querySelector('.delete-overlay-buttons .yes-button');
-  console.log(button)
+  //console.log(button)
   if (button && !isLoadingButtonDelete && isDelete) {
     const rect = button.getBoundingClientRect();
     const leftX = rect.left;
     const rightX = rect.right;
     setChildCreateBorderDiff(rightX - leftX);
-    console.log(rightX - leftX)
+    //console.log(rightX - leftX)
   }
 }, [isLoadingButtonDelete, isDelete]);
   const { id } = useParams();
@@ -223,7 +222,7 @@ useEffect(() => {
       setLoadingFiles(false);
       return extractedFiles;
     } catch (error) {
-      console.error('ZIP download/extraction failed:', error);
+      //console.error('ZIP download/extraction failed:', error);
       return [];
     }
   };
@@ -275,7 +274,7 @@ useEffect(() => {
       setLoadingFiles(false);
       return extractedFiles;
     } catch (error) {
-      console.error('ZIP download/extraction failed:', error);
+      //console.error('ZIP download/extraction failed:', error);
       return [];
     }
   };
@@ -305,7 +304,7 @@ useEffect(() => {
         throw new Error(errorData.detail || 'Request creation failed');
       }
     } catch (err) {
-      console.error('Error creating child request:', err);
+      //console.error('Error creating child request:', err);
       // Add error handling UI here
     }
   };
@@ -339,11 +338,11 @@ useEffect(() => {
         );
         data.beneficiary_request_child_document = zipFile;
       }
-      console.log(data);
+      //console.log(data);
       return data;
     } catch (error) {
-      console.log(data);
-      console.error('Error creating zip file:', error);
+      //console.log(data);
+      //console.error('Error creating zip file:', error);
       return data;
     }
   };
@@ -355,7 +354,7 @@ useEffect(() => {
   };
 
   useEffect(() => {
-    console.log(childData);
+    //console.log(childData);
   });
 
   const handleChildCreation = async () => {
@@ -426,7 +425,7 @@ useEffect(() => {
       setIsChildCreateFinish(false);
       // fetchData();
     } catch (err) {
-      console.error('Error creating child request:', err);
+      //console.error('Error creating child request:', err);
       setIsLoadingButtonChildCreation(false)
       // Add error handling UI here
     }
@@ -535,7 +534,7 @@ useEffect(() => {
       const { jy, jm, jd } = toJalaali(year, month, day);
       return `${toPersianDigits(jy)}/${toPersianDigits(jm)}/${toPersianDigits(jd)}`;
     } catch (error) {
-      console.error('Date conversion error:', error);
+      //console.error('Date conversion error:', error);
       return 'تاریخ نامشخص';
     }
   };
@@ -599,7 +598,7 @@ useEffect(() => {
         beneficiary_request_duration_recurring: updateDurationRecurring,
       });
     } catch (err) {
-      console.log(err);
+      //console.log(err);
     }
 
     try {
@@ -639,7 +638,7 @@ useEffect(() => {
         setChildFiles([]);
       }
     } catch (err) {
-      console.log(err);
+      //console.log(err);
     }
   };
 
@@ -692,7 +691,7 @@ useEffect(() => {
       
       
     } catch (err) {
-      console.log(err);
+      //console.log(err);
       setIsLoadingButtonDelete(false)
     }
   };

@@ -134,7 +134,6 @@ function RequestDetailEdit({
   const timeout = setTimeout(() => {
     const leftArrow = document.querySelector('.rmdp-left i');
     const rightArrow = document.querySelector('.rmdp-right i');
-    console.log(leftArrow, rightArrow);
 
     if (leftArrow) leftArrow.style.webkitTransform = 'rotate(-45deg)';
     if (rightArrow) rightArrow.style.webkitTransform = 'rotate(135deg)';
@@ -149,13 +148,12 @@ function RequestDetailEdit({
   const [childCreateBorderDiff, setChildCreateBorderDiff] = useState(0)
   useEffect(() => {
     const button = document.querySelector('.delete-overlay-buttons .yes-button');
-    console.log(button)
+
     if (button && !isLoadingButtonDelete && editApplied) {
       const rect = button.getBoundingClientRect();
       const leftX = rect.left;
       const rightX = rect.right;
       setChildCreateBorderDiff(rightX - leftX);
-      console.log(rightX - leftX)
     }
   }, [isLoadingButtonDelete, editApplied]);
   const onDrop = useCallback((acceptedfiles1) => {
@@ -208,10 +206,6 @@ function RequestDetailEdit({
     maxSize: 10 * 1024 * 1024, // 10MB
     multiple: true,
   });
-
-  useEffect(() => {
-    console.log(requestData)
-  })
 
   const getFileIcon = (file) => {
     const extension = file.name.split('.').pop().toLowerCase();
@@ -313,11 +307,7 @@ useEffect(() => {
     amount: true,
   });
 
-  const [blur, setBlur] = useState({
-    deadline: true,
-    limit: true,
-    amount: true,
-  });
+  const [blur, setBlur] = useState({deadline: false, limit: false, amount: false});
   const [finishEdit, setFinishEdit] = useState(false);
   useEffect(() => {
     const newValidation = {
@@ -375,28 +365,6 @@ useEffect(() => {
       return null;
     }
   };
-
-  // Function to convert Gregorian to Jalali date
-  
-  useEffect(() => {
-    console.log(updateData);
-  });
-
-//   useEffect(() => {
-//      if (updateData?.beneficiary_request_duration_onetime?.beneficiary_request_duration_onetime_deadline && updateData?.beneficiary_request_duration_onetime?.beneficiary_request_duration_onetime_deadline !== "") {
-//   const newDate = new DateObject({
-//     date: updateData.beneficiary_request_duration_onetime.beneficiary_request_duration_onetime_deadline,
-//     calendar: 'gregorian',
-//   }).convert(persian).setLocale(persian_fa);
-
-//   setJalaliValue(newDate);
-// } else {
-//   setJalaliValue(null); // don't default to today
-// }
-//   }, [
-//     updateData?.beneficiary_request_duration_onetime
-//       ?.beneficiary_request_duration_onetime_deadline,
-//   ]);
 
   const handleFinishEdit = async () => {
     if (
@@ -627,7 +595,6 @@ useEffect(() => {
   const handleAmountUpdate = (event) => {
     setInputSelected(true);
     setTimeout(() => setInputSelected(false), 10);
-    setBlur((pre) => ({ ...pre, amount: false }));
     // Remove Persian digits and commas from the input value
     var englishValue = event.target.value
       .replace(/[۰-۹]/g, (d) =>
@@ -651,19 +618,24 @@ useEffect(() => {
      setInputSelected(true);
     setTimeout(() => setInputSelected(false), 10);
     setUpdateData((pre) => {
-      if(Number(event.target.value) === 3){
+      {
         return {
           ...pre,
           beneficiary_request_duration: Number(event.target.value),
           beneficiary_request_amount: null,
+          beneficiary_request_duration_onetime: {
+            beneficiary_request_duration_onetime_deadline: null,
+          },
+          beneficiary_request_duration_recurring: {
+            beneficiary_request_duration_recurring_limit: null,
+          },
         }
       }
-      return {
-        ...pre,
-        beneficiary_request_duration: Number(event.target.value),
-      };
     });
-    
+    setBlur({
+      deadline: false,
+      limit: false,
+      amount: false,})
   };
 
   const handleTitleChange = (event) => {
@@ -685,7 +657,6 @@ useEffect(() => {
   const handleLimitChange = (event) => {
     setInputSelected(true);
     setTimeout(() => setInputSelected(false), 10);
-    setBlur((pre) => ({ ...pre, limit: false }));
     let englishValue = event.target.value
       .split('')
       .map((c) => {
@@ -869,6 +840,25 @@ useEffect(() => {
       }
     };
   }, [updateData, inputSelected]);
+
+  useEffect(() => {
+    const datePicker = document.querySelector('.custom-datepicker-input');
+    if (!datePicker) return;
+    datePicker.placeholder = ""
+    datePicker.style.border = '';
+    const onClickDatePicker = () => {
+      setBlur(pre => ({...pre, deadline: false}));
+    }
+    datePicker.addEventListener('click', onClickDatePicker);
+    if (!validation.deadline && blur.deadline) {
+      datePicker.style.border = '1px solid #ff0000';
+      datePicker.placeholder = 'تاریخ را وارد کنید';
+    }
+    return () => {
+      datePicker.removeEventListener('click', onClickDatePicker);
+    }
+  },[validation.deadline, blur.deadline,updateData])
+  
   return (
     <>
       <div className="request-detail-edit-container">
@@ -975,7 +965,10 @@ useEffect(() => {
                           تعداد دوره‌های درخواست:
                         </label>
                         <input
-                          onClick={() => setInputSelected(true)}
+                          onClick={() => {
+                            setInputSelected(true)
+                            setBlur(pre => ({...pre, limit: false}));
+                          }}
                           type="text"
                           id="observe-time2"
                           value={
@@ -987,11 +980,9 @@ useEffect(() => {
                               : null
                           }
                           onChange={handleLimitChange}
-                          onBlur={() =>
-                            setBlur((pre) => ({ ...pre, limit: true }))
-                          }
                           inputMode="numeric"
-                          style={{direction:"ltr"}}
+                          style={!validation.limit && blur.limit ?{direction:"ltr", border:"1px solid #ff0000"}:{direction:"ltr"}}
+                          placeholder={!validation.limit && blur.limit ?" تعداد دوره‌ها را وارد کنید": ""}
                         />
                       </>
                     )}
@@ -1011,12 +1002,13 @@ useEffect(() => {
                             )
                           : ''
                       }
-                      onChange={handleAmountUpdate}
-                      onBlur={() => {
-                        setBlur((pre) => ({ ...pre, amount: true }));
+                      onClick={() => {
+                        setBlur(pre => ({...pre, amount: false}));
                       }}
+                      onChange={handleAmountUpdate}
                       {...(!editApplied ? { inputMode: 'numeric' } : {})}
-                      style={{direction:"ltr"}}
+                      style={!validation.amount && blur.amount ?{direction:"ltr", border:"1px solid #ff0000"}:{direction:"ltr"}}
+                      placeholder={!validation.amount && blur.amount ?"مبلغ را وارد کنید": ""}
                     />
                   </div>
                 )}
@@ -1180,24 +1172,7 @@ useEffect(() => {
               </form>
             </div>
 
-            {!validation.deadline &&
-              blur.deadline &&
-              updateData.beneficiary_request_duration === 1 && (
-                <p>لطفا تاریح آخرین زمان دریافت کمک را مشخص کنید</p>
-              )}
-
-            {!validation.limit &&
-              blur.limit &&
-              updateData.beneficiary_request_duration === 2 && (
-                <p>
-                  لطفا تعداد دوره های درخواست را انتخاب کنید بین یک دوره تا
-                  دوازده دوره
-                </p>
-              )}
-
-            {!validation.amount && blur.amount && (
-              <p>مبلغ درخواست نمی تواند خالی باشد</p>
-            )}
+            
 
             <div className="buttons">
               <div className="observe-back-container">
@@ -1219,6 +1194,22 @@ useEffect(() => {
                 <button
                   className="observe-confirm-edit"
                   onClick={() => {
+                    var flag = 0
+                    if(!validation.deadline && updateData.beneficiary_request_duration === 1){
+                      setBlur(pre => ({...pre,deadline:true}));
+                      flag = 1;
+                    }
+                    if ((!validation.limit && updateData.beneficiary_request_duration === 2)) {
+                      setBlur(pre => ({...pre,limit:true}));
+                      flag = 1;
+                    }
+                    if((!validation.amount && updateData.beneficiary_request_duration !== 3)){
+                      setBlur(pre => ({...pre,amount:true}));
+                      flag = 1;
+                    }
+                    if (flag === 1) {
+                      return;
+                    }
                     setEditApplied(true);
                   }}
                 >
@@ -1234,6 +1225,7 @@ useEffect(() => {
         </main>
         <NavigationBar selected={3} />
       </div>
+      
       {
         finishEdit && (
           <>
