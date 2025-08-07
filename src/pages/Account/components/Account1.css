@@ -132,6 +132,7 @@
   padding-left: 45px;
   height: 35px;
   text-align: left;
+  font-size: 0.8rem;
 }
 .account-container1 #account-support {
   text-align: right;
@@ -245,4 +246,16 @@
   height: 7vw;
   max-height: 36px;
   width: auto;
+}
+
+.account-container1 .account-form1 .invalid-input{
+  border: 1.5px solid var(--error-red);
+}
+.account-container1 #account-submit1 .submit-error {
+  background-color: transparent;
+  box-shadow: none;
+  padding: 0;
+}
+.account-container1 #account-submit1 .submit-error p {
+  color: var(--error-red);
 }

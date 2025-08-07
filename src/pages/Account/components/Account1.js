@@ -3,8 +3,12 @@ import Header from '../../../components/header/Header';
 import NavigationBar from '../../../components/navigationBar/NavigationBar';
 import './Account1.css';
 import LoadingButton from '../../../components/loadingButton/LoadingButton';
+import {Tooltip} from 'react-tooltip';
+import 'react-tooltip/dist/react-tooltip.css'
+
 
 function Account1({ accountData, setAccountData, setStep, setLoad }) {
+  const [showError, setShowError] = useState(false)
   const [account1Data, setAccount1Data] = useState(accountData);
   const [submit, setSubmit] = useState(false);
   const [isLoadingButton, setIsLoadingButton] = useState(false)
@@ -15,6 +19,12 @@ function Account1({ accountData, setAccountData, setStep, setLoad }) {
   useEffect(() => {
     setAccount1Data(accountData);
   }, [accountData]);
+
+  useEffect(() => {
+    if(validation.email && validation.phone_number){
+      setShowError(false)
+    }
+  },[validation])
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -44,7 +54,6 @@ function Account1({ accountData, setAccountData, setStep, setLoad }) {
         console.log(result);
         setIsLoadingButton(false)
         setSubmit(true);
-
         // Reset after 5 seconds
         setLoad(true);
         setTimeout(() => setSubmit(false), 5000);
@@ -53,6 +62,7 @@ function Account1({ accountData, setAccountData, setStep, setLoad }) {
         setIsLoadingButton(false)
       }
     } else {
+      setShowError(true)
       return;
     }
   };
@@ -185,7 +195,11 @@ function Account1({ accountData, setAccountData, setStep, setLoad }) {
                     ? 'هستید'
                     : account1Data?.beneficiary_user_information?.under_charity_support === null || account1Data?.beneficiary_user_information?.under_charity_support === undefined? "":'نیستید'
                 }
+                data-tooltip-id="account-support-lock"
+        data-tooltip-content="این بخش قابل ویرایش نیست"
               />
+              
+      <Tooltip id="account-support-lock" place="top" openOnClick={true} style={{fontSize:"0.7rem", fontWeight:"normal",borderRadius:"6px"}}/>
             </div>
           </div>
 
@@ -200,8 +214,13 @@ function Account1({ accountData, setAccountData, setStep, setLoad }) {
                 id="account-id"
                 readOnly
                 value={account1Data?.beneficiary_id || ''}
-                style={{direction:"ltr"}}
+                style={{direction:"ltr"}
+              }
+                data-tooltip-id="account-id-lock"
+                data-tooltip-content="این بخش قابل ویرایش نیست"
               />
+              <Tooltip id="account-id-lock" place="top" openOnClick={true} style={{fontSize:"0.7rem", fontWeight:"normal",borderRadius:"6px"}}/>
+
             </div>
           </div>
 
@@ -235,12 +254,6 @@ function Account1({ accountData, setAccountData, setStep, setLoad }) {
               }
               style={{direction:"ltr"}}
             />
-            {!validation.phone_number && blur.phone_number && (
-              <div className="error-message">
-                {' '}
-                شماره همراه وارد شده صحیح نیست
-              </div>
-            )}
           </div>
 
           <div>
@@ -254,13 +267,10 @@ function Account1({ accountData, setAccountData, setStep, setLoad }) {
               className={!validation.email && blur.email ? 'invalid-input' : ''}
               style={{direction:"ltr"}}
             />
-            {!validation.email && blur.email && (
-              <div className="error-message">فرمت ایمیل وارد شده صحیح نیست</div>
-            )}
           </div>
 
           <div id="account-submit1">
-            {submit ? (
+            {submit && (
               <div>
                 <svg
                   width="16"
@@ -273,7 +283,9 @@ function Account1({ accountData, setAccountData, setStep, setLoad }) {
                 </svg>
                 اطلاعات با موفقیت ثبت گردید
               </div>
-            ) : (
+            ) }
+            
+            {!submit && !showError &&(
               <div style={{ visibility: 'hidden' }}>
                 <svg
                   width="16"
@@ -287,6 +299,16 @@ function Account1({ accountData, setAccountData, setStep, setLoad }) {
                 اطلاعات با موفقیت ثبت گردید
               </div>
             )}
+            {
+              showError &&
+        <div className='submit-error'>
+          <svg id="alert-icon3" width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M5.5 0C2.464 0 0 2.464 0 5.5C0 8.536 2.464 11 5.5 11C8.536 11 11 8.536 11 5.5C11 2.464 8.536 0 5.5 0ZM6.05 8.25H4.95V7.15H6.05V8.25ZM6.05 6.05H4.95V2.75H6.05V6.05Z" fill="#FF0000"/>
+          </svg>
+
+          <p>اطلاعات وارد شده معتبر نیست</p>
+        </div>
+            }
 
             {isLoadingButton? <button><LoadingButton dimension={10} stroke={2} color={'#fff'} /></button>
               :<input type="submit" value="تأیید" onClick={handleSubmit} />}
