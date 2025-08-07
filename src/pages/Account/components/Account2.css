@@ -282,3 +282,10 @@
   max-height: 36px;
   width: auto;
 }
+.account-container2 .custom-rmdp-month-span {
+  width: 60px !important;
+  height: auto !important;
+  border-radius: 12px !important;
+}
+
+

@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useMemo } from 'react';
 import more_icon from '../../media/icons/more_icon.svg';
 import bell_icon from '../../media/icons/bell_icon.svg';
 import { toJalaali } from 'jalaali-js';
@@ -289,7 +289,13 @@ function Carousel({
   // if (!notification || !notification.items || notification.items.length === 0) {
   //   return null;
   // }
+const sortedItems = useMemo(() => {
+  return [...(notification.items || [])].sort((a, b) => new Date(b.date) - new Date(a.date));
+}, [notification.items]);
 
+const sortedMoreItems = useMemo(() => {
+  return [...(notification.moreItems || [])].sort((a, b) => new Date(b.date) - new Date(a.date));
+}, [notification.moreItems]);
   return (
     <>
       <main
@@ -313,14 +319,14 @@ function Carousel({
                     </h1>
                   </section>
                   <section className="h3">
-                    <h3>{notification.items[0]?.heading || 'عنوان اطلاعیه'}</h3>
-                    <time dateTime={notification.items[0]?.date || ''}>
-                      {gregorianToJalali(notification.items[0]?.date) || 'تاریخ'}
+                    <h3>{sortedMoreItems[0]?.heading || 'عنوان اطلاعیه'}</h3>
+                    <time dateTime={sortedMoreItems[0]?.date || ''}>
+                      {gregorianToJalali(sortedMoreItems[0]?.date) || 'تاریخ'}
                     </time>
                   </section>
                   <div>
                     <p className="paragraph" id="para1">
-                      {notification.items[0]?.content || 'توضیحات اطلاعیه'}
+                      {sortedMoreItems[0]?.content || 'توضیحات اطلاعیه'}
                     </p>
                   </div>
                 </div>
@@ -349,7 +355,7 @@ function Carousel({
                       }}
                     >
                       <h3>{'موردی وجود ندارد'}</h3>
-                      {/* <time dateTime={notification.items[0]?.date || ""}>
+                      {/* <time dateTime={sortedMoreItems[0]?.date || ""}>
                 
                 </time> */}
                     </section>
@@ -446,7 +452,7 @@ function Carousel({
             </button>
           </div>
 
-          {notification.moreItems.map((item) => {
+          {sortedMoreItems.map((item) => {
             return (
               <div className="notif-overlay-body">
                 <section className="notif-overlay-title">

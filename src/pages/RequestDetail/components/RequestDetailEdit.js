@@ -723,7 +723,7 @@ useEffect(() => {
       span.style.position = 'absolute';
       span.style.whiteSpace = 'nowrap';
       span.style.pointerEvents = 'none';
-      span.style.fontSize = '14px';
+      span.style.fontSize = '0.7rem';
       span.style.color = 'black';
       document.body.appendChild(span);
     }
@@ -747,7 +747,7 @@ useEffect(() => {
         rect.right -
         paddingRight -
         textWidth -
-        70  +
+        55  +
         window.scrollX;
       // Vertically center the span to the input field
       const top =
@@ -788,7 +788,7 @@ useEffect(() => {
       span.style.position = 'absolute';
       span.style.whiteSpace = 'nowrap';
       span.style.pointerEvents = 'none';
-      span.style.fontSize = '14px';
+      span.style.fontSize = '0.7rem';
       span.style.color = 'black';
       document.body.appendChild(span);
     }
@@ -812,7 +812,7 @@ useEffect(() => {
         rect.right -
         paddingRight -
         textWidth -
-        40  +
+        30 -
         window.scrollX;
       // Vertically center the span to the input field
       const top =

@@ -54,7 +54,6 @@ function Account3({
       bottomRight.parentElement.removeChild(bottomRight)
     }
   })
-  
   const [userLocation, setUserLocation] = useState(null);
   const [useUserLocation, setUseUserLocation] = useState(false);
   const [addressWidth, setAddressWidth] = useState(0);
@@ -108,18 +107,10 @@ console.log(userLocation)
     }
   }, [account1Data]);
   const [validation, setValidation] = useState({
-    neighbor: true,
-    street: true,
-    alley: true,
     postal_code: true,
   });
 
-  const [blur, setBlur] = useState({
-    neighbor: true,
-    street: true,
-    alley: true,
-    postal_code: true,
-  });
+  const [blur, setBlur] = useState(false);
 
   // Initialize position state with proper fallbacks
   const [position, setPosition] = useState([35.6892, 51.389])
@@ -151,7 +142,6 @@ console.log(userLocation)
   };
 
   const handlePostalCodeChange = (event) => {
-    setBlur((pre) => ({ ...pre, postal_code: false }));
     // Convert Persian digits to English and remove all non-digit characters
     let englishValue = event.target.value
       .split('')
@@ -356,7 +346,7 @@ console.log(userLocation)
   };
 
   const handleNeighborChange = (e) => {
-    setBlur((pre) => ({ ...pre, neighbor: false }));
+    if(!isPersian(e.target.value )&& e.target.value !== "" && e.target.value !== null) return
     setAccount1Data((pre) => ({
       ...pre,
       beneficiary_user_address: {
@@ -364,11 +354,10 @@ console.log(userLocation)
         neighborhood: e.target.value,
       },
     }));
-    setValidation((pre) => ({ ...pre, neighbor: isPersian(e.target.value) }));
   };
 
   const handleStreetChange = (e) => {
-    setBlur((pre) => ({ ...pre, street: false }));
+    if(!isPersian(e.target.value )&& e.target.value !== "" && e.target.value !== null) return
     setAccount1Data((pre) => ({
       ...pre,
       beneficiary_user_address: {
@@ -376,11 +365,10 @@ console.log(userLocation)
         street: e.target.value,
       },
     }));
-    setValidation((pre) => ({ ...pre, street: isPersian(e.target.value) }));
   };
 
   const handleAlleyChange = (e) => {
-    setBlur((pre) => ({ ...pre, alley: false }));
+    if(!isPersian(e.target.value )&& e.target.value !== "" && e.target.value !== null) return
     setAccount1Data((pre) => ({
       ...pre,
       beneficiary_user_address: {
@@ -388,27 +376,18 @@ console.log(userLocation)
         alley: e.target.value,
       },
     }));
-    setValidation((pre) => ({ ...pre, alley: isPersian(e.target.value) }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoadingButtonAddress(true)
+    setBlur(true)
     if (
       hasAddress &&
-      (validation.neighbor ||
-        account1Data?.beneficiary_user_address?.neighborhood === '' ||
-        account1Data?.beneficiary_user_address?.neighborhood === null) &&
-      (validation.street ||
-        account1Data?.beneficiary_user_address?.street === '' ||
-        account1Data?.beneficiary_user_address?.street === null) &&
-      (validation.alley ||
-        account1Data?.beneficiary_user_address?.alley === '' ||
-        account1Data?.beneficiary_user_address?.alley === null) &&
       (validation.postal_code ||
         account1Data?.beneficiary_user_address?.postal_code === '' ||
         account1Data?.beneficiary_user_address?.postal_code === null)
     ) {
+      setIsLoadingButtonAddress(true)
       try {
         const response = await fetch(
           `https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/update-user-address/`,
@@ -452,19 +431,11 @@ console.log(userLocation)
       }
     } else if (
       !hasAddress &&
-      (validation.neighbor ||
-        account1Data?.beneficiary_user_address?.neighborhood === '' ||
-        account1Data?.beneficiary_user_address?.neighborhood === null) &&
-      (validation.street ||
-        account1Data?.beneficiary_user_address?.street === '' ||
-        account1Data?.beneficiary_user_address?.street === null) &&
-      (validation.alley ||
-        account1Data?.beneficiary_user_address?.alley === '' ||
-        account1Data?.beneficiary_user_address?.alley === null) &&
       (validation.postal_code ||
         account1Data?.beneficiary_user_address?.postal_code === '' ||
         account1Data?.beneficiary_user_address?.postal_code === null)
     ) {
+      setIsLoadingButtonAddress(true)
       try {
         const response = await fetch(
           `https://charity-backend-staging.liara.run/beneficiary-platform/beneficiary/${localStorage.getItem('user_id')}/create-user-address/`,
@@ -711,11 +682,11 @@ console.log(userLocation)
                   account1Data?.beneficiary_user_address?.neighborhood || ''
                 }
                 onChange={handleNeighborChange}
-                onBlur={() => setBlur((pre) => ({ ...pre, neighbor: true }))}
+                placeholder='با کیبورد فارسی وارد کنید'
               />
             </div>
 
-            <div className='input-browser-border'>
+            <div className='input-browser-border' style={blur && !validation.postal_code?{border:"1.5px solid #ff0000"}:null}>
               <label htmlFor="account-postal"> کد پستی:</label>
               <input
                 type="text"
@@ -728,8 +699,8 @@ console.log(userLocation)
                       ).toString()
                     : null
                 }
+                onClick={() => setBlur(false)}
                 onChange={handlePostalCodeChange}
-                onBlur={() => setBlur((pre) => ({ ...pre, postal_code: true }))}
                 maxLength={10}
                 style={{direction:"ltr"}}
               />
@@ -742,7 +713,7 @@ console.log(userLocation)
                 id="account-street"
                 value={account1Data?.beneficiary_user_address?.street || ''}
                 onChange={handleStreetChange}
-                onBlur={() => setBlur((pre) => ({ ...pre, street: true }))}
+                placeholder='با کیبورد فارسی وارد کنید'
               />
             </div>
 
@@ -753,7 +724,7 @@ console.log(userLocation)
                 id="account-alley"
                 value={account1Data?.beneficiary_user_address?.alley || ''}
                 onChange={handleAlleyChange}
-                onBlur={() => setBlur((pre) => ({ ...pre, alley: true }))}
+                placeholder='با کیبورد فارسی وارد کنید'
               />
             </div>
 
@@ -808,7 +779,7 @@ console.log(userLocation)
                 </svg>
                 اطلاعات با موفقیت ثبت گردید
               </div>
-            ) : (
+            ) : !validation.postal_code && blur ?null:(
               <div style={{ visibility: 'hidden' }}>
                 <svg
                   width="16"
@@ -822,35 +793,21 @@ console.log(userLocation)
                 اطلاعات با موفقیت ثبت گردید
               </div>
             )}
-            {((!validation.neighbor &&
-              account1Data?.beneficiary_user_address?.neighborhood !== '' &&
-              account1Data?.beneficiary_user_address?.neighborhood !== null) ||
-              (!validation.street &&
-                account1Data?.beneficiary_user_address?.street !== '' &&
-                account1Data?.beneficiary_user_address?.street !== null) ||
-              (!validation.alley &&
-                account1Data?.beneficiary_user_address?.alley !== '' &&
-                account1Data?.beneficiary_user_address?.alley !== null)) &&
-              blur.neighbor &&
-              blur.street &&
-              blur.alley && (
-                <div className="error-message">
-                  لطفا نام محله و خیابان و کوچه خود را به فارسی وارد کنید
-                </div>
-              )}
-            {!validation.postal_code &&
-              blur.postal_code &&
-              account1Data?.beneficiary_user_address?.postal_code !== '' &&
-              account1Data?.beneficiary_user_address?.postal_code !== null && (
-                <div className="error-message">
-                  لطفا یک کدپستی ده رقمی معتبر وارد کنید
-                </div>
-              )}
+            {
+              blur && !validation.postal_code &&
+        <div className='submit-error'>
+          <svg id="alert-icon3" width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M5.5 0C2.464 0 0 2.464 0 5.5C0 8.536 2.464 11 5.5 11C8.536 11 11 8.536 11 5.5C11 2.464 8.536 0 5.5 0ZM6.05 8.25H4.95V7.15H6.05V8.25ZM6.05 6.05H4.95V2.75H6.05V6.05Z" fill="#FF0000"/>
+          </svg>
+
+          <p>کد پستی وارد شده معتبر نیست</p>
+        </div>
+            }
             {isLoadingButtonAddress?<button style={{width:"75px"}}><LoadingButton dimension={10} stroke={2} color={'#fff'} /></button>:<input type="submit" value="تأیید" className='address-submit'/>}
           </div>
 
           <section style={{position:"relative", zIndex: 1}}>
-            <p>آدرس خود را برروی نقشه زیر تعیین کنید:</p>
+            <p>آدرس خود را برروی نقشه زیر تعیین کنید (می‌توانید از مکان‌یابی خودکار استفاده کنید):</p>
             <div className='map-style' style={{ position: 'relative' }}>
               <div
                 id="map"

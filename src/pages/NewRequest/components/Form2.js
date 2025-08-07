@@ -10,6 +10,8 @@ import persian_fa from 'react-date-object/locales/persian_fa';
 import DateObject from 'react-date-object';
 import FormHeader from './FormHeader';
 import { doc } from 'prettier';
+import {Tooltip} from 'react-tooltip';
+import 'react-tooltip/dist/react-tooltip.css'
 
 function Form2({
   setOneTimeData,
@@ -356,11 +358,11 @@ function Form2({
       .replace(/\D/g, '');
 
     // Update the state with the English number (or empty string)
-    var inputValue = englishValue === '' ? null : englishValue;
+    var inputValue = englishValue === '' ? '' : englishValue;
     if (inputValue && Number(inputValue) > 1000000000) {
      inputValue = '1000000000' // Enforce max limit of 1 billion
     }
-    if (!inputValue) {
+    if (inputValue === '') {
       setRequestData((pre) => {
         return { ...pre, beneficiary_request_amount: '' };
       });
@@ -394,7 +396,7 @@ useEffect(() => {
       span.style.position = 'absolute';
       span.style.whiteSpace = 'nowrap';
       span.style.pointerEvents = 'none';
-      span.style.fontSize = '14px';
+      span.style.fontSize = '0.7rem';
       span.style.color = 'black';
       document.body.appendChild(span);
     }
@@ -418,7 +420,7 @@ useEffect(() => {
         rect.left +
         inputWidth/2 -
         textWidth -
-        70  +
+        50  +
         window.scrollX;
       // Vertically center the span to the input field
       const top =
@@ -456,7 +458,7 @@ useEffect(() => {
       span.style.position = 'absolute';
       span.style.whiteSpace = 'nowrap';
       span.style.pointerEvents = 'none';
-      span.style.fontSize = '14px';
+      span.style.fontSize = '0.7rem';
       span.style.color = 'black';
       document.body.appendChild(span);
     }
@@ -480,7 +482,7 @@ useEffect(() => {
         rect.left +
         inputWidth/2 -
         textWidth/2 -
-        40  +
+        30  +
         window.scrollX;
       // Vertically center the span to the input field
       const top =
@@ -733,20 +735,27 @@ useEffect(() => {
               </button>
             </div>
           ) : (
-            <div class="next-lock-btn">
-              <button>
-                <span> بعدی</span>
-                <svg
-                  width="21"
-                  height="32"
-                  viewBox="0 0 21 32"
-                  fill="currentColor"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M17.3184 1.22266C16.7343 0.75704 15.884 0.790223 15.3379 1.32227L1.38574 14.9258L1.2793 15.041C0.817171 15.5952 0.81717 16.4048 1.2793 16.959L1.38574 17.0742L15.3379 30.6777C15.884 31.2098 16.7343 31.243 17.3184 30.7773L17.4316 30.6777L19.6152 28.5479C20.2185 27.9596 20.2189 26.9903 19.6162 26.4014L9.33789 16.3574L9.27148 16.2783C9.15894 16.1106 9.15894 15.8894 9.27148 15.7217L9.33789 15.6426L19.6162 5.59863C20.2189 5.00974 20.2185 4.04041 19.6152 3.45215L17.4316 1.32227L17.3184 1.22266Z" />
-                </svg>
-              </button>
-            </div>
+                      <>
+          <div class="next-lock-btn">
+            <button
+            data-tooltip-id="next-lock-button"
+                data-tooltip-content="تمامی بخش ها را پر کنید"
+            >
+              <span> بعدی</span>
+              <svg
+                width="21"
+                height="32"
+                viewBox="0 0 21 32"
+                fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M17.3184 1.22266C16.7343 0.75704 15.884 0.790223 15.3379 1.32227L1.38574 14.9258L1.2793 15.041C0.817171 15.5952 0.81717 16.4048 1.2793 16.959L1.38574 17.0742L15.3379 30.6777C15.884 31.2098 16.7343 31.243 17.3184 30.7773L17.4316 30.6777L19.6152 28.5479C20.2185 27.9596 20.2189 26.9903 19.6162 26.4014L9.33789 16.3574L9.27148 16.2783C9.15894 16.1106 9.15894 15.8894 9.27148 15.7217L9.33789 15.6426L19.6162 5.59863C20.2189 5.00974 20.2185 4.04041 19.6152 3.45215L17.4316 1.32227L17.3184 1.22266Z" />
+              </svg>
+              
+            </button>
+          </div>
+          <Tooltip id="next-lock-button" place="top" openOnClick={true} style={{fontSize:"0.7rem", fontWeight:"normal",borderRadius:"6px"}}/>
+          </>
           )}
         </div>
 

@@ -19,8 +19,8 @@
 .hamburger-block-overlay {
     z-index: 999;
     background-color: rgba(0,0,0,0.35);
-    -webkit-backdrop-filter: blur(2px);
-    backdrop-filter: blur(2px);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
     position: fixed;
     top: 0;
     bottom: 0;

@@ -264,6 +264,8 @@
 }
 .form4-container .next-back-btn button > span {
   margin: 0 5px;
+  display: flex;
+  justify-content: center;
 }
 .form4-container .back-button-review {
   background-color: transparent;
@@ -387,17 +389,23 @@
   align-items: center;
   justify-content: center;
 
+  width: 400px;
+  max-width: 90%;
+
+  align-self: center;
+  justify-self: center;
+
   position: absolute;
+  margin: auto auto;
   top: 50%;
-  margin: auto;
   transform: translateY(-50%);
 
   background-color: var(--white-color);
   border: 1px solid var(--main-color);
   border-radius: 10px;
-  box-shadow: 0px 4px 4px var(--black25-color);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
   padding: 10px 40px 20px 40px;
-  z-index: 1000;
+  z-index: 100;
 }
 .final-form svg {
   color: var(--green-color);

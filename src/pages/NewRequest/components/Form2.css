@@ -355,9 +355,9 @@
   stroke: var(--black-color);
   stroke-width: 1px;
 }
-.form2-container .next-lock-btn button {
+/* .form2-container .next-lock-btn button {
   cursor: not-allowed;
-}
+} */
 .form2-container .next-lock-btn span {
   color: var(--black50-color);
 }

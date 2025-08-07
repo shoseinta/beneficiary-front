@@ -19,6 +19,10 @@ function Account2({
  useEffect(() => {
   if (!dateSelected) return;
   const timeout = setTimeout(() => {
+    // const calendar = document.querySelector('.rmdp-calendar')
+    // if(calendar){
+    //   calendar.style.height = '311px'
+    // }
     const leftArrow = document.querySelector('.rmdp-left i');
     const rightArrow = document.querySelector('.rmdp-right i');
     // const disables = document.querySelectorAll('.rmdp-day.rmdp-disabled');
@@ -67,11 +71,15 @@ function Account2({
         spanMonth.style.paddingLeft = '15px';
         spanMonth.addEventListener('click', () => {
           setTimeout(() => {
+            // const rmdpYm = document.querySelectorAll('.rmdp-ym')
+            // if(rmdpYm.length !== 0){
+            //   rmdpYm.forEach((ym) => {
+            //     ym.style.height = '62.5px'
+            //   })
+            // }
             const months = document.querySelectorAll('.rmdp-ym .rmdp-day span')
             months.forEach((month) => {
-              month.style.width = '60px';
-            month.style.height = 'auto';
-            month.style.borderRadius = '12px';
+              month.classList.add('custom-rmdp-month-span');
             })
             
           },50)
@@ -81,6 +89,12 @@ function Account2({
         spanYear.style.paddingRight = '15px';
         spanYear.addEventListener('click', () => {
           setTimeout(() => {
+            // const rmdpYm = document.querySelectorAll('.rmdp-ym')
+            // if(rmdpYm.length !== 0){
+            //   rmdpYm.forEach((ym) => {
+            //     ym.style.height = '62.5px'
+            //   })
+            // }
             const months = document.querySelectorAll('.rmdp-ym .rmdp-day span')
             months.forEach((month) => {
               month.style.width = '60px';
@@ -114,15 +128,6 @@ function Account2({
     setAccount1Data(accountData);
   }, [accountData]);
 
-  const [validation, setValidation] = useState({
-    first_name: true,
-    last_name: true,
-  });
-
-  const [blur, setBlur] = useState({
-    first_name: true,
-    last_name: true,
-  });
   const toPersianDigits = (num) => {
     const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
     return num.toString().replace(/\d/g, (d) => persianDigits[d]);
@@ -132,7 +137,8 @@ function Account2({
     // Also includes Persian numbers \u06F0-\u06F9
     // And Arabic characters that might be used in Persian \u0621-\u064A
     const persianRegex = /^[\u0600-\u06FF\u0621-\u064A\s]+$/;
-    return persianRegex.test(text);
+    const numberRegex = /[\u06F0-\u06F9\u0660-\u0669\u0030-\u0039]/; // Persian, Arabic, and Latin digits
+    return persianRegex.test(text) && !numberRegex.test(text);
   };
 
   useEffect(() => {
@@ -194,11 +200,7 @@ function Account2({
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (
-      hasInformation &&
-      (validation.first_name ||
-        account1Data?.beneficiary_user_information?.first_name === '') &&
-      (validation.last_name ||
-        account1Data?.beneficiary_user_information?.last_name === '')
+      hasInformation
     ) {
       setIsLoadingButton(true)
       try {
@@ -240,11 +242,7 @@ function Account2({
         setIsLoadingButton(false)
       }
     } else if (
-      !hasInformation &&
-      (validation.first_name ||
-        account1Data?.beneficiary_user_information?.first_name === '') &&
-      (validation.last_name ||
-        account1Data?.beneficiary_user_information?.last_name === '')
+      !hasInformation
     ) {
       setIsLoadingButton(true)
       try {
@@ -346,27 +344,20 @@ function Account2({
               value={
                 account1Data?.beneficiary_user_information?.first_name || ''
               }
+              placeholder='با کیبورد فارسی وارد کنید'
               onChange={(e) => {
-                setBlur((pre) => ({ ...pre, first_name: false }));
-                if (!isPersian(e.target.value)) {
-                  setValidation((pre) => ({ ...pre, first_name: false }));
+                if (!isPersian(e.target.value) && e.target.value !== "" && e.target.value !== null) {
+                  return
                 } else {
-                  setValidation((pre) => ({ ...pre, first_name: true }));
-                }
-                setAccount1Data((pre) => ({
+                  setAccount1Data((pre) => ({
                   ...pre,
                   beneficiary_user_information: {
                     ...pre.beneficiary_user_information,
                     first_name: e.target.value,
                   },
                 }));
-
-                setValidation((pre) => ({
-                  ...pre,
-                  first_name: isPersian(e.target.value),
-                }));
+                }
               }}
-              onBlur={() => setBlur((pre) => ({ ...pre, first_name: true }))}
             />
           </div>
 
@@ -378,22 +369,21 @@ function Account2({
               value={
                 account1Data?.beneficiary_user_information?.last_name || ''
               }
+              placeholder='با کیبورد فارسی وارد کنید'
               onChange={(e) => {
-                setBlur((pre) => ({ ...pre, last_name: false }));
-                if (!isPersian(e.target.value)) {
-                  setValidation((pre) => ({ ...pre, last_name: false }));
+                if (!isPersian(e.target.value)&& e.target.value !== "" && e.target.value !== null) {
+                  return
                 } else {
-                  setValidation((pre) => ({ ...pre, last_name: true }));
-                }
-                setAccount1Data((pre) => ({
+                  setAccount1Data((pre) => ({
                   ...pre,
                   beneficiary_user_information: {
                     ...pre.beneficiary_user_information,
                     last_name: e.target.value,
                   },
                 }));
+                }
+                
               }}
-              onBlur={() => setBlur((pre) => ({ ...pre, last_name: true }))}
             />
           </div>
 
@@ -425,6 +415,7 @@ function Account2({
               onOpen={() => setDateSelected(true)}
                           onClose={() => setDateSelected(false)}
                           onFocusedDateChange={() => setDateSelected(true)}
+              showOtherDays={true}
             />
             {/* <input 
                     type="text" 
@@ -484,18 +475,6 @@ function Account2({
                 </svg>
                 اطلاعات با موفقیت ثبت گردید
               </div>
-            )}
-            {((!validation.first_name &&
-              blur.first_name &&
-              account1Data?.beneficiary_user_information?.first_name !== '' &&
-              account1Data?.beneficiary_user_information?.first_name !==
-                null) ||
-              (!validation.last_name &&
-                blur.last_name &&
-                account1Data?.beneficiary_user_information?.last_name !== '' &&
-                account1Data?.beneficiary_user_information?.last_name !==
-                  null)) && (
-              <div> لطفا نام و نام خانوادگی خود را به فارسی وارد کنید</div>
             )}
             {isLoadingButton? <button><LoadingButton dimension={10} stroke={2} color={'#fff'} /></button>
               :<input type="submit" value="تأیید" onClick={handleSubmit} />}

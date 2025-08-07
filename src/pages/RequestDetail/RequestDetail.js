@@ -10,6 +10,8 @@ import attach_icon from '../../media/icons/attach_icon.svg';
 import RequestDetailEdit from './components/RequestDetailEdit';
 import LoadingButton from '../../components/loadingButton/LoadingButton';
 import JSZip from 'jszip';
+import {Tooltip} from 'react-tooltip';
+import 'react-tooltip/dist/react-tooltip.css'
 import {
   FiFile,
   FiImage,
@@ -73,6 +75,7 @@ useEffect(() => {
 }, [isLoadingButtonDelete, isDelete]);
   const { id } = useParams();
   const [loadingFiles, setLoadingFiles] = useState(true)
+  const [loadingChildFiles, setLoadingChildFiles] = useState(true)
   const { duration, processingStage,isDeleteFinished,setIsDeleteFinished } = useLookup();
   const [isEdit, setIsEdit] = useState(false);
   const [requestData, setRequestData] = useState(null);
@@ -228,7 +231,7 @@ useEffect(() => {
   };
 
   const downloadAndExtractZipChild = async (url) => {
-    setLoadingFiles(true);
+    setLoadingChildFiles(true);
     const filename = url.split('/').pop();
     try {
       const response = await fetch(
@@ -271,7 +274,7 @@ useEffect(() => {
 });
 
       await Promise.all(filePromises);
-      setLoadingFiles(false);
+      setLoadingChildFiles(false);
       return extractedFiles;
     } catch (error) {
       //console.error('ZIP download/extraction failed:', error);
@@ -430,6 +433,12 @@ useEffect(() => {
       // Add error handling UI here
     }
   };
+
+  useEffect(() => {
+    if(!isChildCreate){
+      setChildCreationValidation(true)
+    }
+  },[isChildCreate])
 
   useEffect(() => {
     document.documentElement.classList.add('request-detail-html');
@@ -695,74 +704,30 @@ useEffect(() => {
       setIsLoadingButtonDelete(false)
     }
   };
+  const [showTooltip,setShowTooltip] = useState(false)
   useEffect(() => {
-    const input = document.getElementById('observe-cash');
-    if (!input) return;
-    let span = document.getElementById('amount-unit-span');
-    // if (span) {
-    //   span.parentElement.removeChild(span); // Remove the existing span if it exists
-    // }
-    if (!span) {
-      span = document.createElement('span');
-      span.id = 'amount-unit-span';
-      span.innerText = "تومان";
-      span.style.position = 'absolute';
-      span.style.whiteSpace = 'nowrap';
-      span.style.pointerEvents = 'none';
-      span.style.fontSize = '14px';
-      span.style.color = 'black';
-      document.body.appendChild(span);
+    setShowTooltip(requestData && (requestData.beneficiary_request_is_created_by_charity ||
+      (requestData.beneficiary_request_processing_stage !== 'Submitted' &&
+        requestData.beneficiary_request_processing_stage !== 'Pending Review' &&
+        requestData.beneficiary_request_processing_stage !== 'Under Evaluation')))
+  },[requestData]) 
+  
+    
+  
+  const handleDeleteClick = () => {
+    if (requestData && (
+      requestData.beneficiary_request_is_created_by_charity ||
+      (requestData.beneficiary_request_processing_stage !== 'Submitted' &&
+        requestData.beneficiary_request_processing_stage !== 'Pending Review' &&
+        requestData.beneficiary_request_processing_stage !== 'Under Evaluation')
+      )
+    ) {
+      return;
     }
+    setIsDelete(true)
+  }
 
-    const updatePositionAmount = () => {
-      const rect = input.getBoundingClientRect();
-      const computedStyle = getComputedStyle(input);
-      const paddingLeft = parseFloat(computedStyle.paddingLeft) || 0;
-      const paddingRight = parseFloat(computedStyle.paddingRight) || 0;
-      const inputWidth = rect.width
-      // Create a canvas to measure the rendered width of the input value
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      // Use the computed font properties for accurate measurement
-      ctx.font = computedStyle.font || `${computedStyle.fontSize} ${computedStyle.fontFamily}`;
-      // If the value is empty, use placeholder for width estimation; otherwise, use value
-      const valueToMeasure = input.value || input.placeholder || '';
-      const textWidth = ctx.measureText(valueToMeasure).width;
-      // Calculate left position: input's left + left padding + text width + small padding (e.g., 4px)
-      const left =
-        rect.right -
-        paddingRight -
-        textWidth -
-        40  +
-        window.scrollX;
-      // Vertically center the span to the input field
-      const top =
-        rect.top +
-        rect.height / 2 -
-        span.offsetHeight / 2 +
-        window.scrollY;
-      span.style.top = `${top}px`;
-      span.style.left = `${left}px`;
-    };
-
-    updatePositionAmount();
-    if (span.getBoundingClientRect().left < input.getBoundingClientRect().left) {
-      span.innerText = "";
-    }
-
-    window.addEventListener('resize', updatePositionAmount);
-    input.addEventListener('input', updatePositionAmount);
-
-    return () => {
-      window.removeEventListener('resize', updatePositionAmount);
-      input.removeEventListener('input', updatePositionAmount);
-      if (span) {
-        span.remove();
-      }
-    };
-  }, [requestData]);
-
-  if ((!isDelete && !isEdit && !isChildCreate && !isChildSee && !isChildCreateFinish && !isDeleteFinished) && (!requestData || (requestData?.beneficiary_request_document && loadingFiles) || (childSeeData?.beneficiary_request_child_document && loadingFiles))) {
+  if ((!isDelete && !isEdit && !isChildCreate && !isChildSee && !isChildCreateFinish && !isDeleteFinished) && (!requestData || (requestData?.beneficiary_request_document && loadingFiles) || (childSeeData?.beneficiary_request_child_document && loadingChildFiles))) {
     return (
       <>
       <div className="request-detail-container">
@@ -858,9 +823,9 @@ useEffect(() => {
                       type="text"
                       id="observe-cash"
                       readOnly
-                      value={formatPersianNumber(
+                      value={`${formatPersianNumber(
                         requestData.beneficiary_request_amount
-                      )}
+                      )} تومان`}
                     />
                   </div>
                 )}
@@ -1011,7 +976,10 @@ useEffect(() => {
                   </button>
                 </div>
                 <div className="observe-edit-container">
-                  <button className="observe-edit" onClick={handleEditClick}>
+                  <button className="observe-edit" onClick={handleEditClick}
+                  data-tooltip-id="edit-button-tooltip"
+                  data-tooltip-content="این درخواست قابل ویرایش نیست"
+                  >
                     ویرایش درخواست
                     <svg
                       width="14"
@@ -1023,6 +991,10 @@ useEffect(() => {
                       <path d="M8.60103 4.68222L9.31648 5.39778L2.2708 12.4444H1.55534V11.7289L8.60103 4.68222ZM11.4006 0C11.2062 0 11.004 0.0777778 10.8563 0.225556L9.43314 1.64889L12.3494 4.56556L13.7725 3.14222C14.0758 2.83889 14.0758 2.34889 13.7725 2.04556L11.9528 0.225556C11.7973 0.07 11.6028 0 11.4006 0ZM8.60103 2.48111L0 11.0833V14H2.91626L11.5173 5.39778L8.60103 2.48111Z" />
                     </svg>
                   </button>
+                  {
+                    showTooltip &&
+                    <Tooltip id="edit-button-tooltip" place="top" openOnClick={true} style={{fontSize:"0.7rem", fontWeight:"normal",borderRadius:"6px"}}/>
+                  }
                 </div>
               </div>
 
@@ -1047,7 +1019,7 @@ useEffect(() => {
                 <div className="observe-delete-container">
                   <button
                     className="observe-delete"
-                    onClick={() => setIsDelete(true)}
+                    onClick={handleDeleteClick}
                   >
                     حذف درخواست
                     <svg
@@ -1056,10 +1028,15 @@ useEffect(() => {
                       viewBox="0 0 11 14"
                       fill="currentColor"
                       xmlns="http://www.w3.org/2000/svg"
+                      data-tooltip-id="delete-button-tooltip"
+                      data-tooltip-content="این درخواست قابل حذف نیست"
                     >
                       <path d="M8.64286 4.66667V12.4444H2.35714V4.66667H8.64286ZM7.46429 0H3.53571L2.75 0.777778H0V2.33333H11V0.777778H8.25L7.46429 0ZM10.2143 3.11111H0.785714V12.4444C0.785714 13.3 1.49286 14 2.35714 14H8.64286C9.50714 14 10.2143 13.3 10.2143 12.4444V3.11111Z" />
                     </svg>
                   </button>
+                  {
+                    showTooltip && <Tooltip id="delete-button-tooltip" place="top" openOnClick={true} style={{fontSize:"0.7rem", fontWeight:"normal",borderRadius:"6px"}}/>
+                  }
                 </div>
               </div>
 
@@ -1206,9 +1183,9 @@ useEffect(() => {
                       type="text"
                       id="observe-cash"
                       readOnly
-                      value={formatPersianNumber(
+                      value={`${formatPersianNumber(
                         requestData.beneficiary_request_amount
-                      )}
+                      )} تومان`}
                     />
                   </div>
                 )}
@@ -1359,7 +1336,10 @@ useEffect(() => {
                   </button>
                 </div>
                 <div className="observe-edit-container">
-                  <button className="observe-edit" onClick={handleEditClick}>
+                  <button className="observe-edit" onClick={handleEditClick}
+                  data-tooltip-id="edit-button-tooltip2"
+                  data-tooltip-content="این درخواست قابل ویرایش نیست"
+                  >
                     ویرایش درخواست
                     <svg
                       width="14"
@@ -1371,6 +1351,10 @@ useEffect(() => {
                       <path d="M8.60103 4.68222L9.31648 5.39778L2.2708 12.4444H1.55534V11.7289L8.60103 4.68222ZM11.4006 0C11.2062 0 11.004 0.0777778 10.8563 0.225556L9.43314 1.64889L12.3494 4.56556L13.7725 3.14222C14.0758 2.83889 14.0758 2.34889 13.7725 2.04556L11.9528 0.225556C11.7973 0.07 11.6028 0 11.4006 0ZM8.60103 2.48111L0 11.0833V14H2.91626L11.5173 5.39778L8.60103 2.48111Z" />
                     </svg>
                   </button>
+                  {
+                    showTooltip &&
+                    <Tooltip id="edit-button-tooltip2" place="top" openOnClick={true} style={{fontSize:"0.7rem", fontWeight:"normal",borderRadius:"6px"}}/>
+                  }
                 </div>
               </div>
 
@@ -1395,7 +1379,9 @@ useEffect(() => {
                 <div className="observe-delete-container">
                   <button
                     className="observe-delete"
-                    onClick={() => setIsDelete(true)}
+                    onClick={handleDeleteClick}
+                    data-tooltip-id="delete-button-tooltip2"
+                    data-tooltip-content="این درخواست قابل حذف نیست"
                   >
                     حذف درخواست
                     <svg
@@ -1408,7 +1394,9 @@ useEffect(() => {
                       <path d="M8.64286 4.66667V12.4444H2.35714V4.66667H8.64286ZM7.46429 0H3.53571L2.75 0.777778H0V2.33333H11V0.777778H8.25L7.46429 0ZM10.2143 3.11111H0.785714V12.4444C0.785714 13.3 1.49286 14 2.35714 14H8.64286C9.50714 14 10.2143 13.3 10.2143 12.4444V3.11111Z" />
                     </svg>
                   </button>
-                </div>
+                  {showTooltip &&
+                    <Tooltip id="delete-button-tooltip2" place="top" openOnClick={true} style={{fontSize:"0.7rem", fontWeight:"normal",borderRadius:"6px"}}/>
+                }</div>
               </div>
 
               <div className="observe-line-button">
@@ -1463,6 +1451,8 @@ useEffect(() => {
                   id="child-creation-description"
                   value={childData.beneficiary_request_child_description}
                   onChange={handleChildDescriptionChange}
+                  placeholder={!childCreationValidation?"لطفا توضیحات را وارد کنید":""}
+                  style={!childCreationValidation?{border:"1.5px solid #ff0000"}:null}
                 ></textarea>
               </div>
 
@@ -1560,9 +1550,6 @@ useEffect(() => {
                 </div>
               </div>
             </form>
-            {!childCreationValidation && (
-              <div>لطفا بخش توضیحات درخواست را پر کنید</div>
-            )}
 
             <div className="child-creation-overlay-buttons">
               <button
