@@ -895,7 +895,7 @@ console.log(userLocation)
             </div>
             <div className='map-button-success-container'>
               {submitMap ? (
-              <div className='button-container-success'>
+              <div className='button-container-success' style={{ marginTop: '10px'}}>
                 <svg
                   width="16"
                   height="14"
