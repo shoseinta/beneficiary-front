@@ -7,6 +7,9 @@ import persian from 'react-date-object/calendars/persian';
 import persian_fa from 'react-date-object/locales/persian_fa';
 import DateObject from 'react-date-object';
 import LoadingButton from '../../../components/loadingButton/LoadingButton';
+import {Tooltip} from 'react-tooltip';
+import 'react-tooltip/dist/react-tooltip.css'
+
 
 function Account2({
   accountData,
@@ -332,7 +335,12 @@ function Account2({
                 id="account-ident-num"
                 readOnly
                 value={toPersianDigits(account1Data?.identification_number || '')}
+              data-tooltip-id="account-ident-lock"
+        data-tooltip-content="این بخش قابل ویرایش نیست"
               />
+              
+      <Tooltip id="account-ident-lock" place="top" openOnClick={true} style={{fontSize:"0.7rem", fontWeight:"normal",borderRadius:"6px"}}/>
+            
             </div>
           </div>
 

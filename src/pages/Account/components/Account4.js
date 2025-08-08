@@ -139,6 +139,12 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
       ...pre,
       beneficiary_user_family_info_identification_number: newValue,
     }))
+
+    if(newValue === null || (newValue!== null && newValue?.length !== 10)){
+      setFamilyValidation(pre => ({...pre, identification_number:false}))
+    }else{
+      setFamilyValidation(pre => ({...pre, identification_number:true}))
+    }
     // Update the displayed value with Persian digits (no commas)
     const displayValue =
       englishValue === '' ? '' : toPersianDigits(englishValue);
@@ -159,7 +165,8 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
     // Also includes Persian numbers \u06F0-\u06F9
     // And Arabic characters that might be used in Persian \u0621-\u064A
     const persianRegex = /^[\u0600-\u06FF\u0621-\u064A\s]+$/;
-    return persianRegex.test(text);
+    const numberRegex = /[\u06F0-\u06F9\u0660-\u0669\u0030-\u0039]/; // Persian, Arabic, and Latin digits
+    return persianRegex.test(text) && !numberRegex.test(text);
   };
   
   const [addFamily, setAddFamily] = useState(false);
@@ -178,7 +185,22 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
     beneficiary_user_family_info_birth_date: null,
     beneficiary_user_family_info_gender: null,
   });
-
+  const [familyValidation,setFamilyValidation] = useState({
+    family_relation:false,
+    identification_number:false,
+    name:false,
+    family_name:false,
+    birth_date:false,
+    gender:false,
+  })
+  const [familyBlur,setFamilyBlur] = useState({
+    family_relation:false,
+    identification_number:false,
+    name:false,
+    family_name:false,
+    birth_date:false,
+    gender:false,
+  })
   const [additionalData, setAdditionalData] = useState({
     beneficiary_user_additional_info_title: null,
     beneficiary_user_additional_info_description: null,
@@ -450,7 +472,11 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
 
   const handleAddFamily = async (e) => {
     e.preventDefault();
+    setFamilyBlur({birth_date:true,identification_number:true,family_relation:true,name:true,family_name:true,gender:true})
     var flag = 0
+    if (!familyValidation.identification_number){
+      flag = 1
+    }
     if(familyData.beneficiary_user_family_info_birth_date === null ||
       familyData.beneficiary_user_family_info_birth_date === "" ||
       familyData.beneficiary_user_family_info_family_relation === null ||
@@ -582,6 +608,34 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
     setAdditionalBlur(false)
     setFiles([]);
   },[addAdditional])
+
+  useEffect(() => {
+    setFamilyData({
+        beneficiary_user_family_info_family_relation: null,
+        beneficiary_user_family_info_identification_number: null,
+        beneficiary_user_family_info_first_name: null,
+        beneficiary_user_family_info_last_name: null,
+        beneficiary_user_family_info_birth_date: null,
+        beneficiary_user_family_info_gender: null,
+      });
+      setJalaliValue(null);
+      setFamilyBlur({
+        birth_date:false,
+        gender:false,
+        name:false,
+        family_name:false,
+        identification_number:false,
+        birth_date:false,
+      })
+      setFamilyValidation({
+        birth_date:false,
+        gender:false,
+        name:false,
+        family_name:false,
+        identification_number:false,
+        birth_date:false,
+      })
+  },[addFamily])
   return (
     <>
       <div className="account-container4">
@@ -808,10 +862,12 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
                   نسبت فامیلی:<sup>*</sup>
                 </label>
                 <select
+                  style={!familyValidation.family_relation && familyBlur.family_relation ? {border:"1.5px solid #ff0000", color:"#ff0000"}:null}
                   id="family-relation"
                   value={
                     familyData.beneficiary_user_family_info_family_relation
                   }
+                  onClick={() => setFamilyBlur(pre => ({...pre,family_relation:false}))}
                   onChange={(e) => {
                     setFamilyData((pre) => {
                       return {
@@ -820,6 +876,11 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
                           e.target.value,
                       };
                     });
+                    if(e.target.value === ""){
+                      setFamilyValidation(pre => ({...pre,family_relation:false}))
+                    }else {
+                      setFamilyValidation(pre => ({...pre,family_relation:true}))
+                    }
                   }}
                 >
                   <option value="">انتخاب کنید</option>
@@ -833,6 +894,8 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
                   کد ملی:<sup>*</sup>
                 </label>
                 <input
+                  style={!familyValidation.identification_number && familyBlur.identification_number ? {border:"1.5px solid #ff0000", color:"#ff0000",direction:"ltr"}:{direction:"ltr"}}
+                  placeholder={familyBlur.identification_number && !familyValidation.identification_number ? "لطفا کد ملی را وارد کنید":""}
                   type="text"
                   id="family-ident-num"
                   inputMode="numeric"
@@ -845,17 +908,33 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
                     : null
                   }
                   onChange={handleIdentificationChange}
-                  style={{direction:"ltr"}}
+                  onClick={() => setFamilyBlur(pre =>({...pre,identification_number:false}))}
                 />
               </div>
 
               <div>
                 <label htmlFor="family-fn">نام:<sup>*</sup></label>
                 <input
+                  style={familyBlur.name && !familyValidation.name ? {border:"1.5px solid #ff0000"}:null}
+                  placeholder={familyBlur.name && !familyValidation.name ? "لطفا نام را وارد کنید":""}
                   type="text"
                   id="family-fn"
                   value={familyData.beneficiary_user_family_info_first_name}
+                  onClick={() => setFamilyBlur(pre => ({...pre,name:false}))}
                   onChange={(e) => {
+                    if (e.target.value === "" || e.target.value === null){
+                      setFamilyValidation(pre => ({...pre,name:false}))
+                      setFamilyData((pre) => {
+                      return {
+                        ...pre,
+                        beneficiary_user_family_info_first_name: e.target.value,
+                      };
+                    });
+                    return
+                    }else{
+                    if(!isPersian(e.target.value)) return
+                    else{
+                    setFamilyValidation(pre => ({...pre,name:true}))
                     setFamilyData((pre) => {
                       return {
                         ...pre,
@@ -863,24 +942,42 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
                       };
                     });
                   }}
+                }
+                }
                 />
               </div>
 
               <div>
                 <label htmlFor="family-ln">نام خانوادگی:<sup>*</sup></label>
                 <input
+                style={familyBlur.family_name && !familyValidation.family_name ? {border:"1.5px solid #ff0000"}:null}
+                placeholder={familyBlur.family_name && !familyValidation.family_name ? "لطفا نام خانوادگی را وارد کنید":""}
                   type="text"
                   id="family-ln"
                   value={familyData.beneficiary_user_family_info_last_name}
+                  onClick={() => setFamilyBlur(pre => ({...pre,family_name:false}))}
                   onChange={(e) => {
+                    if (e.target.value === "" || e.target.value === null){
+                      setFamilyValidation(pre => ({...pre,family_name:false}))
+                      setFamilyData((pre) => {
+                      return {
+                        ...pre,
+                        beneficiary_user_family_info_last_name: e.target.value,
+                      };
+                    });
+                    return
+                    }else{
+                    if(!isPersian(e.target.value)) return
+                    else{
+                    setFamilyValidation(pre => ({...pre,family_name:true}))
                     setFamilyData((pre) => {
                       return {
                         ...pre,
                         beneficiary_user_family_info_last_name: e.target.value,
                       };
                     });
-                  }
-                  
+                  }}
+                }
                 }
                 />
               </div>
@@ -897,26 +994,40 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
                       ...prev,
                       beneficiary_user_family_info_birth_date: isoDate,
                     }));
+                    setFamilyValidation(pre => ({...pre, birth_date:true}))
                   }}
                   calendar={persian}
                   locale={persian_fa_custom}
                   calendarPosition="bottom-center"
-                  placeholder="تاریخ را انتخاب کنید"
+                  placeholder={familyBlur.birth_date && !familyValidation.birth_date ? "تاریخ را انتخاب کنید":""}
                   inputClass="custom-datepicker-input"
+                  style={familyBlur.birth_date && !familyValidation.birth_date ?{border:"1.5px solid #ff0000"}:null}
                   maxDate={todayJalali}
                   minDate={minDate}
-                  onOpen={() => setDateSelected(true)}
+                  onOpen={() => {
+                    setDateSelected(true)
+                    setFamilyBlur(pre => ({...pre,birth_date:false}))
+                  }}
                           onClose={() => setDateSelected(false)}
-                          onFocusedDateChange={() => setDateSelected(true)}
+                          onFocusedDateChange={() => {
+                    setDateSelected(true)
+                    setFamilyBlur(pre => ({...pre,birth_date:false}))
+                  }}
                 />
               </div>
 
               <div>
                 <label htmlFor="family-gender"> جنسیت: <sup>*</sup></label>
                 <select
+                  style={!familyValidation.gender && familyBlur.gender ? {border:"1.5px solid #ff0000", color:"#ff0000"}:null}
                   id="family-gender"
                   value={familyData.beneficiary_user_family_info_gender}
                   onChange={(e) => {
+                    if (e.target.value === ""){
+                      setFamilyValidation(pre => ({...pre,gender:false}))
+                    }else {
+                      setFamilyValidation(pre => ({...pre,gender:true}))
+                    }
                     setFamilyData((pre) => {
                       return {
                         ...pre,
@@ -1147,9 +1258,3 @@ function Account4({ accountData, setAccountData, setStep, setLoad }) {
 }
 
 export default Account4;
-
-
-
-//when clicking out everything must reset
-//when clicking laghve everything must reset
-//when handlingsubmit everything must reset

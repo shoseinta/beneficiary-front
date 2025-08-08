@@ -1,0 +1,102 @@
+:root {
+    --main-color: #185ea7;
+    --main50-color: rgba(24, 94, 160, 0.5);
+    --main10-color: rgba(24, 94, 160, 0.1);
+    --white-color: #ffffff;
+    --white-gray-color: #f5f5f5;
+    --gray-color: #f9f9f9;
+    --black-color: #000000;
+    --black50-color: rgba(0, 0, 0, 0.5);
+    --black25-color: rgba(0, 0, 0, 0.25);
+    --error-red: #ff0000;
+    --bluelinenav-color : #8BAECF;
+    --green-color: #3F9633;
+}
+.html-webapp {
+  background-color: var(--white-color);
+  overflow-y: auto;
+  width: 100%;
+  height: 100%;
+}
+.webapp-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  flex-wrap: wrap;
+  row-gap: 20px;
+}
+.webapp-container .logo-typo {
+  height: 25vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  flex-wrap: wrap;
+  row-gap: 10px;
+}
+.webapp-container .logo-typo > #logo {
+  width: 30vw;
+  max-width: 100px;
+  height: auto;
+  border-radius: 50%;
+  border: #185EA0 1px solid;
+  margin: 0 auto;
+}
+.webapp-container .logo-typo > #typo {
+  width: 40vw;
+  max-width: 150px;
+  height: auto;
+  margin: 0 auto;
+}
+.webapp-container .main-container {
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  padding: 20px;
+}
+.webapp-container .main-container h1 {
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+}
+.webapp-container .main-container button {
+  all: unset;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--white-color);
+  background-color: var(--main-color);
+  border-radius: 1000px;
+  padding: 20px 50px;
+  cursor: pointer;
+  border: 5px solid var(--bluelinenav-color);
+  box-shadow: 0 0 10px var(--main50-color);
+  animation: pulse 2s infinite;
+  text-align: center;
+  line-height: 2;
+}
+@keyframes pulse {
+  0% { transform: scale(1); box-shadow: 0 0 10px var(--main50-color); }
+  50% { transform: scale(1.02); box-shadow: 0 0 10px var(--main-color); }
+  100% { transform: scale(1); box-shadow: 0 0 10px var(--main50-color); }
+}
+
+.lottie-hand {
+  width: 75px;
+  height: auto;
+  margin: 0;
+  position: absolute;
+  right: -35px;
+  top: 70%;
+  transform: translateY(-50%) rotate(-45deg);
+}
+
+
+
+.webapp-container .empty {
+  height: 25vh;
+}

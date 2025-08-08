@@ -9,7 +9,7 @@ import './Hamburger.css';
 
 function Hamburger() {
     const navigate = useNavigate();
-    const { hamburger, setHamburger } = useLookup();
+    const { hamburger, setHamburger,fontBig,setFontBig,darkMode,setDarkMode } = useLookup();
     const [isActive, setIsActive] = useState(false);
     const [isClosing, setIsClosing] = useState(false);
 
@@ -64,7 +64,12 @@ function Hamburger() {
                                 <h5>اندازه متن</h5>
                                 <div className="setting-content">
                                     <p>متوسط</p>
-                                    <div className="setting-image"> 
+                                    {!fontBig &&
+                                    <div className="setting-image" onClick={() => {
+                                        setFontBig(true)
+                                        localStorage.setItem('fontSize','big')
+                                    }
+                                    }> 
                                         <svg width="44" height="22" viewBox="0 0 44 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <rect width="44" height="22" rx="11" fill="#D9D9D9"/>
                                         </svg>
@@ -73,7 +78,23 @@ function Hamburger() {
                                         <ellipse cx="11.0333" cy="11" rx="10.9668" ry="10.9668" fill="#185EA0"/>
                                         </svg>
 
-                                    </div>
+                                    </div>}
+                                    
+                                    {fontBig && 
+                                    <div className="setting-image" onClick={() => {
+                                        setFontBig(false)
+                                        localStorage.removeItem('fontSize')
+                                    }
+                                    }> 
+                                        <svg width="44" height="22" viewBox="0 0 44 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect width="44" height="22" rx="11" fill="#D9D9D9"/>
+                                        </svg>
+
+                                        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" className='move-left'>
+                                        <ellipse cx="11.0333" cy="11" rx="10.9668" ry="10.9668" fill="#185EA0"/>
+                                        </svg>
+
+                                    </div>}
                                     <p>بزرگ</p>
                                 </div>
                             </div>
@@ -93,6 +114,7 @@ function Hamburger() {
 
                                     </div>
                                     <p>بزرگ</p>
+                                    
                                 </div>
                             </div>
 
@@ -100,7 +122,11 @@ function Hamburger() {
                                 <h5>حالت تصویر</h5>
                                 <div className="setting-content">
                                     <p>روشن&nbsp;&nbsp;&nbsp;</p>
-                                    <div className="setting-image"> 
+                                    {!darkMode &&
+                                    <div className="setting-image" onClick={() => {
+                                        setDarkMode(true)
+                                        localStorage.setItem('darkMode',true)
+                                    }}> 
                                         <svg width="44" height="22" viewBox="0 0 44 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <rect width="44" height="22" rx="11" fill="#D9D9D9"/>
                                         </svg>
@@ -109,7 +135,21 @@ function Hamburger() {
                                         <ellipse cx="11.0333" cy="11" rx="10.9668" ry="10.9668" fill="#185EA0"/>
                                         </svg>
 
-                                    </div>
+                                    </div>}
+                                    {darkMode &&
+                                        <div className="setting-image" onClick={() => {
+                                            setDarkMode(false)
+                                            localStorage.removeItem('darkMode')
+                                        }}> 
+                                        <svg width="44" height="22" viewBox="0 0 44 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect width="44" height="22" rx="11" fill="#D9D9D9"/>
+                                        </svg>
+
+                                        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" className='move-left'>
+                                        <ellipse cx="11.0333" cy="11" rx="10.9668" ry="10.9668" fill="#185EA0"/>
+                                        </svg>
+
+                                    </div>}
                                     <p>تاریک</p>
                                 </div>
                             </div>

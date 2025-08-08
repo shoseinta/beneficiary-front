@@ -9,6 +9,8 @@ import persian_fa from 'react-date-object/locales/persian_fa';
 import DateObject from 'react-date-object';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
+import {Tooltip} from 'react-tooltip';
+import 'react-tooltip/dist/react-tooltip.css'
 import {
   FiFile,
   FiImage,
@@ -880,8 +882,13 @@ useEffect(() => {
                       value={convertTypeLayer1(
                         requestData.beneficiary_request_type_layer1
                       )}
-                      style={{ pointerEvents: 'none' }}
-                    />
+                      // style={{ pointerEvents: 'none' }}
+                    data-tooltip-id="observe-time1-lock"
+                  data-tooltip-content="این بخش قابل ویرایش نیست"
+              />
+              
+      <Tooltip id="observe-time1-lock" place="top" openOnClick={true} style={{fontSize:"0.7rem", fontWeight:"normal",borderRadius:"6px"}}/>
+            
                   </div>
                 </div>
 
@@ -896,8 +903,13 @@ useEffect(() => {
                       id="observe-type2"
                       readOnly
                       value={requestData.beneficiary_request_type_layer2}
-                      style={{ pointerEvents: 'none' }}
-                    />
+                      // style={{ pointerEvents: 'none' }}
+                    data-tooltip-id="observe-time2-lock"
+                  data-tooltip-content="این بخش قابل ویرایش نیست"
+              />
+              
+              <Tooltip id="observe-time2-lock" place="top" openOnClick={true} style={{fontSize:"0.7rem", fontWeight:"normal",borderRadius:"6px"}}/>
+            
                   </div>
                 </div>
 
@@ -1148,8 +1160,13 @@ useEffect(() => {
                       id="observe-created-at"
                       readOnly
                       value={gregorianToJalali(requestData.effective_date)}
-                      style={{ pointerEvents: 'none' }}
-                    />
+                      // style={{ pointerEvents: 'none' }}
+                    data-tooltip-id="observe-created-at-lock"
+                  data-tooltip-content="این بخش قابل ویرایش نیست"
+              />
+              
+                 <Tooltip id="observe-created-at-lock" place="top" openOnClick={true} style={{fontSize:"0.7rem", fontWeight:"normal",borderRadius:"6px"}}/>
+            
                   </div>
                 </div>
 
@@ -1168,8 +1185,13 @@ useEffect(() => {
                           ? 'مدیر سامانه'
                           : 'شخص کاربر'
                       }
-                      style={{ pointerEvents: 'none' }}
-                    />
+                      // style={{ pointerEvents: 'none' }}
+                    data-tooltip-id="observe-created-by-lock"
+                  data-tooltip-content="این بخش قابل ویرایش نیست"
+              />
+              
+                  <Tooltip id="observe-created-by-lock" place="top" openOnClick={true} style={{fontSize:"0.7rem", fontWeight:"normal",borderRadius:"6px"}}/>
+            
                   </div>
                 </div>
 
@@ -1190,8 +1212,13 @@ useEffect(() => {
                           requestData?.beneficiary_request_processing_stage
                         ) || null
                       }
-                      style={{ pointerEvents: 'none' }}
-                    />
+                      // style={{ pointerEvents: 'none' }}
+                    data-tooltip-id="observe-proccesing-stage-lock"
+                  data-tooltip-content="این بخش قابل ویرایش نیست"
+              />
+              
+                  <Tooltip id="observe-proccesing-stage-lock" place="top" openOnClick={true} style={{fontSize:"0.7rem", fontWeight:"normal",borderRadius:"6px"}}/>
+            
                   </div>
                 </div>
               </form>

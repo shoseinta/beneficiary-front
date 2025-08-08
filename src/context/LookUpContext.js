@@ -7,6 +7,28 @@ const LookupContext = createContext();
 export const useLookup = () => useContext(LookupContext);
 
 export const LookupProvider = ({ children }) => {
+  const [fontBig,setFontBig] = useState(false)
+  const [darkMode, setDarkMode] = useState(false)
+  useEffect(() => {
+    if(localStorage.getItem('darkMode')){
+      setDarkMode(true)
+      document.documentElement.classList.add('dark')
+      document.body.classList.add('dark')
+    }else{
+      setDarkMode(false)
+      document.documentElement.classList.remove('dark')
+      document.body.classList.remove('dark')
+    }
+  },[darkMode])
+  useEffect(() => {
+    if(localStorage.getItem('fontSize')){
+      setFontBig(true)
+      document.documentElement.style.fontSize = '1.5em'
+    }else{
+      setFontBig(false)
+      document.documentElement.style.fontSize = '1em'
+    }
+  },[fontBig])
   const [isDeleteFinished, setIsDeleteFinished] = useState(false);
   const [hamburger,setHamburger] = useState(false)
       useEffect(() => {
@@ -122,6 +144,10 @@ export const LookupProvider = ({ children }) => {
         setFiles,
         isDeleteFinished,
         setIsDeleteFinished,
+        fontBig,
+        setFontBig,
+        darkMode,
+        setDarkMode,
       }}
     >
       {children}

@@ -704,3 +704,19 @@
 .additional-info-overlay-container #additional-info-title::placeholder {
   color: var(--error-red);
 }
+
+.family-overlay-container #family-fn::placeholder{
+  color: var(--error-red);
+}
+
+.family-overlay-container #family-ln::placeholder {
+  color: var(--error-red);
+}
+
+.family-overlay-container .custom-datepicker-input::placeholder {
+  color: var(--error-red);
+}
+
+.family-overlay-container #family-ident-num::placeholder {
+  color: var(--error-red);
+}

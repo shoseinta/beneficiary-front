@@ -46,6 +46,22 @@
   font-weight: 100;
   font-style: normal;
 }
+/* Light theme uses variables defined in each page’s CSS (e.g. Home.css and Login.css) */
+
+html.dark,
+body.dark {
+  --main-color: #0d47a1;       /* dark primary */
+  --main50-color: rgba(13, 71, 161, 0.5);
+  --main10-color: rgba(13, 71, 161, 0.1);
+  --white-color: #121212;      /* dark surface */
+  --white-gray-color: #1e1e1e;
+  --gray-color: #222;
+  --black-color: #ffffff;      /* text becomes white */
+  --black50-color: rgba(255, 255, 255, 0.5);
+  --black25-color: rgba(255, 255, 255, 0.25);
+  --error-red: #ef5350;
+  --bluelinenav-color: #547ca6;
+}
 * {
   box-sizing: border-box;
   margin: 0;
@@ -54,9 +70,14 @@
   direction: rtl;
   unicode-bidi: embed;
   text-align: right;
+
+
+  /* warning */
+  /* color: var(--black-color) */
 }
+
 h1, h2, h3, h4, h5, h6, p, a, button, label, input, textarea, select, th, td, ul, ol, li {
-  color: #000;
+  color: var(--black-color);
 }
 
 html, body {
