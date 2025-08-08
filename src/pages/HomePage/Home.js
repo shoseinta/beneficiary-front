@@ -21,7 +21,13 @@ function Home() {
   window.matchMedia('(display-mode: standalone)').matches ||
   window.navigator.standalone === true; // for iOS Safari
   const [isInstalled, setIsInstalled] = useState(false);
+  useEffect(() => {
+    const isStandalone =
+      window.matchMedia('(display-mode: standalone)').matches ||
+      window.navigator.standalone === true;
 
+    setIsInstalled(isStandalone);
+  }, []);
 
 
   const {darkMode} = useLookup();

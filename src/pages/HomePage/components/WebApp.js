@@ -8,13 +8,7 @@ function WebApp({isInstalled,setIsInstalled}) {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
 
   // Check if app is already installed
-  useEffect(() => {
-    const isStandalone =
-      window.matchMedia('(display-mode: standalone)').matches ||
-      window.navigator.standalone === true;
-
-    setIsInstalled(isStandalone);
-  }, []);
+  
 
   // Capture install prompt
   useEffect(() => {
