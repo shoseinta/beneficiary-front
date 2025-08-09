@@ -15,22 +15,16 @@ import './Home.css';
 import useEmblaCarousel from 'embla-carousel-react';
 import { useLookup } from '../../context/LookUpContext';
 import WebApp from './components/WebApp';
+import { useInstall } from '../../context/InstallContext';
 
 function Home() {
   const isInStandaloneMode = () =>
   window.matchMedia('(display-mode: standalone)').matches ||
   window.navigator.standalone === true; // for iOS Safari
-  const [isInstalled, setIsInstalled] = useState(false);
-  useEffect(() => {
-    const isStandalone =
-      window.matchMedia('(display-mode: standalone)').matches ||
-      window.navigator.standalone === true;
-
-    setIsInstalled(isStandalone);
-  }, []);
 
 
   const {darkMode} = useLookup();
+  const {isInstalled,displayModeStandalone} = useInstall()
   const [carousel1Display, setCarousel1Display] = useState(true)
   const [carousel2Display, setCarousel2Display] = useState(false)
   const [whichNotif, setWhichNotif] = useState(0);
@@ -194,8 +188,8 @@ function Home() {
       document.querySelector('.home-body').style.overflow = 'auto';
     }
   },[moreItems])
-  if (!isInstalled) {
-  return <WebApp isInstalled={isInstalled} setIsInstalled={setIsInstalled}/>;
+  if (!displayModeStandalone) {
+  return <WebApp/>;
   }
 
   return (

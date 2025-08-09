@@ -3,27 +3,11 @@ import charity_logo from '../../../media/images/charity_logo.png'
 import charity_typo_blue from '../../../media/images/charity_typo_blue.png'
 import { useEffect, useState } from "react";
 import './WebApp.css';
+import { useInstall } from '../../../context/InstallContext';
 
-function WebApp({isInstalled,setIsInstalled}) {
-  const [deferredPrompt, setDeferredPrompt] = useState(null);
-
-  // Check if app is already installed
+function WebApp() {
   
-
-  // Capture install prompt
-  useEffect(() => {
-    const handleBeforeInstallPrompt = (e) => {
-      e.preventDefault();
-      setDeferredPrompt(e);
-    };
-
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-
-    return () => {
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-    };
-  }, []);
-
+  const {isInstalled,deferredPrompt,setDeferredPrompt} = useInstall();
   // Lottie animation
   useEffect(() => {
     const container = document.getElementById('lottie-hand');
@@ -72,14 +56,13 @@ function WebApp({isInstalled,setIsInstalled}) {
       deferredPrompt.userChoice.then(choice => {
         if (choice.outcome === 'accepted') {
           console.log("User accepted the install prompt");
-          setIsInstalled(true)
         } else {
           console.log("User dismissed the install prompt");
         }
         setDeferredPrompt(null);
       });
     } else {
-      alert("نصب برنامه در حال حاضر پشتیبانی نمی‌شود یا مرورگر شما از این قابلیت پشتیبانی نمی‌کند.");
+      alert("برنامه قبلا نصب شده است.")
     }
   };
 

@@ -5,14 +5,17 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import { LookupProvider } from './context/LookUpContext';
+import { InstallProvider } from './context/InstallContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
+    <InstallProvider>
       <LookupProvider>
-        <App />
+          <App />
       </LookupProvider>
+    </InstallProvider>
     </BrowserRouter>
   </React.StrictMode>
 );
