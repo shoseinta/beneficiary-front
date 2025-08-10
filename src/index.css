@@ -47,20 +47,34 @@
   font-style: normal;
 }
 /* Light theme uses variables defined in each page’s CSS (e.g. Home.css and Login.css) */
+:root {
+  --main-color: #185EA0;
+  --main50-color: rgba(24, 94, 160, 0.5);
+  --main10-color: rgba(24, 94, 160, 0.1);
+  --white-color: #ffffff;
+  --white-gray-color: #f5f5f5;
+  --gray-color: #f9f9f9;
+  --black-color: #000000;
+  --black50-color: rgba(0, 0, 0, 0.5);
+  --black25-color: rgba(0, 0, 0, 0.25);
+  --error-red: #ff0000;
+  --bluelinenav-color: #8baecf;
+}
 
 html.dark,
 body.dark {
-  --main-color: #0d47a1;       /* dark primary */
-  --main50-color: rgba(13, 71, 161, 0.5);
-  --main10-color: rgba(13, 71, 161, 0.1);
-  --white-color: #121212;      /* dark surface */
-  --white-gray-color: #1e1e1e;
-  --gray-color: #222;
-  --black-color: #ffffff;      /* text becomes white */
-  --black50-color: rgba(255, 255, 255, 0.5);
-  --black25-color: rgba(255, 255, 255, 0.25);
-  --error-red: #ef5350;
-  --bluelinenav-color: #547ca6;
+  --main-color: #185EA0;
+  --main50-color: #86a9ca;
+  --main10-color: #dee5ec;
+  --white-color: #000;
+  --white-gray-color: #f5f5f5;
+  --gray-color: #f9f9f9;
+  --black-color: #fff;
+  --black50-color: #7a7a7a;
+  --black25-color: #b8b8b8;
+  --error-red: #ff0000;
+  --bluelinenav-color: #8baecf;
+  --green-color: #3f9633;
 }
 * {
   box-sizing: border-box;

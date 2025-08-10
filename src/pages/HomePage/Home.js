@@ -1,16 +1,8 @@
 import { useEffect, useState, useRef } from 'react';
 import Carousel from '../../components/carousel/Carousel';
-import { useNavigate } from 'react-router-dom';
 import NavigationBar from '../../components/navigationBar/NavigationBar';
 import Header from '../../components/header/Header';
-import bell_icon from '../../media/icons/bell_icon.svg';
-import more_icon from '../../media/icons/more_icon.svg';
 import tutorial from '../../media/images/tutorial.mp4';
-import thumbnail from '../../media/images/thumbnail.png';
-import phone_icon from '../../media/icons/phone_icon.svg';
-import whatsapp_icon from '../../media/icons/whatsapp_icon.svg';
-import instagram_icon from '../../media/icons/instagram_icon.svg';
-import email_icon from '../../media/icons/email_icon.svg';
 import './Home.css';
 import useEmblaCarousel from 'embla-carousel-react';
 import { useLookup } from '../../context/LookUpContext';
@@ -188,9 +180,9 @@ function Home() {
       document.querySelector('.home-body').style.overflow = 'auto';
     }
   },[moreItems])
-  if (!displayModeStandalone) {
-  return <WebApp/>;
-  }
+  // if (!displayModeStandalone) {
+  // return <WebApp/>;
+  // }
 
   return (
     <>
