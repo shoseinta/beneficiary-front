@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import Header from '../../../components/header/Header';
 import NavigationBar from '../../../components/navigationBar/NavigationBar';
-import next_icon from '../../../media/icons/next_icon.svg';
 import './Form1.css';
 import FormHeader from './FormHeader';
 import {Tooltip} from 'react-tooltip';

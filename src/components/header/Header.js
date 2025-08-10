@@ -1,4 +1,3 @@
-import hamburger_icon from '../../media/icons/hamburger_icon.svg';
 import charity_typo_white from '../../media/images/charity_typo_white.png';
 import charity_logo from '../../media/images/charity_logo.png';
 import { useLookup } from '../../context/LookUpContext';

@@ -1,10 +1,5 @@
 import Header from '../../../components/header/Header';
 import NavigationBar from '../../../components/navigationBar/NavigationBar';
-import step1_completed from '../../../media/icons/step1_completed.svg';
-import step2_completed from '../../../media/icons/step2_completed.svg';
-import step3_completed from '../../../media/icons/step3_completed.svg';
-import step4_active from '../../../media/icons/step4_active.svg';
-import back_icon from '../../../media/icons/back_icon.svg';
 import { useEffect, useState } from 'react';
 import './Form4.css';
 import {
@@ -456,7 +451,7 @@ useEffect(() => {
       submitSuccess && (
         <>
         <div className='block-overlay-container'></div>
-        <div className="edit-finish-container final-form">
+        <div className="edit-finish-container">
           <svg
             width="59"
             height="59"

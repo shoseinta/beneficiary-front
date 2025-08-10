@@ -1,10 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLookup } from '../../context/LookUpContext';
-import close_icon from '../../media/icons/close_icon.svg';
-import setting1_icon from '../../media/icons/setting1_icon.svg';
-import setting2_icon from '../../media/icons/setting2_icon.svg';
-import power_icon from '../../media/icons/power_icon.svg';
 import './Hamburger.css';
 
 function Hamburger() {

@@ -6,7 +6,6 @@ import DatePicker from 'react-multi-date-picker';
 import persian from 'react-date-object/calendars/persian';
 import persian_fa from 'react-date-object/locales/persian_fa';
 import DateObject from 'react-date-object';
-import attach_icon from '../../../media/icons/attach_icon.svg';
 import JSZip from 'jszip';
 import { useDropzone } from 'react-dropzone';
 import {

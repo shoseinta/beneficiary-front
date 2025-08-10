@@ -3,8 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import './Login.css';
 import charity_logo from '../../media/images/charity_logo.png';
 import charity_typo_blue from '../../media/images/charity_typo_blue.png';
-import alert_icon from '../../media/icons/alert_icon.svg';
-import hide_icon from '../../media/icons/hide_icon.svg';
 
 import { useLookup } from '../../context/LookUpContext';
 import LoadingButton from '../../components/loadingButton/LoadingButton';

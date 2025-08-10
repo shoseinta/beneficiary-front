@@ -6,7 +6,6 @@ import Requests from './pages/Requests/Requests';
 import Account from './pages/Account/Account';
 import RequestDetail from './pages/RequestDetail/RequestDetail';
 import withHamburger from './components/hamburger/withHamburger';
-import { InstallProvider } from './context/InstallContext';
 
 // Auth wrapper component
 const ProtectedRoute = ({ children }) => {

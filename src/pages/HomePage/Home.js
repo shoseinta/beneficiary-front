@@ -180,9 +180,9 @@ function Home() {
       document.querySelector('.home-body').style.overflow = 'auto';
     }
   },[moreItems])
-  // if (!displayModeStandalone) {
-  // return <WebApp/>;
-  // }
+  if (!displayModeStandalone) {
+  return <WebApp/>;
+  }
 
   return (
     <>

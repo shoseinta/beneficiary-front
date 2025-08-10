@@ -1,8 +1,6 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import observe_icon from '../../../media/icons/observe_icon.svg';
 import { toJalaali } from 'jalaali-js';
-import LoadingPage from '../../../components/loadingPage/LoadingPage';
 
 function RequestsList({ data, index }) {
   useEffect(() => {

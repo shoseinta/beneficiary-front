@@ -278,7 +278,6 @@
   font-size: 0.9rem;
   font-weight: normal;
   line-height: 2;
-  color: var(--black-color);
 }
 .home-container .footer > #value {
   grid-column: 2;

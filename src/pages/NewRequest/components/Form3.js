@@ -11,9 +11,6 @@ import {
 import JSZip from 'jszip';
 import Header from '../../../components/header/Header';
 import NavigationBar from '../../../components/navigationBar/NavigationBar';
-import attach_icon from '../../../media/icons/attach_icon.svg';
-import next_icon from '../../../media/icons/next_icon.svg';
-import back_icon from '../../../media/icons/back_icon.svg';
 import './Form3.css';
 import FormHeader from './FormHeader';
 

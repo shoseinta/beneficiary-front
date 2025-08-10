@@ -1,8 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import Header from '../../../components/header/Header';
 import NavigationBar from '../../../components/navigationBar/NavigationBar';
-import back_icon from '../../../media/icons/back_icon.svg';
-import next_icon from '../../../media/icons/next_icon.svg';
 import './Form2.css';
 import DatePicker from 'react-multi-date-picker';
 import persian from 'react-date-object/calendars/persian';
